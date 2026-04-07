@@ -1,4 +1,4 @@
-![cover-v5-optimized](./images/GitHub_README_if.png)
+![NexusAI](./images/NexusAI-README-banner.svg)
 
 <p align="center">
   <a href="https://cloud.nexusai.ai">NexusAI Cloud</a> ·
