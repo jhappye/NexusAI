@@ -196,7 +196,7 @@ export default function AppSelector() {
                   trailing={<ExternalLinkIndicator />}
                 />
                 <AccountMenuExternalItem
-                  href="https://github.com/langgenius/nexusai"
+                  href="https://github.com/jhappye/NexusAI"
                   iconClassName="i-ri-github-line"
                   label={t('userProfile.github', { ns: 'common' })}
                   trailing={(

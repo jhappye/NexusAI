@@ -59,7 +59,7 @@ export default function AccountAbout({
             <div className="text-text-accent">
               {
                 IS_CE_EDITION
-                  ? <Link href="https://github.com/langgenius/nexusai/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Open Source License</Link>
+                  ? <Link href="https://github.com/jhappye/NexusAI/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Open Source License</Link>
                   : (
                       <>
                         <Link href="https://nexusai.ai/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link>
@@ -83,7 +83,7 @@ export default function AccountAbout({
           <div className="flex items-center">
             <Button className="mr-2" size="small">
               <Link
-                href="https://github.com/langgenius/nexusai/releases"
+                href="https://github.com/jhappye/NexusAI/releases"
                 target="_blank"
                 rel="noopener noreferrer"
               >

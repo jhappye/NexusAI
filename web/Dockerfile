@@ -53,8 +53,8 @@ ENV EDITION=SELF_HOSTED
 ENV DEPLOY_ENV=PRODUCTION
 ENV CONSOLE_API_URL=http://127.0.0.1:5001
 ENV APP_API_URL=http://127.0.0.1:5001
-ENV MARKETPLACE_API_URL=https://marketplace.dify.ai
-ENV MARKETPLACE_URL=https://marketplace.dify.ai
+ENV MARKETPLACE_API_URL=https://marketplace.nexusai.ai
+ENV MARKETPLACE_URL=https://marketplace.nexusai.ai
 ENV PORT=3000
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -64,24 +64,24 @@ RUN ln -s /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone
 
 # Create non-root user
-ARG dify_uid=1001
-RUN addgroup -S -g ${dify_uid} dify && \
-    adduser -S -u ${dify_uid} -G dify -s /bin/ash -h /home/dify dify && \
+ARG nexusai_uid=1001
+RUN addgroup -S -g ${nexusai_uid} nexusai && \
+    adduser -S -u ${nexusai_uid} -G nexusai -s /bin/ash -h /home/nexusai nexusai && \
     mkdir /app && \
-    chown -R dify:dify /app
+    chown -R nexusai:nexusai /app
 
 
 WORKDIR /app
 
-COPY --from=builder --chown=dify:dify /app/web/public ./web/public
-COPY --from=builder --chown=dify:dify /app/web/.next/standalone ./
-COPY --from=builder --chown=dify:dify /app/web/.next/static ./web/.next/static
+COPY --from=builder --chown=nexusai:nexusai /app/web/public ./web/public
+COPY --from=builder --chown=nexusai:nexusai /app/web/.next/standalone ./
+COPY --from=builder --chown=nexusai:nexusai /app/web/.next/static ./web/.next/static
 
-COPY --chown=dify:dify --chmod=755 web/docker/entrypoint.sh ./entrypoint.sh
+COPY --chown=nexusai:nexusai --chmod=755 web/docker/entrypoint.sh ./entrypoint.sh
 
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}
 
-USER dify
+USER nexusai
 EXPOSE 3000
 ENTRYPOINT ["/bin/sh", "./entrypoint.sh"]

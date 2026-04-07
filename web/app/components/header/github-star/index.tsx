@@ -13,7 +13,7 @@ const defaultData: GithubStarResponse = {
 }
 
 const getStar = async () => {
-  const res = await fetch('https://ungh.cc/repos/langgenius/nexusai')
+  const res = await fetch('https://ungh.cc/repos/jhappye/NexusAI')
 
   if (!res.ok)
     throw new Error('Failed to fetch github star')
