@@ -798,18 +798,18 @@ html[data-theme="light"] {
 
   --color-saas-background: #ffffff;
   --color-saas-pricing-grid-bg: rgb(200 206 218 / 0.5);
-  --color-saas-dify-blue-static: #0033ff;
-  --color-saas-dify-blue-static-hover: #002cd6;
-  --color-saas-dify-blue-accessible: #0033ff;
-  --color-saas-dify-blue-inverted: #0033ff;
-  --color-saas-dify-blue-inverted-dimmed: #0033ff;
+  --color-saas-nexusai-blue-static: #0033ff;
+  --color-saas-nexusai-blue-static-hover: #002cd6;
+  --color-saas-nexusai-blue-accessible: #0033ff;
+  --color-saas-nexusai-blue-inverted: #0033ff;
+  --color-saas-nexusai-blue-inverted-dimmed: #0033ff;
 
   --color-saas-background-inverted: #0b0b0e;
   --color-saas-background-inverted-hover: #222225;
 
-  --color-dify-logo-blue: #1E3A5F;
-  --color-dify-logo-black: #1E3A5F;
-  --color-dify-logo-outline-1: rgb(0 0 0 / 0);
-  --color-dify-logo-outline-2: rgb(0 0 0 / 0);
+  --color-nexusai-logo-blue: #1E3A5F;
+  --color-nexusai-logo-black: #1E3A5F;
+  --color-nexusai-logo-outline-1: rgb(0 0 0 / 0);
+  --color-nexusai-logo-outline-2: rgb(0 0 0 / 0);
 
 }

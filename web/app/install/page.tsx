@@ -18,7 +18,7 @@ const Install = () => {
             {' '}
             {new Date().getFullYear()}
             {' '}
-            LangGenius, Inc. All rights reserved.
+NexusAI, Inc. All rights reserved.
           </div>
         )}
       </div>
