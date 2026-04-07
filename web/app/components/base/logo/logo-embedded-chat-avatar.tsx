@@ -9,7 +9,7 @@ const LogoEmbeddedChatAvatar: FC<LogoEmbeddedChatAvatarProps> = ({
 }) => {
   return (
     <img
-      src={`${basePath}/logo/logo-embedded-chat-avatar.png`}
+      src={`${basePath}/logo/nexusai-logo.svg`}
       className={`block h-10 w-10 ${className}`}
       alt="logo"
     />

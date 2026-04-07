@@ -7,8 +7,8 @@ import { basePath } from '@/utils/var'
 export type LogoStyle = 'default' | 'monochromeWhite'
 
 export const logoPathMap: Record<LogoStyle, string> = {
-  default: '/logo/logo.svg',
-  monochromeWhite: '/logo/logo-monochrome-white.svg',
+  default: '/logo/nexusai-logo.svg',
+  monochromeWhite: '/logo/nexusai-logo-monochrome-white.svg',
 }
 
 export type LogoSize = 'large' | 'medium' | 'small'
@@ -37,7 +37,7 @@ const DifyLogo: FC<DifyLogoProps> = ({
     <img
       src={`${basePath}${logoPathMap[themedStyle]}`}
       className={cn('block object-contain', logoSizeMap[size], className)}
-      alt="Dify logo"
+      alt="NexusAI logo"
     />
   )
 }
