@@ -115,6 +115,14 @@ class Account(UserMixin, TypeBase):
         DateTime, server_default=func.current_timestamp(), nullable=False, init=False, onupdate=func.current_timestamp()
     )
 
+    # 关系 - 租户用户关联
+    tenant_users: Mapped[list["TenantUser"]] = relationship(
+        "TenantUser",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        lazy="dynamic",
+    )
+
     role: TenantAccountRole | None = field(default=None, init=False)
     _current_tenant: "Tenant | None" = field(default=None, init=False)
 

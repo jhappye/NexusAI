@@ -8,6 +8,7 @@ from .account import (
     TenantAccountRole,
     TenantStatus,
 )
+from .audit_log import AuditLog
 from .api_based_extension import APIBasedExtension, APIBasedExtensionPoint
 from .dataset import (
     AppDatasetJoin,
@@ -82,6 +83,8 @@ from .provider import (
 )
 from .source import DataSourceApiKeyAuthBinding, DataSourceOauthBinding
 from .task import CeleryTask, CeleryTaskSet
+from .tenant import Tenant, TenantStatus, TenantTier, TenantUser, TenantUserRole, TenantUserStatus
+from .tenant_quota import TenantQuota
 from .tools import (
     ApiToolProvider,
     BuiltinToolProvider,
@@ -98,6 +101,7 @@ from .trigger import (
     TriggerSubscription,
     WorkflowSchedulePlan,
 )
+from .usage_record import UsageRecord
 from .web import PinnedConversation, SavedMessage
 from .workflow import (
     ConversationVariable,
@@ -120,6 +124,7 @@ __all__ = [
     "AccountIntegrate",
     "AccountStatus",
     "AccountTrialAppRecord",
+    "AuditLog",
     "ApiRequest",
     "ApiToken",
     "ApiToolProvider",
@@ -191,7 +196,12 @@ __all__ = [
     "TenantCreditPool",
     "TenantDefaultModel",
     "TenantPreferredModelProvider",
+    "TenantQuota",
     "TenantStatus",
+    "TenantTier",
+    "TenantUser",
+    "TenantUserRole",
+    "TenantUserStatus",
     "TidbAuthBinding",
     "ToolConversationVariables",
     "ToolFile",
@@ -202,6 +212,7 @@ __all__ = [
     "TriggerOAuthSystemClient",
     "TriggerOAuthTenantClient",
     "TriggerSubscription",
+    "UsageRecord",
     "UploadFile",
     "Whitelist",
     "Workflow",
