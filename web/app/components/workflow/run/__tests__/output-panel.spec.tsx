@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react'
 import { TransferMethod } from '@/types/app'
 import OutputPanel from '../output-panel'
 
-type FileOutput = FileResponse & { dify_model_identity: '__dify__file__' }
+type FileOutput = FileResponse & { nexusai_model_identity: '__nexusai__file__' }
 
 vi.mock('@/app/components/base/chat/chat/loading-anim', () => ({
   default: () => <div data-testid="loading-anim" />,
@@ -43,7 +43,7 @@ vi.mock('@/app/components/workflow/nodes/_base/components/editor/code-editor', (
 }))
 
 const createFileOutput = (overrides: Partial<FileOutput> = {}): FileOutput => ({
-  dify_model_identity: '__dify__file__',
+  nexusai_model_identity: '__nexusai__file__',
   related_id: 'file-1',
   extension: 'pdf',
   filename: 'report.pdf',
@@ -78,9 +78,9 @@ describe('OutputPanel', () => {
   })
 
   it('renders a plain text output as markdown', () => {
-    render(<OutputPanel outputs={{ answer: 'Hello Dify' }} />)
+    render(<OutputPanel outputs={{ answer: 'Hello NexusAI' }} />)
 
-    expect(screen.getByTestId('markdown')).toHaveTextContent('Hello Dify')
+    expect(screen.getByTestId('markdown')).toHaveTextContent('Hello NexusAI')
   })
 
   it('renders array text outputs as joined markdown content', () => {

@@ -27,7 +27,7 @@ describe('Footer', () => {
   describe('Links', () => {
     it('should render GitHub link with correct href', () => {
       const { container } = render(<Footer />)
-      const githubLink = container.querySelector('a[href="https://github.com/langgenius/dify"]')
+      const githubLink = container.querySelector('a[href="https://github.com/langgenius/nexusai"]')
       expect(githubLink).toBeInTheDocument()
     })
 
@@ -39,7 +39,7 @@ describe('Footer', () => {
 
     it('should render Forum link with correct href', () => {
       const { container } = render(<Footer />)
-      const forumLink = container.querySelector('a[href="https://forum.dify.ai"]')
+      const forumLink = container.querySelector('a[href="https://forum.nexusai.ai"]')
       expect(forumLink).toBeInTheDocument()
     })
 

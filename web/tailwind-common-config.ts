@@ -1,5 +1,5 @@
-import { icons as customPublicIcons } from '@dify/iconify-collections/custom-public'
-import { icons as customVenderIcons } from '@dify/iconify-collections/custom-vender'
+import { icons as customPublicIcons } from '@nexusai/iconify-collections/custom-public'
+import { icons as customVenderIcons } from '@nexusai/iconify-collections/custom-vender'
 import { getIconCollections, iconsPlugin } from '@egoist/tailwindcss-icons'
 import tailwindTypography from '@tailwindcss/typography'
 import tailwindThemeVarDefine from './themes/tailwind-theme-var-define'

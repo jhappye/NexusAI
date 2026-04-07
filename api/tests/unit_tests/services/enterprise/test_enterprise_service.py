@@ -242,7 +242,7 @@ class TestJoinDefaultWorkspace:
 class TestTryJoinDefaultWorkspace:
     def test_try_join_default_workspace_enterprise_disabled_noop(self):
         with (
-            patch("services.enterprise.enterprise_service.dify_config") as mock_config,
+            patch("services.enterprise.enterprise_service.nexusai_config") as mock_config,
             patch("services.enterprise.enterprise_service.EnterpriseService.join_default_workspace") as mock_join,
         ):
             mock_config.ENTERPRISE_ENABLED = False
@@ -255,7 +255,7 @@ class TestTryJoinDefaultWorkspace:
         account_id = "11111111-1111-1111-1111-111111111111"
 
         with (
-            patch("services.enterprise.enterprise_service.dify_config") as mock_config,
+            patch("services.enterprise.enterprise_service.nexusai_config") as mock_config,
             patch("services.enterprise.enterprise_service.EnterpriseService.join_default_workspace") as mock_join,
         ):
             mock_config.ENTERPRISE_ENABLED = True
@@ -274,7 +274,7 @@ class TestTryJoinDefaultWorkspace:
         account_id = "11111111-1111-1111-1111-111111111111"
 
         with (
-            patch("services.enterprise.enterprise_service.dify_config") as mock_config,
+            patch("services.enterprise.enterprise_service.nexusai_config") as mock_config,
             patch("services.enterprise.enterprise_service.EnterpriseService.join_default_workspace") as mock_join,
         ):
             mock_config.ENTERPRISE_ENABLED = True
@@ -293,7 +293,7 @@ class TestTryJoinDefaultWorkspace:
         account_id = "11111111-1111-1111-1111-111111111111"
 
         with (
-            patch("services.enterprise.enterprise_service.dify_config") as mock_config,
+            patch("services.enterprise.enterprise_service.nexusai_config") as mock_config,
             patch("services.enterprise.enterprise_service.EnterpriseService.join_default_workspace") as mock_join,
         ):
             mock_config.ENTERPRISE_ENABLED = True
@@ -305,7 +305,7 @@ class TestTryJoinDefaultWorkspace:
             mock_join.assert_called_once_with(account_id=account_id)
 
     def test_try_join_default_workspace_invalid_account_id_soft_fails(self):
-        with patch("services.enterprise.enterprise_service.dify_config") as mock_config:
+        with patch("services.enterprise.enterprise_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
 
             # Should not raise even though UUID parsing fails inside join_default_workspace
@@ -323,7 +323,7 @@ class TestGetCachedLicenseStatus:
     """Tests for EnterpriseService.get_cached_license_status."""
 
     def test_returns_none_when_enterprise_disabled(self):
-        with patch(f"{_EE_SVC}.dify_config") as mock_config:
+        with patch(f"{_EE_SVC}.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = False
 
             assert EnterpriseService.get_cached_license_status() is None
@@ -332,7 +332,7 @@ class TestGetCachedLicenseStatus:
         from services.feature_service import LicenseStatus
 
         with (
-            patch(f"{_EE_SVC}.dify_config") as mock_config,
+            patch(f"{_EE_SVC}.nexusai_config") as mock_config,
             patch(f"{_EE_SVC}.redis_client") as mock_redis,
             patch.object(EnterpriseService, "get_info") as mock_get_info,
         ):
@@ -349,7 +349,7 @@ class TestGetCachedLicenseStatus:
         from services.feature_service import LicenseStatus
 
         with (
-            patch(f"{_EE_SVC}.dify_config") as mock_config,
+            patch(f"{_EE_SVC}.nexusai_config") as mock_config,
             patch(f"{_EE_SVC}.redis_client") as mock_redis,
             patch.object(EnterpriseService, "get_info") as mock_get_info,
         ):
@@ -368,7 +368,7 @@ class TestGetCachedLicenseStatus:
         from services.feature_service import LicenseStatus
 
         with (
-            patch(f"{_EE_SVC}.dify_config") as mock_config,
+            patch(f"{_EE_SVC}.nexusai_config") as mock_config,
             patch(f"{_EE_SVC}.redis_client") as mock_redis,
             patch.object(EnterpriseService, "get_info") as mock_get_info,
         ):
@@ -387,7 +387,7 @@ class TestGetCachedLicenseStatus:
         from services.feature_service import LicenseStatus
 
         with (
-            patch(f"{_EE_SVC}.dify_config") as mock_config,
+            patch(f"{_EE_SVC}.nexusai_config") as mock_config,
             patch(f"{_EE_SVC}.redis_client") as mock_redis,
             patch.object(EnterpriseService, "get_info") as mock_get_info,
         ):
@@ -404,7 +404,7 @@ class TestGetCachedLicenseStatus:
         from services.feature_service import LicenseStatus
 
         with (
-            patch(f"{_EE_SVC}.dify_config") as mock_config,
+            patch(f"{_EE_SVC}.nexusai_config") as mock_config,
             patch(f"{_EE_SVC}.redis_client") as mock_redis,
             patch.object(EnterpriseService, "get_info") as mock_get_info,
         ):
@@ -419,7 +419,7 @@ class TestGetCachedLicenseStatus:
 
     def test_api_failure_returns_none(self):
         with (
-            patch(f"{_EE_SVC}.dify_config") as mock_config,
+            patch(f"{_EE_SVC}.nexusai_config") as mock_config,
             patch(f"{_EE_SVC}.redis_client") as mock_redis,
             patch.object(EnterpriseService, "get_info") as mock_get_info,
         ):
@@ -431,7 +431,7 @@ class TestGetCachedLicenseStatus:
 
     def test_api_returns_no_license_info(self):
         with (
-            patch(f"{_EE_SVC}.dify_config") as mock_config,
+            patch(f"{_EE_SVC}.nexusai_config") as mock_config,
             patch(f"{_EE_SVC}.redis_client") as mock_redis,
             patch.object(EnterpriseService, "get_info") as mock_get_info,
         ):

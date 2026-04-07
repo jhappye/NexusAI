@@ -26,7 +26,7 @@ from models.enums import CreatorUserRole
 from models.human_input import RecipientType
 from models.model import AppMode
 from models.workflow import WorkflowRun
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.human_input_service import Form, HumanInputService
 from services.workflow_event_snapshot_service import build_workflow_event_stream
 
@@ -132,7 +132,7 @@ class ConsoleWorkflowEventsApi(Resource):
 
         user, tenant_id = current_account_with_tenant()
         session_maker = sessionmaker(db.engine)
-        repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+        repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
         workflow_run = repo.get_workflow_run_by_id_and_tenant_id(
             tenant_id=tenant_id,
             run_id=workflow_run_id,
@@ -150,7 +150,7 @@ class ConsoleWorkflowEventsApi(Resource):
             app = _retrieve_app_for_workflow_run(session, workflow_run)
 
         if workflow_run.finished_at is not None:
-            # TODO(QuantumGhost): should we modify the handling for finished workflow run here?
+            # TODO(QuantumGhost): should we monexusai the handling for finished workflow run here?
             response = WorkflowResponseConverter.workflow_run_result_to_finish_response(
                 task_id=workflow_run.id,
                 workflow_run=workflow_run,

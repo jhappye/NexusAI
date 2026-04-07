@@ -73,11 +73,11 @@ class QuotaType(StrEnum):
         Raises:
             QuotaExceededError: When quota is insufficient
         """
-        from configs import dify_config
+        from configs import nexusai_config
         from services.billing_service import BillingService
         from services.errors.app import QuotaExceededError
 
-        if not dify_config.BILLING_ENABLED:
+        if not nexusai_config.BILLING_ENABLED:
             logger.debug("Billing disabled, allowing request for %s", tenant_id)
             return QuotaCharge(success=True, charge_id=None, _quota_type=self)
 
@@ -126,9 +126,9 @@ class QuotaType(StrEnum):
         Returns:
             True if quota is sufficient, False otherwise
         """
-        from configs import dify_config
+        from configs import nexusai_config
 
-        if not dify_config.BILLING_ENABLED:
+        if not nexusai_config.BILLING_ENABLED:
             return True
 
         if amount <= 0:
@@ -153,10 +153,10 @@ class QuotaType(StrEnum):
             charge_id: The UUID returned from consume()
         """
         try:
-            from configs import dify_config
+            from configs import nexusai_config
             from services.billing_service import BillingService
 
-            if not dify_config.BILLING_ENABLED:
+            if not nexusai_config.BILLING_ENABLED:
                 return
 
             if not charge_id:

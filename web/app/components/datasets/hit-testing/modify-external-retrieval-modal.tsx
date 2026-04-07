@@ -7,7 +7,7 @@ import ActionButton from '@/app/components/base/action-button'
 import Button from '@/app/components/base/button'
 import RetrievalSettings from '../external-knowledge-base/create/RetrievalSettings'
 
-type ModifyExternalRetrievalModalProps = {
+type MonexusaiExternalRetrievalModalProps = {
   onClose: () => void
   onSave: (data: { top_k: number, score_threshold: number, score_threshold_enabled: boolean }) => void
   initialTopK: number
@@ -15,7 +15,7 @@ type ModifyExternalRetrievalModalProps = {
   initialScoreThresholdEnabled: boolean
 }
 
-const ModifyExternalRetrievalModal: React.FC<ModifyExternalRetrievalModalProps> = ({
+const MonexusaiExternalRetrievalModal: React.FC<MonexusaiExternalRetrievalModalProps> = ({
   onClose,
   onSave,
   initialTopK,
@@ -68,4 +68,4 @@ const ModifyExternalRetrievalModal: React.FC<ModifyExternalRetrievalModalProps> 
   )
 }
 
-export default ModifyExternalRetrievalModal
+export default MonexusaiExternalRetrievalModal

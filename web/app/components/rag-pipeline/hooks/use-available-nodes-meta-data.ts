@@ -27,7 +27,7 @@ export const useAvailableNodesMetaData = () => {
   ], [])
 
   const helpLinkUri = useMemo(() => docLink(
-    '/use-dify/knowledge/knowledge-pipeline/knowledge-pipeline-orchestration',
+    '/use-nexusai/knowledge/knowledge-pipeline/knowledge-pipeline-orchestration',
   ), [docLink])
 
   const availableNodesMetaData = useMemo(() => mergedNodesMetaData.map((node) => {

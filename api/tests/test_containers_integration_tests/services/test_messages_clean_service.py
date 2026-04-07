@@ -102,13 +102,13 @@ class TestMessagesCleanServiceIntegration:
     @pytest.fixture
     def mock_billing_enabled(self):
         """Mock BILLING_ENABLED to be True."""
-        with patch("services.retention.conversation.messages_clean_policy.dify_config.BILLING_ENABLED", True):
+        with patch("services.retention.conversation.messages_clean_policy.nexusai_config.BILLING_ENABLED", True):
             yield
 
     @pytest.fixture
     def mock_billing_disabled(self):
         """Mock BILLING_ENABLED to be False."""
-        with patch("services.retention.conversation.messages_clean_policy.dify_config.BILLING_ENABLED", False):
+        with patch("services.retention.conversation.messages_clean_policy.nexusai_config.BILLING_ENABLED", False):
             yield
 
     def _create_account_and_tenant(self, db_session_with_containers: Session, plan: str = CloudPlan.SANDBOX):

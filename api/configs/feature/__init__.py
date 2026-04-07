@@ -112,7 +112,7 @@ class CodeExecutionSandboxConfig(BaseSettings):
 
     CODE_EXECUTION_API_KEY: str = Field(
         description="API key for accessing the code execution service",
-        default="dify-sandbox",
+        default="nexusai-sandbox",
     )
 
     CODE_EXECUTION_CONNECT_TIMEOUT: float | None = Field(
@@ -283,7 +283,7 @@ class MarketplaceConfig(BaseSettings):
 
     MARKETPLACE_API_URL: HttpUrl = Field(
         description="Marketplace API URL",
-        default=HttpUrl("https://marketplace.dify.ai"),
+        default=HttpUrl("https://marketplace.nexusai.ai"),
     )
 
 
@@ -687,7 +687,7 @@ class UpdateConfig(BaseSettings):
 
     CHECK_UPDATE_URL: str = Field(
         description="URL to check for application updates",
-        default="https://updates.dify.ai",
+        default="https://updates.nexusai.ai",
     )
 
 
@@ -800,12 +800,12 @@ class RepositoryConfig(BaseSettings):
     API_WORKFLOW_NODE_EXECUTION_REPOSITORY: str = Field(
         description="Service-layer repository implementation for WorkflowNodeExecutionModel operations. "
         "Specify as a module path",
-        default="repositories.sqlalchemy_api_workflow_node_execution_repository.DifyAPISQLAlchemyWorkflowNodeExecutionRepository",
+        default="repositories.sqlalchemy_api_workflow_node_execution_repository.NexusAIAPISQLAlchemyWorkflowNodeExecutionRepository",
     )
 
     API_WORKFLOW_RUN_REPOSITORY: str = Field(
         description="Service-layer repository implementation for WorkflowRun operations. Specify as a module path",
-        default="repositories.sqlalchemy_api_workflow_run_repository.DifyAPISQLAlchemyWorkflowRunRepository",
+        default="repositories.sqlalchemy_api_workflow_run_repository.NexusAIAPISQLAlchemyWorkflowRunRepository",
     )
 
 
@@ -1010,8 +1010,8 @@ class RagEtlConfig(BaseSettings):
 
     # TODO: This config is not only for rag etl, it is also for file upload, we should move it to file upload config
     ETL_TYPE: str = Field(
-        description="RAG ETL type ('dify' or 'Unstructured'), default to 'dify'",
-        default="dify",
+        description="RAG ETL type ('nexusai' or 'Unstructured'), default to 'nexusai'",
+        default="nexusai",
     )
 
     KEYWORD_DATA_SOURCE_TYPE: str = Field(

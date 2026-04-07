@@ -8,12 +8,12 @@ from typing import TYPE_CHECKING, TypedDict
 import click
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from enums.cloud_plan import CloudPlan
 from extensions.ext_database import db
 from models.workflow import WorkflowRun
 from repositories.api_workflow_run_repository import APIWorkflowRunRepository, RunsWithRelatedCountsDict
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from repositories.sqlalchemy_workflow_trigger_log_repository import SQLAlchemyWorkflowTriggerLogRepository
 from services.billing_service import BillingService, SubscriptionPlan
 
@@ -71,13 +71,13 @@ class WorkflowRunCleanupMetrics:
         self._init_instruments()
 
     def _init_instruments(self) -> None:
-        if not dify_config.ENABLE_OTEL:
+        if not nexusai_config.ENABLE_OTEL:
             return
 
         try:
             from opentelemetry.metrics import get_meter
 
-            meter = get_meter("workflow_run_cleanup", version=dify_config.project.version)
+            meter = get_meter("workflow_run_cleanup", version=nexusai_config.project.version)
             self._job_runs_total = meter.create_counter(
                 "workflow_run_cleanup_jobs_total",
                 description="Total number of workflow run cleanup jobs by status.",
@@ -217,16 +217,16 @@ class WorkflowRunCleanup:
             has_window=bool(start_from),
             task_label=task_label,
         )
-        self.free_plan_grace_period_days = dify_config.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD
+        self.free_plan_grace_period_days = nexusai_config.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD
         self.workflow_run_repo: APIWorkflowRunRepository
         if workflow_run_repo:
             self.workflow_run_repo = workflow_run_repo
         else:
             # Lazy import to avoid circular dependencies during module import
-            from repositories.factory import DifyAPIRepositoryFactory
+            from repositories.factory import NexusAIAPIRepositoryFactory
 
             session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-            self.workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+            self.workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
 
     def run(self) -> None:
         click.echo(
@@ -247,7 +247,7 @@ class WorkflowRunCleanup:
         last_seen: tuple[datetime.datetime, str] | None = None
         status = "success"
         run_start = time.monotonic()
-        max_batch_interval_ms = dify_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_MAX_INTERVAL
+        max_batch_interval_ms = nexusai_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_MAX_INTERVAL
 
         try:
             while True:
@@ -441,7 +441,7 @@ class WorkflowRunCleanup:
     def _filter_free_tenants(self, tenant_ids: Iterable[str]) -> set[str]:
         tenant_id_list = list(tenant_ids)
 
-        if not dify_config.BILLING_ENABLED:
+        if not nexusai_config.BILLING_ENABLED:
             return set(tenant_id_list)
 
         if not tenant_id_list:
@@ -501,7 +501,7 @@ class WorkflowRunCleanup:
         if self._cleanup_whitelist is not None:
             return self._cleanup_whitelist
 
-        if not dify_config.BILLING_ENABLED:
+        if not nexusai_config.BILLING_ENABLED:
             self._cleanup_whitelist = set()
             return self._cleanup_whitelist
 
@@ -555,14 +555,14 @@ class WorkflowRunCleanup:
 
     def _count_node_executions(self, session: Session, runs: Sequence[WorkflowRun]) -> tuple[int, int]:
         run_ids = [run.id for run in runs]
-        repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(
+        repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(
             session_maker=sessionmaker(bind=session.get_bind(), expire_on_commit=False)
         )
         return repo.count_by_runs(session, run_ids)
 
     def _delete_node_executions(self, session: Session, runs: Sequence[WorkflowRun]) -> tuple[int, int]:
         run_ids = [run.id for run in runs]
-        repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(
+        repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(
             session_maker=sessionmaker(bind=session.get_bind(), expire_on_commit=False)
         )
         return repo.delete_by_runs(session, run_ids)

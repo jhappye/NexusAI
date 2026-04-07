@@ -1,4 +1,4 @@
-from configs import dify_config
+from configs import nexusai_config
 from libs.collection_utils import convert_to_lower_and_upper_set
 
 HIDDEN_VALUE = "[__HIDDEN__]"
@@ -57,9 +57,9 @@ _DEFAULT_DOCUMENT_EXTENSION_BASE: frozenset[str] = frozenset(
 )
 
 _doc_extensions: set[str]
-if dify_config.ETL_TYPE == "Unstructured":
+if nexusai_config.ETL_TYPE == "Unstructured":
     _doc_extensions = set(_UNSTRUCTURED_DOCUMENT_EXTENSION_BASE)
-    if dify_config.UNSTRUCTURED_API_URL:
+    if nexusai_config.UNSTRUCTURED_API_URL:
         _doc_extensions.add("ppt")
 else:
     _doc_extensions = set(_DEFAULT_DOCUMENT_EXTENSION_BASE)

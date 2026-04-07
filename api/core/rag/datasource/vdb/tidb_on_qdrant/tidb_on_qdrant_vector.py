@@ -22,7 +22,7 @@ from qdrant_client.http.models import (
 from qdrant_client.local.qdrant_local import QdrantLocal
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import Field
 from core.rag.datasource.vdb.tidb_on_qdrant.tidb_service import TidbService
 from core.rag.datasource.vdb.vector_base import BaseVector
@@ -438,12 +438,12 @@ class TidbOnQdrantVectorFactory(AbstractVectorFactory):
                         TIDB_ON_QDRANT_API_KEY = f"{idle_tidb_auth_binding.account}:{idle_tidb_auth_binding.password}"
                     else:
                         new_cluster = TidbService.create_tidb_serverless_cluster(
-                            dify_config.TIDB_PROJECT_ID or "",
-                            dify_config.TIDB_API_URL or "",
-                            dify_config.TIDB_IAM_API_URL or "",
-                            dify_config.TIDB_PUBLIC_KEY or "",
-                            dify_config.TIDB_PRIVATE_KEY or "",
-                            dify_config.TIDB_REGION or "",
+                            nexusai_config.TIDB_PROJECT_ID or "",
+                            nexusai_config.TIDB_API_URL or "",
+                            nexusai_config.TIDB_IAM_API_URL or "",
+                            nexusai_config.TIDB_PUBLIC_KEY or "",
+                            nexusai_config.TIDB_PRIVATE_KEY or "",
+                            nexusai_config.TIDB_REGION or "",
                         )
                         new_tidb_auth_binding = TidbAuthBinding(
                             cluster_id=new_cluster["cluster_id"],
@@ -474,13 +474,13 @@ class TidbOnQdrantVectorFactory(AbstractVectorFactory):
             collection_name=collection_name,
             group_id=dataset.id,
             config=TidbOnQdrantConfig(
-                endpoint=dify_config.TIDB_ON_QDRANT_URL or "",
+                endpoint=nexusai_config.TIDB_ON_QDRANT_URL or "",
                 api_key=TIDB_ON_QDRANT_API_KEY,
                 root_path=str(config.root_path),
-                timeout=dify_config.TIDB_ON_QDRANT_CLIENT_TIMEOUT,
-                grpc_port=dify_config.TIDB_ON_QDRANT_GRPC_PORT,
-                prefer_grpc=dify_config.TIDB_ON_QDRANT_GRPC_ENABLED,
-                replication_factor=dify_config.QDRANT_REPLICATION_FACTOR,
+                timeout=nexusai_config.TIDB_ON_QDRANT_CLIENT_TIMEOUT,
+                grpc_port=nexusai_config.TIDB_ON_QDRANT_GRPC_PORT,
+                prefer_grpc=nexusai_config.TIDB_ON_QDRANT_GRPC_ENABLED,
+                replication_factor=nexusai_config.QDRANT_REPLICATION_FACTOR,
             ),
         )
 

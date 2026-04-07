@@ -10,7 +10,7 @@ from core.app.workflow.layers.observability import ObservabilityLayer
 class TestObservabilityLayerExtras:
     def test_init_tracer_enabled_sets_tracer(self, monkeypatch):
         tracer = object()
-        monkeypatch.setattr("core.app.workflow.layers.observability.dify_config.ENABLE_OTEL", True)
+        monkeypatch.setattr("core.app.workflow.layers.observability.nexusai_config.ENABLE_OTEL", True)
         monkeypatch.setattr("core.app.workflow.layers.observability.is_instrument_flag_enabled", lambda: False)
         monkeypatch.setattr("core.app.workflow.layers.observability.get_tracer", lambda _: tracer)
 
@@ -20,7 +20,7 @@ class TestObservabilityLayerExtras:
         assert layer._tracer is tracer
 
     def test_init_tracer_disables_when_get_tracer_fails(self, monkeypatch, caplog):
-        monkeypatch.setattr("core.app.workflow.layers.observability.dify_config.ENABLE_OTEL", True)
+        monkeypatch.setattr("core.app.workflow.layers.observability.nexusai_config.ENABLE_OTEL", True)
         monkeypatch.setattr("core.app.workflow.layers.observability.is_instrument_flag_enabled", lambda: False)
 
         def _raise(*_args, **_kwargs):
@@ -35,7 +35,7 @@ class TestObservabilityLayerExtras:
         assert "Failed to get OpenTelemetry tracer" in caplog.text
 
     def test_init_tracer_disables_when_otel_disabled(self, monkeypatch):
-        monkeypatch.setattr("core.app.workflow.layers.observability.dify_config.ENABLE_OTEL", False)
+        monkeypatch.setattr("core.app.workflow.layers.observability.nexusai_config.ENABLE_OTEL", False)
         monkeypatch.setattr("core.app.workflow.layers.observability.is_instrument_flag_enabled", lambda: False)
 
         layer = ObservabilityLayer()

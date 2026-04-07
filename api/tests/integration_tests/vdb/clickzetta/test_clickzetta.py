@@ -31,7 +31,7 @@ class TestClickzettaVector(AbstractVectorTest):
             service=os.getenv("CLICKZETTA_SERVICE", "api.clickzetta.com"),
             workspace=os.getenv("CLICKZETTA_WORKSPACE", "quick_start"),
             vcluster=os.getenv("CLICKZETTA_VCLUSTER", "default_ap"),
-            schema=os.getenv("CLICKZETTA_SCHEMA", "dify_test"),
+            schema=os.getenv("CLICKZETTA_SCHEMA", "nexusai_test"),
             batch_size=10,  # Small batch size for testing
             enable_inverted_index=True,
             analyzer_type="chinese",

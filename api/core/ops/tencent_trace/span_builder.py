@@ -102,7 +102,7 @@ class TencentSpanBuilder:
                 GEN_AI_SESSION_ID: trace_info.metadata.get("conversation_id", ""),
                 GEN_AI_USER_ID: str(user_id),
                 GEN_AI_SPAN_KIND: GenAISpanKind.WORKFLOW.value,
-                GEN_AI_FRAMEWORK: "dify",
+                GEN_AI_FRAMEWORK: "nexusai",
                 GEN_AI_IS_ENTRY: "true",
                 INPUT_VALUE: trace_info.workflow_run_inputs.get("sys.query", ""),
                 OUTPUT_VALUE: json.dumps(trace_info.workflow_run_outputs, ensure_ascii=False),
@@ -125,7 +125,7 @@ class TencentSpanBuilder:
         attributes = {
             GEN_AI_USER_ID: str(user_id),
             GEN_AI_SPAN_KIND: GenAISpanKind.WORKFLOW.value,
-            GEN_AI_FRAMEWORK: "dify",
+            GEN_AI_FRAMEWORK: "nexusai",
             INPUT_VALUE: json.dumps(trace_info.workflow_run_inputs, ensure_ascii=False),
             OUTPUT_VALUE: json.dumps(trace_info.workflow_run_outputs, ensure_ascii=False),
         }
@@ -157,7 +157,7 @@ class TencentSpanBuilder:
         attributes = {
             GEN_AI_SESSION_ID: trace_info.metadata.get("conversation_id", ""),
             GEN_AI_SPAN_KIND: GenAISpanKind.GENERATION.value,
-            GEN_AI_FRAMEWORK: "dify",
+            GEN_AI_FRAMEWORK: "nexusai",
             GEN_AI_MODEL_NAME: process_data.get("model_name", ""),
             GEN_AI_PROVIDER: process_data.get("model_provider", ""),
             GEN_AI_USAGE_INPUT_TOKENS: str(usage_data.get("prompt_tokens", 0)),
@@ -198,7 +198,7 @@ class TencentSpanBuilder:
             GEN_AI_SESSION_ID: trace_info.metadata.get("conversation_id", ""),
             GEN_AI_USER_ID: str(user_id),
             GEN_AI_SPAN_KIND: GenAISpanKind.WORKFLOW.value,
-            GEN_AI_FRAMEWORK: "dify",
+            GEN_AI_FRAMEWORK: "nexusai",
             GEN_AI_IS_ENTRY: "true",
             INPUT_VALUE: str(trace_info.inputs or ""),
             OUTPUT_VALUE: str(trace_info.outputs or ""),
@@ -235,7 +235,7 @@ class TencentSpanBuilder:
             end_time=TencentSpanBuilder._get_time_nanoseconds(trace_info.end_time),
             attributes={
                 GEN_AI_SPAN_KIND: GenAISpanKind.TOOL.value,
-                GEN_AI_FRAMEWORK: "dify",
+                GEN_AI_FRAMEWORK: "nexusai",
                 TOOL_NAME: trace_info.tool_name,
                 TOOL_DESCRIPTION: "",
                 TOOL_PARAMETERS: json.dumps(trace_info.tool_parameters, ensure_ascii=False),
@@ -263,7 +263,7 @@ class TencentSpanBuilder:
             end_time=TencentSpanBuilder._get_time_nanoseconds(trace_info.end_time),
             attributes={
                 GEN_AI_SPAN_KIND: GenAISpanKind.RETRIEVER.value,
-                GEN_AI_FRAMEWORK: "dify",
+                GEN_AI_FRAMEWORK: "nexusai",
                 RETRIEVAL_QUERY: str(trace_info.inputs or ""),
                 RETRIEVAL_DOCUMENT: json.dumps(documents_data, ensure_ascii=False),
                 INPUT_VALUE: str(trace_info.inputs or ""),
@@ -303,7 +303,7 @@ class TencentSpanBuilder:
             attributes={
                 GEN_AI_SESSION_ID: trace_info.metadata.get("conversation_id", ""),
                 GEN_AI_SPAN_KIND: GenAISpanKind.RETRIEVER.value,
-                GEN_AI_FRAMEWORK: "dify",
+                GEN_AI_FRAMEWORK: "nexusai",
                 RETRIEVAL_QUERY: input_value,
                 RETRIEVAL_DOCUMENT: output_value,
                 INPUT_VALUE: input_value,
@@ -330,7 +330,7 @@ class TencentSpanBuilder:
             end_time=TencentSpanBuilder._get_time_nanoseconds(node_execution.finished_at),
             attributes={
                 GEN_AI_SPAN_KIND: GenAISpanKind.TOOL.value,
-                GEN_AI_FRAMEWORK: "dify",
+                GEN_AI_FRAMEWORK: "nexusai",
                 TOOL_NAME: node_execution.title,
                 TOOL_DESCRIPTION: json.dumps(tool_des, ensure_ascii=False),
                 TOOL_PARAMETERS: json.dumps(node_execution.inputs or {}, ensure_ascii=False),
@@ -355,7 +355,7 @@ class TencentSpanBuilder:
             attributes={
                 GEN_AI_SESSION_ID: trace_info.metadata.get("conversation_id", ""),
                 GEN_AI_SPAN_KIND: GenAISpanKind.TASK.value,
-                GEN_AI_FRAMEWORK: "dify",
+                GEN_AI_FRAMEWORK: "nexusai",
                 INPUT_VALUE: json.dumps(node_execution.inputs, ensure_ascii=False),
                 OUTPUT_VALUE: json.dumps(node_execution.outputs, ensure_ascii=False),
             },

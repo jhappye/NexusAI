@@ -36,7 +36,7 @@ class TestGetAvailableDatasetsIntegration:
             tenant_id=tenant.id,
             name=fake.company(),
             description=fake.text(max_nb_chars=100),
-            provider="dify",
+            provider="nexusai",
             data_source_type=DataSourceType.UPLOAD_FILE,
             created_by=account.id,
             indexing_technique=IndexTechniqueType.HIGH_QUALITY,
@@ -95,7 +95,7 @@ class TestGetAvailableDatasetsIntegration:
             id=str(uuid.uuid4()),
             tenant_id=tenant.id,
             name=fake.company(),
-            provider="dify",
+            provider="nexusai",
             data_source_type=DataSourceType.UPLOAD_FILE,
             created_by=account.id,
         )
@@ -148,7 +148,7 @@ class TestGetAvailableDatasetsIntegration:
             id=str(uuid.uuid4()),
             tenant_id=tenant.id,
             name=fake.company(),
-            provider="dify",
+            provider="nexusai",
             data_source_type=DataSourceType.UPLOAD_FILE,
             created_by=account.id,
         )
@@ -201,7 +201,7 @@ class TestGetAvailableDatasetsIntegration:
             id=str(uuid.uuid4()),
             tenant_id=tenant.id,
             name=fake.company(),
-            provider="dify",
+            provider="nexusai",
             data_source_type=DataSourceType.UPLOAD_FILE,
             created_by=account.id,
         )
@@ -242,7 +242,7 @@ class TestGetAvailableDatasetsIntegration:
         Test that external datasets are returned even with no available documents.
 
         External datasets (e.g., from external knowledge bases) don't have
-        documents stored in Dify's database, so they should always be available.
+        documents stored in NexusAI's database, so they should always be available.
 
         Verifies:
         - External datasets are included in results
@@ -308,7 +308,7 @@ class TestGetAvailableDatasetsIntegration:
             id=str(uuid.uuid4()),
             tenant_id=tenant1.id,
             name="Tenant 1 Dataset",
-            provider="dify",
+            provider="nexusai",
             data_source_type=DataSourceType.UPLOAD_FILE,
             created_by=account1.id,
         )
@@ -319,7 +319,7 @@ class TestGetAvailableDatasetsIntegration:
             id=str(uuid.uuid4()),
             tenant_id=tenant2.id,
             name="Tenant 2 Dataset",
-            provider="dify",
+            provider="nexusai",
             data_source_type=DataSourceType.UPLOAD_FILE,
             created_by=account2.id,
         )
@@ -399,7 +399,7 @@ class TestGetAvailableDatasetsIntegration:
                 id=str(uuid.uuid4()),
                 tenant_id=tenant.id,
                 name=f"Dataset {i}",
-                provider="dify",
+                provider="nexusai",
                 data_source_type=DataSourceType.UPLOAD_FILE,
                 created_by=account.id,
             )
@@ -457,7 +457,7 @@ class TestKnowledgeRetrievalIntegration:
             id=str(uuid.uuid4()),
             tenant_id=tenant.id,
             name=fake.company(),
-            provider="dify",
+            provider="nexusai",
             data_source_type=DataSourceType.UPLOAD_FILE,
             created_by=account.id,
             indexing_technique=IndexTechniqueType.HIGH_QUALITY,
@@ -526,7 +526,7 @@ class TestKnowledgeRetrievalIntegration:
             id=str(uuid.uuid4()),
             tenant_id=tenant.id,
             name=fake.company(),
-            provider="dify",
+            provider="nexusai",
             data_source_type=DataSourceType.UPLOAD_FILE,
             created_by=account.id,
         )
@@ -573,7 +573,7 @@ class TestKnowledgeRetrievalIntegration:
             id=str(uuid.uuid4()),
             tenant_id=tenant.id,
             name=fake.company(),
-            provider="dify",
+            provider="nexusai",
             data_source_type=DataSourceType.UPLOAD_FILE,
             created_by=account.id,
         )

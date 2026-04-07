@@ -33,7 +33,7 @@ class MockTcvectordbClass:
 
     def create_database_if_not_exists(self, database_name: str, timeout: float | None = None) -> RPCDatabase:
         return RPCDatabase(
-            name="dify",
+            name="nexusai",
             read_consistency=self._read_consistency,
         )
 
@@ -80,7 +80,7 @@ class MockTcvectordbClass:
     ) -> RPCCollection:
         return RPCCollection(
             RPCDatabase(
-                name="dify",
+                name="nexusai",
                 read_consistency=self._read_consistency,
             ),
             collection_name,

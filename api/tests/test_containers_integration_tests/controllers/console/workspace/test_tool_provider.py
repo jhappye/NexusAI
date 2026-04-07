@@ -104,7 +104,7 @@ def test_create_mcp_provider_populates_tools(mock_reconnect, mock_session, mock_
         }
         # Act
         with (
-            patch("controllers.console.wraps.dify_config.EDITION", "CLOUD"),  # bypass setup_required DB check
+            patch("controllers.console.wraps.nexusai_config.EDITION", "CLOUD"),  # bypass setup_required DB check
             patch(
                 "controllers.console.wraps.current_account_with_tenant",
                 return_value=(MagicMock(id="u1"), "t1"),

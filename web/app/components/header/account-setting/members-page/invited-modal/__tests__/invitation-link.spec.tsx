@@ -41,13 +41,13 @@ describe('InvitationLink', () => {
 
   it('should copy absolute url as is', async () => {
     const user = userEvent.setup()
-    const absoluteValue = { ...value, url: 'https://dify.ai/invite/123' }
+    const absoluteValue = { ...value, url: 'https://nexusai.ai/invite/123' }
 
     render(<InvitationLink value={absoluteValue} />)
 
     await user.click(screen.getByTestId('invitation-link-url'))
 
-    expect(copy).toHaveBeenCalledWith('https://dify.ai/invite/123')
+    expect(copy).toHaveBeenCalledWith('https://nexusai.ai/invite/123')
   })
 
   it('should show copied feedback and reset after timeout', async () => {

@@ -123,10 +123,10 @@ const Installed: FC<Props> = ({
 
   const { langGeniusVersionInfo } = useAppContext()
   const { data: pluginDeclaration } = usePluginDeclarationFromMarketPlace(uniqueIdentifier)
-  const isDifyVersionCompatible = useMemo(() => {
+  const isNexusAIVersionCompatible = useMemo(() => {
     if (!pluginDeclaration || !langGeniusVersionInfo.current_version)
       return true
-    return isEqualOrLaterThanVersion(langGeniusVersionInfo.current_version, pluginDeclaration?.manifest.meta.minimum_dify_version ?? '0.0.0')
+    return isEqualOrLaterThanVersion(langGeniusVersionInfo.current_version, pluginDeclaration?.manifest.meta.minimum_nexusai_version ?? '0.0.0')
   }, [langGeniusVersionInfo.current_version, pluginDeclaration])
 
   const { canInstall } = useInstallPluginLimit({ ...payload, from: 'marketplace' })
@@ -135,9 +135,9 @@ const Installed: FC<Props> = ({
       <div className="flex flex-col items-start justify-center gap-4 self-stretch px-6 py-3">
         <div className="text-text-secondary system-md-regular">
           <p>{t(`${i18nPrefix}.readyToInstall`, { ns: 'plugin' })}</p>
-          {!isDifyVersionCompatible && (
+          {!isNexusAIVersionCompatible && (
             <p className="text-text-warning system-md-regular">
-              {t('difyVersionNotCompatible', { ns: 'plugin', minimalDifyVersion: pluginDeclaration?.manifest.meta.minimum_dify_version })}
+              {t('nexusaiVersionNotCompatible', { ns: 'plugin', minimalNexusAIVersion: pluginDeclaration?.manifest.meta.minimum_nexusai_version })}
             </p>
           )}
         </div>

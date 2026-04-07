@@ -210,7 +210,7 @@ class InstructionGenerateApi(Resource):
                     case _:
                         return {"error": f"invalid node type: {node_type}"}
             if args.node_id == "" and args.current != "":  # For legacy app without a workflow
-                return LLMGenerator.instruction_modify_legacy(
+                return LLMGenerator.instruction_monexusai_legacy(
                     tenant_id=current_tenant_id,
                     flow_id=args.flow_id,
                     current=args.current,
@@ -219,7 +219,7 @@ class InstructionGenerateApi(Resource):
                     ideal_output=args.ideal_output,
                 )
             if args.node_id != "" and args.current != "":  # For workflow node
-                return LLMGenerator.instruction_modify_workflow(
+                return LLMGenerator.instruction_monexusai_workflow(
                     tenant_id=current_tenant_id,
                     flow_id=args.flow_id,
                     node_id=args.node_id,

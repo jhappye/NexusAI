@@ -5,7 +5,7 @@ import pytest
 from flask import Flask
 from flask.views import MethodView
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions import ext_fastopenapi
 
 if not hasattr(builtins, "MethodView"):
@@ -22,13 +22,13 @@ def app() -> Flask:
 def test_console_version_fastopenapi_returns_current_version(app: Flask):
     ext_fastopenapi.init_app(app)
 
-    with patch("controllers.console.version.dify_config.CHECK_UPDATE_URL", None):
+    with patch("controllers.console.version.nexusai_config.CHECK_UPDATE_URL", None):
         client = app.test_client()
         response = client.get("/console/api/version", query_string={"current_version": "0.0.0"})
 
     assert response.status_code == 200
     data = response.get_json()
-    assert data["version"] == dify_config.project.version
+    assert data["version"] == nexusai_config.project.version
     assert data["release_date"] == ""
     assert data["release_notes"] == ""
     assert data["can_auto_update"] is False

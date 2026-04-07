@@ -411,9 +411,9 @@ def test_fetch_memory_text_uses_prompt_memory_interface():
 
 def test_handle_list_messages_renders_jinja2_messages():
     variable_pool = VariablePool.empty()
-    variable_pool.add(["input", "name"], "Dify")
+    variable_pool.add(["input", "name"], "NexusAI")
     renderer = mock.MagicMock()
-    renderer.render_template.return_value = "Hello Dify"
+    renderer.render_template.return_value = "Hello NexusAI"
 
     prompt_messages = llm_utils.handle_list_messages(
         messages=[
@@ -431,8 +431,8 @@ def test_handle_list_messages_renders_jinja2_messages():
         template_renderer=renderer,
     )
 
-    assert prompt_messages == [SystemPromptMessage(content=[TextPromptMessageContent(data="Hello Dify")])]
-    renderer.render_template.assert_called_once_with("Hello {{ name }}", {"name": "Dify"})
+    assert prompt_messages == [SystemPromptMessage(content=[TextPromptMessageContent(data="Hello NexusAI")])]
+    renderer.render_template.assert_called_once_with("Hello {{ name }}", {"name": "NexusAI"})
 
 
 def test_handle_list_messages_splits_text_and_file_content():
@@ -529,7 +529,7 @@ def test_handle_list_messages_supports_array_file_segments():
 
 def test_render_jinja2_message_handles_empty_template_success_and_missing_renderer():
     variable_pool = VariablePool.empty()
-    variable_pool.add(["input", "name"], "Dify")
+    variable_pool.add(["input", "name"], "NexusAI")
     variables = [VariableSelector(variable="name", value_selector=["input", "name"])]
 
     assert (
@@ -551,7 +551,7 @@ def test_render_jinja2_message_handles_empty_template_success_and_missing_render
         )
 
     renderer = mock.MagicMock()
-    renderer.render_template.return_value = "Hello Dify"
+    renderer.render_template.return_value = "Hello NexusAI"
     assert (
         llm_utils.render_jinja2_message(
             template="Hello {{ name }}",
@@ -559,15 +559,15 @@ def test_render_jinja2_message_handles_empty_template_success_and_missing_render
             variable_pool=variable_pool,
             template_renderer=renderer,
         )
-        == "Hello Dify"
+        == "Hello NexusAI"
     )
 
 
 def test_handle_completion_template_supports_basic_and_jinja2_templates():
     variable_pool = VariablePool.empty()
-    variable_pool.add(["input", "name"], "Dify")
+    variable_pool.add(["input", "name"], "NexusAI")
     renderer = mock.MagicMock()
-    renderer.render_template.return_value = "Hello Dify"
+    renderer.render_template.return_value = "Hello NexusAI"
 
     basic_messages = llm_utils.handle_completion_template(
         template=LLMNodeCompletionModelPromptTemplate(
@@ -594,7 +594,7 @@ def test_handle_completion_template_supports_basic_and_jinja2_templates():
         UserPromptMessage(content=[TextPromptMessageContent(data="Summarize the docs")]),
     ]
     assert jinja_messages == [
-        UserPromptMessage(content=[TextPromptMessageContent(data="Hello Dify")]),
+        UserPromptMessage(content=[TextPromptMessageContent(data="Hello NexusAI")]),
     ]
 
 

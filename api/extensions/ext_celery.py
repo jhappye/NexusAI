@@ -6,19 +6,19 @@ import pytz  # type: ignore[import-untyped]
 from celery import Celery, Task
 from celery.schedules import crontab
 
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 
 
 def get_celery_ssl_options() -> dict[str, Any] | None:
     """Get SSL configuration for Celery broker/backend connections."""
     # Only apply SSL if we're using Redis as broker/backend
-    if not dify_config.BROKER_USE_SSL:
+    if not nexusai_config.BROKER_USE_SSL:
         return None
 
     # Check if Celery is actually using Redis
-    broker_is_redis = dify_config.CELERY_BROKER_URL and (
-        dify_config.CELERY_BROKER_URL.startswith("redis://") or dify_config.CELERY_BROKER_URL.startswith("rediss://")
+    broker_is_redis = nexusai_config.CELERY_BROKER_URL and (
+        nexusai_config.CELERY_BROKER_URL.startswith("redis://") or nexusai_config.CELERY_BROKER_URL.startswith("rediss://")
     )
 
     if not broker_is_redis:
@@ -31,13 +31,13 @@ def get_celery_ssl_options() -> dict[str, Any] | None:
         "CERT_REQUIRED": ssl.CERT_REQUIRED,
     }
 
-    ssl_cert_reqs = cert_reqs_map.get(dify_config.REDIS_SSL_CERT_REQS, ssl.CERT_NONE)
+    ssl_cert_reqs = cert_reqs_map.get(nexusai_config.REDIS_SSL_CERT_REQS, ssl.CERT_NONE)
 
     ssl_options = {
         "ssl_cert_reqs": ssl_cert_reqs,
-        "ssl_ca_certs": dify_config.REDIS_SSL_CA_CERTS,
-        "ssl_certfile": dify_config.REDIS_SSL_CERTFILE,
-        "ssl_keyfile": dify_config.REDIS_SSL_KEYFILE,
+        "ssl_ca_certs": nexusai_config.REDIS_SSL_CA_CERTS,
+        "ssl_certfile": nexusai_config.REDIS_SSL_CERTFILE,
+        "ssl_keyfile": nexusai_config.REDIS_SSL_KEYFILE,
     }
 
     return ssl_options
@@ -45,18 +45,18 @@ def get_celery_ssl_options() -> dict[str, Any] | None:
 
 def get_celery_broker_transport_options() -> dict[str, Any]:
     """Get broker transport options (e.g. Redis Sentinel) for Celery connections."""
-    if dify_config.CELERY_USE_SENTINEL:
+    if nexusai_config.CELERY_USE_SENTINEL:
         return {
-            "master_name": dify_config.CELERY_SENTINEL_MASTER_NAME,
+            "master_name": nexusai_config.CELERY_SENTINEL_MASTER_NAME,
             "sentinel_kwargs": {
-                "socket_timeout": dify_config.CELERY_SENTINEL_SOCKET_TIMEOUT,
-                "password": dify_config.CELERY_SENTINEL_PASSWORD,
+                "socket_timeout": nexusai_config.CELERY_SENTINEL_SOCKET_TIMEOUT,
+                "password": nexusai_config.CELERY_SENTINEL_PASSWORD,
             },
         }
     return {}
 
 
-def init_app(app: DifyApp) -> Celery:
+def init_app(app: NexusAIApp) -> Celery:
     class FlaskTask(Task):
         def __call__(self, *args: object, **kwargs: object) -> object:
             from core.logging.context import init_request_context
@@ -71,23 +71,23 @@ def init_app(app: DifyApp) -> Celery:
     celery_app = Celery(
         app.name,
         task_cls=FlaskTask,
-        broker=dify_config.CELERY_BROKER_URL,
-        backend=dify_config.CELERY_BACKEND,
+        broker=nexusai_config.CELERY_BROKER_URL,
+        backend=nexusai_config.CELERY_BACKEND,
     )
 
     celery_app.conf.update(
-        result_backend=dify_config.CELERY_RESULT_BACKEND,
+        result_backend=nexusai_config.CELERY_RESULT_BACKEND,
         broker_transport_options=broker_transport_options,
         broker_connection_retry_on_startup=True,
-        worker_log_format=dify_config.LOG_FORMAT,
-        worker_task_log_format=dify_config.LOG_FORMAT,
+        worker_log_format=nexusai_config.LOG_FORMAT,
+        worker_task_log_format=nexusai_config.LOG_FORMAT,
         worker_hijack_root_logger=False,
-        timezone=pytz.timezone(dify_config.LOG_TZ or "UTC"),
+        timezone=pytz.timezone(nexusai_config.LOG_TZ or "UTC"),
         task_ignore_result=True,
-        task_annotations=dify_config.CELERY_TASK_ANNOTATIONS,
+        task_annotations=nexusai_config.CELERY_TASK_ANNOTATIONS,
     )
 
-    if dify_config.CELERY_BACKEND == "redis":
+    if nexusai_config.CELERY_BACKEND == "redis":
         celery_app.conf.update(
             result_backend_transport_options=broker_transport_options,
         )
@@ -98,12 +98,12 @@ def init_app(app: DifyApp) -> Celery:
         celery_app.conf.update(
             broker_use_ssl=ssl_options,
             # Also apply SSL to the backend if it's Redis
-            redis_backend_use_ssl=ssl_options if dify_config.CELERY_BACKEND == "redis" else None,
+            redis_backend_use_ssl=ssl_options if nexusai_config.CELERY_BACKEND == "redis" else None,
         )
 
-    if dify_config.LOG_FILE:
+    if nexusai_config.LOG_FILE:
         celery_app.conf.update(
-            worker_logfile=dify_config.LOG_FILE,
+            worker_logfile=nexusai_config.LOG_FILE,
         )
 
     celery_app.set_default()
@@ -115,100 +115,100 @@ def init_app(app: DifyApp) -> Celery:
         "tasks.generate_summary_index_task",  # summary index generation
         "tasks.regenerate_summary_index_task",  # summary index regeneration
     ]
-    day = dify_config.CELERY_BEAT_SCHEDULER_TIME
+    day = nexusai_config.CELERY_BEAT_SCHEDULER_TIME
 
     # if you add a new task, please add the switch to CeleryScheduleTasksConfig
     beat_schedule = {}
-    if dify_config.ENABLE_CLEAN_EMBEDDING_CACHE_TASK:
+    if nexusai_config.ENABLE_CLEAN_EMBEDDING_CACHE_TASK:
         imports.append("schedule.clean_embedding_cache_task")
         beat_schedule["clean_embedding_cache_task"] = {
             "task": "schedule.clean_embedding_cache_task.clean_embedding_cache_task",
             "schedule": crontab(minute="0", hour="2", day_of_month=f"*/{day}"),
         }
-    if dify_config.ENABLE_CLEAN_UNUSED_DATASETS_TASK:
+    if nexusai_config.ENABLE_CLEAN_UNUSED_DATASETS_TASK:
         imports.append("schedule.clean_unused_datasets_task")
         beat_schedule["clean_unused_datasets_task"] = {
             "task": "schedule.clean_unused_datasets_task.clean_unused_datasets_task",
             "schedule": crontab(minute="0", hour="3", day_of_month=f"*/{day}"),
         }
-    if dify_config.ENABLE_CREATE_TIDB_SERVERLESS_TASK:
+    if nexusai_config.ENABLE_CREATE_TIDB_SERVERLESS_TASK:
         imports.append("schedule.create_tidb_serverless_task")
         beat_schedule["create_tidb_serverless_task"] = {
             "task": "schedule.create_tidb_serverless_task.create_tidb_serverless_task",
             "schedule": crontab(minute="0", hour="*"),
         }
-    if dify_config.ENABLE_UPDATE_TIDB_SERVERLESS_STATUS_TASK:
+    if nexusai_config.ENABLE_UPDATE_TIDB_SERVERLESS_STATUS_TASK:
         imports.append("schedule.update_tidb_serverless_status_task")
         beat_schedule["update_tidb_serverless_status_task"] = {
             "task": "schedule.update_tidb_serverless_status_task.update_tidb_serverless_status_task",
             "schedule": timedelta(minutes=10),
         }
-    if dify_config.ENABLE_CLEAN_MESSAGES:
+    if nexusai_config.ENABLE_CLEAN_MESSAGES:
         imports.append("schedule.clean_messages")
         beat_schedule["clean_messages"] = {
             "task": "schedule.clean_messages.clean_messages",
             "schedule": crontab(minute="0", hour="4", day_of_month=f"*/{day}"),
         }
-    if dify_config.ENABLE_MAIL_CLEAN_DOCUMENT_NOTIFY_TASK:
+    if nexusai_config.ENABLE_MAIL_CLEAN_DOCUMENT_NOTIFY_TASK:
         imports.append("schedule.mail_clean_document_notify_task")
         beat_schedule["mail_clean_document_notify_task"] = {
             "task": "schedule.mail_clean_document_notify_task.mail_clean_document_notify_task",
             "schedule": crontab(minute="0", hour="10", day_of_week="1"),
         }
-    if dify_config.ENABLE_DATASETS_QUEUE_MONITOR:
+    if nexusai_config.ENABLE_DATASETS_QUEUE_MONITOR:
         imports.append("schedule.queue_monitor_task")
         beat_schedule["datasets-queue-monitor"] = {
             "task": "schedule.queue_monitor_task.queue_monitor_task",
-            "schedule": timedelta(minutes=dify_config.QUEUE_MONITOR_INTERVAL or 30),
+            "schedule": timedelta(minutes=nexusai_config.QUEUE_MONITOR_INTERVAL or 30),
         }
-    if dify_config.ENABLE_HUMAN_INPUT_TIMEOUT_TASK:
+    if nexusai_config.ENABLE_HUMAN_INPUT_TIMEOUT_TASK:
         imports.append("tasks.human_input_timeout_tasks")
         beat_schedule["human_input_form_timeout"] = {
             "task": "human_input_form_timeout.check_and_resume",
-            "schedule": timedelta(minutes=dify_config.HUMAN_INPUT_TIMEOUT_TASK_INTERVAL),
+            "schedule": timedelta(minutes=nexusai_config.HUMAN_INPUT_TIMEOUT_TASK_INTERVAL),
         }
-    if dify_config.ENABLE_CHECK_UPGRADABLE_PLUGIN_TASK and dify_config.MARKETPLACE_ENABLED:
+    if nexusai_config.ENABLE_CHECK_UPGRADABLE_PLUGIN_TASK and nexusai_config.MARKETPLACE_ENABLED:
         imports.append("schedule.check_upgradable_plugin_task")
         imports.append("tasks.process_tenant_plugin_autoupgrade_check_task")
         beat_schedule["check_upgradable_plugin_task"] = {
             "task": "schedule.check_upgradable_plugin_task.check_upgradable_plugin_task",
             "schedule": crontab(minute="*/15"),
         }
-    if dify_config.WORKFLOW_LOG_CLEANUP_ENABLED:
+    if nexusai_config.WORKFLOW_LOG_CLEANUP_ENABLED:
         # 2:00 AM every day
         imports.append("schedule.clean_workflow_runlogs_precise")
         beat_schedule["clean_workflow_runlogs_precise"] = {
             "task": "schedule.clean_workflow_runlogs_precise.clean_workflow_runlogs_precise",
             "schedule": crontab(minute="0", hour="2"),
         }
-    if dify_config.ENABLE_WORKFLOW_RUN_CLEANUP_TASK:
+    if nexusai_config.ENABLE_WORKFLOW_RUN_CLEANUP_TASK:
         # for saas only
         imports.append("schedule.clean_workflow_runs_task")
         beat_schedule["clean_workflow_runs_task"] = {
             "task": "schedule.clean_workflow_runs_task.clean_workflow_runs_task",
             "schedule": crontab(minute="0", hour="0"),
         }
-    if dify_config.ENABLE_WORKFLOW_SCHEDULE_POLLER_TASK:
+    if nexusai_config.ENABLE_WORKFLOW_SCHEDULE_POLLER_TASK:
         imports.append("schedule.workflow_schedule_task")
         beat_schedule["workflow_schedule_task"] = {
             "task": "schedule.workflow_schedule_task.poll_workflow_schedules",
-            "schedule": timedelta(minutes=dify_config.WORKFLOW_SCHEDULE_POLLER_INTERVAL),
+            "schedule": timedelta(minutes=nexusai_config.WORKFLOW_SCHEDULE_POLLER_INTERVAL),
         }
-    if dify_config.ENABLE_TRIGGER_PROVIDER_REFRESH_TASK:
+    if nexusai_config.ENABLE_TRIGGER_PROVIDER_REFRESH_TASK:
         imports.append("schedule.trigger_provider_refresh_task")
         beat_schedule["trigger_provider_refresh"] = {
             "task": "schedule.trigger_provider_refresh_task.trigger_provider_refresh",
-            "schedule": timedelta(minutes=dify_config.TRIGGER_PROVIDER_REFRESH_INTERVAL),
+            "schedule": timedelta(minutes=nexusai_config.TRIGGER_PROVIDER_REFRESH_INTERVAL),
         }
 
-    if dify_config.ENABLE_API_TOKEN_LAST_USED_UPDATE_TASK:
+    if nexusai_config.ENABLE_API_TOKEN_LAST_USED_UPDATE_TASK:
         imports.append("schedule.update_api_token_last_used_task")
         beat_schedule["batch_update_api_token_last_used"] = {
             "task": "schedule.update_api_token_last_used_task.batch_update_api_token_last_used",
-            "schedule": timedelta(minutes=dify_config.API_TOKEN_LAST_USED_UPDATE_INTERVAL),
+            "schedule": timedelta(minutes=nexusai_config.API_TOKEN_LAST_USED_UPDATE_INTERVAL),
         }
 
-    if dify_config.ENTERPRISE_ENABLED and dify_config.ENTERPRISE_TELEMETRY_ENABLED:
+    if nexusai_config.ENTERPRISE_ENABLED and nexusai_config.ENTERPRISE_TELEMETRY_ENABLED:
         imports.append("tasks.enterprise_telemetry_task")
     celery_app.conf.update(beat_schedule=beat_schedule, imports=imports)
 

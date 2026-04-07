@@ -100,7 +100,7 @@ describe('useImageFiles', () => {
     expect(result.current.files).toHaveLength(0)
   })
 
-  it('should not modify files when onRemove is called with non-existent id', () => {
+  it('should not monexusai files when onRemove is called with non-existent id', () => {
     const { result } = renderHook(() => useImageFiles())
     const imageFile = createImageFile({ _id: 'file-1' })
 
@@ -130,7 +130,7 @@ describe('useImageFiles', () => {
     expect(result.current.files[0].progress).toBe(-1)
   })
 
-  it('should not modify files when onImageLinkLoadError is called with non-existent id', () => {
+  it('should not monexusai files when onImageLinkLoadError is called with non-existent id', () => {
     const { result } = renderHook(() => useImageFiles())
     const imageFile = createImageFile({ _id: 'file-1', progress: 0 })
 
@@ -160,7 +160,7 @@ describe('useImageFiles', () => {
     expect(result.current.files[0].progress).toBe(100)
   })
 
-  it('should not modify files when onImageLinkLoadSuccess is called with non-existent id', () => {
+  it('should not monexusai files when onImageLinkLoadSuccess is called with non-existent id', () => {
     const { result } = renderHook(() => useImageFiles())
     const imageFile = createImageFile({ _id: 'file-1', progress: 50 })
 

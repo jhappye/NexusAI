@@ -7,7 +7,7 @@ from graphon.file import File, FileTransferMethod, FileType
 from graphon.runtime import GraphRuntimeState, VariablePool
 from graphon.variables import FileVariable, StringVariable
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
 from core.trigger.constants import TRIGGER_WEBHOOK_NODE_TYPE
 from core.workflow.nodes.trigger_webhook.entities import (
     ContentType,
@@ -32,7 +32,7 @@ def create_webhook_node(webhook_data: WebhookData, variable_pool: VariablePool) 
         workflow_id="1",
         graph_config={},
         run_context={
-            DIFY_RUN_CONTEXT_KEY: {
+            NEXUSAI_RUN_CONTEXT_KEY: {
                 "tenant_id": "1",
                 "app_id": "1",
                 "user_id": "1",

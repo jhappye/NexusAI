@@ -96,7 +96,7 @@ class TestBuildStreamingTaskOnSubscribe:
     """Tests for AppGenerateService._build_streaming_task_on_subscribe."""
 
     def test_streams_mode_starts_immediately(self, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams")
+        monkeypatch.setattr(ags_module.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams")
         called = []
         cb = AppGenerateService._build_streaming_task_on_subscribe(lambda: called.append(1))
         # task started immediately during build
@@ -106,7 +106,7 @@ class TestBuildStreamingTaskOnSubscribe:
         assert called == [1]  # not called again
 
     def test_pubsub_mode_starts_on_subscribe(self, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "pubsub")
+        monkeypatch.setattr(ags_module.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "pubsub")
         monkeypatch.setattr(ags_module, "SSE_TASK_START_FALLBACK_MS", 60_000)  # large to prevent timer
         called = []
         cb = AppGenerateService._build_streaming_task_on_subscribe(lambda: called.append(1))
@@ -119,7 +119,7 @@ class TestBuildStreamingTaskOnSubscribe:
 
     def test_sharded_mode_starts_on_subscribe(self, monkeypatch):
         """sharded is treated like pubsub (i.e. not 'streams')."""
-        monkeypatch.setattr(ags_module.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "sharded")
+        monkeypatch.setattr(ags_module.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "sharded")
         monkeypatch.setattr(ags_module, "SSE_TASK_START_FALLBACK_MS", 60_000)
         called = []
         cb = AppGenerateService._build_streaming_task_on_subscribe(lambda: called.append(1))
@@ -129,7 +129,7 @@ class TestBuildStreamingTaskOnSubscribe:
 
     def test_pubsub_fallback_timer_fires(self, monkeypatch):
         """When nobody subscribes fast enough the fallback timer fires."""
-        monkeypatch.setattr(ags_module.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "pubsub")
+        monkeypatch.setattr(ags_module.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "pubsub")
         monkeypatch.setattr(ags_module, "SSE_TASK_START_FALLBACK_MS", 50)  # 50 ms
         called = []
         _cb = AppGenerateService._build_streaming_task_on_subscribe(lambda: called.append(1))
@@ -138,7 +138,7 @@ class TestBuildStreamingTaskOnSubscribe:
 
     def test_exception_in_start_task_returns_false(self, monkeypatch):
         """When start_task raises, _try_start returns False and next call retries."""
-        monkeypatch.setattr(ags_module.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams")
+        monkeypatch.setattr(ags_module.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams")
         call_count = 0
 
         def _bad():
@@ -154,7 +154,7 @@ class TestBuildStreamingTaskOnSubscribe:
         assert call_count == 2
 
     def test_concurrent_subscribe_only_starts_once(self, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "pubsub")
+        monkeypatch.setattr(ags_module.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "pubsub")
         monkeypatch.setattr(ags_module, "SSE_TASK_START_FALLBACK_MS", 60_000)
         call_count = 0
 
@@ -176,32 +176,32 @@ class TestBuildStreamingTaskOnSubscribe:
 # ---------------------------------------------------------------------------
 class TestGetMaxActiveRequests:
     def test_both_zero_returns_zero(self, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "APP_MAX_ACTIVE_REQUESTS", 0)
-        monkeypatch.setattr(ags_module.dify_config, "APP_DEFAULT_ACTIVE_REQUESTS", 0)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_MAX_ACTIVE_REQUESTS", 0)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_DEFAULT_ACTIVE_REQUESTS", 0)
         app = _make_app(AppMode.CHAT, max_active_requests=0)
         assert AppGenerateService._get_max_active_requests(app) == 0
 
     def test_app_limit_only(self, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "APP_MAX_ACTIVE_REQUESTS", 0)
-        monkeypatch.setattr(ags_module.dify_config, "APP_DEFAULT_ACTIVE_REQUESTS", 0)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_MAX_ACTIVE_REQUESTS", 0)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_DEFAULT_ACTIVE_REQUESTS", 0)
         app = _make_app(AppMode.CHAT, max_active_requests=5)
         assert AppGenerateService._get_max_active_requests(app) == 5
 
     def test_config_limit_only(self, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "APP_MAX_ACTIVE_REQUESTS", 10)
-        monkeypatch.setattr(ags_module.dify_config, "APP_DEFAULT_ACTIVE_REQUESTS", 0)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_MAX_ACTIVE_REQUESTS", 10)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_DEFAULT_ACTIVE_REQUESTS", 0)
         app = _make_app(AppMode.CHAT, max_active_requests=0)
         assert AppGenerateService._get_max_active_requests(app) == 10
 
     def test_both_non_zero_returns_min(self, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "APP_MAX_ACTIVE_REQUESTS", 20)
-        monkeypatch.setattr(ags_module.dify_config, "APP_DEFAULT_ACTIVE_REQUESTS", 0)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_MAX_ACTIVE_REQUESTS", 20)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_DEFAULT_ACTIVE_REQUESTS", 0)
         app = _make_app(AppMode.CHAT, max_active_requests=5)
         assert AppGenerateService._get_max_active_requests(app) == 5
 
     def test_default_active_requests_used_when_app_has_none(self, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "APP_MAX_ACTIVE_REQUESTS", 0)
-        monkeypatch.setattr(ags_module.dify_config, "APP_DEFAULT_ACTIVE_REQUESTS", 15)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_MAX_ACTIVE_REQUESTS", 0)
+        monkeypatch.setattr(ags_module.nexusai_config, "APP_DEFAULT_ACTIVE_REQUESTS", 15)
         app = _make_app(AppMode.CHAT, max_active_requests=0)
         assert AppGenerateService._get_max_active_requests(app) == 15
 
@@ -214,7 +214,7 @@ class TestGenerate:
 
     @pytest.fixture(autouse=True)
     def _common(self, mocker, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "BILLING_ENABLED", False)
+        monkeypatch.setattr(ags_module.nexusai_config, "BILLING_ENABLED", False)
         mocker.patch("services.app_generate_service.RateLimit", _DummyRateLimit)
         # Prevent AppExecutionParams.new from touching real models via isinstance
         mocker.patch(
@@ -341,7 +341,7 @@ class TestGenerate:
         delay_spy = mocker.patch("services.app_generate_service.workflow_based_app_execution_task.delay")
         # Let _build_streaming_task_on_subscribe call the real on_subscribe
         # so the inner closure (line 165) actually executes.
-        monkeypatch.setattr(ags_module.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams")
+        monkeypatch.setattr(ags_module.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams")
         gen_instance = MagicMock()
         gen_instance.retrieve_events.return_value = iter([])
         gen_instance.convert_to_event_stream.side_effect = lambda x: x
@@ -398,7 +398,7 @@ class TestGenerate:
         delay_spy = mocker.patch("services.app_generate_service.workflow_based_app_execution_task.delay")
         # Let _build_streaming_task_on_subscribe invoke the real on_subscribe
         # so the inner closure (line 216) actually executes.
-        monkeypatch.setattr(ags_module.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams")
+        monkeypatch.setattr(ags_module.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams")
         retrieve_spy = mocker.patch(
             "services.app_generate_service.MessageBasedAppGenerator.retrieve_events",
             return_value=iter([]),
@@ -445,7 +445,7 @@ class TestGenerateBilling:
         )
 
     def test_billing_enabled_consumes_quota(self, mocker, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "BILLING_ENABLED", True)
+        monkeypatch.setattr(ags_module.nexusai_config, "BILLING_ENABLED", True)
         quota_charge = MagicMock()
         consume_mock = mocker.patch(
             "services.app_generate_service.QuotaType.WORKFLOW.consume",
@@ -473,7 +473,7 @@ class TestGenerateBilling:
         from services.errors.app import QuotaExceededError
         from services.errors.llm import InvokeRateLimitError
 
-        monkeypatch.setattr(ags_module.dify_config, "BILLING_ENABLED", True)
+        monkeypatch.setattr(ags_module.nexusai_config, "BILLING_ENABLED", True)
         mocker.patch(
             "services.app_generate_service.QuotaType.WORKFLOW.consume",
             side_effect=QuotaExceededError(feature="workflow", tenant_id="t", required=1),
@@ -489,7 +489,7 @@ class TestGenerateBilling:
             )
 
     def test_exception_refunds_quota_and_exits_rate_limit(self, mocker, monkeypatch):
-        monkeypatch.setattr(ags_module.dify_config, "BILLING_ENABLED", True)
+        monkeypatch.setattr(ags_module.nexusai_config, "BILLING_ENABLED", True)
         quota_charge = MagicMock()
         mocker.patch(
             "services.app_generate_service.QuotaType.WORKFLOW.consume",
@@ -516,7 +516,7 @@ class TestGenerateBilling:
 
     def test_rate_limit_exit_called_in_finally_for_blocking(self, mocker, monkeypatch):
         """For non-streaming (blocking) calls, rate_limit.exit should be called in finally."""
-        monkeypatch.setattr(ags_module.dify_config, "BILLING_ENABLED", False)
+        monkeypatch.setattr(ags_module.nexusai_config, "BILLING_ENABLED", False)
 
         exit_calls: list[str] = []
 

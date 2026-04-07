@@ -4,7 +4,7 @@ import { BlockEnum } from '@/app/components/workflow/types'
 import { useAvailableNodesMetaData } from '../use-available-nodes-meta-data'
 
 vi.mock('@/context/i18n', () => ({
-  useDocLink: () => (path?: string) => `https://docs.dify.ai${path || ''}`,
+  useDocLink: () => (path?: string) => `https://docs.nexusai.ai${path || ''}`,
 }))
 
 vi.mock('@/app/components/workflow/constants/node', () => ({
@@ -89,7 +89,7 @@ describe('useAvailableNodesMetaData', () => {
     const { result } = renderHook(() => useAvailableNodesMetaData())
 
     result.current.nodes.forEach((node) => {
-      expect(node.metaData.helpLinkUri).toContain('https://docs.dify.ai')
+      expect(node.metaData.helpLinkUri).toContain('https://docs.nexusai.ai')
       expect(node.metaData.helpLinkUri).toContain('knowledge-pipeline')
     })
   })

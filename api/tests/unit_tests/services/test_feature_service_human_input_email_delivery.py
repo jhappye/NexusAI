@@ -90,8 +90,8 @@ def test_resolve_human_input_email_delivery_enabled_matrix(
     monkeypatch: pytest.MonkeyPatch,
     case: HumanInputEmailDeliveryCase,
 ):
-    monkeypatch.setattr(feature_service_module.dify_config, "ENTERPRISE_ENABLED", case.enterprise_enabled)
-    monkeypatch.setattr(feature_service_module.dify_config, "BILLING_ENABLED", case.billing_enabled)
+    monkeypatch.setattr(feature_service_module.nexusai_config, "ENTERPRISE_ENABLED", case.enterprise_enabled)
+    monkeypatch.setattr(feature_service_module.nexusai_config, "BILLING_ENABLED", case.billing_enabled)
     features = FeatureModel()
     features.billing.enabled = case.billing_feature_enabled
     features.billing.subscription.plan = case.plan

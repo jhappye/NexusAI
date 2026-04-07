@@ -7,21 +7,21 @@ from graphon.nodes.llm.entities import ModelConfig
 from graphon.nodes.llm.exc import LLMModeRequiredError, ModelNotExistError
 from graphon.nodes.llm.protocols import CredentialsProvider
 
-from core.app.entities.app_invoke_entities import DifyRunContext, ModelConfigWithCredentialsEntity
+from core.app.entities.app_invoke_entities import NexusAIRunContext, ModelConfigWithCredentialsEntity
 from core.errors.error import ProviderTokenNotInitError
 from core.model_manager import ModelInstance, ModelManager
 from core.plugin.impl.model_runtime_factory import create_plugin_provider_manager
 from core.provider_manager import ProviderManager
 
 
-class DifyCredentialsProvider:
+class NexusAICredentialsProvider:
     tenant_id: str
     provider_manager: ProviderManager
 
     def __init__(
         self,
         *,
-        run_context: DifyRunContext,
+        run_context: NexusAIRunContext,
         provider_manager: ProviderManager | None = None,
     ) -> None:
         self.tenant_id = run_context.tenant_id
@@ -50,14 +50,14 @@ class DifyCredentialsProvider:
         return credentials
 
 
-class DifyModelFactory:
+class NexusAIModelFactory:
     tenant_id: str
     model_manager: ModelManager
 
     def __init__(
         self,
         *,
-        run_context: DifyRunContext,
+        run_context: NexusAIRunContext,
         model_manager: ModelManager | None = None,
     ) -> None:
         self.tenant_id = run_context.tenant_id
@@ -79,7 +79,7 @@ class DifyModelFactory:
         )
 
 
-def build_dify_model_access(run_context: DifyRunContext) -> tuple[CredentialsProvider, DifyModelFactory]:
+def build_nexusai_model_access(run_context: NexusAIRunContext) -> tuple[CredentialsProvider, NexusAIModelFactory]:
     """Create LLM access adapters that share the same tenant-bound manager graph."""
     provider_manager = create_plugin_provider_manager(
         tenant_id=run_context.tenant_id,
@@ -88,8 +88,8 @@ def build_dify_model_access(run_context: DifyRunContext) -> tuple[CredentialsPro
     model_manager = ModelManager(provider_manager=provider_manager)
 
     return (
-        DifyCredentialsProvider(run_context=run_context, provider_manager=provider_manager),
-        DifyModelFactory(run_context=run_context, model_manager=model_manager),
+        NexusAICredentialsProvider(run_context=run_context, provider_manager=provider_manager),
+        NexusAIModelFactory(run_context=run_context, model_manager=model_manager),
     )
 
 
@@ -114,7 +114,7 @@ def fetch_model_config(
     *,
     node_data_model: ModelConfig,
     credentials_provider: CredentialsProvider,
-    model_factory: DifyModelFactory,
+    model_factory: NexusAIModelFactory,
 ) -> tuple[ModelInstance, ModelConfigWithCredentialsEntity]:
     if not node_data_model.mode:
         raise LLMModeRequiredError("LLM mode is required.")

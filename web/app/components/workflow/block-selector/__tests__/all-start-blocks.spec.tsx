@@ -270,7 +270,7 @@ describe('AllStartBlocks', () => {
       expect(screen.getByText('workflow.tabs.noPluginsFound')).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'workflow.tabs.requestToCommunity' })).toHaveAttribute(
         'href',
-        'https://github.com/langgenius/dify-plugins/issues/new?template=plugin_request.yaml',
+        'https://github.com/langgenius/nexusai-plugins/issues/new?template=plugin_request.yaml',
       )
     })
   })

@@ -11,12 +11,12 @@ class BaiduVectorTest(AbstractVectorTest):
     def __init__(self):
         super().__init__()
         self.vector = BaiduVector(
-            "dify",
+            "nexusai",
             BaiduConfig(
                 endpoint="http://127.0.0.1:5287",
                 account="root",
-                api_key="dify",
-                database="dify",
+                api_key="nexusai",
+                database="nexusai",
                 shard=1,
                 replicas=3,
             ),

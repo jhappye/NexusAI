@@ -30,7 +30,7 @@ from core.app.entities.app_invoke_entities import (
     ModelConfigWithCredentialsEntity,
 )
 from core.app.file_access import DatabaseFileAccessController
-from core.callback_handler.agent_tool_callback_handler import DifyAgentCallbackHandler
+from core.callback_handler.agent_tool_callback_handler import NexusAIAgentCallbackHandler
 from core.callback_handler.index_tool_callback_handler import DatasetIndexToolCallbackHandler
 from core.memory.token_buffer_memory import TokenBufferMemory
 from core.model_manager import ModelInstance
@@ -81,7 +81,7 @@ class BaseAgentRunner(AppRunner):
         self.model_instance = model_instance
 
         # init callback
-        self.agent_callback = DifyAgentCallbackHandler()
+        self.agent_callback = NexusAIAgentCallbackHandler()
         # init dataset tools
         hit_callback = DatasetIndexToolCallbackHandler(
             queue_manager=queue_manager,

@@ -120,7 +120,7 @@ const createPluginDeclaration = (overrides: Partial<PluginDeclaration> = {}): Pl
   agent_strategy: null,
   meta: {
     version: '1.0.0',
-    minimum_dify_version: '0.5.0',
+    minimum_nexusai_version: '0.5.0',
   },
   trigger: {} as unknown as PluginDeclaration['trigger'],
   ...overrides,
@@ -145,7 +145,7 @@ const createPluginDetail = (overrides: Partial<PluginDetail> = {}): PluginDetail
   meta: {
     repo: 'test-author/test-plugin',
     version: '1.0.0',
-    package: 'test-plugin.difypkg',
+    package: 'test-plugin.nexusaipkg',
   },
   status: 'active',
   deprecated_reason: '',
@@ -221,7 +221,7 @@ describe('PluginItem', () => {
       // Arrange
       const plugin = createPluginDetail({
         source: PluginSource.github,
-        meta: { repo: 'owner/repo', version: '1.0.0', package: 'pkg.difypkg' },
+        meta: { repo: 'owner/repo', version: '1.0.0', package: 'pkg.nexusaipkg' },
       })
 
       // Act
@@ -344,12 +344,12 @@ describe('PluginItem', () => {
   })
 
   describe('Version Compatibility', () => {
-    it('should show warning icon when Dify version is not compatible', () => {
+    it('should show warning icon when NexusAI version is not compatible', () => {
       // Arrange
       mockLangGeniusVersionInfo.mockReturnValue({ current_version: '0.3.0' })
       const plugin = createPluginDetail({
         declaration: createPluginDeclaration({
-          meta: { version: '1.0.0', minimum_dify_version: '0.5.0' },
+          meta: { version: '1.0.0', minimum_nexusai_version: '0.5.0' },
         }),
       })
 
@@ -361,12 +361,12 @@ describe('PluginItem', () => {
       expect(warningIcon).toBeInTheDocument()
     })
 
-    it('should not show warning when Dify version is compatible', () => {
+    it('should not show warning when NexusAI version is compatible', () => {
       // Arrange
       mockLangGeniusVersionInfo.mockReturnValue({ current_version: '1.0.0' })
       const plugin = createPluginDetail({
         declaration: createPluginDeclaration({
-          meta: { version: '1.0.0', minimum_dify_version: '0.5.0' },
+          meta: { version: '1.0.0', minimum_nexusai_version: '0.5.0' },
         }),
       })
 
@@ -391,7 +391,7 @@ describe('PluginItem', () => {
       expect(warningIcon).not.toBeInTheDocument()
     })
 
-    it('should handle missing minimum_dify_version gracefully', () => {
+    it('should handle missing minimum_nexusai_version gracefully', () => {
       // Arrange
       const plugin = createPluginDetail({
         declaration: createPluginDeclaration({

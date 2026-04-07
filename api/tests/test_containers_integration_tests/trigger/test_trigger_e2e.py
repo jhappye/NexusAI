@@ -13,7 +13,7 @@ from flask.testing import FlaskClient
 from graphon.enums import BuiltinNodeTypes
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from core.plugin.entities.request import TriggerInvokeEventResponse
 from core.trigger.constants import (
     TRIGGER_PLUGIN_NODE_TYPE,
@@ -114,7 +114,7 @@ def test_publish_blocks_start_and_trigger_coexistence(
         "get_system_features",
         classmethod(lambda _cls: SimpleNamespace(plugin_manager=SimpleNamespace(enabled=False))),
     )
-    monkeypatch.setattr("services.workflow_service.dify_config", SimpleNamespace(BILLING_ENABLED=False))
+    monkeypatch.setattr("services.workflow_service.nexusai_config", SimpleNamespace(BILLING_ENABLED=False))
 
     with pytest.raises(ValueError, match="Start node and trigger nodes cannot coexist"):
         workflow_service.publish_workflow(session=db_session_with_containers, app_model=app_model, account=account)
@@ -122,10 +122,10 @@ def test_publish_blocks_start_and_trigger_coexistence(
 
 def test_trigger_url_uses_config_base(monkeypatch: pytest.MonkeyPatch) -> None:
     """TRIGGER_URL config should be reflected in generated webhook and plugin endpoints."""
-    original_url = getattr(dify_config, "TRIGGER_URL", None)
+    original_url = getattr(nexusai_config, "TRIGGER_URL", None)
 
     try:
-        monkeypatch.setattr(dify_config, "TRIGGER_URL", TEST_TRIGGER_URL)
+        monkeypatch.setattr(nexusai_config, "TRIGGER_URL", TEST_TRIGGER_URL)
         endpoint_module = importlib.reload(importlib.import_module("core.trigger.utils.endpoint"))
 
         assert (
@@ -142,7 +142,7 @@ def test_trigger_url_uses_config_base(monkeypatch: pytest.MonkeyPatch) -> None:
     finally:
         # Restore original config and reload module
         if original_url is not None:
-            monkeypatch.setattr(dify_config, "TRIGGER_URL", original_url)
+            monkeypatch.setattr(nexusai_config, "TRIGGER_URL", original_url)
         importlib.reload(importlib.import_module("core.trigger.utils.endpoint"))
 
 

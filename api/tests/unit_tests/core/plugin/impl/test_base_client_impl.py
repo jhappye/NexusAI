@@ -41,7 +41,7 @@ class _StreamContext:
 class TestBasePluginClientImpl:
     def test_inject_trace_headers(self, mocker):
         client = BasePluginClient()
-        mocker.patch("core.plugin.impl.base.dify_config.ENABLE_OTEL", True)
+        mocker.patch("core.plugin.impl.base.nexusai_config.ENABLE_OTEL", True)
         trace_header = "00-abc-xyz-01"
         mocker.patch("core.helper.trace_id_helper.generate_traceparent_header", return_value=trace_header)
 

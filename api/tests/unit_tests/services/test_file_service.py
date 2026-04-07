@@ -8,7 +8,7 @@ from sqlalchemy import Engine
 from sqlalchemy.orm import Session, sessionmaker
 from werkzeug.exceptions import NotFound
 
-from configs import dify_config
+from configs import nexusai_config
 from models.enums import CreatorUserRole
 from models.model import Account, EndUser, UploadFile
 from services.errors.file import BlockedFileExtensionError, FileTooLargeError, UnsupportedFileTypeError
@@ -105,7 +105,7 @@ class TestFileService:
             assert result.name.endswith(".txt")
 
     def test_upload_file_blocked_extension(self, file_service):
-        with patch.object(dify_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe"):
+        with patch.object(nexusai_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe"):
             with pytest.raises(BlockedFileExtensionError):
                 file_service.upload_file(
                     filename="test.exe", content=b"", mimetype="application/octet-stream", user=MagicMock()
@@ -120,7 +120,7 @@ class TestFileService:
     def test_upload_file_too_large(self, file_service):
         # 16MB file for an image with 15MB limit
         content = b"a" * (16 * 1024 * 1024)
-        with patch.object(dify_config, "UPLOAD_IMAGE_FILE_SIZE_LIMIT", 15):
+        with patch.object(nexusai_config, "UPLOAD_IMAGE_FILE_SIZE_LIMIT", 15):
             with pytest.raises(FileTooLargeError):
                 file_service.upload_file(filename="test.jpg", content=content, mimetype="image/jpeg", user=MagicMock())
 
@@ -139,10 +139,10 @@ class TestFileService:
 
     def test_is_file_size_within_limit(self):
         with (
-            patch.object(dify_config, "UPLOAD_IMAGE_FILE_SIZE_LIMIT", 10),
-            patch.object(dify_config, "UPLOAD_VIDEO_FILE_SIZE_LIMIT", 20),
-            patch.object(dify_config, "UPLOAD_AUDIO_FILE_SIZE_LIMIT", 30),
-            patch.object(dify_config, "UPLOAD_FILE_SIZE_LIMIT", 5),
+            patch.object(nexusai_config, "UPLOAD_IMAGE_FILE_SIZE_LIMIT", 10),
+            patch.object(nexusai_config, "UPLOAD_VIDEO_FILE_SIZE_LIMIT", 20),
+            patch.object(nexusai_config, "UPLOAD_AUDIO_FILE_SIZE_LIMIT", 30),
+            patch.object(nexusai_config, "UPLOAD_FILE_SIZE_LIMIT", 5),
         ):
             # Image
             assert FileService.is_file_size_within_limit(extension="jpg", file_size=10 * 1024 * 1024) is True

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.entities.provider_entities import ProviderConfig
 from core.plugin.entities.base import BasePluginEntity
 
@@ -48,6 +48,6 @@ class EndpointEntityWithInstance(EndpointEntity):
     @classmethod
     def render_url_template(cls, values):
         if "url" not in values:
-            url_template = dify_config.ENDPOINT_URL_TEMPLATE
+            url_template = nexusai_config.ENDPOINT_URL_TEMPLATE
             values["url"] = url_template.replace("{hook_id}", values["hook_id"])
         return values

@@ -29,7 +29,7 @@ from graphon.runtime import GraphRuntimeState, VariablePool
 from core.app.apps.advanced_chat import app_generator as adv_app_gen_module
 from core.app.apps.workflow import app_generator as wf_app_gen_module
 from core.app.entities.app_invoke_entities import InvokeFrom
-from core.workflow.node_factory import DifyNodeFactory
+from core.workflow.node_factory import NexusAINodeFactory
 from core.workflow.system_variables import build_system_variables
 from tests.workflow_test_utils import build_test_graph_init_params
 
@@ -90,7 +90,7 @@ class _StubToolNode(Node[_StubToolNodeData]):
 
 
 def _patch_tool_node(mocker):
-    original_create_node = DifyNodeFactory.create_node
+    original_create_node = NexusAINodeFactory.create_node
 
     def _patched_create_node(self, node_config: dict[str, object] | NodeConfigDict) -> Node:
         typed_node_config = NodeConfigDictAdapter.validate_python(node_config)
@@ -104,7 +104,7 @@ def _patch_tool_node(mocker):
             )
         return original_create_node(self, typed_node_config)
 
-    mocker.patch.object(DifyNodeFactory, "create_node", _patched_create_node)
+    mocker.patch.object(NexusAINodeFactory, "create_node", _patched_create_node)
 
 
 def _node_data(node_type: NodeType, data: BaseNodeData) -> dict[str, object]:
@@ -153,7 +153,7 @@ def _build_graph(runtime_state: GraphRuntimeState, *, pause_on: str | None) -> G
         call_depth=0,
     )
 
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=params,
         graph_runtime_state=runtime_state,
     )

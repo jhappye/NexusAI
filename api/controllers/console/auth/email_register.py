@@ -3,7 +3,7 @@ from flask_restx import Resource
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from constants.languages import languages
 from controllers.console import console_ns
 from controllers.console.auth.error import (
@@ -70,7 +70,7 @@ class EmailRegisterSendEmailApi(Resource):
         if args.language in languages:
             language = args.language
 
-        if dify_config.BILLING_ENABLED and BillingService.is_email_in_freeze(normalized_email):
+        if nexusai_config.BILLING_ENABLED and BillingService.is_email_in_freeze(normalized_email):
             raise AccountInFreezeError()
 
         with sessionmaker(db.engine).begin() as session:

@@ -10,7 +10,7 @@
 
 ## Query & Mutation (Mandatory)
 
-- `frontend-query-mutation` is the source of truth for Dify frontend contracts, query and mutation call-site patterns, conditional queries, invalidation, and mutation error handling.
+- `frontend-query-mutation` is the source of truth for NexusAI frontend contracts, query and mutation call-site patterns, conditional queries, invalidation, and mutation error handling.
 
 ## Automated Test Generation
 

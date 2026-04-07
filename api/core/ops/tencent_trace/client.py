@@ -36,7 +36,7 @@ from opentelemetry.semconv.attributes import service_attributes
 from opentelemetry.trace import SpanKind
 from opentelemetry.util.types import AttributeValue
 
-from configs import dify_config
+from configs import nexusai_config
 
 from .entities.semconv import (
     GEN_AI_SERVER_TIME_TO_FIRST_TOKEN,
@@ -80,8 +80,8 @@ class TencentTraceClient:
         self.resource = Resource(
             attributes={
                 service_attributes.SERVICE_NAME: service_name,
-                service_attributes.SERVICE_VERSION: f"dify-{dify_config.project.version}-{dify_config.COMMIT_SHA}",
-                DEPLOYMENT_ENVIRONMENT: f"{dify_config.DEPLOY_ENV}-{dify_config.EDITION}",
+                service_attributes.SERVICE_VERSION: f"nexusai-{nexusai_config.project.version}-{nexusai_config.COMMIT_SHA}",
+                DEPLOYMENT_ENVIRONMENT: f"{nexusai_config.DEPLOY_ENV}-{nexusai_config.EDITION}",
                 HOST_NAME: socket.gethostname(),
                 "telemetry.sdk.language": "python",
                 "telemetry.sdk.name": "opentelemetry",
@@ -109,8 +109,8 @@ class TencentTraceClient:
         )
         self.tracer_provider.add_span_processor(self.span_processor)
 
-        # use dify api version as tracer version
-        self.tracer = self.tracer_provider.get_tracer("dify-sdk", dify_config.project.version)
+        # use nexusai api version as tracer version
+        self.tracer = self.tracer_provider.get_tracer("nexusai-sdk", nexusai_config.project.version)
 
         # Store span contexts for parent-child relationships
         self.span_contexts: dict[int, trace_api.SpanContext] = {}
@@ -213,7 +213,7 @@ class TencentTraceClient:
                 # without worker restart. Each TencentTraceClient manages its own MeterProvider.
                 provider = MeterProvider(resource=self.resource, metric_readers=[metric_reader])
                 self.meter_provider = provider
-                self.meter = provider.get_meter("dify-sdk", dify_config.project.version)
+                self.meter = provider.get_meter("nexusai-sdk", nexusai_config.project.version)
 
                 # LLM operation duration histogram
                 self.hist_llm_duration = self.meter.create_histogram(

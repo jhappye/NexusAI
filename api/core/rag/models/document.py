@@ -24,7 +24,7 @@ class AttachmentDocument(BaseModel):
 
     page_content: str
 
-    provider: str | None = "dify"
+    provider: str | None = "nexusai"
 
     vector: list[float] | None = None
 
@@ -43,7 +43,7 @@ class Document(BaseModel):
     """
     metadata: dict[str, Any] = Field(default_factory=dict)
 
-    provider: str | None = "dify"
+    provider: str | None = "nexusai"
 
     children: list[ChildDocument] | None = None
 

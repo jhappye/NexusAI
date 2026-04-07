@@ -51,7 +51,7 @@ def _valid_config(module):
     return module.HologresVectorConfig(
         host="localhost",
         port=80,
-        database="dify",
+        database="nexusai",
         access_key_id="ak",
         access_key_secret="sk",
         schema_name="public",
@@ -86,7 +86,7 @@ def test_init_client_and_get_type(hologres_module):
     hologres_module.holo.connect.assert_called_once_with(
         host="localhost",
         port=80,
-        database="dify",
+        database="nexusai",
         access_key_id="ak",
         access_key_secret="sk",
         schema="public",
@@ -341,17 +341,17 @@ def test_hologres_factory_uses_existing_or_generated_collection(hologres_module,
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(hologres_module.Dataset, "gen_collection_name_by_id", lambda _id: "generated_collection")
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_HOST", "127.0.0.1")
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_PORT", 80)
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_DATABASE", "dify")
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_ACCESS_KEY_ID", "ak")
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_ACCESS_KEY_SECRET", "sk")
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_SCHEMA", "public")
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_TOKENIZER", "jieba")
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_DISTANCE_METHOD", "Cosine")
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_BASE_QUANTIZATION_TYPE", "rabitq")
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_MAX_DEGREE", 64)
-    monkeypatch.setattr(hologres_module.dify_config, "HOLOGRES_EF_CONSTRUCTION", 400)
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_HOST", "127.0.0.1")
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_PORT", 80)
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_DATABASE", "nexusai")
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_ACCESS_KEY_ID", "ak")
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_ACCESS_KEY_SECRET", "sk")
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_SCHEMA", "public")
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_TOKENIZER", "jieba")
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_DISTANCE_METHOD", "Cosine")
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_BASE_QUANTIZATION_TYPE", "rabitq")
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_MAX_DEGREE", 64)
+    monkeypatch.setattr(hologres_module.nexusai_config, "HOLOGRES_EF_CONSTRUCTION", 400)
 
     with patch.object(hologres_module, "HologresVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())
@@ -363,7 +363,7 @@ def test_hologres_factory_uses_existing_or_generated_collection(hologres_module,
     assert vector_cls.call_args_list[1].kwargs["collection_name"] == "generated_collection"
     generated_config = vector_cls.call_args_list[1].kwargs["config"]
     assert generated_config.host == "127.0.0.1"
-    assert generated_config.database == "dify"
+    assert generated_config.database == "nexusai"
     assert generated_config.access_key_id == "ak"
     assert json.loads(dataset_without_index.index_struct) == {
         "type": hologres_module.VectorType.HOLOGRES,

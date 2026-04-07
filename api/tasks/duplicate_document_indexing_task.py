@@ -6,7 +6,7 @@ import click
 from celery import shared_task
 from sqlalchemy import delete, select
 
-from configs import dify_config
+from configs import nexusai_config
 from core.db.session_factory import session_factory
 from core.entities.document_task import DocumentTask
 from core.indexing_runner import DocumentIsPausedError, IndexingRunner
@@ -56,7 +56,7 @@ def _duplicate_document_indexing_task_with_tenant_queue(
 
         # Check if there are waiting tasks in the queue
         # Use rpop to get the next task from the queue (FIFO order)
-        next_tasks = tenant_isolated_task_queue.pull_tasks(count=dify_config.TENANT_ISOLATED_TASK_CONCURRENCY)
+        next_tasks = tenant_isolated_task_queue.pull_tasks(count=nexusai_config.TENANT_ISOLATED_TASK_CONCURRENCY)
 
         logger.info("duplicate document indexing tenant isolation queue %s next tasks: %s", tenant_id, next_tasks)
 
@@ -95,7 +95,7 @@ def _duplicate_document_indexing_task(dataset_id: str, document_ids: Sequence[st
                     count = len(document_ids)
                     if features.billing.subscription.plan == CloudPlan.SANDBOX and count > 1:
                         raise ValueError("Your current plan does not support batch upload, please upgrade your plan.")
-                    batch_upload_limit = int(dify_config.BATCH_UPLOAD_LIMIT)
+                    batch_upload_limit = int(nexusai_config.BATCH_UPLOAD_LIMIT)
                     if count > batch_upload_limit:
                         raise ValueError(f"You have reached the batch upload limit of {batch_upload_limit}.")
                     current = int(getattr(vector_space, "size", 0) or 0)

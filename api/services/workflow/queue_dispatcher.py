@@ -8,7 +8,7 @@ with appropriate queue routing and priority assignment.
 from abc import ABC, abstractmethod
 from enum import StrEnum
 
-from configs import dify_config
+from configs import nexusai_config
 from services.billing_service import BillingService
 
 
@@ -87,7 +87,7 @@ class QueueDispatcherManager:
         Returns:
             Appropriate queue dispatcher instance
         """
-        if dify_config.BILLING_ENABLED:
+        if nexusai_config.BILLING_ENABLED:
             try:
                 billing_info = BillingService.get_info(tenant_id)
                 plan = billing_info.get("subscription", {}).get("plan", "sandbox")

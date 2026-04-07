@@ -29,7 +29,7 @@ PYTHON_CODE_GENERATOR_PROMPT_TEMPLATE = (
     "Please ensure that you meet the following requirements:\n"
     "1. Define a function named 'main'.\n"
     "2. The 'main' function must return a dictionary (dict).\n"
-    "3. You may modify the arguments of the 'main' function, but include appropriate type hints.\n"
+    "3. You may monexusai the arguments of the 'main' function, but include appropriate type hints.\n"
     "4. The returned dictionary should contain at least one key-value pair.\n\n"
     "5. You may ONLY use the following libraries in your code: \n"
     "- json\n"
@@ -71,7 +71,7 @@ JAVASCRIPT_CODE_GENERATOR_PROMPT_TEMPLATE = (
     "Please ensure that you meet the following requirements:\n"
     "1. Define a function named 'main'.\n"
     "2. The 'main' function must return an object.\n"
-    "3. You may modify the arguments of the 'main' function, but include appropriate JSDoc annotations.\n"
+    "3. You may monexusai the arguments of the 'main' function, but include appropriate JSDoc annotations.\n"
     "4. The returned object should contain at least one key-value pair.\n\n"
     "5. The returned object should always be in the format: {result: ...}\n\n"
     "Example:\n"
@@ -322,13 +322,13 @@ Here is the JSON schema:
 {{schema}}
 """  # noqa: E501
 
-LLM_MODIFY_PROMPT_SYSTEM = """
+LLM_MONEXUSAI_PROMPT_SYSTEM = """
 Both your input and output should be in JSON format.
 
 ! Below is the schema for input content !
 {
     "type": "object",
-    "description": "The user is trying to process some content with a prompt, but the output is not as expected. They hope to achieve their goal by modifying the prompt.",
+    "description": "The user is trying to process some content with a prompt, but the output is not as expected. They hope to achieve their goal by monexusaiing the prompt.",
     "properties": {
         "current": {
             "type": "string",
@@ -344,7 +344,7 @@ Both your input and output should be in JSON format.
         },
         "ideal_output": {
             "type": "string",
-            "description": "The ideal output that the user expects from the large language model after modifying the prompt. You should compare the last output with the ideal output and make changes to the prompt to achieve the goal."
+            "description": "The ideal output that the user expects from the large language model after monexusaiing the prompt. You should compare the last output with the ideal output and make changes to the prompt to achieve the goal."
         }
     }
 }
@@ -374,13 +374,13 @@ Both your input and output should be in JSON format.
 Your output must strictly follow the schema format, do not output any content outside of the JSON body.
 """  # noqa: E501
 
-LLM_MODIFY_CODE_SYSTEM = """
+LLM_MONEXUSAI_CODE_SYSTEM = """
 Both your input and output should be in JSON format.
 
 ! Below is the schema for input content !
 {
     "type": "object",
-    "description": "The user is trying to process some data with a code snippet, but the result is not as expected. They hope to achieve their goal by modifying the code.",
+    "description": "The user is trying to process some data with a code snippet, but the result is not as expected. They hope to achieve their goal by monexusaiing the code.",
     "properties": {
         "current": {
             "type": "string",
@@ -419,8 +419,8 @@ Both your input and output should be in JSON format.
 }
 ! Above is the schema for output content !
 
-When you are modifying the code, you should remember:
-- Do not use print, this not work in dify sandbox.
+When you are monexusaiing the code, you should remember:
+- Do not use print, this not work in nexusai sandbox.
 - Do not try dangerous call like deleting files. It's PROHIBITED.
 - Do not use any library that is not built-in in with Python.
 - Get inputs from the parameters of the function and have explicit type annotations.

@@ -103,14 +103,14 @@ describe('install-plugin/hooks', () => {
       const pkg = await handleUpload(
         'https://github.com/owner/repo',
         'v1.0.0',
-        'plugin.difypkg',
+        'plugin.nexusaipkg',
         onSuccess,
       )
 
       expect(mockUploadGitHub).toHaveBeenCalledWith(
         'https://github.com/owner/repo',
         'v1.0.0',
-        'plugin.difypkg',
+        'plugin.nexusaipkg',
       )
       expect(onSuccess).toHaveBeenCalledWith({
         manifest: mockManifest,

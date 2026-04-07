@@ -94,7 +94,7 @@ class TestMemberInviteEmailApi:
             patch("controllers.console.workspace.members.current_account_with_tenant", return_value=(user, "t1")),
             patch("controllers.console.workspace.members.FeatureService.get_features", return_value=features),
             patch("controllers.console.workspace.members.RegisterService.invite_new_member", return_value="token"),
-            patch("controllers.console.workspace.members.dify_config.CONSOLE_WEB_URL", "http://x"),
+            patch("controllers.console.workspace.members.nexusai_config.CONSOLE_WEB_URL", "http://x"),
         ):
             result, status = method(api)
 
@@ -145,7 +145,7 @@ class TestMemberInviteEmailApi:
                 "controllers.console.workspace.members.RegisterService.invite_new_member",
                 side_effect=AccountAlreadyInTenantError(),
             ),
-            patch("controllers.console.workspace.members.dify_config.CONSOLE_WEB_URL", "http://x"),
+            patch("controllers.console.workspace.members.nexusai_config.CONSOLE_WEB_URL", "http://x"),
         ):
             result, status = method(api)
 
@@ -188,7 +188,7 @@ class TestMemberInviteEmailApi:
                 "controllers.console.workspace.members.RegisterService.invite_new_member",
                 side_effect=Exception("boom"),
             ),
-            patch("controllers.console.workspace.members.dify_config.CONSOLE_WEB_URL", "http://x"),
+            patch("controllers.console.workspace.members.nexusai_config.CONSOLE_WEB_URL", "http://x"),
         ):
             result, _ = method(api)
 

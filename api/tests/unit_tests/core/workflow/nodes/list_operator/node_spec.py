@@ -7,7 +7,7 @@ from graphon.nodes.list_operator.node import ListOperatorNode
 from graphon.runtime import GraphRuntimeState
 from graphon.variables import ArrayNumberSegment, ArrayStringSegment
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY
 
 
 class TestListOperatorNode:
@@ -28,7 +28,7 @@ class TestListOperatorNode:
             workflow_id="test",
             graph_config={},
             run_context={
-                DIFY_RUN_CONTEXT_KEY: {
+                NEXUSAI_RUN_CONTEXT_KEY: {
                     "tenant_id": "test",
                     "app_id": "test",
                     "user_id": "test",

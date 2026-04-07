@@ -109,7 +109,7 @@ const createDataset = (overrides: Partial<DataSet> = {}): DataSet => {
     total_document_count: 0,
     total_available_documents: 0,
     word_count: 0,
-    provider: 'dify',
+    provider: 'nexusai',
     embedding_model: 'text-embedding',
     embedding_model_provider: 'openai',
     embedding_available: true,
@@ -219,7 +219,7 @@ describe('ConfigContent', () => {
       const selectedDatasets: DataSet[] = [
         createDataset({
           indexing_technique: 'high_quality' as IndexingType,
-          provider: 'dify',
+          provider: 'nexusai',
           embedding_model: 'text-embedding',
           embedding_model_provider: 'openai',
           retrieval_model_dict: {
@@ -269,7 +269,7 @@ describe('ConfigContent', () => {
       const selectedDatasets: DataSet[] = [
         createDataset({
           indexing_technique: 'high_quality' as IndexingType,
-          provider: 'dify',
+          provider: 'nexusai',
           embedding_model: 'text-embedding',
           embedding_model_provider: 'openai',
           retrieval_model_dict: {
@@ -310,7 +310,7 @@ describe('ConfigContent', () => {
       const selectedDatasets: DataSet[] = [
         createDataset({
           indexing_technique: 'high_quality' as IndexingType,
-          provider: 'dify',
+          provider: 'nexusai',
           embedding_model: 'text-embedding',
           embedding_model_provider: 'openai',
           retrieval_model_dict: {
@@ -349,7 +349,7 @@ describe('ConfigContent', () => {
       const selectedDatasets: DataSet[] = [
         createDataset({
           indexing_technique: 'economy' as IndexingType,
-          provider: 'dify',
+          provider: 'nexusai',
           embedding_model: 'text-embedding',
           embedding_model_provider: 'openai',
           retrieval_model_dict: {

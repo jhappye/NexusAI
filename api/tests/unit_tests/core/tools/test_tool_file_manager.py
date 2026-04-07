@@ -20,10 +20,10 @@ from core.tools.tool_file_manager import ToolFileManager
 def _setup_tool_file_signing(monkeypatch: pytest.MonkeyPatch) -> dict[str, str]:
     monkeypatch.setattr("core.tools.tool_file_manager.time.time", lambda: 1700000000)
     monkeypatch.setattr("core.tools.tool_file_manager.os.urandom", lambda _: b"\x01" * 16)
-    monkeypatch.setattr("core.tools.tool_file_manager.dify_config.SECRET_KEY", "secret")
-    monkeypatch.setattr("core.tools.tool_file_manager.dify_config.FILES_URL", "https://files.example.com")
-    monkeypatch.setattr("core.tools.tool_file_manager.dify_config.INTERNAL_FILES_URL", "https://internal.example.com")
-    monkeypatch.setattr("core.tools.tool_file_manager.dify_config.FILES_ACCESS_TIMEOUT", 100)
+    monkeypatch.setattr("core.tools.tool_file_manager.nexusai_config.SECRET_KEY", "secret")
+    monkeypatch.setattr("core.tools.tool_file_manager.nexusai_config.FILES_URL", "https://files.example.com")
+    monkeypatch.setattr("core.tools.tool_file_manager.nexusai_config.INTERNAL_FILES_URL", "https://internal.example.com")
+    monkeypatch.setattr("core.tools.tool_file_manager.nexusai_config.FILES_ACCESS_TIMEOUT", 100)
 
     url = ToolFileManager.sign_file("tf-1", ".png")
     return dict(part.split("=", 1) for part in url.split("?", 1)[1].split("&"))
@@ -52,7 +52,7 @@ def test_tool_file_manager_sign_verify_bad_signature(monkeypatch: pytest.MonkeyP
 
 def test_tool_file_manager_sign_verify_expired_timestamp(monkeypatch: pytest.MonkeyPatch) -> None:
     query = _setup_tool_file_signing(monkeypatch)
-    monkeypatch.setattr("core.tools.tool_file_manager.dify_config.FILES_ACCESS_TIMEOUT", 0)
+    monkeypatch.setattr("core.tools.tool_file_manager.nexusai_config.FILES_ACCESS_TIMEOUT", 0)
     monkeypatch.setattr("core.tools.tool_file_manager.time.time", lambda: 1700000100)
 
     assert ToolFileManager.verify_file("tf-1", query["timestamp"], query["nonce"], query["sign"]) is False

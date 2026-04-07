@@ -47,7 +47,7 @@ vi.mock('../../model-name', () => ({
 
 vi.mock('../../model-auth', () => ({
   ConfigModel: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" onClick={onClick}>modify load balancing</button>
+    <button type="button" onClick={onClick}>monexusai load balancing</button>
   ),
 }))
 
@@ -126,20 +126,20 @@ describe('ModelListItem', () => {
 
   it('should open load balancing config action when available', () => {
     mockModelLoadBalancingEnabled = true
-    const onModifyLoadBalancing = vi.fn()
+    const onMonexusaiLoadBalancing = vi.fn()
 
     render(
       <ModelListItem
         model={mockModel}
         provider={mockProvider}
         isConfigurable={false}
-        onModifyLoadBalancing={onModifyLoadBalancing}
+        onMonexusaiLoadBalancing={onMonexusaiLoadBalancing}
       />,
       { wrapper: createWrapper() },
     )
 
-    fireEvent.click(screen.getByRole('button', { name: 'modify load balancing' }))
-    expect(onModifyLoadBalancing).toHaveBeenCalledWith(mockModel)
+    fireEvent.click(screen.getByRole('button', { name: 'monexusai load balancing' }))
+    expect(onMonexusaiLoadBalancing).toHaveBeenCalledWith(mockModel)
   })
 
   // Deprecated branches: opacity-60, disabled switch, no ConfigModel
@@ -160,7 +160,7 @@ describe('ModelListItem', () => {
 
     // Assert
     expect(container.querySelector('.opacity-60')).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'modify load balancing' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'monexusai load balancing' })).not.toBeInTheDocument()
   })
 
   // Load balancing badge: visible when all 4 conditions met
@@ -206,7 +206,7 @@ describe('ModelListItem', () => {
     )
 
     // Assert - ConfigModel should show because plan.type === 'sandbox'
-    expect(screen.getByRole('button', { name: 'modify load balancing' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'monexusai load balancing' })).toBeInTheDocument()
   })
 
   // Negative proof: non-sandbox plan without load balancing should NOT show ConfigModel
@@ -226,7 +226,7 @@ describe('ModelListItem', () => {
     )
 
     // Assert - ConfigModel should NOT show because plan.type !== 'sandbox' and load balancing is disabled
-    expect(screen.queryByRole('button', { name: 'modify load balancing' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'monexusai load balancing' })).not.toBeInTheDocument()
   })
 
   // model.status=credentialRemoved: switch disabled, no ConfigModel
@@ -246,7 +246,7 @@ describe('ModelListItem', () => {
     )
 
     // Assert - ConfigModel should not render because status is not active/disabled
-    expect(screen.queryByRole('button', { name: 'modify load balancing' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'monexusai load balancing' })).not.toBeInTheDocument()
     const statusSwitch = screen.getByRole('switch')
     expect(statusSwitch).toHaveAttribute('aria-disabled', 'true')
     fireEvent.click(statusSwitch)

@@ -1,3 +1,3 @@
-from core.workflow.node_factory import DifyNodeFactory
+from core.workflow.node_factory import NexusAINodeFactory
 
-__all__ = ["DifyNodeFactory"]
+__all__ = ["NexusAINodeFactory"]

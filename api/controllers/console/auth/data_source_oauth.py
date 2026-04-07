@@ -5,7 +5,7 @@ from flask import current_app, redirect, request
 from flask_restx import Resource
 from pydantic import BaseModel, Field
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import register_schema_models
 from libs.login import login_required
 from libs.oauth_data_source import NotionOAuth
@@ -39,9 +39,9 @@ register_schema_models(
 def get_oauth_providers():
     with current_app.app_context():
         notion_oauth = NotionOAuth(
-            client_id=dify_config.NOTION_CLIENT_ID or "",
-            client_secret=dify_config.NOTION_CLIENT_SECRET or "",
-            redirect_uri=dify_config.CONSOLE_API_URL + "/console/api/oauth/data-source/callback/notion",
+            client_id=nexusai_config.NOTION_CLIENT_ID or "",
+            client_secret=nexusai_config.NOTION_CLIENT_SECRET or "",
+            redirect_uri=nexusai_config.CONSOLE_API_URL + "/console/api/oauth/data-source/callback/notion",
         )
 
         OAUTH_PROVIDERS = {"notion": notion_oauth}
@@ -68,8 +68,8 @@ class OAuthDataSource(Resource):
             oauth_provider = OAUTH_DATASOURCE_PROVIDERS.get(provider)
         if not oauth_provider:
             return {"error": "Invalid provider"}, 400
-        if dify_config.NOTION_INTEGRATION_TYPE == "internal":
-            internal_secret = dify_config.NOTION_INTERNAL_SECRET
+        if nexusai_config.NOTION_INTEGRATION_TYPE == "internal":
+            internal_secret = nexusai_config.NOTION_INTERNAL_SECRET
             if not internal_secret:
                 return ({"error": "Internal secret is not set"},)
             oauth_provider.save_internal_access_token(internal_secret)
@@ -101,13 +101,13 @@ class OAuthDataSourceCallback(Resource):
         if "code" in request.args:
             code = request.args.get("code")
 
-            return redirect(f"{dify_config.CONSOLE_WEB_URL}?type=notion&code={code}")
+            return redirect(f"{nexusai_config.CONSOLE_WEB_URL}?type=notion&code={code}")
         elif "error" in request.args:
             error = request.args.get("error")
 
-            return redirect(f"{dify_config.CONSOLE_WEB_URL}?type=notion&error={error}")
+            return redirect(f"{nexusai_config.CONSOLE_WEB_URL}?type=notion&error={error}")
         else:
-            return redirect(f"{dify_config.CONSOLE_WEB_URL}?type=notion&error=Access denied")
+            return redirect(f"{nexusai_config.CONSOLE_WEB_URL}?type=notion&error=Access denied")
 
 
 @console_ns.route("/oauth/data-source/binding/<string:provider>")

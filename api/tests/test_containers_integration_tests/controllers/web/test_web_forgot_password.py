@@ -18,10 +18,10 @@ from controllers.web.forgot_password import (
 @pytest.fixture(autouse=True)
 def _patch_wraps():
     wraps_features = SimpleNamespace(enable_email_password_login=True)
-    dify_settings = SimpleNamespace(ENTERPRISE_ENABLED=True, EDITION="CLOUD")
+    nexusai_settings = SimpleNamespace(ENTERPRISE_ENABLED=True, EDITION="CLOUD")
     with (
         patch("controllers.console.wraps.db") as mock_db,
-        patch("controllers.console.wraps.dify_config", dify_settings),
+        patch("controllers.console.wraps.nexusai_config", nexusai_settings),
         patch("controllers.console.wraps.FeatureService.get_system_features", return_value=wraps_features),
     ):
         mock_db.session.query.return_value.first.return_value = MagicMock()

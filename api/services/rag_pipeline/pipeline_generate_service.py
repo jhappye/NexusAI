@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 from typing import Any, Union
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.apps.pipeline.pipeline_generator import PipelineGenerator
 from core.app.entities.app_invoke_entities import InvokeFrom
 from extensions.ext_database import db
@@ -54,8 +54,8 @@ class PipelineGenerateService:
 
     @staticmethod
     def _get_max_active_requests(app_model: App) -> int:
-        app_limit = app_model.max_active_requests or dify_config.APP_DEFAULT_ACTIVE_REQUESTS
-        config_limit = dify_config.APP_MAX_ACTIVE_REQUESTS
+        app_limit = app_model.max_active_requests or nexusai_config.APP_DEFAULT_ACTIVE_REQUESTS
+        config_limit = nexusai_config.APP_MAX_ACTIVE_REQUESTS
         # Filter out infinite (0) values and return the minimum, or 0 if both are infinite
         limits = [limit for limit in [app_limit, config_limit] if limit > 0]
         return min(limits) if limits else 0

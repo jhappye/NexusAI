@@ -7,7 +7,7 @@ from graphon.variables.types import SegmentType
 from sqlalchemy import asc, desc, func, or_, select
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.entities.app_invoke_entities import InvokeFrom
 from core.db.session_factory import session_factory
 from core.llm_generator.llm_generator import LLMGenerator
@@ -230,13 +230,13 @@ class ConversationService:
 
             escaped_variable_name = escape_like_pattern(variable_name)
             # Filter using JSON extraction to match variable names case-insensitively
-            if dify_config.DB_TYPE in ["mysql", "oceanbase", "seekdb"]:
+            if nexusai_config.DB_TYPE in ["mysql", "oceanbase", "seekdb"]:
                 stmt = stmt.where(
                     func.json_extract(ConversationVariable.data, "$.name").ilike(
                         f"%{escaped_variable_name}%", escape="\\"
                     )
                 )
-            elif dify_config.DB_TYPE == "postgresql":
+            elif nexusai_config.DB_TYPE == "postgresql":
                 stmt = stmt.where(
                     func.json_extract_path_text(ConversationVariable.data, "name").ilike(
                         f"%{escaped_variable_name}%", escape="\\"

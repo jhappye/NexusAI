@@ -21,7 +21,7 @@ vi.mock('react-i18next', () => ({
 }))
 
 vi.mock('@/context/i18n', () => ({
-  defaultDocBaseUrl: 'https://docs.dify.ai',
+  defaultDocBaseUrl: 'https://docs.nexusai.ai',
 }))
 
 vi.mock('@/i18n-config/language', () => ({
@@ -45,7 +45,7 @@ describe('docsCommand', () => {
     docsCommand.execute?.()
 
     expect(openSpy).toHaveBeenCalledWith(
-      expect.stringContaining('https://docs.dify.ai'),
+      expect.stringContaining('https://docs.nexusai.ai'),
       '_blank',
       'noopener,noreferrer',
     )
@@ -85,7 +85,7 @@ describe('docsCommand', () => {
     const handlers = vi.mocked(registerCommands).mock.calls[0][0]
     await handlers['navigation.doc']()
 
-    expect(openSpy).toHaveBeenCalledWith('https://docs.dify.ai/en', '_blank', 'noopener,noreferrer')
+    expect(openSpy).toHaveBeenCalledWith('https://docs.nexusai.ai/en', '_blank', 'noopener,noreferrer')
     openSpy.mockRestore()
   })
 
@@ -235,7 +235,7 @@ describe('forumCommand', () => {
     forumCommand.execute?.()
 
     expect(openSpy).toHaveBeenCalledWith(
-      'https://forum.dify.ai',
+      'https://forum.nexusai.ai',
       '_blank',
       'noopener,noreferrer',
     )
@@ -285,7 +285,7 @@ describe('forumCommand', () => {
     const handlers = vi.mocked(registerCommands).mock.calls[0][0]
     await handlers['navigation.forum']()
 
-    expect(openSpy).toHaveBeenCalledWith('https://forum.dify.ai', '_blank', 'noopener,noreferrer')
+    expect(openSpy).toHaveBeenCalledWith('https://forum.nexusai.ai', '_blank', 'noopener,noreferrer')
     openSpy.mockRestore()
   })
 

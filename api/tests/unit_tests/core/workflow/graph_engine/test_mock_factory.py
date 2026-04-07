@@ -11,7 +11,7 @@ from graphon.entities.graph_config import NodeConfigDict, NodeConfigDictAdapter
 from graphon.enums import BuiltinNodeTypes, NodeType
 from graphon.nodes.base.node import Node
 
-from core.workflow.node_factory import DifyNodeFactory
+from core.workflow.node_factory import NexusAINodeFactory
 
 from .test_mock_nodes import (
     MockAgentNode,
@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     from .test_mock_config import MockConfig
 
 
-class MockNodeFactory(DifyNodeFactory):
+class MockNodeFactory(NexusAINodeFactory):
     """
     A factory that creates mock nodes for testing purposes.
 

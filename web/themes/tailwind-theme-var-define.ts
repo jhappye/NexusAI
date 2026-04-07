@@ -798,19 +798,19 @@ const vars = {
 
   'saas-background': 'var(--color-saas-background)',
   'saas-pricing-grid-bg': 'var(--color-saas-pricing-grid-bg)',
-  'saas-dify-blue-static': 'var(--color-saas-dify-blue-static)',
-  'saas-dify-blue-static-hover': 'var(--color-saas-dify-blue-static-hover)',
-  'saas-dify-blue-accessible': 'var(--color-saas-dify-blue-accessible)',
-  'saas-dify-blue-inverted': 'var(--color-saas-dify-blue-inverted)',
-  'saas-dify-blue-inverted-dimmed': 'var(--color-saas-dify-blue-inverted-dimmed)',
+  'saas-nexusai-blue-static': 'var(--color-saas-nexusai-blue-static)',
+  'saas-nexusai-blue-static-hover': 'var(--color-saas-nexusai-blue-static-hover)',
+  'saas-nexusai-blue-accessible': 'var(--color-saas-nexusai-blue-accessible)',
+  'saas-nexusai-blue-inverted': 'var(--color-saas-nexusai-blue-inverted)',
+  'saas-nexusai-blue-inverted-dimmed': 'var(--color-saas-nexusai-blue-inverted-dimmed)',
 
   'saas-background-inverted': 'var(--color-saas-background-inverted)',
   'saas-background-inverted-hover': 'var(--color-saas-background-inverted-hover)',
 
-  'dify-logo-blue': 'var(--color-dify-logo-blue)',
-  'dify-logo-black': 'var(--color-dify-logo-black)',
-  'dify-logo-outline-1': 'var(--color-dify-logo-outline-1)',
-  'dify-logo-outline-2': 'var(--color-dify-logo-outline-2)',
+  'nexusai-logo-blue': 'var(--color-nexusai-logo-blue)',
+  'nexusai-logo-black': 'var(--color-nexusai-logo-black)',
+  'nexusai-logo-outline-1': 'var(--color-nexusai-logo-outline-1)',
+  'nexusai-logo-outline-2': 'var(--color-nexusai-logo-outline-2)',
 
 }
 export default vars

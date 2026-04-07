@@ -15,7 +15,7 @@ describe('genNodeMetaData', () => {
       sort: 1,
       type: BlockEnum.LLM,
       title: 'LLM Node',
-      author: 'Dify',
+      author: 'NexusAI',
       helpLinkUri: BlockEnum.LLM,
       isRequired: false,
       isUndeletable: false,

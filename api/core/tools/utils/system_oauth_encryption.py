@@ -9,7 +9,7 @@ from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
 from pydantic import TypeAdapter
 
-from configs import dify_config
+from configs import nexusai_config
 
 logger = logging.getLogger(__name__)
 
@@ -33,12 +33,12 @@ class SystemOAuthEncrypter:
         Initialize the OAuth encrypter.
 
         Args:
-            secret_key: Optional secret key. If not provided, uses dify_config.SECRET_KEY
+            secret_key: Optional secret key. If not provided, uses nexusai_config.SECRET_KEY
 
         Raises:
             ValueError: If SECRET_KEY is not configured or empty
         """
-        secret_key = secret_key or dify_config.SECRET_KEY or ""
+        secret_key = secret_key or nexusai_config.SECRET_KEY or ""
 
         # Generate a fixed 256-bit key using SHA-256
         self.key = hashlib.sha256(secret_key.encode()).digest()
@@ -135,7 +135,7 @@ def create_system_oauth_encrypter(secret_key: str | None = None) -> SystemOAuthE
     Create an OAuth encrypter instance.
 
     Args:
-        secret_key: Optional secret key. If not provided, uses dify_config.SECRET_KEY
+        secret_key: Optional secret key. If not provided, uses nexusai_config.SECRET_KEY
 
     Returns:
         SystemOAuthEncrypter instance

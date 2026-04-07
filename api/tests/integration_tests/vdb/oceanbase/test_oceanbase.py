@@ -14,13 +14,13 @@ pytest_plugins = ("tests.integration_tests.vdb.test_vector_store",)
 @pytest.fixture
 def oceanbase_vector():
     return OceanBaseVector(
-        "dify_test_collection",
+        "nexusai_test_collection",
         config=OceanBaseVectorConfig(
             host="127.0.0.1",
             port=2881,
             user="root",
             database="test",
-            password="difyai123456",
+            password="nexusaiai123456",
             enable_hybrid_search=True,
             batch_size=10,
         ),

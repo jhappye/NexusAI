@@ -18,8 +18,8 @@ vi.mock('@/context/modal-context', () => ({
 }))
 
 vi.mock('../model-list-item', () => ({
-  default: ({ model, onModifyLoadBalancing }: { model: ModelItem, onModifyLoadBalancing: (model: ModelItem) => void }) => (
-    <button type="button" onClick={() => onModifyLoadBalancing(model)}>
+  default: ({ model, onMonexusaiLoadBalancing }: { model: ModelItem, onMonexusaiLoadBalancing: (model: ModelItem) => void }) => (
+    <button type="button" onClick={() => onMonexusaiLoadBalancing(model)}>
       {model.model}
     </button>
   ),

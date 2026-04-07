@@ -8,7 +8,7 @@ from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 from werkzeug.exceptions import NotFound
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.storage.storage_type import StorageType
 from models import Account, Tenant
 from models.enums import CreatorUserRole
@@ -272,7 +272,7 @@ class TestFileService:
         """
         account = self._create_test_account(db_session_with_containers, mock_external_service_dependencies)
 
-        filename = 'candidate?resume for "dify"<final>|v2:.txt'
+        filename = 'candidate?resume for "nexusai"<final>|v2:.txt'
         content = b"test content"
         mimetype = "text/plain"
 
@@ -348,7 +348,7 @@ class TestFileService:
 
         filename = "large_image.jpg"
         # Create content larger than the limit
-        content = b"x" * (dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024 + 1)
+        content = b"x" * (nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024 + 1)
         mimetype = "image/jpeg"
 
         with pytest.raises(FileTooLargeError):
@@ -367,7 +367,7 @@ class TestFileService:
         Test file size check for image files within limit.
         """
         extension = "jpg"
-        file_size = dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
+        file_size = nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
 
         result = FileService(engine).is_file_size_within_limit(extension=extension, file_size=file_size)
 
@@ -380,7 +380,7 @@ class TestFileService:
         Test file size check for video files within limit.
         """
         extension = "mp4"
-        file_size = dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
+        file_size = nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
 
         result = FileService(engine).is_file_size_within_limit(extension=extension, file_size=file_size)
 
@@ -393,7 +393,7 @@ class TestFileService:
         Test file size check for audio files within limit.
         """
         extension = "mp3"
-        file_size = dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
+        file_size = nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
 
         result = FileService(engine).is_file_size_within_limit(extension=extension, file_size=file_size)
 
@@ -406,7 +406,7 @@ class TestFileService:
         Test file size check for document files within limit.
         """
         extension = "pdf"
-        file_size = dify_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
+        file_size = nexusai_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
 
         result = FileService(engine).is_file_size_within_limit(extension=extension, file_size=file_size)
 
@@ -419,7 +419,7 @@ class TestFileService:
         Test file size check for image files exceeding limit.
         """
         extension = "jpg"
-        file_size = dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024 + 1  # Exceeds limit
+        file_size = nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024 + 1  # Exceeds limit
 
         result = FileService(engine).is_file_size_within_limit(extension=extension, file_size=file_size)
 
@@ -432,7 +432,7 @@ class TestFileService:
         Test file size check for unknown file extension.
         """
         extension = "xyz"
-        file_size = dify_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024  # Uses default limit
+        file_size = nexusai_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024  # Uses default limit
 
         result = FileService(engine).is_file_size_within_limit(extension=extension, file_size=file_size)
 
@@ -922,10 +922,10 @@ class TestFileService:
         """
         # Test exactly at limit
         for extension, limit_config in [
-            ("jpg", dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT),
-            ("mp4", dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT),
-            ("mp3", dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT),
-            ("pdf", dify_config.UPLOAD_FILE_SIZE_LIMIT),
+            ("jpg", nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT),
+            ("mp4", nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT),
+            ("mp3", nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT),
+            ("pdf", nexusai_config.UPLOAD_FILE_SIZE_LIMIT),
         ]:
             file_size = limit_config * 1024 * 1024
             result = FileService(engine).is_file_size_within_limit(extension=extension, file_size=file_size)
@@ -985,7 +985,7 @@ class TestFileService:
         account = self._create_test_account(db_session_with_containers, mock_external_service_dependencies)
 
         # Mock blacklist configuration by patching the inner field
-        with patch.object(dify_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe,bat,sh"):
+        with patch.object(nexusai_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe,bat,sh"):
             filename = "malware.exe"
             content = b"test content"
             mimetype = "application/x-msdownload"
@@ -1008,7 +1008,7 @@ class TestFileService:
         account = self._create_test_account(db_session_with_containers, mock_external_service_dependencies)
 
         # Mock blacklist configuration by patching the inner field
-        with patch.object(dify_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe,bat"):
+        with patch.object(nexusai_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe,bat"):
             # Test with uppercase extension
             filename = "malware.EXE"
             content = b"test content"
@@ -1032,7 +1032,7 @@ class TestFileService:
         account = self._create_test_account(db_session_with_containers, mock_external_service_dependencies)
 
         # Mock blacklist configuration by patching the inner field
-        with patch.object(dify_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe,bat,sh"):
+        with patch.object(nexusai_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe,bat,sh"):
             filename = "document.pdf"
             content = b"test content"
             mimetype = "application/pdf"
@@ -1058,7 +1058,7 @@ class TestFileService:
         account = self._create_test_account(db_session_with_containers, mock_external_service_dependencies)
 
         # Mock empty blacklist configuration by patching the inner field
-        with patch.object(dify_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", ""):
+        with patch.object(nexusai_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", ""):
             # Should allow all file types when blacklist is empty
             filename = "script.sh"
             content = b"#!/bin/bash\necho test"
@@ -1085,7 +1085,7 @@ class TestFileService:
 
         # Mock blacklist with multiple extensions by patching the inner field
         blacklist_str = "exe,bat,cmd,com,scr,vbs,ps1,msi,dll"
-        with patch.object(dify_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", blacklist_str):
+        with patch.object(nexusai_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", blacklist_str):
             for ext in blacklist_str.split(","):
                 filename = f"malware.{ext}"
                 content = b"test content"
@@ -1109,7 +1109,7 @@ class TestFileService:
         account = self._create_test_account(db_session_with_containers, mock_external_service_dependencies)
 
         # Mock blacklist configuration by patching the inner field
-        with patch.object(dify_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe,bat"):
+        with patch.object(nexusai_config, "inner_UPLOAD_FILE_EXTENSION_BLACKLIST", "exe,bat"):
             # Files with no extension should not be blocked
             filename = "README"
             content = b"test content"

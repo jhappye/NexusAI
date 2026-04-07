@@ -2,7 +2,7 @@ from flask import Flask
 from graphon.model_runtime.entities.model_entities import ModelType
 from pydantic import BaseModel
 
-from configs import dify_config
+from configs import nexusai_config
 from core.entities import DEFAULT_PLUGIN_ID
 from core.entities.provider_entities import ProviderQuotaType, QuotaUnit, RestrictModel
 
@@ -47,7 +47,7 @@ class HostingConfiguration:
         self.moderation_config = None
 
     def init_app(self, app: Flask):
-        if dify_config.EDITION != "CLOUD":
+        if nexusai_config.EDITION != "CLOUD":
             return
 
         self.provider_map[f"{DEFAULT_PLUGIN_ID}/azure_openai/azure_openai"] = self.init_azure_openai()
@@ -66,15 +66,15 @@ class HostingConfiguration:
     @staticmethod
     def init_azure_openai() -> HostingProvider:
         quota_unit = QuotaUnit.TIMES
-        if dify_config.HOSTED_AZURE_OPENAI_ENABLED:
+        if nexusai_config.HOSTED_AZURE_OPENAI_ENABLED:
             credentials = {
-                "openai_api_key": dify_config.HOSTED_AZURE_OPENAI_API_KEY,
-                "openai_api_base": dify_config.HOSTED_AZURE_OPENAI_API_BASE,
+                "openai_api_key": nexusai_config.HOSTED_AZURE_OPENAI_API_KEY,
+                "openai_api_base": nexusai_config.HOSTED_AZURE_OPENAI_API_BASE,
                 "base_model_name": "gpt-35-turbo",
             }
 
             quotas: list[HostingQuota] = []
-            hosted_quota_limit = dify_config.HOSTED_AZURE_OPENAI_QUOTA_LIMIT
+            hosted_quota_limit = nexusai_config.HOSTED_AZURE_OPENAI_QUOTA_LIMIT
             trial_quota = TrialHostingQuota(
                 quota_limit=hosted_quota_limit,
                 restrict_models=[
@@ -131,27 +131,27 @@ class HostingConfiguration:
         quota_unit = QuotaUnit.CREDITS
         quotas: list[HostingQuota] = []
 
-        if dify_config.HOSTED_OPENAI_TRIAL_ENABLED:
+        if nexusai_config.HOSTED_OPENAI_TRIAL_ENABLED:
             hosted_quota_limit = 0
             trial_models = self.parse_restrict_models_from_env("HOSTED_OPENAI_TRIAL_MODELS")
             trial_quota = TrialHostingQuota(quota_limit=hosted_quota_limit, restrict_models=trial_models)
             quotas.append(trial_quota)
 
-        if dify_config.HOSTED_OPENAI_PAID_ENABLED:
+        if nexusai_config.HOSTED_OPENAI_PAID_ENABLED:
             paid_models = self.parse_restrict_models_from_env("HOSTED_OPENAI_PAID_MODELS")
             paid_quota = PaidHostingQuota(restrict_models=paid_models)
             quotas.append(paid_quota)
 
         if len(quotas) > 0:
             credentials = {
-                "openai_api_key": dify_config.HOSTED_OPENAI_API_KEY,
+                "openai_api_key": nexusai_config.HOSTED_OPENAI_API_KEY,
             }
 
-            if dify_config.HOSTED_OPENAI_API_BASE:
-                credentials["openai_api_base"] = dify_config.HOSTED_OPENAI_API_BASE
+            if nexusai_config.HOSTED_OPENAI_API_BASE:
+                credentials["openai_api_base"] = nexusai_config.HOSTED_OPENAI_API_BASE
 
-            if dify_config.HOSTED_OPENAI_API_ORGANIZATION:
-                credentials["openai_organization"] = dify_config.HOSTED_OPENAI_API_ORGANIZATION
+            if nexusai_config.HOSTED_OPENAI_API_ORGANIZATION:
+                credentials["openai_organization"] = nexusai_config.HOSTED_OPENAI_API_ORGANIZATION
 
             return HostingProvider(enabled=True, credentials=credentials, quota_unit=quota_unit, quotas=quotas)
 
@@ -164,24 +164,24 @@ class HostingConfiguration:
         quota_unit = QuotaUnit.CREDITS
         quotas: list[HostingQuota] = []
 
-        if dify_config.HOSTED_GEMINI_TRIAL_ENABLED:
+        if nexusai_config.HOSTED_GEMINI_TRIAL_ENABLED:
             hosted_quota_limit = 0
             trial_models = self.parse_restrict_models_from_env("HOSTED_GEMINI_TRIAL_MODELS")
             trial_quota = TrialHostingQuota(quota_limit=hosted_quota_limit, restrict_models=trial_models)
             quotas.append(trial_quota)
 
-        if dify_config.HOSTED_GEMINI_PAID_ENABLED:
+        if nexusai_config.HOSTED_GEMINI_PAID_ENABLED:
             paid_models = self.parse_restrict_models_from_env("HOSTED_GEMINI_PAID_MODELS")
             paid_quota = PaidHostingQuota(restrict_models=paid_models)
             quotas.append(paid_quota)
 
         if len(quotas) > 0:
             credentials = {
-                "google_api_key": dify_config.HOSTED_GEMINI_API_KEY,
+                "google_api_key": nexusai_config.HOSTED_GEMINI_API_KEY,
             }
 
-            if dify_config.HOSTED_GEMINI_API_BASE:
-                credentials["google_base_url"] = dify_config.HOSTED_GEMINI_API_BASE
+            if nexusai_config.HOSTED_GEMINI_API_BASE:
+                credentials["google_base_url"] = nexusai_config.HOSTED_GEMINI_API_BASE
 
             return HostingProvider(enabled=True, credentials=credentials, quota_unit=quota_unit, quotas=quotas)
 
@@ -194,24 +194,24 @@ class HostingConfiguration:
         quota_unit = QuotaUnit.CREDITS
         quotas: list[HostingQuota] = []
 
-        if dify_config.HOSTED_ANTHROPIC_TRIAL_ENABLED:
+        if nexusai_config.HOSTED_ANTHROPIC_TRIAL_ENABLED:
             hosted_quota_limit = 0
             trail_models = self.parse_restrict_models_from_env("HOSTED_ANTHROPIC_TRIAL_MODELS")
             trial_quota = TrialHostingQuota(quota_limit=hosted_quota_limit, restrict_models=trail_models)
             quotas.append(trial_quota)
 
-        if dify_config.HOSTED_ANTHROPIC_PAID_ENABLED:
+        if nexusai_config.HOSTED_ANTHROPIC_PAID_ENABLED:
             paid_models = self.parse_restrict_models_from_env("HOSTED_ANTHROPIC_PAID_MODELS")
             paid_quota = PaidHostingQuota(restrict_models=paid_models)
             quotas.append(paid_quota)
 
         if len(quotas) > 0:
             credentials = {
-                "anthropic_api_key": dify_config.HOSTED_ANTHROPIC_API_KEY,
+                "anthropic_api_key": nexusai_config.HOSTED_ANTHROPIC_API_KEY,
             }
 
-            if dify_config.HOSTED_ANTHROPIC_API_BASE:
-                credentials["anthropic_api_url"] = dify_config.HOSTED_ANTHROPIC_API_BASE
+            if nexusai_config.HOSTED_ANTHROPIC_API_BASE:
+                credentials["anthropic_api_url"] = nexusai_config.HOSTED_ANTHROPIC_API_BASE
 
             return HostingProvider(enabled=True, credentials=credentials, quota_unit=quota_unit, quotas=quotas)
 
@@ -224,21 +224,21 @@ class HostingConfiguration:
         quota_unit = QuotaUnit.CREDITS
         quotas: list[HostingQuota] = []
 
-        if dify_config.HOSTED_TONGYI_TRIAL_ENABLED:
+        if nexusai_config.HOSTED_TONGYI_TRIAL_ENABLED:
             hosted_quota_limit = 0
             trail_models = self.parse_restrict_models_from_env("HOSTED_TONGYI_TRIAL_MODELS")
             trial_quota = TrialHostingQuota(quota_limit=hosted_quota_limit, restrict_models=trail_models)
             quotas.append(trial_quota)
 
-        if dify_config.HOSTED_TONGYI_PAID_ENABLED:
+        if nexusai_config.HOSTED_TONGYI_PAID_ENABLED:
             paid_models = self.parse_restrict_models_from_env("HOSTED_TONGYI_PAID_MODELS")
             paid_quota = PaidHostingQuota(restrict_models=paid_models)
             quotas.append(paid_quota)
 
         if len(quotas) > 0:
             credentials = {
-                "dashscope_api_key": dify_config.HOSTED_TONGYI_API_KEY,
-                "use_international_endpoint": dify_config.HOSTED_TONGYI_USE_INTERNATIONAL_ENDPOINT,
+                "dashscope_api_key": nexusai_config.HOSTED_TONGYI_API_KEY,
+                "use_international_endpoint": nexusai_config.HOSTED_TONGYI_USE_INTERNATIONAL_ENDPOINT,
             }
 
             return HostingProvider(enabled=True, credentials=credentials, quota_unit=quota_unit, quotas=quotas)
@@ -252,24 +252,24 @@ class HostingConfiguration:
         quota_unit = QuotaUnit.CREDITS
         quotas: list[HostingQuota] = []
 
-        if dify_config.HOSTED_XAI_TRIAL_ENABLED:
+        if nexusai_config.HOSTED_XAI_TRIAL_ENABLED:
             hosted_quota_limit = 0
             trail_models = self.parse_restrict_models_from_env("HOSTED_XAI_TRIAL_MODELS")
             trial_quota = TrialHostingQuota(quota_limit=hosted_quota_limit, restrict_models=trail_models)
             quotas.append(trial_quota)
 
-        if dify_config.HOSTED_XAI_PAID_ENABLED:
+        if nexusai_config.HOSTED_XAI_PAID_ENABLED:
             paid_models = self.parse_restrict_models_from_env("HOSTED_XAI_PAID_MODELS")
             paid_quota = PaidHostingQuota(restrict_models=paid_models)
             quotas.append(paid_quota)
 
         if len(quotas) > 0:
             credentials = {
-                "api_key": dify_config.HOSTED_XAI_API_KEY,
+                "api_key": nexusai_config.HOSTED_XAI_API_KEY,
             }
 
-            if dify_config.HOSTED_XAI_API_BASE:
-                credentials["endpoint_url"] = dify_config.HOSTED_XAI_API_BASE
+            if nexusai_config.HOSTED_XAI_API_BASE:
+                credentials["endpoint_url"] = nexusai_config.HOSTED_XAI_API_BASE
 
             return HostingProvider(enabled=True, credentials=credentials, quota_unit=quota_unit, quotas=quotas)
 
@@ -282,24 +282,24 @@ class HostingConfiguration:
         quota_unit = QuotaUnit.CREDITS
         quotas: list[HostingQuota] = []
 
-        if dify_config.HOSTED_DEEPSEEK_TRIAL_ENABLED:
+        if nexusai_config.HOSTED_DEEPSEEK_TRIAL_ENABLED:
             hosted_quota_limit = 0
             trail_models = self.parse_restrict_models_from_env("HOSTED_DEEPSEEK_TRIAL_MODELS")
             trial_quota = TrialHostingQuota(quota_limit=hosted_quota_limit, restrict_models=trail_models)
             quotas.append(trial_quota)
 
-        if dify_config.HOSTED_DEEPSEEK_PAID_ENABLED:
+        if nexusai_config.HOSTED_DEEPSEEK_PAID_ENABLED:
             paid_models = self.parse_restrict_models_from_env("HOSTED_DEEPSEEK_PAID_MODELS")
             paid_quota = PaidHostingQuota(restrict_models=paid_models)
             quotas.append(paid_quota)
 
         if len(quotas) > 0:
             credentials = {
-                "api_key": dify_config.HOSTED_DEEPSEEK_API_KEY,
+                "api_key": nexusai_config.HOSTED_DEEPSEEK_API_KEY,
             }
 
-            if dify_config.HOSTED_DEEPSEEK_API_BASE:
-                credentials["endpoint_url"] = dify_config.HOSTED_DEEPSEEK_API_BASE
+            if nexusai_config.HOSTED_DEEPSEEK_API_BASE:
+                credentials["endpoint_url"] = nexusai_config.HOSTED_DEEPSEEK_API_BASE
 
             return HostingProvider(enabled=True, credentials=credentials, quota_unit=quota_unit, quotas=quotas)
 
@@ -311,7 +311,7 @@ class HostingConfiguration:
     @staticmethod
     def init_minimax() -> HostingProvider:
         quota_unit = QuotaUnit.TOKENS
-        if dify_config.HOSTED_MINIMAX_ENABLED:
+        if nexusai_config.HOSTED_MINIMAX_ENABLED:
             quotas: list[HostingQuota] = [FreeHostingQuota()]
 
             return HostingProvider(
@@ -329,7 +329,7 @@ class HostingConfiguration:
     @staticmethod
     def init_spark() -> HostingProvider:
         quota_unit = QuotaUnit.TOKENS
-        if dify_config.HOSTED_SPARK_ENABLED:
+        if nexusai_config.HOSTED_SPARK_ENABLED:
             quotas: list[HostingQuota] = [FreeHostingQuota()]
 
             return HostingProvider(
@@ -347,7 +347,7 @@ class HostingConfiguration:
     @staticmethod
     def init_zhipuai() -> HostingProvider:
         quota_unit = QuotaUnit.TOKENS
-        if dify_config.HOSTED_ZHIPUAI_ENABLED:
+        if nexusai_config.HOSTED_ZHIPUAI_ENABLED:
             quotas: list[HostingQuota] = [FreeHostingQuota()]
 
             return HostingProvider(
@@ -364,8 +364,8 @@ class HostingConfiguration:
 
     @staticmethod
     def init_moderation_config() -> HostedModerationConfig:
-        if dify_config.HOSTED_MODERATION_ENABLED and dify_config.HOSTED_MODERATION_PROVIDERS:
-            providers = dify_config.HOSTED_MODERATION_PROVIDERS.split(",")
+        if nexusai_config.HOSTED_MODERATION_ENABLED and nexusai_config.HOSTED_MODERATION_PROVIDERS:
+            providers = nexusai_config.HOSTED_MODERATION_PROVIDERS.split(",")
             hosted_providers = []
             for provider in providers:
                 if "/" not in provider:
@@ -378,7 +378,7 @@ class HostingConfiguration:
 
     @staticmethod
     def parse_restrict_models_from_env(env_var: str) -> list[RestrictModel]:
-        models_str = dify_config.model_dump().get(env_var)
+        models_str = nexusai_config.model_dump().get(env_var)
         models_list = models_str.split(",") if models_str else []
         return [
             RestrictModel(model=model_name.strip(), model_type=ModelType.LLM)

@@ -12,7 +12,7 @@ import pytest
 from pandas.errors import ParserError
 from werkzeug.datastructures import FileStorage
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.console.wraps import annotation_import_concurrency_limit, annotation_import_rate_limit
 from services.annotation_service import AppAnnotationService
 from tasks.annotation.batch_import_annotations_task import batch_import_annotations_task
@@ -38,7 +38,7 @@ class TestAnnotationImportRateLimiting:
         """Test that per-minute rate limit is enforced."""
         # Simulate exceeding per-minute limit
         mock_redis.zcard.side_effect = [
-            dify_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE + 1,  # Minute check
+            nexusai_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE + 1,  # Minute check
             10,  # Hour check
         ]
 
@@ -59,7 +59,7 @@ class TestAnnotationImportRateLimiting:
         # Simulate exceeding per-hour limit
         mock_redis.zcard.side_effect = [
             3,  # Minute check (under limit)
-            dify_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR + 1,  # Hour check (over limit)
+            nexusai_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR + 1,  # Hour check (over limit)
         ]
 
         @annotation_import_rate_limit
@@ -111,7 +111,7 @@ class TestAnnotationImportConcurrencyControl:
         """Test that concurrent task limit is enforced."""
 
         # Simulate max concurrent tasks already running
-        mock_redis.zcard.return_value = dify_config.ANNOTATION_IMPORT_MAX_CONCURRENT
+        mock_redis.zcard.return_value = nexusai_config.ANNOTATION_IMPORT_MAX_CONCURRENT
 
         @annotation_import_concurrency_limit
         def dummy_view():
@@ -158,7 +158,7 @@ class TestAnnotationImportFileValidation:
     def test_file_size_limit_enforced(self):
         """Test that files exceeding size limit are rejected."""
         # Create a file larger than the limit
-        max_size = dify_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT * 1024 * 1024
+        max_size = nexusai_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT * 1024 * 1024
         large_content = b"x" * (max_size + 1024)  # Exceed by 1KB
 
         file = FileStorage(stream=io.BytesIO(large_content), filename="test.csv", content_type="text/csv")
@@ -201,7 +201,7 @@ class TestAnnotationImportServiceValidation:
         """Test that files with too many records are rejected."""
 
         # Create CSV with too many records
-        max_records = dify_config.ANNOTATION_IMPORT_MAX_RECORDS
+        max_records = nexusai_config.ANNOTATION_IMPORT_MAX_RECORDS
         csv_content = "question,answer\n"
         for i in range(max_records + 100):
             csv_content += f"Question {i},Answer {i}\n"
@@ -303,29 +303,29 @@ class TestConfigurationValues:
 
     def test_rate_limit_configs_exist(self):
         """Test that rate limit configurations are defined."""
-        assert hasattr(dify_config, "ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE")
-        assert hasattr(dify_config, "ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR")
+        assert hasattr(nexusai_config, "ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE")
+        assert hasattr(nexusai_config, "ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR")
 
-        assert dify_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE > 0
-        assert dify_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR > 0
+        assert nexusai_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE > 0
+        assert nexusai_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR > 0
 
     def test_file_size_limit_config_exists(self):
         """Test that file size limit configuration is defined."""
-        assert hasattr(dify_config, "ANNOTATION_IMPORT_FILE_SIZE_LIMIT")
-        assert dify_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT > 0
-        assert dify_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT <= 10  # Reasonable max (10MB)
+        assert hasattr(nexusai_config, "ANNOTATION_IMPORT_FILE_SIZE_LIMIT")
+        assert nexusai_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT > 0
+        assert nexusai_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT <= 10  # Reasonable max (10MB)
 
     def test_record_limit_configs_exist(self):
         """Test that record limit configurations are defined."""
-        assert hasattr(dify_config, "ANNOTATION_IMPORT_MAX_RECORDS")
-        assert hasattr(dify_config, "ANNOTATION_IMPORT_MIN_RECORDS")
+        assert hasattr(nexusai_config, "ANNOTATION_IMPORT_MAX_RECORDS")
+        assert hasattr(nexusai_config, "ANNOTATION_IMPORT_MIN_RECORDS")
 
-        assert dify_config.ANNOTATION_IMPORT_MAX_RECORDS > 0
-        assert dify_config.ANNOTATION_IMPORT_MIN_RECORDS > 0
-        assert dify_config.ANNOTATION_IMPORT_MIN_RECORDS < dify_config.ANNOTATION_IMPORT_MAX_RECORDS
+        assert nexusai_config.ANNOTATION_IMPORT_MAX_RECORDS > 0
+        assert nexusai_config.ANNOTATION_IMPORT_MIN_RECORDS > 0
+        assert nexusai_config.ANNOTATION_IMPORT_MIN_RECORDS < nexusai_config.ANNOTATION_IMPORT_MAX_RECORDS
 
     def test_concurrency_limit_config_exists(self):
         """Test that concurrency limit configuration is defined."""
-        assert hasattr(dify_config, "ANNOTATION_IMPORT_MAX_CONCURRENT")
-        assert dify_config.ANNOTATION_IMPORT_MAX_CONCURRENT > 0
-        assert dify_config.ANNOTATION_IMPORT_MAX_CONCURRENT <= 10  # Reasonable upper bound
+        assert hasattr(nexusai_config, "ANNOTATION_IMPORT_MAX_CONCURRENT")
+        assert nexusai_config.ANNOTATION_IMPORT_MAX_CONCURRENT > 0
+        assert nexusai_config.ANNOTATION_IMPORT_MAX_CONCURRENT <= 10  # Reasonable upper bound

@@ -30,7 +30,7 @@ const clientSchema = {
   /**
    * The base URL of console application, refers to the Console base URL of WEB service if console domain is
    * different from api or web app domain.
-   * example: http://cloud.dify.ai/console/api
+   * example: http://cloud.nexusai.ai/console/api
    */
   NEXT_PUBLIC_API_PREFIX: z.string().optional(),
   /**
@@ -103,7 +103,7 @@ const clientSchema = {
   /**
    * The URL for Web APP, refers to the Web App base URL of WEB service if web app domain is different from
    * console or api domain.
-   * example: http://udify.app/api
+   * example: http://unexusai.app/api
    */
   NEXT_PUBLIC_PUBLIC_API_PREFIX: z.string().optional(),
   /**

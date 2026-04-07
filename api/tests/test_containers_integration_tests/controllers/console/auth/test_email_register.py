@@ -42,8 +42,8 @@ class TestEmailRegisterSendEmailApi:
 
         feature_flags = SimpleNamespace(enable_email_password_login=True, is_allow_register=True)
         with (
-            patch("controllers.console.auth.email_register.dify_config", SimpleNamespace(BILLING_ENABLED=True)),
-            patch("controllers.console.wraps.dify_config", SimpleNamespace(EDITION="CLOUD")),
+            patch("controllers.console.auth.email_register.nexusai_config", SimpleNamespace(BILLING_ENABLED=True)),
+            patch("controllers.console.wraps.nexusai_config", SimpleNamespace(EDITION="CLOUD")),
             patch("controllers.console.wraps.FeatureService.get_system_features", return_value=feature_flags),
         ):
             with app.test_request_context(
@@ -83,7 +83,7 @@ class TestEmailRegisterCheckApi:
 
         feature_flags = SimpleNamespace(enable_email_password_login=True, is_allow_register=True)
         with (
-            patch("controllers.console.wraps.dify_config", SimpleNamespace(EDITION="CLOUD")),
+            patch("controllers.console.wraps.nexusai_config", SimpleNamespace(EDITION="CLOUD")),
             patch("controllers.console.wraps.FeatureService.get_system_features", return_value=feature_flags),
         ):
             with app.test_request_context(
@@ -131,7 +131,7 @@ class TestEmailRegisterResetApi:
 
         feature_flags = SimpleNamespace(enable_email_password_login=True, is_allow_register=True)
         with (
-            patch("controllers.console.wraps.dify_config", SimpleNamespace(EDITION="CLOUD")),
+            patch("controllers.console.wraps.nexusai_config", SimpleNamespace(EDITION="CLOUD")),
             patch("controllers.console.wraps.FeatureService.get_system_features", return_value=feature_flags),
         ):
             with app.test_request_context(

@@ -7,7 +7,7 @@ from sqlalchemy import select
 from werkzeug.exceptions import Unauthorized
 
 import services
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.errors import (
     FilenameNotExistsError,
     FileTooLargeError,
@@ -110,8 +110,8 @@ class TenantListApi(Resource):
         current_user, current_tenant_id = current_account_with_tenant()
         tenants = TenantService.get_join_tenants(current_user)
         tenant_dicts = []
-        is_enterprise_only = dify_config.ENTERPRISE_ENABLED and not dify_config.BILLING_ENABLED
-        is_saas = dify_config.EDITION == "CLOUD" and dify_config.BILLING_ENABLED
+        is_enterprise_only = nexusai_config.ENTERPRISE_ENABLED and not nexusai_config.BILLING_ENABLED
+        is_saas = nexusai_config.EDITION == "CLOUD" and nexusai_config.BILLING_ENABLED
         tenant_plans: dict[str, SubscriptionPlan] = {}
 
         if is_saas:

@@ -10,7 +10,7 @@ from tcvectordb.model import document, enum  # type: ignore
 from tcvectordb.model import index as vdb_index  # type: ignore
 from tcvectordb.model.document import AnnSearch, Filter, KeywordSearch, WeightedRerank  # type: ignore
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import parse_metadata_json
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -141,7 +141,7 @@ class TencentVector(BaseVector):
                     collection_name=self._collection_name,
                     shard=self._client_config.shard,
                     replicas=self._client_config.replicas,
-                    description="Collection for Dify",
+                    description="Collection for NexusAI",
                     indexes=indexes,
                 )
             except VectorDBException as e:
@@ -159,7 +159,7 @@ class TencentVector(BaseVector):
                     collection_name=self._collection_name,
                     shard=self._client_config.shard,
                     replicas=self._client_config.replicas,
-                    description="Collection for Dify",
+                    description="Collection for NexusAI",
                     indexes=indexes,
                 )
             redis_client.set(collection_exist_cache_key, 1, ex=3600)
@@ -317,13 +317,13 @@ class TencentVectorFactory(AbstractVectorFactory):
         return TencentVector(
             collection_name=collection_name,
             config=TencentConfig(
-                url=dify_config.TENCENT_VECTOR_DB_URL or "",
-                api_key=dify_config.TENCENT_VECTOR_DB_API_KEY,
-                timeout=dify_config.TENCENT_VECTOR_DB_TIMEOUT,
-                username=dify_config.TENCENT_VECTOR_DB_USERNAME,
-                database=dify_config.TENCENT_VECTOR_DB_DATABASE,
-                shard=dify_config.TENCENT_VECTOR_DB_SHARD,
-                replicas=dify_config.TENCENT_VECTOR_DB_REPLICAS,
-                enable_hybrid_search=dify_config.TENCENT_VECTOR_DB_ENABLE_HYBRID_SEARCH or False,
+                url=nexusai_config.TENCENT_VECTOR_DB_URL or "",
+                api_key=nexusai_config.TENCENT_VECTOR_DB_API_KEY,
+                timeout=nexusai_config.TENCENT_VECTOR_DB_TIMEOUT,
+                username=nexusai_config.TENCENT_VECTOR_DB_USERNAME,
+                database=nexusai_config.TENCENT_VECTOR_DB_DATABASE,
+                shard=nexusai_config.TENCENT_VECTOR_DB_SHARD,
+                replicas=nexusai_config.TENCENT_VECTOR_DB_REPLICAS,
+                enable_hybrid_search=nexusai_config.TENCENT_VECTOR_DB_ENABLE_HYBRID_SEARCH or False,
             ),
         )

@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from constants.languages import supported_language
 from controllers.common.schema import register_schema_models
 from controllers.console import console_ns
@@ -207,7 +207,7 @@ class AccountInitApi(Resource):
         payload = console_ns.payload or {}
         args = AccountInitPayload.model_validate(payload)
 
-        if dify_config.EDITION == "CLOUD":
+        if nexusai_config.EDITION == "CLOUD":
             if not args.invitation_code:
                 raise ValueError("invitation_code is required")
 

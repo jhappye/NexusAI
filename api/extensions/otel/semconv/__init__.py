@@ -1,11 +1,11 @@
-"""Semantic convention shortcuts for Dify-specific spans."""
+"""Semantic convention shortcuts for NexusAI-specific spans."""
 
-from .dify import DifySpanAttributes
+from .nexusai import NexusAISpanAttributes
 from .gen_ai import ChainAttributes, GenAIAttributes, LLMAttributes, RetrieverAttributes, ToolAttributes
 
 __all__ = [
     "ChainAttributes",
-    "DifySpanAttributes",
+    "NexusAISpanAttributes",
     "GenAIAttributes",
     "LLMAttributes",
     "RetrieverAttributes",

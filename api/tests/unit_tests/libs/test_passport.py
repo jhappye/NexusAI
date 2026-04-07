@@ -14,14 +14,14 @@ class TestPassportService:
     @pytest.fixture
     def passport_service(self):
         """Create PassportService instance with test secret key"""
-        with patch("libs.passport.dify_config") as mock_config:
+        with patch("libs.passport.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = "test-secret-key-for-testing"
             return PassportService()
 
     @pytest.fixture
     def another_passport_service(self):
         """Create another PassportService instance with different secret key"""
-        with patch("libs.passport.dify_config") as mock_config:
+        with patch("libs.passport.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = "another-secret-key-for-testing"
             return PassportService()
 
@@ -98,7 +98,7 @@ class TestPassportService:
         payload = {"user_id": "123"}
 
         # Create token with different algorithm
-        with patch("libs.passport.dify_config") as mock_config:
+        with patch("libs.passport.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = "test-secret-key-for-testing"
             # Create token with HS512 instead of HS256
             wrong_alg_token = jwt.encode(payload, mock_config.SECRET_KEY, algorithm="HS512")
@@ -134,7 +134,7 @@ class TestPassportService:
         past_time = datetime.now(UTC) - timedelta(hours=1)
         payload = {"user_id": "123", "exp": past_time.timestamp()}
 
-        with patch("libs.passport.dify_config") as mock_config:
+        with patch("libs.passport.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = "test-secret-key-for-testing"
             token = jwt.encode(payload, mock_config.SECRET_KEY, algorithm="HS256")
 
@@ -145,7 +145,7 @@ class TestPassportService:
     # Configuration tests
     def test_should_handle_empty_secret_key(self):
         """Test behavior when SECRET_KEY is empty"""
-        with patch("libs.passport.dify_config") as mock_config:
+        with patch("libs.passport.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = ""
             service = PassportService()
 
@@ -157,7 +157,7 @@ class TestPassportService:
 
     def test_should_handle_none_secret_key(self):
         """Test behavior when SECRET_KEY is None"""
-        with patch("libs.passport.dify_config") as mock_config:
+        with patch("libs.passport.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = None
             service = PassportService()
 

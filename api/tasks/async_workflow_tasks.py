@@ -14,21 +14,21 @@ from graphon.runtime import GraphRuntimeState
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.apps.workflow.app_generator import SKIP_PREPARE_USER_INPUTS_KEY, WorkflowAppGenerator
 from core.app.entities.app_invoke_entities import InvokeFrom, WorkflowAppGenerateEntity
 from core.app.layers.pause_state_persist_layer import PauseStateLayerConfig, WorkflowResumptionContext
 from core.app.layers.timeslice_layer import TimeSliceLayer
 from core.app.layers.trigger_post_layer import TriggerPostLayer
 from core.db.session_factory import session_factory
-from core.repositories import DifyCoreRepositoryFactory
+from core.repositories import NexusAICoreRepositoryFactory
 from extensions.ext_database import db
 from models.account import Account
 from models.enums import CreatorUserRole, WorkflowRunTriggeredFrom, WorkflowTriggerStatus
 from models.model import App, EndUser, Tenant
 from models.trigger import WorkflowTriggerLog
 from models.workflow import Workflow, WorkflowNodeExecutionTriggeredFrom, WorkflowRun
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from repositories.sqlalchemy_workflow_trigger_log_repository import SQLAlchemyWorkflowTriggerLogRepository
 from services.errors.app import WorkflowNotFoundError
 from services.workflow.entities import (
@@ -49,7 +49,7 @@ def execute_workflow_professional(task_data_dict: dict[str, Any]):
     cfs_plan_scheduler_entity = AsyncWorkflowCFSPlanEntity(
         queue=AsyncWorkflowQueue.PROFESSIONAL_QUEUE,
         schedule_strategy=AsyncWorkflowSystemStrategy,
-        granularity=dify_config.ASYNC_WORKFLOW_SCHEDULER_GRANULARITY,
+        granularity=nexusai_config.ASYNC_WORKFLOW_SCHEDULER_GRANULARITY,
     )
     _execute_workflow_common(
         task_data,
@@ -65,7 +65,7 @@ def execute_workflow_team(task_data_dict: dict[str, Any]):
     cfs_plan_scheduler_entity = AsyncWorkflowCFSPlanEntity(
         queue=AsyncWorkflowQueue.TEAM_QUEUE,
         schedule_strategy=AsyncWorkflowSystemStrategy,
-        granularity=dify_config.ASYNC_WORKFLOW_SCHEDULER_GRANULARITY,
+        granularity=nexusai_config.ASYNC_WORKFLOW_SCHEDULER_GRANULARITY,
     )
     _execute_workflow_common(
         task_data,
@@ -81,7 +81,7 @@ def execute_workflow_sandbox(task_data_dict: dict[str, Any]):
     cfs_plan_scheduler_entity = AsyncWorkflowCFSPlanEntity(
         queue=AsyncWorkflowQueue.SANDBOX_QUEUE,
         schedule_strategy=AsyncWorkflowSystemStrategy,
-        granularity=dify_config.ASYNC_WORKFLOW_SCHEDULER_GRANULARITY,
+        granularity=nexusai_config.ASYNC_WORKFLOW_SCHEDULER_GRANULARITY,
     )
     _execute_workflow_common(
         task_data,
@@ -194,7 +194,7 @@ def resume_workflow_execution(task_data_dict: dict[str, Any]) -> None:
     """Resume a paused workflow run via Celery."""
     task_data = WorkflowResumeTaskData.model_validate(task_data_dict)
     session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
-    workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_factory)
+    workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_factory)
 
     pause_entity = workflow_run_repo.get_workflow_pause(task_data.workflow_run_id)
     if pause_entity is None:
@@ -235,13 +235,13 @@ def resume_workflow_execution(task_data_dict: dict[str, Any]) -> None:
                 "App not found: app_id=%s, workflow_run_id=%s", workflow_run.app_id, workflow_run.id
             )
 
-    workflow_execution_repository = DifyCoreRepositoryFactory.create_workflow_execution_repository(
+    workflow_execution_repository = NexusAICoreRepositoryFactory.create_workflow_execution_repository(
         session_factory=session_factory,
         user=user,
         app_id=generate_entity.app_config.app_id,
         triggered_from=WorkflowRunTriggeredFrom(workflow_run.triggered_from),
     )
-    workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+    workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
         session_factory=session_factory,
         user=user,
         app_id=generate_entity.app_config.app_id,
@@ -262,7 +262,7 @@ def resume_workflow_execution(task_data_dict: dict[str, Any]) -> None:
         cfs_plan_scheduler_entity = AsyncWorkflowCFSPlanEntity(
             queue=AsyncWorkflowQueue(trigger_log.queue_name),
             schedule_strategy=AsyncWorkflowSystemStrategy,
-            granularity=dify_config.ASYNC_WORKFLOW_SCHEDULER_GRANULARITY,
+            granularity=nexusai_config.ASYNC_WORKFLOW_SCHEDULER_GRANULARITY,
         )
         cfs_plan_scheduler = AsyncWorkflowCFSPlanScheduler(plan=cfs_plan_scheduler_entity)
 

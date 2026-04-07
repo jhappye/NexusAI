@@ -4,7 +4,7 @@ from pathlib import Path
 
 from supabase import Client
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.storage.base_storage import BaseStorage
 
 
@@ -13,16 +13,16 @@ class SupabaseStorage(BaseStorage):
 
     def __init__(self):
         super().__init__()
-        if dify_config.SUPABASE_URL is None:
+        if nexusai_config.SUPABASE_URL is None:
             raise ValueError("SUPABASE_URL is not set")
-        if dify_config.SUPABASE_API_KEY is None:
+        if nexusai_config.SUPABASE_API_KEY is None:
             raise ValueError("SUPABASE_API_KEY is not set")
-        if dify_config.SUPABASE_BUCKET_NAME is None:
+        if nexusai_config.SUPABASE_BUCKET_NAME is None:
             raise ValueError("SUPABASE_BUCKET_NAME is not set")
 
-        self.bucket_name = dify_config.SUPABASE_BUCKET_NAME
-        self.client = Client(supabase_url=dify_config.SUPABASE_URL, supabase_key=dify_config.SUPABASE_API_KEY)
-        self.create_bucket(id=dify_config.SUPABASE_BUCKET_NAME, bucket_name=dify_config.SUPABASE_BUCKET_NAME)
+        self.bucket_name = nexusai_config.SUPABASE_BUCKET_NAME
+        self.client = Client(supabase_url=nexusai_config.SUPABASE_URL, supabase_key=nexusai_config.SUPABASE_API_KEY)
+        self.create_bucket(id=nexusai_config.SUPABASE_BUCKET_NAME, bucket_name=nexusai_config.SUPABASE_BUCKET_NAME)
 
     def create_bucket(self, id, bucket_name):
         if not self.bucket_exists():

@@ -3,8 +3,8 @@ from core.hosting_configuration import HostingConfiguration
 hosting_configuration = HostingConfiguration()
 
 
-from dify_app import DifyApp
+from nexusai_app import NexusAIApp
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     hosting_configuration.init_app(app)

@@ -15,7 +15,7 @@ class ArchivedDocumentImmutableError(BaseHTTPException):
 
 class DatasetNameDuplicateError(BaseHTTPException):
     error_code = "dataset_name_duplicate"
-    description = "The dataset name already exists. Please modify your dataset name."
+    description = "The dataset name already exists. Please monexusai your dataset name."
     code = 409
 
 

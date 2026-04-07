@@ -17,7 +17,7 @@ import { isClient } from '@/utils/client'
 import { request } from './base'
 
 const getMarketplaceHeaders = () => new Headers({
-  'X-Dify-Version': !IS_MARKETPLACE ? APP_VERSION : '999.0.0',
+  'X-NexusAI-Version': !IS_MARKETPLACE ? APP_VERSION : '999.0.0',
 })
 
 function isURL(path: string) {

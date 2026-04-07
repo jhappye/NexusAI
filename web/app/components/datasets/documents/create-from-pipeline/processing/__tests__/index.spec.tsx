@@ -10,7 +10,7 @@ import Processing from '../index'
 vi.mock('@/context/i18n', () => ({
   useDocLink: () => (path?: string) => {
     const normalizedPath = path?.startsWith('/') ? path.slice(1) : (path || '')
-    return `https://docs.dify.ai/en-US/${normalizedPath}`
+    return `https://docs.nexusai.ai/en-US/${normalizedPath}`
   },
 }))
 
@@ -135,7 +135,7 @@ describe('Processing', () => {
       render(<Processing {...props} />)
 
       const link = screen.getByRole('link', { name: 'datasetPipeline.addDocuments.stepThree.learnMore' })
-      expect(link).toHaveAttribute('href', 'https://docs.dify.ai/en-US/use-dify/knowledge/knowledge-pipeline/authorize-data-source')
+      expect(link).toHaveAttribute('href', 'https://docs.nexusai.ai/en-US/use-nexusai/knowledge/knowledge-pipeline/authorize-data-source')
       expect(link).toHaveAttribute('target', '_blank')
       expect(link).toHaveAttribute('rel', 'noreferrer noopener')
     })

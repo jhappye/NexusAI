@@ -6,27 +6,27 @@ from pydantic import BaseModel, ConfigDict
 
 
 class EnterpriseTelemetrySpan(StrEnum):
-    WORKFLOW_RUN = "dify.workflow.run"
-    NODE_EXECUTION = "dify.node.execution"
-    DRAFT_NODE_EXECUTION = "dify.node.execution.draft"
+    WORKFLOW_RUN = "nexusai.workflow.run"
+    NODE_EXECUTION = "nexusai.node.execution"
+    DRAFT_NODE_EXECUTION = "nexusai.node.execution.draft"
 
 
 class EnterpriseTelemetryEvent(StrEnum):
     """Event names for enterprise telemetry logs."""
 
-    APP_CREATED = "dify.app.created"
-    APP_UPDATED = "dify.app.updated"
-    APP_DELETED = "dify.app.deleted"
-    FEEDBACK_CREATED = "dify.feedback.created"
-    WORKFLOW_RUN = "dify.workflow.run"
-    MESSAGE_RUN = "dify.message.run"
-    TOOL_EXECUTION = "dify.tool.execution"
-    MODERATION_CHECK = "dify.moderation.check"
-    SUGGESTED_QUESTION_GENERATION = "dify.suggested_question.generation"
-    DATASET_RETRIEVAL = "dify.dataset.retrieval"
-    GENERATE_NAME_EXECUTION = "dify.generate_name.execution"
-    PROMPT_GENERATION_EXECUTION = "dify.prompt_generation.execution"
-    REHYDRATION_FAILED = "dify.telemetry.rehydration_failed"
+    APP_CREATED = "nexusai.app.created"
+    APP_UPDATED = "nexusai.app.updated"
+    APP_DELETED = "nexusai.app.deleted"
+    FEEDBACK_CREATED = "nexusai.feedback.created"
+    WORKFLOW_RUN = "nexusai.workflow.run"
+    MESSAGE_RUN = "nexusai.message.run"
+    TOOL_EXECUTION = "nexusai.tool.execution"
+    MODERATION_CHECK = "nexusai.moderation.check"
+    SUGGESTED_QUESTION_GENERATION = "nexusai.suggested_question.generation"
+    DATASET_RETRIEVAL = "nexusai.dataset.retrieval"
+    GENERATE_NAME_EXECUTION = "nexusai.generate_name.execution"
+    PROMPT_GENERATION_EXECUTION = "nexusai.prompt_generation.execution"
+    REHYDRATION_FAILED = "nexusai.telemetry.rehydration_failed"
 
 
 class EnterpriseTelemetryCounter(StrEnum):
@@ -52,9 +52,9 @@ class EnterpriseTelemetryHistogram(StrEnum):
 
 
 class TokenMetricLabels(BaseModel):
-    """Unified label structure for all dify.token.* metrics.
+    """Unified label structure for all nexusai.token.* metrics.
 
-    All token counters (dify.tokens.input, dify.tokens.output, dify.tokens.total) MUST
+    All token counters (nexusai.tokens.input, nexusai.tokens.output, nexusai.tokens.total) MUST
     use this exact label set to ensure consistent filtering and aggregation across
     different operation types.
 
@@ -62,7 +62,7 @@ class TokenMetricLabels(BaseModel):
         tenant_id: Tenant identifier.
         app_id: Application identifier.
         operation_type: Source of token usage (workflow | node_execution | message |
-            rule_generate | code_generate | structured_output | instruction_modify).
+            rule_generate | code_generate | structured_output | instruction_monexusai).
         model_provider: LLM provider name. Empty string if not applicable (e.g., workflow-level).
         model_name: LLM model name. Empty string if not applicable (e.g., workflow-level).
         node_type: Workflow node type. Empty string unless operation_type=node_execution.

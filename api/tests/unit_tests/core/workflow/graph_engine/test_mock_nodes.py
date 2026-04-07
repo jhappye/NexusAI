@@ -28,7 +28,7 @@ from graphon.nodes.tool import ToolNode
 from graphon.template_rendering import Jinja2TemplateRenderer, TemplateRenderError
 
 from core.model_manager import ModelInstance
-from core.workflow.node_runtime import DifyToolNodeRuntime
+from core.workflow.node_runtime import NexusAIToolNodeRuntime
 from core.workflow.nodes.agent import AgentNode
 from core.workflow.nodes.knowledge_retrieval.knowledge_retrieval_node import KnowledgeRetrievalNode
 
@@ -86,7 +86,7 @@ class MockNodeMixin:
 
         if isinstance(self, _ToolNode):
             kwargs.setdefault("tool_file_manager_factory", MagicMock(spec=ToolFileManagerProtocol))
-            kwargs.setdefault("runtime", DifyToolNodeRuntime(graph_init_params.run_context))
+            kwargs.setdefault("runtime", NexusAIToolNodeRuntime(graph_init_params.run_context))
 
         if isinstance(self, AgentNode):
             presentation_provider = MagicMock()
@@ -616,7 +616,7 @@ class MockIterationNode(MockNodeMixin, IterationNode):
         return "1"
 
     def _create_graph_engine(self, index: int, item: Any):
-        """Create a graph engine with MockNodeFactory instead of DifyNodeFactory."""
+        """Create a graph engine with MockNodeFactory instead of NexusAINodeFactory."""
         # Import dependencies
         from graphon.entities import GraphInitParams
         from graphon.graph import Graph
@@ -624,7 +624,7 @@ class MockIterationNode(MockNodeMixin, IterationNode):
         from graphon.graph_engine.command_channels import InMemoryChannel
         from graphon.runtime import GraphRuntimeState
 
-        # Import our MockNodeFactory instead of DifyNodeFactory
+        # Import our MockNodeFactory instead of NexusAINodeFactory
         from .test_mock_factory import MockNodeFactory
 
         # Create GraphInitParams from node attributes
@@ -688,7 +688,7 @@ class MockLoopNode(MockNodeMixin, LoopNode):
         return "1"
 
     def _create_graph_engine(self, start_at, root_node_id: str):
-        """Create a graph engine with MockNodeFactory instead of DifyNodeFactory."""
+        """Create a graph engine with MockNodeFactory instead of NexusAINodeFactory."""
         # Import dependencies
         from graphon.entities import GraphInitParams
         from graphon.graph import Graph
@@ -696,7 +696,7 @@ class MockLoopNode(MockNodeMixin, LoopNode):
         from graphon.graph_engine.command_channels import InMemoryChannel
         from graphon.runtime import GraphRuntimeState
 
-        # Import our MockNodeFactory instead of DifyNodeFactory
+        # Import our MockNodeFactory instead of NexusAINodeFactory
         from .test_mock_factory import MockNodeFactory
 
         # Create GraphInitParams from node attributes

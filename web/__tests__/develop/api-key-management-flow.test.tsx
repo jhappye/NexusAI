@@ -82,9 +82,9 @@ describe('API Key management flow', () => {
   })
 
   it('ApiServer renders URL, status badge, and API Key button', () => {
-    render(<ApiServer apiBaseUrl="https://api.dify.ai/v1" appId="app-1" />)
+    render(<ApiServer apiBaseUrl="https://api.nexusai.ai/v1" appId="app-1" />)
 
-    expect(screen.getByText('https://api.dify.ai/v1')).toBeInTheDocument()
+    expect(screen.getByText('https://api.nexusai.ai/v1')).toBeInTheDocument()
     expect(screen.getByText('appApi.ok')).toBeInTheDocument()
     expect(screen.getByText('appApi.apiKey')).toBeInTheDocument()
   })
@@ -92,7 +92,7 @@ describe('API Key management flow', () => {
   it('clicking API Key button opens SecretKeyModal with real modal content', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
 
-    render(<ApiServer apiBaseUrl="https://api.dify.ai/v1" appId="app-1" />)
+    render(<ApiServer apiBaseUrl="https://api.nexusai.ai/v1" appId="app-1" />)
 
     // Click API Key button (rendered by SecretKeyButton)
     await act(async () => {
@@ -112,7 +112,7 @@ describe('API Key management flow', () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
     mockIsLoading.mockReturnValue(true)
 
-    render(<ApiServer apiBaseUrl="https://api.dify.ai/v1" appId="app-1" />)
+    render(<ApiServer apiBaseUrl="https://api.nexusai.ai/v1" appId="app-1" />)
 
     await act(async () => {
       await user.click(screen.getByText('appApi.apiKey'))
@@ -130,7 +130,7 @@ describe('API Key management flow', () => {
   it('modal can be closed by clicking X icon', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
 
-    render(<ApiServer apiBaseUrl="https://api.dify.ai/v1" appId="app-1" />)
+    render(<ApiServer apiBaseUrl="https://api.nexusai.ai/v1" appId="app-1" />)
 
     // Open modal
     await act(async () => {

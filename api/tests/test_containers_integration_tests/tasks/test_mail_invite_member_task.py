@@ -58,7 +58,7 @@ class TestMailInviteMemberTask:
         with (
             patch("tasks.mail_invite_member_task.mail", autospec=True) as mock_mail,
             patch("tasks.mail_invite_member_task.get_email_i18n_service", autospec=True) as mock_email_service,
-            patch("tasks.mail_invite_member_task.dify_config", autospec=True) as mock_config,
+            patch("tasks.mail_invite_member_task.nexusai_config", autospec=True) as mock_config,
         ):
             # Setup mail service mock
             mock_mail.is_inited.return_value = True
@@ -69,7 +69,7 @@ class TestMailInviteMemberTask:
             mock_email_service.return_value = mock_email_service_instance
 
             # Setup config mock
-            mock_config.CONSOLE_WEB_URL = "https://console.dify.ai"
+            mock_config.CONSOLE_WEB_URL = "https://console.nexusai.ai"
 
             yield {
                 "mail": mock_mail,
@@ -227,7 +227,7 @@ class TestMailInviteMemberTask:
         assert template_context["to"] == invitee_email
         assert template_context["inviter_name"] == inviter_name
         assert template_context["workspace_name"] == workspace_name
-        assert template_context["url"] == f"https://console.dify.ai/activate?token={token}"
+        assert template_context["url"] == f"https://console.nexusai.ai/activate?token={token}"
 
     def test_send_invite_member_mail_different_languages(
         self, db_session_with_containers, mock_external_service_dependencies
@@ -364,7 +364,7 @@ class TestMailInviteMemberTask:
         assert template_context["to"] == invitee_email
         assert template_context["inviter_name"] == inviter_name
         assert template_context["workspace_name"] == workspace_name
-        assert template_context["url"] == f"https://console.dify.ai/activate?token={token}"
+        assert template_context["url"] == f"https://console.nexusai.ai/activate?token={token}"
 
     def test_send_invite_member_mail_integration_with_redis_token(
         self, db_session_with_containers, mock_external_service_dependencies

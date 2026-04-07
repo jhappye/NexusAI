@@ -786,7 +786,7 @@ class ToolAnnotations(BaseModel):
 
     readOnlyHint: bool | None = None
     """
-    If true, the tool does not modify its environment.
+    If true, the tool does not monexusai its environment.
     Default: false
     """
 

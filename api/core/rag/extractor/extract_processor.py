@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Union
 from urllib.parse import unquote
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper import ssrf_proxy
 from core.rag.extractor.csv_extractor import CSVExtractor
 from core.rag.extractor.entity.datasource_type import DatasourceType
@@ -104,11 +104,11 @@ class ExtractProcessor:
                     storage.download(upload_file.key, file_path)
                 input_file = Path(file_path)
                 file_extension = input_file.suffix.lower()
-                etl_type = dify_config.ETL_TYPE
+                etl_type = nexusai_config.ETL_TYPE
                 extractor: BaseExtractor | None = None
                 if etl_type == "Unstructured":
-                    unstructured_api_url = dify_config.UNSTRUCTURED_API_URL or ""
-                    unstructured_api_key = dify_config.UNSTRUCTURED_API_KEY or ""
+                    unstructured_api_url = nexusai_config.UNSTRUCTURED_API_URL or ""
+                    unstructured_api_key = nexusai_config.UNSTRUCTURED_API_KEY or ""
 
                     if file_extension in {".xlsx", ".xls"}:
                         extractor = ExcelExtractor(file_path)

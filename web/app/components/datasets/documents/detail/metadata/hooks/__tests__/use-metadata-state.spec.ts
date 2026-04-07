@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { useMetadataState } from '../use-metadata-state'
 
-const { mockNotify, mockModifyDocMetadata, mockToast } = vi.hoisted(() => {
+const { mockNotify, mockMonexusaiDocMetadata, mockToast } = vi.hoisted(() => {
   const mockNotify = vi.fn()
   const mockToast = Object.assign(mockNotify, {
     success: vi.fn((message, options) => mockNotify({ type: 'success', message, ...options })),
@@ -17,7 +17,7 @@ const { mockNotify, mockModifyDocMetadata, mockToast } = vi.hoisted(() => {
     update: vi.fn(),
     promise: vi.fn(),
   })
-  return { mockNotify, mockModifyDocMetadata: vi.fn(), mockToast }
+  return { mockNotify, mockMonexusaiDocMetadata: vi.fn(), mockToast }
 })
 
 vi.mock('@/app/components/base/ui/toast', () => ({
@@ -30,7 +30,7 @@ vi.mock('../../../context', () => ({
 }))
 
 vi.mock('@/service/datasets', () => ({
-  modifyDocMetadata: (...args: unknown[]) => mockModifyDocMetadata(...args),
+  monexusaiDocMetadata: (...args: unknown[]) => mockMonexusaiDocMetadata(...args),
 }))
 
 vi.mock('@/hooks/use-metadata', () => ({ useMetadataMap: () => ({}) }))
@@ -55,7 +55,7 @@ const makeDoc = (overrides: Partial<FullDocumentDetail> = {}): DocDetail =>
 describe('useMetadataState', () => {
   // Verify all metadata editing workflows using a stable docDetail reference
   it('should manage the full metadata editing lifecycle', async () => {
-    mockModifyDocMetadata.mockResolvedValue({ result: 'ok' })
+    mockMonexusaiDocMetadata.mockResolvedValue({ result: 'ok' })
     const onUpdate = vi.fn()
 
     // IMPORTANT: Create a stable reference outside the render callback
@@ -125,7 +125,7 @@ describe('useMetadataState', () => {
     await act(async () => {
       await result.current.saveMetadata()
     })
-    expect(mockModifyDocMetadata).toHaveBeenCalledWith({
+    expect(mockMonexusaiDocMetadata).toHaveBeenCalledWith({
       datasetId: 'ds-1',
       documentId: 'doc-1',
       body: { doc_type: 'web_page', doc_metadata: {} },
@@ -137,7 +137,7 @@ describe('useMetadataState', () => {
 
     // --- Save failure notifies error ---
     mockNotify.mockClear()
-    mockModifyDocMetadata.mockRejectedValue(new Error('fail'))
+    mockMonexusaiDocMetadata.mockRejectedValue(new Error('fail'))
     act(() => {
       result.current.enableEdit()
     })

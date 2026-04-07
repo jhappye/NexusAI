@@ -16,7 +16,7 @@ from graphon.model_runtime.errors.validate import CredentialsValidateFailedError
 from pydantic import BaseModel
 from yarl import URL
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper.http_client_pooling import get_pooled_http_client
 from core.plugin.endpoint.exc import EndpointSetupFailedError
 from core.plugin.entities.plugin_daemon import PluginDaemonBasicResponse, PluginDaemonError, PluginDaemonInnerError
@@ -38,10 +38,10 @@ from core.trigger.errors import (
     TriggerProviderCredentialValidationError,
 )
 
-plugin_daemon_inner_api_baseurl = URL(str(dify_config.PLUGIN_DAEMON_URL))
+plugin_daemon_inner_api_baseurl = URL(str(nexusai_config.PLUGIN_DAEMON_URL))
 _plugin_daemon_timeout_config = cast(
     float | httpx.Timeout | None,
-    getattr(dify_config, "PLUGIN_DAEMON_TIMEOUT", 600.0),
+    getattr(nexusai_config, "PLUGIN_DAEMON_TIMEOUT", 600.0),
 )
 plugin_daemon_request_timeout: httpx.Timeout | None
 if _plugin_daemon_timeout_config is None:
@@ -105,7 +105,7 @@ class BasePluginClient:
     ) -> tuple[str, dict[str, str], bytes | dict[str, Any] | str | None, dict[str, Any] | None, dict[str, Any] | None]:
         url = plugin_daemon_inner_api_baseurl / path
         prepared_headers = dict(headers or {})
-        prepared_headers["X-Api-Key"] = dify_config.PLUGIN_DAEMON_KEY
+        prepared_headers["X-Api-Key"] = nexusai_config.PLUGIN_DAEMON_KEY
         prepared_headers.setdefault("Accept-Encoding", "gzip, deflate, br")
 
         # Inject traceparent header for distributed tracing
@@ -129,7 +129,7 @@ class BasePluginClient:
         This ensures trace context is propagated to plugin daemon even if
         HTTPXClientInstrumentor doesn't cover module-level httpx functions.
         """
-        if not dify_config.ENABLE_OTEL:
+        if not nexusai_config.ENABLE_OTEL:
             return
 
         import contextlib
@@ -293,7 +293,7 @@ class BasePluginClient:
             try:
                 rep = PluginDaemonBasicResponse[type_].model_validate_json(line)  # type: ignore
             except (ValueError, TypeError):
-                # TODO modify this when line_data has code and message
+                # TODO monexusai this when line_data has code and message
                 try:
                     line_data = json.loads(line)
                 except (ValueError, TypeError):

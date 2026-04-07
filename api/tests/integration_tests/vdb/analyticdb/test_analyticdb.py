@@ -20,7 +20,7 @@ class AnalyticdbVectorTest(AbstractVectorTest):
                     port=5432,
                     account="test_account",
                     account_password="test_passwd",
-                    namespace="difytest_namespace",
+                    namespace="nexusaitest_namespace",
                 ),
                 api_config=None,
             )
@@ -35,8 +35,8 @@ class AnalyticdbVectorTest(AbstractVectorTest):
                     instance_id="test_id",
                     account="test_account",
                     account_password="test_passwd",
-                    namespace="difytest_namespace",
-                    collection="difytest_collection",
+                    namespace="nexusaitest_namespace",
+                    collection="nexusaitest_collection",
                     namespace_password="test_passwd",
                 ),
             )

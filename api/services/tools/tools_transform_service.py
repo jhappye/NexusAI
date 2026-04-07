@@ -6,7 +6,7 @@ from typing import Any, Union
 from pydantic import TypeAdapter, ValidationError
 from yarl import URL
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper.provider_cache import ToolProviderCredentialsCache
 from core.mcp.types import Tool as MCPTool
 from core.plugin.entities.plugin_daemon import CredentialType, PluginDatasourceProviderEntity
@@ -45,7 +45,7 @@ class ToolTransformService:
         get tool provider icon url
         """
         url_prefix = (
-            URL(dify_config.CONSOLE_API_URL or "/") / "console" / "api" / "workspaces" / "current" / "tool-provider"
+            URL(nexusai_config.CONSOLE_API_URL or "/") / "console" / "api" / "workspaces" / "current" / "tool-provider"
         )
 
         if provider_type == ToolProviderType.BUILT_IN:

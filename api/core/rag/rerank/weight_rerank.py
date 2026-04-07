@@ -40,7 +40,7 @@ class WeightRerankRunner(BaseRerankRunner):
         doc_ids = set()
         for document in documents:
             if (
-                document.provider == "dify"
+                document.provider == "nexusai"
                 and document.metadata is not None
                 and document.metadata["doc_id"] not in doc_ids
             ):

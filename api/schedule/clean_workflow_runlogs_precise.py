@@ -7,7 +7,7 @@ import click
 from sqlalchemy.orm import Session, sessionmaker
 
 import app
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_database import db
 from models.model import (
     AppAnnotationHitHistory,
@@ -22,18 +22,18 @@ from models.model import (
 )
 from models.web import SavedMessage
 from models.workflow import ConversationVariable, WorkflowRun
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from repositories.sqlalchemy_workflow_trigger_log_repository import SQLAlchemyWorkflowTriggerLogRepository
 
 logger = logging.getLogger(__name__)
 
 
 MAX_RETRIES = 3
-BATCH_SIZE = dify_config.WORKFLOW_LOG_CLEANUP_BATCH_SIZE
+BATCH_SIZE = nexusai_config.WORKFLOW_LOG_CLEANUP_BATCH_SIZE
 
 
 def _get_specific_workflow_ids() -> list[str]:
-    workflow_ids_str = dify_config.WORKFLOW_LOG_CLEANUP_SPECIFIC_WORKFLOW_IDS.strip()
+    workflow_ids_str = nexusai_config.WORKFLOW_LOG_CLEANUP_SPECIFIC_WORKFLOW_IDS.strip()
     if not workflow_ids_str:
         return []
     return [wid.strip() for wid in workflow_ids_str.split(",") if wid.strip()]
@@ -46,10 +46,10 @@ def clean_workflow_runlogs_precise() -> None:
     click.echo(click.style("Start clean workflow run logs (precise mode with complete cascade).", fg="green"))
     start_at = time.perf_counter()
 
-    retention_days = dify_config.WORKFLOW_LOG_RETENTION_DAYS
+    retention_days = nexusai_config.WORKFLOW_LOG_RETENTION_DAYS
     cutoff_date = datetime.datetime.now() - datetime.timedelta(days=retention_days)
     session_factory = sessionmaker(db.engine, expire_on_commit=False)
-    workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_factory)
+    workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_factory)
     workflow_ids = _get_specific_workflow_ids()
     workflow_ids_filter = workflow_ids or None
 
@@ -151,7 +151,7 @@ def _delete_batch(
 
             def _delete_node_executions(active_session: Session, runs: Sequence[WorkflowRun]) -> tuple[int, int]:
                 run_ids = [run.id for run in runs]
-                repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(
+                repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(
                     session_maker=sessionmaker(bind=active_session.get_bind(), expire_on_commit=False)
                 )
                 return repo.delete_by_runs(active_session, run_ids)

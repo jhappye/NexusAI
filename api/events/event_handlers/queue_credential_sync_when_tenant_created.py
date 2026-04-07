@@ -1,4 +1,4 @@
-from configs import dify_config
+from configs import nexusai_config
 from events.tenant_event import tenant_was_created
 from services.enterprise.workspace_sync import WorkspaceSyncService
 
@@ -7,7 +7,7 @@ from services.enterprise.workspace_sync import WorkspaceSyncService
 def handle(sender, **kwargs):
     """Queue credential sync when a tenant/workspace is created."""
     # Only queue sync tasks if plugin manager (enterprise feature) is enabled
-    if not dify_config.ENTERPRISE_ENABLED:
+    if not nexusai_config.ENTERPRISE_ENABLED:
         return
 
     tenant = sender

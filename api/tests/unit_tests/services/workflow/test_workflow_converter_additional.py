@@ -30,10 +30,10 @@ try:
     from graphon.model_runtime.entities.message_entities import PromptMessageRole
     from graphon.variables.input_entities import VariableEntity, VariableEntityType
 except ModuleNotFoundError:
-    from dify_graph.enums import BuiltinNodeTypes
-    from dify_graph.model_runtime.entities.llm_entities import LLMMode
-    from dify_graph.model_runtime.entities.message_entities import PromptMessageRole
-    from dify_graph.variables.input_entities import VariableEntity, VariableEntityType
+    from nexusai_graph.enums import BuiltinNodeTypes
+    from nexusai_graph.model_runtime.entities.llm_entities import LLMMode
+    from nexusai_graph.model_runtime.entities.message_entities import PromptMessageRole
+    from nexusai_graph.variables.input_entities import VariableEntity, VariableEntityType
 
 
 @pytest.fixture
@@ -98,7 +98,7 @@ def test__convert_to_http_request_node_for_chatbot(default_variables: list[Varia
         tenant_id="tenant_id",
         name="api-1",
         api_key="encrypted_api_key",
-        api_endpoint="https://dify.ai",
+        api_endpoint="https://nexusai.ai",
     )
     extension.id = "api_based_extension_id"
 
@@ -140,7 +140,7 @@ def test__convert_to_http_request_node_for_workflow_app(default_variables: list[
         tenant_id="tenant_id",
         name="api-1",
         api_key="encrypted_api_key",
-        api_endpoint="https://dify.ai",
+        api_endpoint="https://nexusai.ai",
     )
     extension.id = "api_based_extension_id"
 

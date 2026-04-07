@@ -111,7 +111,7 @@ describe('Embedded', () => {
     })
 
     expect(mockWindowOpen).toHaveBeenCalledWith(
-      'https://chrome.google.com/webstore/detail/dify-chatbot/ceehdapohffmjmkdcifjofadiaoeggaf',
+      'https://chrome.google.com/webstore/detail/nexusai-chatbot/ceehdapohffmjmkdcifjofadiaoeggaf',
       '_blank',
       'noopener,noreferrer',
     )

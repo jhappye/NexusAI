@@ -1,7 +1,7 @@
 """
 Comprehensive unit tests for RecommendedAppService.
 
-This test suite provides complete coverage of recommended app operations in Dify,
+This test suite provides complete coverage of recommended app operations in NexusAI,
 following TDD principles with the Arrange-Act-Assert pattern.
 
 ## Test Coverage
@@ -23,7 +23,7 @@ Tests fetching individual app details:
 
 ## Testing Approach
 
-- **Mocking Strategy**: All external dependencies (dify_config, RecommendAppRetrievalFactory)
+- **Mocking Strategy**: All external dependencies (nexusai_config, RecommendAppRetrievalFactory)
   are mocked for fast, isolated unit tests
 - **Factory Pattern**: Tests verify correct factory selection based on mode
 - **Fixtures**: Mock objects are configured per test method
@@ -135,7 +135,7 @@ class TestRecommendedAppServiceGetApps:
     """Test get_recommended_apps_and_categories operations."""
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommended_apps_success_with_apps(self, mock_config, mock_factory_class, factory):
         """Test successful retrieval of recommended apps when apps are returned."""
         # Arrange
@@ -162,7 +162,7 @@ class TestRecommendedAppServiceGetApps:
         mock_retrieval_instance.get_recommended_apps_and_categories.assert_called_once_with("en-US")
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommended_apps_fallback_to_builtin_when_empty(self, mock_config, mock_factory_class, factory):
         """Test fallback to builtin when no recommended apps are returned."""
         # Arrange
@@ -200,7 +200,7 @@ class TestRecommendedAppServiceGetApps:
         mock_builtin_instance.fetch_recommended_apps_from_builtin.assert_called_once_with("en-US")
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommended_apps_fallback_when_none_recommended_apps(self, mock_config, mock_factory_class, factory):
         """Test fallback when recommended_apps key is None."""
         # Arrange
@@ -233,7 +233,7 @@ class TestRecommendedAppServiceGetApps:
         mock_builtin_instance.fetch_recommended_apps_from_builtin.assert_called_once()
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommended_apps_with_different_languages(self, mock_config, mock_factory_class, factory):
         """Test retrieval with different language codes."""
         # Arrange
@@ -263,7 +263,7 @@ class TestRecommendedAppServiceGetApps:
             mock_instance.get_recommended_apps_and_categories.assert_called_with(language)
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommended_apps_uses_correct_factory_mode(self, mock_config, mock_factory_class, factory):
         """Test that correct factory is selected based on mode."""
         # Arrange
@@ -293,7 +293,7 @@ class TestRecommendedAppServiceGetDetail:
     """Test get_recommend_app_detail operations."""
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommend_app_detail_success(self, mock_config, mock_factory_class, factory):
         """Test successful retrieval of app detail."""
         # Arrange
@@ -325,7 +325,7 @@ class TestRecommendedAppServiceGetDetail:
         mock_instance.get_recommend_app_detail.assert_called_once_with(app_id)
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommend_app_detail_with_different_modes(self, mock_config, mock_factory_class, factory):
         """Test app detail retrieval with different factory modes."""
         # Arrange
@@ -353,7 +353,7 @@ class TestRecommendedAppServiceGetDetail:
             mock_factory_class.get_recommend_app_factory.assert_called_with(mode)
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommend_app_detail_returns_none_when_not_found(self, mock_config, mock_factory_class, factory):
         """Test that None is returned when app is not found."""
         # Arrange
@@ -376,7 +376,7 @@ class TestRecommendedAppServiceGetDetail:
         mock_instance.get_recommend_app_detail.assert_called_once_with(app_id)
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommend_app_detail_returns_empty_dict(self, mock_config, mock_factory_class, factory):
         """Test handling of empty dict response."""
         # Arrange
@@ -398,7 +398,7 @@ class TestRecommendedAppServiceGetDetail:
         assert result == {}
 
     @patch("services.recommended_app_service.RecommendAppRetrievalFactory", autospec=True)
-    @patch("services.recommended_app_service.dify_config", autospec=True)
+    @patch("services.recommended_app_service.nexusai_config", autospec=True)
     def test_get_recommend_app_detail_with_complex_model_config(self, mock_config, mock_factory_class, factory):
         """Test app detail with complex model configuration."""
         # Arrange
@@ -477,7 +477,7 @@ def _mock_factory_for_apps(
     retrieval_instance = MagicMock()
     retrieval_instance.get_recommended_apps_and_categories.return_value = result
     retrieval_factory = MagicMock(return_value=retrieval_instance)
-    monkeypatch.setattr(service_module.dify_config, "HOSTED_FETCH_APP_TEMPLATES_MODE", mode, raising=False)
+    monkeypatch.setattr(service_module.nexusai_config, "HOSTED_FETCH_APP_TEMPLATES_MODE", mode, raising=False)
     monkeypatch.setattr(
         service_module.RecommendAppRetrievalFactory,
         "get_recommend_app_factory",
@@ -570,7 +570,7 @@ def test_get_recommend_app_detail_should_set_can_trial_when_trial_feature_enable
     retrieval_instance = MagicMock()
     retrieval_instance.get_recommend_app_detail.return_value = detail
     retrieval_factory = MagicMock(return_value=retrieval_instance)
-    monkeypatch.setattr(service_module.dify_config, "HOSTED_FETCH_APP_TEMPLATES_MODE", "remote", raising=False)
+    monkeypatch.setattr(service_module.nexusai_config, "HOSTED_FETCH_APP_TEMPLATES_MODE", "remote", raising=False)
     monkeypatch.setattr(
         service_module.RecommendAppRetrievalFactory,
         "get_recommend_app_factory",

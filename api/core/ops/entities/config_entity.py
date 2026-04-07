@@ -175,14 +175,14 @@ class AliyunConfig(BaseTracingConfig):
     Model class for Aliyun tracing config.
     """
 
-    app_name: str = "dify_app"
+    app_name: str = "nexusai_app"
     license_key: str
     endpoint: str
 
     @field_validator("app_name")
     @classmethod
     def app_name_validator(cls, v, info: ValidationInfo):
-        return cls.validate_project_field(v, "dify_app")
+        return cls.validate_project_field(v, "nexusai_app")
 
     @field_validator("license_key")
     @classmethod
@@ -222,7 +222,7 @@ class TencentConfig(BaseTracingConfig):
     @field_validator("service_name")
     @classmethod
     def service_name_validator(cls, v, info: ValidationInfo):
-        return cls.validate_project_field(v, "dify_app")
+        return cls.validate_project_field(v, "nexusai_app")
 
 
 class MLflowConfig(BaseTracingConfig):

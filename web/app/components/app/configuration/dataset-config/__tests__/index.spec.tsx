@@ -242,7 +242,7 @@ const createMockDataset = (overrides: Partial<DataSet> = {}): DataSet => {
     total_document_count: 10,
     total_available_documents: 10,
     word_count: 1000,
-    provider: 'dify',
+    provider: 'nexusai',
     embedding_model: 'text-embedding-ada-002',
     embedding_model_provider: 'openai',
     embedding_available: true,

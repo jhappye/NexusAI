@@ -1,8 +1,8 @@
 from flask_orjson import OrjsonProvider
 
-from dify_app import DifyApp
+from nexusai_app import NexusAIApp
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     """Initialize Flask-Orjson extension for faster JSON serialization"""
     app.json = OrjsonProvider(app)

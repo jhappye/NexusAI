@@ -7,7 +7,7 @@ from opensearchpy import OpenSearch, Urllib3AWSV4SignerAuth, Urllib3HttpConnecti
 from opensearchpy.helpers import BulkIndexError
 from pydantic import BaseModel, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from configs.middleware.vdb.opensearch_config import AuthMethod
 from core.rag.datasource.vdb.field import Field
 from core.rag.datasource.vdb.vector_base import BaseVector
@@ -290,15 +290,15 @@ class OpenSearchVectorFactory(AbstractVectorFactory):
             dataset.index_struct = json.dumps(self.gen_index_struct_dict(VectorType.OPENSEARCH, collection_name))
 
         open_search_config = OpenSearchConfig(
-            host=dify_config.OPENSEARCH_HOST or "localhost",
-            port=dify_config.OPENSEARCH_PORT,
-            secure=dify_config.OPENSEARCH_SECURE,
-            verify_certs=dify_config.OPENSEARCH_VERIFY_CERTS,
-            auth_method=dify_config.OPENSEARCH_AUTH_METHOD,
-            user=dify_config.OPENSEARCH_USER,
-            password=dify_config.OPENSEARCH_PASSWORD,
-            aws_region=dify_config.OPENSEARCH_AWS_REGION,
-            aws_service=dify_config.OPENSEARCH_AWS_SERVICE,
+            host=nexusai_config.OPENSEARCH_HOST or "localhost",
+            port=nexusai_config.OPENSEARCH_PORT,
+            secure=nexusai_config.OPENSEARCH_SECURE,
+            verify_certs=nexusai_config.OPENSEARCH_VERIFY_CERTS,
+            auth_method=nexusai_config.OPENSEARCH_AUTH_METHOD,
+            user=nexusai_config.OPENSEARCH_USER,
+            password=nexusai_config.OPENSEARCH_PASSWORD,
+            aws_region=nexusai_config.OPENSEARCH_AWS_REGION,
+            aws_service=nexusai_config.OPENSEARCH_AWS_SERVICE,
         )
 
         return OpenSearchVector(collection_name=collection_name, config=open_search_config)

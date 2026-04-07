@@ -226,7 +226,7 @@ describe('usePipelineConfig', () => {
       expect(dataSourceList[0].declaration.identity.icon).toBe('/base/icon.png')
     })
 
-    it('should not modify icon if it already includes basePath', () => {
+    it('should not monexusai icon if it already includes basePath', () => {
       let capturedCallback: ((data: unknown) => void) | undefined
       mockUseDataSourceList.mockImplementation((_enabled: boolean, callback: (data: unknown) => void) => {
         capturedCallback = callback

@@ -4,7 +4,7 @@ from jwt import InvalidTokenError
 from pydantic import BaseModel, Field, field_validator
 
 import services
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import register_schema_models
 from controllers.console.auth.error import (
     AuthenticationFailedError,
@@ -117,7 +117,7 @@ class LoginStatusApi(Resource):
                 "app_logged_in": False,
             }
         app_id = AppService.get_app_id_by_code(app_code)
-        is_public = not dify_config.ENTERPRISE_ENABLED or not WebAppAuthService.is_app_require_permission_check(
+        is_public = not nexusai_config.ENTERPRISE_ENABLED or not WebAppAuthService.is_app_require_permission_check(
             app_id=app_id
         )
         user_logged_in = False

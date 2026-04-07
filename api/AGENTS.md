@@ -162,8 +162,8 @@ class TriggerConfig(BaseModel):
 
     @field_validator("secret")
     def ensure_secret_prefix(cls, value: str) -> str:
-        if not value.startswith("dify_"):
-            raise ValueError("secret must start with dify_")
+        if not value.startswith("nexusai_"):
+            raise ValueError("secret must start with nexusai_")
         return value
 ```
 
@@ -196,7 +196,7 @@ Before opening a PR / submitting:
 
 ### Miscellaneous
 
-- Use `configs.dify_config` for configuration—never read environment variables directly.
+- Use `configs.nexusai_config` for configuration—never read environment variables directly.
 - Maintain tenant awareness end-to-end; `tenant_id` must flow through every layer touching shared resources.
 - Queue async work through `services/async_workflow_service`; implement tasks under `tasks/` with explicit queue selection.
 - Keep experimental scripts under `dev/`; do not ship them in production builds.

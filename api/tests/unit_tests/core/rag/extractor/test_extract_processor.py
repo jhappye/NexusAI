@@ -120,12 +120,12 @@ class TestExtractProcessorLoaders:
 class TestExtractProcessorFileRouting:
     @pytest.fixture(autouse=True)
     def _set_unstructured_config(self, monkeypatch):
-        monkeypatch.setattr(processor_module.dify_config, "UNSTRUCTURED_API_URL", "https://unstructured")
-        monkeypatch.setattr(processor_module.dify_config, "UNSTRUCTURED_API_KEY", "key")
+        monkeypatch.setattr(processor_module.nexusai_config, "UNSTRUCTURED_API_URL", "https://unstructured")
+        monkeypatch.setattr(processor_module.nexusai_config, "UNSTRUCTURED_API_KEY", "key")
 
     def _run_extract_for_extension(self, monkeypatch, extension: str, etl_type: str, is_automatic: bool = False):
         factory = _patch_all_extractors(monkeypatch)
-        monkeypatch.setattr(processor_module.dify_config, "ETL_TYPE", etl_type)
+        monkeypatch.setattr(processor_module.nexusai_config, "ETL_TYPE", etl_type)
 
         def fake_download(key: str, local_path: str):
             Path(local_path).write_text("content", encoding="utf-8")

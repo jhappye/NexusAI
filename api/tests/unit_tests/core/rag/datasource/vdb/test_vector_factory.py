@@ -173,8 +173,8 @@ def test_init_vector_uses_whitelist_override(vector_factory_module, monkeypatch)
         "db",
         SimpleNamespace(session=SimpleNamespace(scalars=lambda _stmt: SimpleNamespace(one_or_none=lambda: object()))),
     )
-    monkeypatch.setattr(vector_factory_module.dify_config, "VECTOR_STORE", vector_factory_module.VectorType.CHROMA)
-    monkeypatch.setattr(vector_factory_module.dify_config, "VECTOR_STORE_WHITELIST_ENABLE", True)
+    monkeypatch.setattr(vector_factory_module.nexusai_config, "VECTOR_STORE", vector_factory_module.VectorType.CHROMA)
+    monkeypatch.setattr(vector_factory_module.nexusai_config, "VECTOR_STORE_WHITELIST_ENABLE", True)
     monkeypatch.setattr(
         vector_factory_module.Vector,
         "get_vector_factory",
@@ -193,8 +193,8 @@ def test_init_vector_uses_whitelist_override(vector_factory_module, monkeypatch)
 
 
 def test_init_vector_raises_when_vector_store_missing(vector_factory_module, monkeypatch):
-    monkeypatch.setattr(vector_factory_module.dify_config, "VECTOR_STORE", None)
-    monkeypatch.setattr(vector_factory_module.dify_config, "VECTOR_STORE_WHITELIST_ENABLE", False)
+    monkeypatch.setattr(vector_factory_module.nexusai_config, "VECTOR_STORE", None)
+    monkeypatch.setattr(vector_factory_module.nexusai_config, "VECTOR_STORE_WHITELIST_ENABLE", False)
 
     vector = vector_factory_module.Vector.__new__(vector_factory_module.Vector)
     vector._dataset = SimpleNamespace(index_struct_dict=None, tenant_id="tenant-1")

@@ -11,7 +11,7 @@ from flask import Response
 from controllers.console.human_input_form import (
     ConsoleHumanInputFormApi,
     ConsoleWorkflowEventsApi,
-    DifyAPIRepositoryFactory,
+    NexusAIAPIRepositoryFactory,
     WorkflowResponseConverter,
     _jsonify_form_definition,
 )
@@ -163,7 +163,7 @@ def test_workflow_events_not_found(app, monkeypatch: pytest.MonkeyPatch) -> None
             return None
 
     monkeypatch.setattr(
-        DifyAPIRepositoryFactory,
+        NexusAIAPIRepositoryFactory,
         "create_api_workflow_run_repository",
         lambda *_args, **_kwargs: _RepoStub(),
     )
@@ -194,7 +194,7 @@ def test_workflow_events_requires_account(app, monkeypatch: pytest.MonkeyPatch) 
             return workflow_run
 
     monkeypatch.setattr(
-        DifyAPIRepositoryFactory,
+        NexusAIAPIRepositoryFactory,
         "create_api_workflow_run_repository",
         lambda *_args, **_kwargs: _RepoStub(),
     )
@@ -225,7 +225,7 @@ def test_workflow_events_requires_creator(app, monkeypatch: pytest.MonkeyPatch) 
             return workflow_run
 
     monkeypatch.setattr(
-        DifyAPIRepositoryFactory,
+        NexusAIAPIRepositoryFactory,
         "create_api_workflow_run_repository",
         lambda *_args, **_kwargs: _RepoStub(),
     )
@@ -264,7 +264,7 @@ def test_workflow_events_finished(app, monkeypatch: pytest.MonkeyPatch) -> None:
     )
 
     monkeypatch.setattr(
-        DifyAPIRepositoryFactory,
+        NexusAIAPIRepositoryFactory,
         "create_api_workflow_run_repository",
         lambda *_args, **_kwargs: _RepoStub(),
     )

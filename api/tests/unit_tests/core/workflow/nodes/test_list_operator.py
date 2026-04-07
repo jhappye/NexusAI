@@ -16,7 +16,7 @@ from graphon.nodes.list_operator.exc import InvalidKeyError
 from graphon.nodes.list_operator.node import ListOperatorNode, _get_file_extract_string_func
 from graphon.variables import ArrayFileSegment
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
 
 
 @pytest.fixture
@@ -45,7 +45,7 @@ def list_operator_node():
     graph_init_params.graph_config = {}
     graph_init_params.call_depth = 0
     graph_init_params.run_context = {
-        DIFY_RUN_CONTEXT_KEY: {
+        NEXUSAI_RUN_CONTEXT_KEY: {
             "tenant_id": "test_tenant",
             "app_id": "test_app",
             "user_id": "test_user",

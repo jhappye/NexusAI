@@ -4,7 +4,7 @@ import time
 import click
 from celery import shared_task
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_mail import mail
 from libs.email_i18n import EmailType, get_email_i18n_service
 
@@ -30,7 +30,7 @@ def send_invite_member_mail_task(language: str, to: str, token: str, inviter_nam
     start_at = time.perf_counter()
 
     try:
-        url = f"{dify_config.CONSOLE_WEB_URL}/activate?token={token}"
+        url = f"{nexusai_config.CONSOLE_WEB_URL}/activate?token={token}"
         email_service = get_email_i18n_service()
         email_service.send_email(
             email_type=EmailType.INVITE_MEMBER,

@@ -32,7 +32,7 @@ lifecycle management system. These operations interact with multiple
 components:
 
 1. Permission System: All update/delete operations require proper
-   permission validation to ensure users can only modify datasets they
+   permission validation to ensure users can only monexusai datasets they
    have access to.
 
 2. Event System: Dataset deletion triggers the dataset_was_deleted event,

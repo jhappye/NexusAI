@@ -4,7 +4,7 @@ from flask_restx import fields, marshal, marshal_with
 from sqlalchemy import select
 from werkzeug.exceptions import Forbidden
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.web import web_ns
 from controllers.web.wraps import WebApiResource
 from extensions.ext_database import db
@@ -100,7 +100,7 @@ class AppSiteInfo:
         self.can_replace_logo = can_replace_logo
 
         if can_replace_logo:
-            base_url = dify_config.FILES_URL
+            base_url = nexusai_config.FILES_URL
             remove_webapp_brand = tenant.custom_config_dict.get("remove_webapp_brand", False)
             replace_webapp_logo = (
                 f"{base_url}/files/workspaces/{tenant.id}/webapp-logo"

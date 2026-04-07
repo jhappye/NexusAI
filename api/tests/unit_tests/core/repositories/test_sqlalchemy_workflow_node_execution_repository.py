@@ -20,7 +20,7 @@ from sqlalchemy import Engine, create_engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.repositories.factory import OrderConfig
 from core.repositories.sqlalchemy_workflow_node_execution_repository import (
     SQLAlchemyWorkflowNodeExecutionRepository,
@@ -182,7 +182,7 @@ def test_create_truncator_uses_config(monkeypatch: pytest.MonkeyPatch) -> None:
         triggered_from=WorkflowNodeExecutionTriggeredFrom.WORKFLOW_RUN,
     )
     _ = repo._create_truncator()
-    assert created["max_size_bytes"] == dify_config.WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE
+    assert created["max_size_bytes"] == nexusai_config.WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE
 
 
 def test_helpers_find_first_and_replace_or_append_and_filter() -> None:

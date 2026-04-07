@@ -1,4 +1,4 @@
-"""Structured JSON log formatter for Dify."""
+"""Structured JSON log formatter for NexusAI."""
 
 import logging
 import traceback
@@ -7,7 +7,7 @@ from typing import Any, TypedDict
 
 import orjson
 
-from configs import dify_config
+from configs import nexusai_config
 
 
 class IdentityDict(TypedDict, total=False):
@@ -43,7 +43,7 @@ class StructuredJSONFormatter(logging.Formatter):
 
     def __init__(self, service_name: str | None = None):
         super().__init__()
-        self._service_name = service_name or dify_config.APPLICATION_NAME
+        self._service_name = service_name or nexusai_config.APPLICATION_NAME
 
     def format(self, record: logging.LogRecord) -> str:
         log_dict = self._build_log_dict(record)

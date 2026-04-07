@@ -184,9 +184,9 @@ class TestWeaviateVector(unittest.TestCase):
         wv.add_texts.assert_called_once_with([doc], [[0.1, 0.2]])
 
     @patch("core.rag.datasource.vdb.weaviate.weaviate_vector.redis_client")
-    @patch("core.rag.datasource.vdb.weaviate.weaviate_vector.dify_config")
+    @patch("core.rag.datasource.vdb.weaviate.weaviate_vector.nexusai_config")
     @patch("core.rag.datasource.vdb.weaviate.weaviate_vector.weaviate")
-    def test_create_collection_includes_doc_type_property(self, mock_weaviate_module, mock_dify_config, mock_redis):
+    def test_create_collection_includes_doc_type_property(self, mock_weaviate_module, mock_nexusai_config, mock_redis):
         """Test that _create_collection defines doc_type in the schema properties."""
         # Mock Redis
         mock_lock = MagicMock()
@@ -196,8 +196,8 @@ class TestWeaviateVector(unittest.TestCase):
         mock_redis.get.return_value = None
         mock_redis.set.return_value = None
 
-        # Mock dify_config
-        mock_dify_config.WEAVIATE_TOKENIZATION = None
+        # Mock nexusai_config
+        mock_nexusai_config.WEAVIATE_TOKENIZATION = None
 
         # Mock client
         mock_client = MagicMock()
@@ -771,10 +771,10 @@ class TestWeaviateVectorFactory(unittest.TestCase):
         attributes = ["doc_id"]
 
         with (
-            patch.object(weaviate_vector_module.dify_config, "WEAVIATE_ENDPOINT", "http://localhost:8080"),
-            patch.object(weaviate_vector_module.dify_config, "WEAVIATE_GRPC_ENDPOINT", "localhost:50051"),
-            patch.object(weaviate_vector_module.dify_config, "WEAVIATE_API_KEY", "api-key"),
-            patch.object(weaviate_vector_module.dify_config, "WEAVIATE_BATCH_SIZE", 88),
+            patch.object(weaviate_vector_module.nexusai_config, "WEAVIATE_ENDPOINT", "http://localhost:8080"),
+            patch.object(weaviate_vector_module.nexusai_config, "WEAVIATE_GRPC_ENDPOINT", "localhost:50051"),
+            patch.object(weaviate_vector_module.nexusai_config, "WEAVIATE_API_KEY", "api-key"),
+            patch.object(weaviate_vector_module.nexusai_config, "WEAVIATE_BATCH_SIZE", 88),
             patch(
                 "core.rag.datasource.vdb.weaviate.weaviate_vector.WeaviateVector", return_value="vector"
             ) as mock_vector,
@@ -797,10 +797,10 @@ class TestWeaviateVectorFactory(unittest.TestCase):
         attributes = ["doc_id", "doc_type"]
 
         with (
-            patch.object(weaviate_vector_module.dify_config, "WEAVIATE_ENDPOINT", "http://localhost:8080"),
-            patch.object(weaviate_vector_module.dify_config, "WEAVIATE_GRPC_ENDPOINT", ""),
-            patch.object(weaviate_vector_module.dify_config, "WEAVIATE_API_KEY", None),
-            patch.object(weaviate_vector_module.dify_config, "WEAVIATE_BATCH_SIZE", 100),
+            patch.object(weaviate_vector_module.nexusai_config, "WEAVIATE_ENDPOINT", "http://localhost:8080"),
+            patch.object(weaviate_vector_module.nexusai_config, "WEAVIATE_GRPC_ENDPOINT", ""),
+            patch.object(weaviate_vector_module.nexusai_config, "WEAVIATE_API_KEY", None),
+            patch.object(weaviate_vector_module.nexusai_config, "WEAVIATE_BATCH_SIZE", 100),
             patch.object(
                 weaviate_vector_module.Dataset,
                 "gen_collection_name_by_id",

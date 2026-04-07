@@ -13,7 +13,7 @@ from graphon.entities import WorkflowExecution, WorkflowNodeExecution
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from libs.module_loading import import_string
 from models import Account, EndUser
 from models.enums import WorkflowRunTriggeredFrom
@@ -50,7 +50,7 @@ class RepositoryImportError(Exception):
     pass
 
 
-class DifyCoreRepositoryFactory:
+class NexusAICoreRepositoryFactory:
     """
     Factory for creating repository instances based on configuration.
 
@@ -81,7 +81,7 @@ class DifyCoreRepositoryFactory:
         Raises:
             RepositoryImportError: If the configured repository cannot be created
         """
-        class_path = dify_config.CORE_WORKFLOW_EXECUTION_REPOSITORY
+        class_path = nexusai_config.CORE_WORKFLOW_EXECUTION_REPOSITORY
 
         try:
             repository_class = import_string(class_path)
@@ -117,7 +117,7 @@ class DifyCoreRepositoryFactory:
         Raises:
             RepositoryImportError: If the configured repository cannot be created
         """
-        class_path = dify_config.CORE_WORKFLOW_NODE_EXECUTION_REPOSITORY
+        class_path = nexusai_config.CORE_WORKFLOW_NODE_EXECUTION_REPOSITORY
 
         try:
             repository_class = import_string(class_path)

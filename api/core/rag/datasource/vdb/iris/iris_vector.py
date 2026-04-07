@@ -1,4 +1,4 @@
-"""InterSystems IRIS vector database implementation for Dify.
+"""InterSystems IRIS vector database implementation for NexusAI.
 
 This module provides vector storage and retrieval using IRIS native VECTOR type
 with HNSW indexing for efficient similarity search.
@@ -13,7 +13,7 @@ import uuid
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any
 
-from configs import dify_config
+from configs import nexusai_config
 from configs.middleware.vdb.iris_config import IrisVectorConfig
 from core.rag.datasource.vdb.field import parse_metadata_json
 from core.rag.datasource.vdb.vector_base import BaseVector
@@ -185,7 +185,7 @@ class IrisVector(BaseVector):
         super().__init__(collection_name)
         self.config = config
         self.table_name = f"embedding_{collection_name}".upper()
-        self.schema = config.IRIS_SCHEMA or "dify"
+        self.schema = config.IRIS_SCHEMA or "nexusai"
         self.pool = get_iris_pool(config)
 
     def get_type(self) -> str:
@@ -494,16 +494,16 @@ class IrisVectorFactory(AbstractVectorFactory):
         return IrisVector(
             collection_name=collection_name,
             config=IrisVectorConfig(
-                IRIS_HOST=dify_config.IRIS_HOST,
-                IRIS_SUPER_SERVER_PORT=dify_config.IRIS_SUPER_SERVER_PORT,
-                IRIS_USER=dify_config.IRIS_USER,
-                IRIS_PASSWORD=dify_config.IRIS_PASSWORD,
-                IRIS_DATABASE=dify_config.IRIS_DATABASE,
-                IRIS_SCHEMA=dify_config.IRIS_SCHEMA,
-                IRIS_CONNECTION_URL=dify_config.IRIS_CONNECTION_URL,
-                IRIS_MIN_CONNECTION=dify_config.IRIS_MIN_CONNECTION,
-                IRIS_MAX_CONNECTION=dify_config.IRIS_MAX_CONNECTION,
-                IRIS_TEXT_INDEX=dify_config.IRIS_TEXT_INDEX,
-                IRIS_TEXT_INDEX_LANGUAGE=dify_config.IRIS_TEXT_INDEX_LANGUAGE,
+                IRIS_HOST=nexusai_config.IRIS_HOST,
+                IRIS_SUPER_SERVER_PORT=nexusai_config.IRIS_SUPER_SERVER_PORT,
+                IRIS_USER=nexusai_config.IRIS_USER,
+                IRIS_PASSWORD=nexusai_config.IRIS_PASSWORD,
+                IRIS_DATABASE=nexusai_config.IRIS_DATABASE,
+                IRIS_SCHEMA=nexusai_config.IRIS_SCHEMA,
+                IRIS_CONNECTION_URL=nexusai_config.IRIS_CONNECTION_URL,
+                IRIS_MIN_CONNECTION=nexusai_config.IRIS_MIN_CONNECTION,
+                IRIS_MAX_CONNECTION=nexusai_config.IRIS_MAX_CONNECTION,
+                IRIS_TEXT_INDEX=nexusai_config.IRIS_TEXT_INDEX,
+                IRIS_TEXT_INDEX_LANGUAGE=nexusai_config.IRIS_TEXT_INDEX_LANGUAGE,
             ),
         )

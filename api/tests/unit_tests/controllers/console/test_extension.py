@@ -57,8 +57,8 @@ def _mock_console_guards(monkeypatch: pytest.MonkeyPatch) -> MagicMock:
     account.id = "account-123"
     account.is_authenticated = True
 
-    monkeypatch.setattr(wraps_module.dify_config, "EDITION", "CLOUD")
-    monkeypatch.setattr("libs.login.dify_config.LOGIN_DISABLED", True)
+    monkeypatch.setattr(wraps_module.nexusai_config, "EDITION", "CLOUD")
+    monkeypatch.setattr("libs.login.nexusai_config.LOGIN_DISABLED", True)
     monkeypatch.delenv("INIT_PASSWORD", raising=False)
     monkeypatch.setattr(extension_module, "current_account_with_tenant", lambda: (account, "tenant-123"))
     monkeypatch.setattr(wraps_module, "current_account_with_tenant", lambda: (account, "tenant-123"))

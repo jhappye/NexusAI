@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import RequestEntityTooLarge
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.entities.app_invoke_entities import InvokeFrom
 from core.app.file_access import DatabaseFileAccessController
 from core.tools.tool_file_manager import ToolFileManager
@@ -261,10 +261,10 @@ class WebhookService:
     def _validate_content_length(cls) -> None:
         """Validate request content length against maximum allowed size."""
         content_length = request.content_length
-        if content_length and content_length > dify_config.WEBHOOK_REQUEST_BODY_MAX_SIZE:
+        if content_length and content_length > nexusai_config.WEBHOOK_REQUEST_BODY_MAX_SIZE:
             raise RequestEntityTooLarge(
                 f"Webhook request too large: {content_length} bytes exceeds maximum allowed size "
-                f"of {dify_config.WEBHOOK_REQUEST_BODY_MAX_SIZE} bytes"
+                f"of {nexusai_config.WEBHOOK_REQUEST_BODY_MAX_SIZE} bytes"
             )
 
     @classmethod

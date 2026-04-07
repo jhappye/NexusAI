@@ -103,7 +103,7 @@ class TestGenerateDependencies:
         install = self._make_installation(
             PluginInstallationSource.Github,
             "org/plugin:1.0.0@hash",
-            {"repo": "org/repo", "version": "v1.0", "package": "plugin.difypkg"},
+            {"repo": "org/repo", "version": "v1.0", "package": "plugin.nexusaipkg"},
         )
         mock_installer_cls.return_value.fetch_plugin_installation_by_ids.return_value = [install]
 
@@ -150,7 +150,7 @@ class TestGenerateDependencies:
 
 
 class TestGenerateLatestDependencies:
-    @patch("services.plugin.dependencies_analysis.dify_config")
+    @patch("services.plugin.dependencies_analysis.nexusai_config")
     def test_returns_empty_when_marketplace_disabled(self, mock_config):
         mock_config.MARKETPLACE_ENABLED = False
 
@@ -159,7 +159,7 @@ class TestGenerateLatestDependencies:
         assert result == []
 
     @patch("services.plugin.dependencies_analysis.marketplace")
-    @patch("services.plugin.dependencies_analysis.dify_config")
+    @patch("services.plugin.dependencies_analysis.nexusai_config")
     def test_returns_marketplace_deps_when_enabled(self, mock_config, mock_marketplace):
         mock_config.MARKETPLACE_ENABLED = True
         manifest = MagicMock()

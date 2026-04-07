@@ -21,7 +21,7 @@ class InvitationData(TypedDict):
 _invitation_adapter: TypeAdapter[InvitationData] = TypeAdapter(InvitationData)
 from werkzeug.exceptions import Unauthorized
 
-from configs import dify_config
+from configs import nexusai_config
 from constants.languages import get_valid_language, language_timezone_mapping
 from events.tenant_event import tenant_was_created
 from extensions.ext_database import db
@@ -42,7 +42,7 @@ from models.account import (
     TenantPluginAutoUpgradeStrategy,
     TenantStatus,
 )
-from models.model import DifySetup
+from models.model import NexusAISetup
 from services.billing_service import BillingService
 from services.errors.account import (
     AccountAlreadyInTenantError,
@@ -91,7 +91,7 @@ class InvitationDetailDict(TypedDict):
 
 def _try_join_enterprise_default_workspace(account_id: str) -> None:
     """Best-effort join to enterprise default workspace."""
-    if not dify_config.ENTERPRISE_ENABLED:
+    if not nexusai_config.ENTERPRISE_ENABLED:
         return
 
     from services.enterprise.enterprise_service import try_join_default_workspace
@@ -107,7 +107,7 @@ class TokenPair(BaseModel):
 
 REFRESH_TOKEN_PREFIX = "refresh_token:"
 ACCOUNT_REFRESH_TOKEN_PREFIX = "account_refresh_token:"
-REFRESH_TOKEN_EXPIRY = timedelta(days=dify_config.REFRESH_TOKEN_EXPIRE_DAYS)
+REFRESH_TOKEN_EXPIRY = timedelta(days=nexusai_config.REFRESH_TOKEN_EXPIRE_DAYS)
 
 
 class AccountService:
@@ -189,12 +189,12 @@ class AccountService:
 
     @staticmethod
     def get_account_jwt_token(account: Account) -> str:
-        exp_dt = datetime.now(UTC) + timedelta(minutes=dify_config.ACCESS_TOKEN_EXPIRE_MINUTES)
+        exp_dt = datetime.now(UTC) + timedelta(minutes=nexusai_config.ACCESS_TOKEN_EXPIRE_MINUTES)
         exp = int(exp_dt.timestamp())
         payload = {
             "user_id": account.id,
             "exp": exp,
-            "iss": dify_config.EDITION,
+            "iss": nexusai_config.EDITION,
             "sub": "Console API Passport",
         }
 
@@ -269,7 +269,7 @@ class AccountService:
 
             raise AccountNotFound()
 
-        if dify_config.BILLING_ENABLED and BillingService.is_email_in_freeze(email):
+        if nexusai_config.BILLING_ENABLED and BillingService.is_email_in_freeze(email):
             raise AccountRegisterError(
                 description=(
                     "This email account has been deleted within the past "
@@ -824,7 +824,7 @@ class AccountService:
 
     @classmethod
     def get_user_through_email(cls, email: str):
-        if dify_config.BILLING_ENABLED and BillingService.is_email_in_freeze(email):
+        if nexusai_config.BILLING_ENABLED and BillingService.is_email_in_freeze(email):
             raise AccountRegisterError(
                 description=(
                     "This email account has been deleted within the past "
@@ -843,7 +843,7 @@ class AccountService:
 
     @classmethod
     def is_account_in_freeze(cls, email: str) -> bool:
-        if dify_config.BILLING_ENABLED and BillingService.is_email_in_freeze(email):
+        if nexusai_config.BILLING_ENABLED and BillingService.is_email_in_freeze(email):
             return True
         return False
 
@@ -855,7 +855,7 @@ class AccountService:
         if count is None:
             count = 0
         count = int(count) + 1
-        redis_client.setex(key, dify_config.LOGIN_LOCKOUT_DURATION, count)
+        redis_client.setex(key, nexusai_config.LOGIN_LOCKOUT_DURATION, count)
 
     @staticmethod
     @redis_fallback(default_return=False)
@@ -884,7 +884,7 @@ class AccountService:
         if count is None:
             count = 0
         count = int(count) + 1
-        redis_client.setex(key, dify_config.FORGOT_PASSWORD_LOCKOUT_DURATION, count)
+        redis_client.setex(key, nexusai_config.FORGOT_PASSWORD_LOCKOUT_DURATION, count)
 
     @staticmethod
     @redis_fallback(default_return=None)
@@ -894,7 +894,7 @@ class AccountService:
         if count is None:
             count = 0
         count = int(count) + 1
-        redis_client.setex(key, dify_config.EMAIL_REGISTER_LOCKOUT_DURATION, count)
+        redis_client.setex(key, nexusai_config.EMAIL_REGISTER_LOCKOUT_DURATION, count)
 
     @staticmethod
     @redis_fallback(default_return=False)
@@ -941,7 +941,7 @@ class AccountService:
         if count is None:
             count = 0
         count = int(count) + 1
-        redis_client.setex(key, dify_config.CHANGE_EMAIL_LOCKOUT_DURATION, count)
+        redis_client.setex(key, nexusai_config.CHANGE_EMAIL_LOCKOUT_DURATION, count)
 
     @staticmethod
     @redis_fallback(default_return=False)
@@ -969,7 +969,7 @@ class AccountService:
         if count is None:
             count = 0
         count = int(count) + 1
-        redis_client.setex(key, dify_config.OWNER_TRANSFER_LOCKOUT_DURATION, count)
+        redis_client.setex(key, nexusai_config.OWNER_TRANSFER_LOCKOUT_DURATION, count)
 
     @staticmethod
     @redis_fallback(default_return=False)
@@ -1007,7 +1007,7 @@ class AccountService:
         current_minute_count = int(current_minute_count)
 
         # check current hour count
-        if current_minute_count > dify_config.EMAIL_SEND_IP_LIMIT_PER_MINUTE:
+        if current_minute_count > nexusai_config.EMAIL_SEND_IP_LIMIT_PER_MINUTE:
             hour_limit_count = redis_client.get(hour_limit_key)
             if hour_limit_count is None:
                 hour_limit_count = 0
@@ -1122,7 +1122,7 @@ class TenantService:
             db.session.add(ta)
 
         db.session.commit()
-        if dify_config.BILLING_ENABLED:
+        if nexusai_config.BILLING_ENABLED:
             BillingService.clean_billing_info_cache(tenant.id)
         return ta
 
@@ -1334,7 +1334,7 @@ class TenantService:
                 account_email,
             )
 
-        if dify_config.BILLING_ENABLED:
+        if nexusai_config.BILLING_ENABLED:
             BillingService.clean_billing_info_cache(tenant.id)
 
         # Queue account deletion sync task for enterprise backend to reassign resources (enterprise only)
@@ -1405,7 +1405,7 @@ class RegisterService:
     @classmethod
     def setup(cls, email: str, name: str, password: str, ip_address: str, language: str | None):
         """
-        Setup dify
+        Setup nexusai
 
         :param email: email
         :param name: username
@@ -1427,11 +1427,11 @@ class RegisterService:
 
             TenantService.create_owner_tenant_if_not_exist(account=account, is_setup=True)
 
-            dify_setup = DifySetup(version=dify_config.project.version)
-            db.session.add(dify_setup)
+            nexusai_setup = NexusAISetup(version=nexusai_config.project.version)
+            db.session.add(nexusai_setup)
             db.session.commit()
         except Exception as e:
-            db.session.execute(delete(DifySetup))
+            db.session.execute(delete(NexusAISetup))
             db.session.execute(delete(TenantAccountJoin))
             db.session.execute(delete(Account))
             db.session.execute(delete(Tenant))
@@ -1556,7 +1556,7 @@ class RegisterService:
             language=language,
             to=account.email,
             token=token,
-            inviter_name=inviter.name if inviter else "Dify",
+            inviter_name=inviter.name if inviter else "NexusAI",
             workspace_name=tenant.name,
         )
 
@@ -1570,7 +1570,7 @@ class RegisterService:
             "email": account.email,
             "workspace_id": tenant.id,
         }
-        expiry_hours = dify_config.INVITE_EXPIRY_HOURS
+        expiry_hours = nexusai_config.INVITE_EXPIRY_HOURS
         redis_client.setex(cls._get_invitation_token_key(token), expiry_hours * 60 * 60, json.dumps(invitation_data))
         return token
 

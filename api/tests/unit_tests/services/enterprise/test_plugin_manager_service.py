@@ -10,7 +10,7 @@ from unittest.mock import patch
 import pytest
 from httpx import HTTPStatusError
 
-from configs import dify_config
+from configs import nexusai_config
 from services.enterprise.plugin_manager_service import (
     CheckCredentialPolicyComplianceRequest,
     CredentialPolicyViolationError,
@@ -40,7 +40,7 @@ class TestTryPreUninstallPlugin:
                 "POST",
                 "/pre-uninstall-plugin",
                 json={"tenant_id": "tenant-123", "plugin_unique_identifier": "com.example.my_plugin"},
-                timeout=dify_config.ENTERPRISE_REQUEST_TIMEOUT,
+                timeout=nexusai_config.ENTERPRISE_REQUEST_TIMEOUT,
             )
 
     def test_try_pre_uninstall_plugin_http_error_soft_fails(self):
@@ -67,7 +67,7 @@ class TestTryPreUninstallPlugin:
                 "POST",
                 "/pre-uninstall-plugin",
                 json={"tenant_id": "tenant-456", "plugin_unique_identifier": "com.example.other_plugin"},
-                timeout=dify_config.ENTERPRISE_REQUEST_TIMEOUT,
+                timeout=nexusai_config.ENTERPRISE_REQUEST_TIMEOUT,
             )
             mock_logger.exception.assert_called_once()
 
@@ -91,7 +91,7 @@ class TestTryPreUninstallPlugin:
                 "POST",
                 "/pre-uninstall-plugin",
                 json={"tenant_id": "tenant-789", "plugin_unique_identifier": "com.example.failing_plugin"},
-                timeout=dify_config.ENTERPRISE_REQUEST_TIMEOUT,
+                timeout=nexusai_config.ENTERPRISE_REQUEST_TIMEOUT,
             )
             mock_logger.exception.assert_called_once()
 
@@ -99,7 +99,7 @@ class TestTryPreUninstallPlugin:
 class TestCheckCredentialPolicyCompliance:
     def _request(self, cred_type=PluginCredentialType.MODEL):
         return CheckCredentialPolicyComplianceRequest(
-            dify_credential_id="cred-1", provider="openai", credential_type=cred_type
+            nexusai_credential_id="cred-1", provider="openai", credential_type=cred_type
         )
 
     def test_passes_when_result_true(self):
@@ -132,7 +132,7 @@ class TestCheckCredentialPolicyCompliance:
         data = body.model_dump()
 
         assert data["credential_type"] == 1
-        assert data["dify_credential_id"] == "cred-1"
+        assert data["nexusai_credential_id"] == "cred-1"
 
     def test_model_credential_type_values(self):
         assert PluginCredentialType.MODEL.to_number() == 0

@@ -71,7 +71,7 @@ class TestInit:
             patch("core.memory.token_buffer_memory.sessionmaker") as mock_sm,
             patch("core.memory.token_buffer_memory.db") as mock_db,
             patch(
-                "core.memory.token_buffer_memory.DifyAPIRepositoryFactory.create_api_workflow_run_repository",
+                "core.memory.token_buffer_memory.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository",
                 return_value=mock_repo,
             ),
         ):
@@ -89,7 +89,7 @@ class TestInit:
         mem._workflow_run_repo = existing_repo
 
         with patch(
-            "core.memory.token_buffer_memory.DifyAPIRepositoryFactory.create_api_workflow_run_repository"
+            "core.memory.token_buffer_memory.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository"
         ) as mock_factory:
             repo = mem.workflow_run_repo
             mock_factory.assert_not_called()

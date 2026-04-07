@@ -30,7 +30,7 @@ const Tab = <T,>({
       <span
         className={cn(
           'system-xl-semibold text-text-secondary',
-          isActive && 'text-saas-dify-blue-accessible',
+          isActive && 'text-saas-nexusai-blue-accessible',
         )}
       >
         {label}

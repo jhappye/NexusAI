@@ -9,15 +9,15 @@ from graphon.nodes.code.code_node import CodeNode
 from graphon.nodes.code.limits import CodeNodeLimits
 from graphon.runtime import GraphRuntimeState, VariablePool
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom
-from core.workflow.node_factory import DifyNodeFactory
+from core.workflow.node_factory import NexusAINodeFactory
 from core.workflow.system_variables import build_system_variables
 from tests.workflow_test_utils import build_test_graph_init_params
 
 pytest_plugins = ("tests.integration_tests.workflow.nodes.__mock.code_executor",)
 
-CODE_MAX_STRING_LENGTH = dify_config.CODE_MAX_STRING_LENGTH
+CODE_MAX_STRING_LENGTH = nexusai_config.CODE_MAX_STRING_LENGTH
 
 
 def init_code_node(code_config: dict):
@@ -56,7 +56,7 @@ def init_code_node(code_config: dict):
     graph_runtime_state = GraphRuntimeState(variable_pool=variable_pool, start_at=time.perf_counter())
 
     # Create node factory
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )
@@ -70,14 +70,14 @@ def init_code_node(code_config: dict):
         graph_runtime_state=graph_runtime_state,
         code_executor=node_factory._code_executor,
         code_limits=CodeNodeLimits(
-            max_string_length=dify_config.CODE_MAX_STRING_LENGTH,
-            max_number=dify_config.CODE_MAX_NUMBER,
-            min_number=dify_config.CODE_MIN_NUMBER,
-            max_precision=dify_config.CODE_MAX_PRECISION,
-            max_depth=dify_config.CODE_MAX_DEPTH,
-            max_number_array_length=dify_config.CODE_MAX_NUMBER_ARRAY_LENGTH,
-            max_string_array_length=dify_config.CODE_MAX_STRING_ARRAY_LENGTH,
-            max_object_array_length=dify_config.CODE_MAX_OBJECT_ARRAY_LENGTH,
+            max_string_length=nexusai_config.CODE_MAX_STRING_LENGTH,
+            max_number=nexusai_config.CODE_MAX_NUMBER,
+            min_number=nexusai_config.CODE_MIN_NUMBER,
+            max_precision=nexusai_config.CODE_MAX_PRECISION,
+            max_depth=nexusai_config.CODE_MAX_DEPTH,
+            max_number_array_length=nexusai_config.CODE_MAX_NUMBER_ARRAY_LENGTH,
+            max_string_array_length=nexusai_config.CODE_MAX_STRING_ARRAY_LENGTH,
+            max_object_array_length=nexusai_config.CODE_MAX_OBJECT_ARRAY_LENGTH,
         ),
     )
 

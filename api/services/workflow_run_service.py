@@ -16,7 +16,7 @@ from models import (
     WorkflowRunTriggeredFrom,
 )
 from repositories.api_workflow_run_repository import APIWorkflowRunRepository
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 
 
 class WorkflowRunService:
@@ -31,10 +31,10 @@ class WorkflowRunService:
             session_factory = sessionmaker(bind=session_factory, expire_on_commit=False)
 
         self._session_factory = session_factory
-        self._node_execution_service_repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(
+        self._node_execution_service_repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(
             self._session_factory
         )
-        self._workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(self._session_factory)
+        self._workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(self._session_factory)
 
     def get_paginate_advanced_chat_workflow_runs(
         self, app_model: App, args: dict, triggered_from: WorkflowRunTriggeredFrom = WorkflowRunTriggeredFrom.DEBUGGING

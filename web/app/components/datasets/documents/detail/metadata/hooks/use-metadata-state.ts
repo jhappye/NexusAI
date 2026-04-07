@@ -4,7 +4,7 @@ import type { DocType, FullDocumentDetail } from '@/models/datasets'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from '@/app/components/base/ui/toast'
-import { modifyDocMetadata } from '@/service/datasets'
+import { monexusaiDocMetadata } from '@/service/datasets'
 import { asyncRunSafe } from '@/utils'
 import { useDocumentContext } from '../../context'
 
@@ -82,7 +82,7 @@ export function useMetadataState({ docDetail, onUpdate }: UseMetadataStateOption
   }
   const saveMetadata = async () => {
     setSaveLoading(true)
-    const [e] = await asyncRunSafe<CommonResponse>(modifyDocMetadata({
+    const [e] = await asyncRunSafe<CommonResponse>(monexusaiDocMetadata({
       datasetId,
       documentId,
       body: {

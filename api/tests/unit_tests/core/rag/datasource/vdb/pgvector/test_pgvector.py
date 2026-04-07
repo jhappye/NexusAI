@@ -477,14 +477,14 @@ def test_pgvector_factory_initializes_expected_collection_name(monkeypatch):
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(pgvector_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(pgvector_module.dify_config, "PGVECTOR_HOST", "localhost")
-    monkeypatch.setattr(pgvector_module.dify_config, "PGVECTOR_PORT", 5432)
-    monkeypatch.setattr(pgvector_module.dify_config, "PGVECTOR_USER", "postgres")
-    monkeypatch.setattr(pgvector_module.dify_config, "PGVECTOR_PASSWORD", "secret")
-    monkeypatch.setattr(pgvector_module.dify_config, "PGVECTOR_DATABASE", "postgres")
-    monkeypatch.setattr(pgvector_module.dify_config, "PGVECTOR_MIN_CONNECTION", 1)
-    monkeypatch.setattr(pgvector_module.dify_config, "PGVECTOR_MAX_CONNECTION", 5)
-    monkeypatch.setattr(pgvector_module.dify_config, "PGVECTOR_PG_BIGM", False)
+    monkeypatch.setattr(pgvector_module.nexusai_config, "PGVECTOR_HOST", "localhost")
+    monkeypatch.setattr(pgvector_module.nexusai_config, "PGVECTOR_PORT", 5432)
+    monkeypatch.setattr(pgvector_module.nexusai_config, "PGVECTOR_USER", "postgres")
+    monkeypatch.setattr(pgvector_module.nexusai_config, "PGVECTOR_PASSWORD", "secret")
+    monkeypatch.setattr(pgvector_module.nexusai_config, "PGVECTOR_DATABASE", "postgres")
+    monkeypatch.setattr(pgvector_module.nexusai_config, "PGVECTOR_MIN_CONNECTION", 1)
+    monkeypatch.setattr(pgvector_module.nexusai_config, "PGVECTOR_MAX_CONNECTION", 5)
+    monkeypatch.setattr(pgvector_module.nexusai_config, "PGVECTOR_PG_BIGM", False)
 
     with patch.object(pgvector_module, "PGVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

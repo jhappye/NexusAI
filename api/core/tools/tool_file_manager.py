@@ -12,7 +12,7 @@ from uuid import uuid4
 import httpx
 from graphon.file import File, FileTransferMethod, get_file_type_by_mime_type
 
-from configs import dify_config
+from configs import nexusai_config
 from core.db.session_factory import session_factory
 from core.helper import ssrf_proxy
 from core.workflow.file_reference import build_file_reference
@@ -45,13 +45,13 @@ class ToolFileManager:
         sign file to get a temporary url for plugin access
         """
         # Use internal URL for plugin/tool file access in Docker environments
-        base_url = dify_config.INTERNAL_FILES_URL or dify_config.FILES_URL
+        base_url = nexusai_config.INTERNAL_FILES_URL or nexusai_config.FILES_URL
         file_preview_url = f"{base_url}/files/tools/{tool_file_id}{extension}"
 
         timestamp = str(int(time.time()))
         nonce = os.urandom(16).hex()
         data_to_sign = f"file-preview|{tool_file_id}|{timestamp}|{nonce}"
-        secret_key = dify_config.SECRET_KEY.encode() if dify_config.SECRET_KEY else b""
+        secret_key = nexusai_config.SECRET_KEY.encode() if nexusai_config.SECRET_KEY else b""
         sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
         encoded_sign = base64.urlsafe_b64encode(sign).decode()
 
@@ -63,7 +63,7 @@ class ToolFileManager:
         verify signature
         """
         data_to_sign = f"file-preview|{file_id}|{timestamp}|{nonce}"
-        secret_key = dify_config.SECRET_KEY.encode() if dify_config.SECRET_KEY else b""
+        secret_key = nexusai_config.SECRET_KEY.encode() if nexusai_config.SECRET_KEY else b""
         recalculated_sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
         recalculated_encoded_sign = base64.urlsafe_b64encode(recalculated_sign).decode()
 
@@ -72,7 +72,7 @@ class ToolFileManager:
             return False
 
         current_time = int(time.time())
-        return current_time - int(timestamp) <= dify_config.FILES_ACCESS_TIMEOUT
+        return current_time - int(timestamp) <= nexusai_config.FILES_ACCESS_TIMEOUT
 
     def create_file_by_raw(
         self,

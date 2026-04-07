@@ -37,7 +37,7 @@ from libs import helper
 from libs.helper import OptionalTimestampField, TimestampField
 from models.model import App, AppMode, EndUser
 from models.workflow import WorkflowRun
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.app_generate_service import AppGenerateService
 from services.errors.app import IsDraftWorkflowError, WorkflowIdFormatError, WorkflowNotFoundError
 from services.errors.llm import InvokeRateLimitError
@@ -125,7 +125,7 @@ class WorkflowRunDetailApi(Resource):
 
         # Use repository to get workflow run
         session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-        workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+        workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
 
         workflow_run = workflow_run_repo.get_workflow_run_by_id(
             tenant_id=app_model.tenant_id,

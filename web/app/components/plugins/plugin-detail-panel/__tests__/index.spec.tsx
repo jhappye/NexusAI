@@ -1035,7 +1035,7 @@ describe('PluginDetailPanel', () => {
         meta: {
           repo: 'owner/repo-name',
           version: 'v1.2.3',
-          package: 'package.difypkg',
+          package: 'package.nexusaipkg',
         },
       })
 

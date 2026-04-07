@@ -398,7 +398,7 @@ describe('file-uploader utils', () => {
         mime_type: 'image/jpeg',
         transfer_method: TransferMethod.local_file,
         type: 'image',
-        url: 'https://upload.dify.dev/files/xxx/file-preview',
+        url: 'https://upload.nexusai.dev/files/xxx/file-preview',
         upload_file_id: '2a38e2ca-1295-415d-a51d-65d4ff9912d9',
         remote_url: '',
       }]
@@ -413,7 +413,7 @@ describe('file-uploader utils', () => {
         transferMethod: TransferMethod.local_file,
         supportFileType: 'image',
         uploadedId: '2a38e2ca-1295-415d-a51d-65d4ff9912d9',
-        url: 'https://upload.dify.dev/files/xxx/file-preview',
+        url: 'https://upload.nexusai.dev/files/xxx/file-preview',
       })
     })
 
@@ -707,7 +707,7 @@ describe('file-uploader utils', () => {
 
   describe('getFilesInLogs', () => {
     const mockFileData = {
-      dify_model_identity: '__dify__file__',
+      nexusai_model_identity: '__nexusai__file__',
       related_id: '123',
       filename: 'test.pdf',
       size: 1024,

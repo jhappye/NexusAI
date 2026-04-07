@@ -414,7 +414,7 @@ const SettingsModal: FC<ISettingsModalProps> = ({
                   <Trans
                     i18nKey={`${prefixSettings}.more.privacyPolicyTip`}
                     ns="appOverview"
-                    components={{ privacyPolicyLink: <Link href="https://dify.ai/privacy" target="_blank" rel="noopener noreferrer" className="text-text-accent" /> }}
+                    components={{ privacyPolicyLink: <Link href="https://nexusai.ai/privacy" target="_blank" rel="noopener noreferrer" className="text-text-accent" /> }}
                   />
                 </p>
                 <Input

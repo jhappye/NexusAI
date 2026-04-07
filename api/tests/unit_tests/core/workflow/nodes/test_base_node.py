@@ -9,7 +9,7 @@ from graphon.nodes.base.node import Node
 from graphon.runtime import GraphRuntimeState, VariablePool
 
 from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom
-from core.workflow.node_runtime import resolve_dify_run_context
+from core.workflow.node_runtime import resolve_nexusai_run_context
 from core.workflow.system_variables import build_system_variables
 from tests.workflow_test_utils import build_test_graph_init_params
 
@@ -68,9 +68,9 @@ def test_node_hydrates_data_during_initialization():
 
     assert node.node_data.foo == "bar"
     assert node.title == "Sample"
-    dify_ctx = resolve_dify_run_context(node.run_context)
-    assert dify_ctx.user_from == "account"
-    assert dify_ctx.invoke_from == "debugger"
+    nexusai_ctx = resolve_nexusai_run_context(node.run_context)
+    assert nexusai_ctx.user_from == "account"
+    assert nexusai_ctx.invoke_from == "debugger"
 
 
 def test_node_accepts_invoke_from_enum():
@@ -92,9 +92,9 @@ def test_node_accepts_invoke_from_enum():
         graph_runtime_state=runtime_state,
     )
 
-    dify_ctx = resolve_dify_run_context(node.run_context)
-    assert dify_ctx.user_from == UserFrom.ACCOUNT
-    assert dify_ctx.invoke_from == InvokeFrom.DEBUGGER
+    nexusai_ctx = resolve_nexusai_run_context(node.run_context)
+    assert nexusai_ctx.user_from == UserFrom.ACCOUNT
+    assert nexusai_ctx.invoke_from == InvokeFrom.DEBUGGER
     assert node.get_run_context_value("missing") is None
     with pytest.raises(ValueError):
         node.require_run_context_value("missing")

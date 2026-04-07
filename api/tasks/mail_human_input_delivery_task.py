@@ -10,7 +10,7 @@ from graphon.runtime import GraphRuntimeState, VariablePool
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.layers.pause_state_persist_layer import WorkflowResumptionContext
 from core.workflow.human_input_compat import EmailDeliveryConfig, EmailDeliveryMethod
 from extensions.ext_database import db
@@ -22,7 +22,7 @@ from models.human_input import (
     HumanInputFormRecipient,
     RecipientType,
 )
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.feature_service import FeatureService
 
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ class _EmailDeliveryJob:
 
 
 def _build_form_link(token: str) -> str:
-    base_url = dify_config.APP_WEB_URL
+    base_url = nexusai_config.APP_WEB_URL
     return f"{base_url.rstrip('/')}/form/{token}"
 
 
@@ -119,7 +119,7 @@ def _load_variable_pool(workflow_run_id: str | None) -> VariablePool | None:
         return None
 
     session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
-    workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_factory)
+    workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_factory)
     pause_entity = workflow_run_repo.get_workflow_pause(workflow_run_id)
     if pause_entity is None:
         logger.info("No pause state found for workflow run %s", workflow_run_id)

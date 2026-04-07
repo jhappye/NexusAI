@@ -9,8 +9,8 @@ describe('OrgInfo', () => {
   })
 
   it('renders org name with separator when provided', () => {
-    render(<OrgInfo orgName="dify" packageName="search-tool" />)
-    expect(screen.getByText('dify')).toBeInTheDocument()
+    render(<OrgInfo orgName="nexusai" packageName="search-tool" />)
+    expect(screen.getByText('nexusai')).toBeInTheDocument()
     expect(screen.getByText('/')).toBeInTheDocument()
     expect(screen.getByText('search-tool')).toBeInTheDocument()
   })

@@ -35,7 +35,7 @@ vi.mock('@/app/components/base/ui/toast', () => ({
 describe('ApiBasedExtensionModal', () => {
   const mockOnCancel = vi.fn()
   const mockOnSave = vi.fn()
-  const mockDocLink = vi.fn((path?: string) => `https://docs.dify.ai${path || ''}`)
+  const mockDocLink = vi.fn((path?: string) => `https://docs.nexusai.ai${path || ''}`)
 
   const render = (ui: ReactElement) => RTLRender(ui)
 

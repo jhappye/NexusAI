@@ -1,12 +1,12 @@
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 
 
 def is_enabled() -> bool:
-    return dify_config.API_COMPRESSION_ENABLED
+    return nexusai_config.API_COMPRESSION_ENABLED
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     from flask_compress import Compress
 
     compress = Compress()

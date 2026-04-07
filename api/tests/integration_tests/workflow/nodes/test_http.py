@@ -9,25 +9,25 @@ from graphon.graph import Graph
 from graphon.nodes.http_request import HttpRequestNode, HttpRequestNodeConfig
 from graphon.runtime import GraphRuntimeState, VariablePool
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom
 from core.helper.ssrf_proxy import ssrf_proxy
 from core.tools.tool_file_manager import ToolFileManager
-from core.workflow.node_factory import DifyNodeFactory
-from core.workflow.node_runtime import DifyFileReferenceFactory
+from core.workflow.node_factory import NexusAINodeFactory
+from core.workflow.node_runtime import NexusAIFileReferenceFactory
 from core.workflow.system_variables import build_system_variables
 from tests.workflow_test_utils import build_test_graph_init_params
 
 pytest_plugins = ("tests.integration_tests.workflow.nodes.__mock.http",)
 
 HTTP_REQUEST_CONFIG = HttpRequestNodeConfig(
-    max_connect_timeout=dify_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
-    max_read_timeout=dify_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
-    max_write_timeout=dify_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
-    max_binary_size=dify_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
-    max_text_size=dify_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
-    ssl_verify=dify_config.HTTP_REQUEST_NODE_SSL_VERIFY,
-    ssrf_default_max_retries=dify_config.SSRF_DEFAULT_MAX_RETRIES,
+    max_connect_timeout=nexusai_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
+    max_read_timeout=nexusai_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
+    max_write_timeout=nexusai_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
+    max_binary_size=nexusai_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
+    max_text_size=nexusai_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
+    ssl_verify=nexusai_config.HTTP_REQUEST_NODE_SSL_VERIFY,
+    ssrf_default_max_retries=nexusai_config.SSRF_DEFAULT_MAX_RETRIES,
 )
 
 
@@ -67,7 +67,7 @@ def init_http_node(config: dict):
     graph_runtime_state = GraphRuntimeState(variable_pool=variable_pool, start_at=time.perf_counter())
 
     # Create node factory
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )
@@ -83,7 +83,7 @@ def init_http_node(config: dict):
         http_client=ssrf_proxy,
         tool_file_manager_factory=ToolFileManager,
         file_manager=file_manager,
-        file_reference_factory=DifyFileReferenceFactory(init_params.run_context),
+        file_reference_factory=NexusAIFileReferenceFactory(init_params.run_context),
     )
 
     return node
@@ -716,7 +716,7 @@ def test_nested_object_variable_selector(setup_http_mock):
     graph_runtime_state = GraphRuntimeState(variable_pool=variable_pool, start_at=time.perf_counter())
 
     # Create node factory
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )
@@ -732,7 +732,7 @@ def test_nested_object_variable_selector(setup_http_mock):
         http_client=ssrf_proxy,
         tool_file_manager_factory=ToolFileManager,
         file_manager=file_manager,
-        file_reference_factory=DifyFileReferenceFactory(init_params.run_context),
+        file_reference_factory=NexusAIFileReferenceFactory(init_params.run_context),
     )
 
     result = node._run()

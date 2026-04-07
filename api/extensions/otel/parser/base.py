@@ -19,7 +19,7 @@ from opentelemetry.trace import Span
 from opentelemetry.trace.status import Status, StatusCode
 from pydantic import BaseModel
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.otel.semconv.gen_ai import ChainAttributes, GenAIAttributes
 
 
@@ -28,9 +28,9 @@ def should_include_content() -> bool:
 
     CE (ENTERPRISE_ENABLED=False): always True — no behaviour change.
     """
-    if not dify_config.ENTERPRISE_ENABLED:
+    if not nexusai_config.ENTERPRISE_ENABLED:
         return True
-    return dify_config.ENTERPRISE_INCLUDE_CONTENT
+    return nexusai_config.ENTERPRISE_INCLUDE_CONTENT
 
 
 def safe_json_dumps(obj: Any, ensure_ascii: bool = False) -> str:
@@ -102,7 +102,7 @@ class DefaultNodeOTelParser:
             span.set_attribute("node.execution_id", node.execution_id)
         span.set_attribute("node.type", node.node_type)
 
-        span.set_attribute(GenAIAttributes.FRAMEWORK, "dify")
+        span.set_attribute(GenAIAttributes.FRAMEWORK, "nexusai")
 
         node_type = node.node_type
         if node_type == BuiltinNodeTypes.LLM:

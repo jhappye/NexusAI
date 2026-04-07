@@ -7,7 +7,7 @@ from sqlalchemy import func, select, update
 from sqlalchemy.exc import SQLAlchemyError
 
 import app
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.index_processor.index_processor_factory import IndexProcessorFactory
 from enums.cloud_plan import CloudPlan
 from extensions.ext_database import db
@@ -30,12 +30,12 @@ def clean_unused_datasets_task():
     # Define cleanup configurations
     cleanup_configs: list[CleanupConfig] = [
         {
-            "clean_day": datetime.datetime.now() - datetime.timedelta(days=dify_config.PLAN_SANDBOX_CLEAN_DAY_SETTING),
+            "clean_day": datetime.datetime.now() - datetime.timedelta(days=nexusai_config.PLAN_SANDBOX_CLEAN_DAY_SETTING),
             "plan_filter": None,
             "add_logs": True,
         },
         {
-            "clean_day": datetime.datetime.now() - datetime.timedelta(days=dify_config.PLAN_PRO_CLEAN_DAY_SETTING),
+            "clean_day": datetime.datetime.now() - datetime.timedelta(days=nexusai_config.PLAN_PRO_CLEAN_DAY_SETTING),
             "plan_filter": CloudPlan.SANDBOX,
             "add_logs": False,
         },

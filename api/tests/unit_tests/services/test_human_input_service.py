@@ -80,7 +80,7 @@ def test_enqueue_resume_dispatches_task_for_workflow(mocker, mock_session_factor
     workflow_run_repo = MagicMock()
     workflow_run_repo.get_workflow_run_by_id_without_tenant.return_value = workflow_run
     mocker.patch(
-        "services.human_input_service.DifyAPIRepositoryFactory.create_api_workflow_run_repository",
+        "services.human_input_service.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository",
         return_value=workflow_run_repo,
     )
 
@@ -105,7 +105,7 @@ def test_ensure_form_active_respects_global_timeout(monkeypatch, sample_form_rec
         created_at=naive_utc_now() - timedelta(hours=2),
         expiration_time=naive_utc_now() + timedelta(hours=2),
     )
-    monkeypatch.setattr(human_input_service_module.dify_config, "HUMAN_INPUT_GLOBAL_TIMEOUT_SECONDS", 3600)
+    monkeypatch.setattr(human_input_service_module.nexusai_config, "HUMAN_INPUT_GLOBAL_TIMEOUT_SECONDS", 3600)
 
     with pytest.raises(FormExpiredError):
         service.ensure_form_active(Form(expired_record))
@@ -121,7 +121,7 @@ def test_enqueue_resume_dispatches_task_for_advanced_chat(mocker, mock_session_f
     workflow_run_repo = MagicMock()
     workflow_run_repo.get_workflow_run_by_id_without_tenant.return_value = workflow_run
     mocker.patch(
-        "services.human_input_service.DifyAPIRepositoryFactory.create_api_workflow_run_repository",
+        "services.human_input_service.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository",
         return_value=workflow_run_repo,
     )
 
@@ -148,7 +148,7 @@ def test_enqueue_resume_skips_unsupported_app_mode(mocker, mock_session_factory)
     workflow_run_repo = MagicMock()
     workflow_run_repo.get_workflow_run_by_id_without_tenant.return_value = workflow_run
     mocker.patch(
-        "services.human_input_service.DifyAPIRepositoryFactory.create_api_workflow_run_repository",
+        "services.human_input_service.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository",
         return_value=workflow_run_repo,
     )
 
@@ -425,7 +425,7 @@ def test_enqueue_resume_workflow_not_found(mocker, mock_session_factory):
     workflow_run_repo = MagicMock()
     workflow_run_repo.get_workflow_run_by_id_without_tenant.return_value = None
     mocker.patch(
-        "services.human_input_service.DifyAPIRepositoryFactory.create_api_workflow_run_repository",
+        "services.human_input_service.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository",
         return_value=workflow_run_repo,
     )
 
@@ -444,7 +444,7 @@ def test_enqueue_resume_app_not_found(mocker, mock_session_factory):
     workflow_run_repo = MagicMock()
     workflow_run_repo.get_workflow_run_by_id_without_tenant.return_value = workflow_run
     mocker.patch(
-        "services.human_input_service.DifyAPIRepositoryFactory.create_api_workflow_run_repository",
+        "services.human_input_service.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository",
         return_value=workflow_run_repo,
     )
 
@@ -459,5 +459,5 @@ def test_is_globally_expired_zero_timeout(monkeypatch, sample_form_record, mock_
     session_factory, _ = mock_session_factory
     service = HumanInputService(session_factory)
 
-    monkeypatch.setattr(human_input_service_module.dify_config, "HUMAN_INPUT_GLOBAL_TIMEOUT_SECONDS", 0)
+    monkeypatch.setattr(human_input_service_module.nexusai_config, "HUMAN_INPUT_GLOBAL_TIMEOUT_SECONDS", 0)
     assert service._is_globally_expired(Form(sample_form_record)) is False

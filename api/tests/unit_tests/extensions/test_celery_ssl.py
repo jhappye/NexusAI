@@ -9,11 +9,11 @@ class TestCelerySSLConfiguration:
 
     def test_get_celery_ssl_options_when_ssl_disabled(self):
         """Test SSL options when BROKER_USE_SSL is False."""
-        from configs import DifyConfig
+        from configs import NexusAIConfig
 
-        dify_config = DifyConfig(CELERY_BROKER_URL="redis://localhost:6379/0")
+        nexusai_config = NexusAIConfig(CELERY_BROKER_URL="redis://localhost:6379/0")
 
-        with patch("extensions.ext_celery.dify_config", dify_config):
+        with patch("extensions.ext_celery.nexusai_config", nexusai_config):
             from extensions.ext_celery import get_celery_ssl_options
 
             result = get_celery_ssl_options()
@@ -24,7 +24,7 @@ class TestCelerySSLConfiguration:
         mock_config = MagicMock()
         mock_config.CELERY_BROKER_URL = "amqp://localhost:5672"
 
-        with patch("extensions.ext_celery.dify_config", mock_config):
+        with patch("extensions.ext_celery.nexusai_config", mock_config):
             from extensions.ext_celery import get_celery_ssl_options
 
             result = get_celery_ssl_options()
@@ -39,7 +39,7 @@ class TestCelerySSLConfiguration:
         mock_config.REDIS_SSL_CERTFILE = None
         mock_config.REDIS_SSL_KEYFILE = None
 
-        with patch("extensions.ext_celery.dify_config", mock_config):
+        with patch("extensions.ext_celery.nexusai_config", mock_config):
             from extensions.ext_celery import get_celery_ssl_options
 
             result = get_celery_ssl_options()
@@ -58,7 +58,7 @@ class TestCelerySSLConfiguration:
         mock_config.REDIS_SSL_CERTFILE = "/path/to/client.crt"
         mock_config.REDIS_SSL_KEYFILE = "/path/to/client.key"
 
-        with patch("extensions.ext_celery.dify_config", mock_config):
+        with patch("extensions.ext_celery.nexusai_config", mock_config):
             from extensions.ext_celery import get_celery_ssl_options
 
             result = get_celery_ssl_options()
@@ -77,7 +77,7 @@ class TestCelerySSLConfiguration:
         mock_config.REDIS_SSL_CERTFILE = None
         mock_config.REDIS_SSL_KEYFILE = None
 
-        with patch("extensions.ext_celery.dify_config", mock_config):
+        with patch("extensions.ext_celery.nexusai_config", mock_config):
             from extensions.ext_celery import get_celery_ssl_options
 
             result = get_celery_ssl_options()
@@ -94,7 +94,7 @@ class TestCelerySSLConfiguration:
         mock_config.REDIS_SSL_CERTFILE = None
         mock_config.REDIS_SSL_KEYFILE = None
 
-        with patch("extensions.ext_celery.dify_config", mock_config):
+        with patch("extensions.ext_celery.nexusai_config", mock_config):
             from extensions.ext_celery import get_celery_ssl_options
 
             result = get_celery_ssl_options()
@@ -136,11 +136,11 @@ class TestCelerySSLConfiguration:
         mock_config.ENABLE_API_TOKEN_LAST_USED_UPDATE_TASK = False
         mock_config.API_TOKEN_LAST_USED_UPDATE_INTERVAL = 30
 
-        with patch("extensions.ext_celery.dify_config", mock_config):
-            from dify_app import DifyApp
+        with patch("extensions.ext_celery.nexusai_config", mock_config):
+            from nexusai_app import NexusAIApp
             from extensions.ext_celery import init_app
 
-            app = DifyApp(__name__)
+            app = NexusAIApp(__name__)
             celery_app = init_app(app)
 
             # Check that SSL options were applied

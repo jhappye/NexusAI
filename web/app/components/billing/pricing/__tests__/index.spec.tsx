@@ -70,7 +70,7 @@ describe('Pricing', () => {
 
       expect(screen.getByRole('dialog', { name: 'billing.plansCommon.title.plans' })).toBeInTheDocument()
       expect(screen.getByText('billing.plansCommon.title.plans')).toBeInTheDocument()
-      expect(screen.getByTestId('pricing-link')).toHaveAttribute('href', 'https://dify.ai/en/pricing#plans-and-features')
+      expect(screen.getByTestId('pricing-link')).toHaveAttribute('href', 'https://nexusai.ai/en/pricing#plans-and-features')
     })
   })
 
@@ -88,7 +88,7 @@ describe('Pricing', () => {
       mockLanguage = ''
       render(<Pricing onCancel={vi.fn()} />)
 
-      expect(screen.getByTestId('pricing-link')).toHaveAttribute('href', 'https://dify.ai/pricing#plans-and-features')
+      expect(screen.getByTestId('pricing-link')).toHaveAttribute('href', 'https://nexusai.ai/pricing#plans-and-features')
     })
   })
 })

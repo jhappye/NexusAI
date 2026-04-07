@@ -4,7 +4,7 @@ from flask_restx import Resource
 from pydantic import BaseModel, Field
 
 import services
-from configs import dify_config
+from configs import nexusai_config
 from constants.languages import get_valid_language
 from controllers.console import console_ns
 from controllers.console.auth.error import (
@@ -91,7 +91,7 @@ class LoginApi(Resource):
         request_email = args.email
         normalized_email = request_email.lower()
 
-        if dify_config.BILLING_ENABLED and BillingService.is_email_in_freeze(normalized_email):
+        if nexusai_config.BILLING_ENABLED and BillingService.is_email_in_freeze(normalized_email):
             raise AccountInFreezeError()
 
         is_login_error_rate_limit = AccountService.is_login_error_rate_limit(normalized_email)

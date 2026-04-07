@@ -27,7 +27,7 @@ def _configure_storage(monkeypatch, **overrides):
     }
     defaults.update(overrides)
     for key, value in defaults.items():
-        monkeypatch.setattr(storage_module.dify_config, key, value, raising=False)
+        monkeypatch.setattr(storage_module.nexusai_config, key, value, raising=False)
 
 
 def _client_error(code: str) -> ClientError:

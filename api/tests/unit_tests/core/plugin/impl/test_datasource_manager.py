@@ -23,7 +23,7 @@ class TestPluginDatasourceManager:
         manager = PluginDatasourceManager()
         provider = _datasource_provider("remote")
         repack = mocker.patch("core.plugin.impl.datasource.ToolTransformService.repack_provider")
-        mocker.patch("core.plugin.impl.datasource.resolve_dify_schema_refs", return_value={"resolved": True})
+        mocker.patch("core.plugin.impl.datasource.resolve_nexusai_schema_refs", return_value={"resolved": True})
 
         def fake_request(method, path, type_, **kwargs):
             transformer = kwargs["transformer"]
@@ -56,7 +56,7 @@ class TestPluginDatasourceManager:
         manager = PluginDatasourceManager()
         provider = _datasource_provider("remote")
         repack = mocker.patch("core.plugin.impl.datasource.ToolTransformService.repack_provider")
-        mocker.patch("core.plugin.impl.datasource.resolve_dify_schema_refs", return_value={"resolved": True})
+        mocker.patch("core.plugin.impl.datasource.resolve_nexusai_schema_refs", return_value={"resolved": True})
 
         def fake_request(method, path, type_, **kwargs):
             transformer = kwargs["transformer"]
@@ -90,7 +90,7 @@ class TestPluginDatasourceManager:
         assert local.plugin_id == "langgenius/file"
 
         remote = _datasource_provider("provider")
-        mocker.patch("core.plugin.impl.datasource.resolve_dify_schema_refs", return_value={"resolved": True})
+        mocker.patch("core.plugin.impl.datasource.resolve_nexusai_schema_refs", return_value={"resolved": True})
 
         def fake_request(method, path, type_, **kwargs):
             transformer = kwargs["transformer"]

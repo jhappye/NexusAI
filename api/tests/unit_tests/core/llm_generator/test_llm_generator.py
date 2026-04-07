@@ -313,21 +313,21 @@ class TestLLMGenerator:
         result = LLMGenerator.generate_structured_output("tenant_id", payload)
         assert "An unexpected error occurred" in result["error"]
 
-    def test_instruction_modify_legacy_no_last_run(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_legacy_no_last_run(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session.scalar") as mock_scalar:
             mock_scalar.return_value = None
 
-            # Mock __instruction_modify_common call via invoke_llm
+            # Mock __instruction_monexusai_common call via invoke_llm
             mock_response = MagicMock()
             mock_response.message.get_text_content.return_value = '{"modified": "prompt"}'
             mock_model_instance.invoke_llm.return_value = mock_response
 
-            result = LLMGenerator.instruction_modify_legacy(
+            result = LLMGenerator.instruction_monexusai_legacy(
                 "tenant_id", "flow_id", "current", "instruction", model_config_entity, "ideal"
             )
             assert result == {"modified": "prompt"}
 
-    def test_instruction_modify_legacy_with_last_run(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_legacy_with_last_run(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session.scalar") as mock_scalar:
             last_run = MagicMock()
             last_run.query = "q"
@@ -339,26 +339,26 @@ class TestLLMGenerator:
             mock_response.message.get_text_content.return_value = '{"modified": "prompt"}'
             mock_model_instance.invoke_llm.return_value = mock_response
 
-            result = LLMGenerator.instruction_modify_legacy(
+            result = LLMGenerator.instruction_monexusai_legacy(
                 "tenant_id", "flow_id", "current", "instruction", model_config_entity, "ideal"
             )
             assert result == {"modified": "prompt"}
 
-    def test_instruction_modify_workflow_app_not_found(self):
+    def test_instruction_monexusai_workflow_app_not_found(self):
         with patch("extensions.ext_database.db.session") as mock_session:
             mock_session.return_value.query.return_value.where.return_value.first.return_value = None
             with pytest.raises(ValueError, match="App not found."):
-                LLMGenerator.instruction_modify_workflow("t", "f", "n", "c", "i", MagicMock(), "o", MagicMock())
+                LLMGenerator.instruction_monexusai_workflow("t", "f", "n", "c", "i", MagicMock(), "o", MagicMock())
 
-    def test_instruction_modify_workflow_no_workflow(self):
+    def test_instruction_monexusai_workflow_no_workflow(self):
         with patch("extensions.ext_database.db.session") as mock_session:
             mock_session.return_value.query.return_value.where.return_value.first.return_value = MagicMock()
             workflow_service = MagicMock()
             workflow_service.get_draft_workflow.return_value = None
             with pytest.raises(ValueError, match="Workflow not found for the given app model."):
-                LLMGenerator.instruction_modify_workflow("t", "f", "n", "c", "i", MagicMock(), "o", workflow_service)
+                LLMGenerator.instruction_monexusai_workflow("t", "f", "n", "c", "i", MagicMock(), "o", workflow_service)
 
-    def test_instruction_modify_workflow_success(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_workflow_success(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session") as mock_session:
             mock_session.return_value.query.return_value.where.return_value.first.return_value = MagicMock()
             workflow = MagicMock()
@@ -381,7 +381,7 @@ class TestLLMGenerator:
             mock_response.message.get_text_content.return_value = '{"modified": "workflow"}'
             mock_model_instance.invoke_llm.return_value = mock_response
 
-            result = LLMGenerator.instruction_modify_workflow(
+            result = LLMGenerator.instruction_monexusai_workflow(
                 "tenant_id",
                 "flow_id",
                 "node_id",
@@ -393,7 +393,7 @@ class TestLLMGenerator:
             )
             assert result == {"modified": "workflow"}
 
-    def test_instruction_modify_workflow_no_last_run_fallback(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_workflow_no_last_run_fallback(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session") as mock_session:
             mock_session.return_value.query.return_value.where.return_value.first.return_value = MagicMock()
             workflow = MagicMock()
@@ -407,7 +407,7 @@ class TestLLMGenerator:
             mock_response.message.get_text_content.return_value = '{"modified": "fallback"}'
             mock_model_instance.invoke_llm.return_value = mock_response
 
-            result = LLMGenerator.instruction_modify_workflow(
+            result = LLMGenerator.instruction_monexusai_workflow(
                 "tenant_id",
                 "flow_id",
                 "node_id",
@@ -419,7 +419,7 @@ class TestLLMGenerator:
             )
             assert result == {"modified": "fallback"}
 
-    def test_instruction_modify_workflow_node_type_fallback(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_workflow_node_type_fallback(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session") as mock_session:
             mock_session.return_value.query.return_value.where.return_value.first.return_value = MagicMock()
             workflow = MagicMock()
@@ -434,7 +434,7 @@ class TestLLMGenerator:
             mock_response.message.get_text_content.return_value = '{"modified": "fallback"}'
             mock_model_instance.invoke_llm.return_value = mock_response
 
-            result = LLMGenerator.instruction_modify_workflow(
+            result = LLMGenerator.instruction_monexusai_workflow(
                 "tenant_id",
                 "flow_id",
                 "node_id",
@@ -446,7 +446,7 @@ class TestLLMGenerator:
             )
             assert result == {"modified": "fallback"}
 
-    def test_instruction_modify_workflow_empty_agent_log(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_workflow_empty_agent_log(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session") as mock_session:
             mock_session.return_value.query.return_value.where.return_value.first.return_value = MagicMock()
             workflow = MagicMock()
@@ -469,7 +469,7 @@ class TestLLMGenerator:
             mock_response.message.get_text_content.return_value = '{"modified": "workflow"}'
             mock_model_instance.invoke_llm.return_value = mock_response
 
-            result = LLMGenerator.instruction_modify_workflow(
+            result = LLMGenerator.instruction_monexusai_workflow(
                 "tenant_id",
                 "flow_id",
                 "node_id",
@@ -481,8 +481,8 @@ class TestLLMGenerator:
             )
             assert result == {"modified": "workflow"}
 
-    def test_instruction_modify_common_placeholders(self, mock_model_instance, model_config_entity):
-        # Testing placeholders replacement via instruction_modify_legacy for convenience
+    def test_instruction_monexusai_common_placeholders(self, mock_model_instance, model_config_entity):
+        # Testing placeholders replacement via instruction_monexusai_legacy for convenience
         with patch("extensions.ext_database.db.session.scalar") as mock_scalar:
             mock_scalar.return_value = None
 
@@ -491,7 +491,7 @@ class TestLLMGenerator:
             mock_model_instance.invoke_llm.return_value = mock_response
 
             instruction = "Test {{#last_run#}} and {{#current#}} and {{#error_message#}}"
-            LLMGenerator.instruction_modify_legacy(
+            LLMGenerator.instruction_monexusai_legacy(
                 "tenant_id", "flow_id", "current_val", instruction, model_config_entity, "ideal"
             )
 
@@ -503,31 +503,31 @@ class TestLLMGenerator:
             assert "null" in user_msg_dict["instruction"]  # because last_run is None and current is current_val etc.
             assert "current_val" in user_msg_dict["instruction"]
 
-    def test_instruction_modify_common_no_braces(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_common_no_braces(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session.scalar") as mock_scalar:
             mock_scalar.return_value = None
             mock_response = MagicMock()
             mock_response.message.get_text_content.return_value = "No braces here"
             mock_model_instance.invoke_llm.return_value = mock_response
-            result = LLMGenerator.instruction_modify_legacy(
+            result = LLMGenerator.instruction_monexusai_legacy(
                 "tenant_id", "flow_id", "current", "instruction", model_config_entity, "ideal"
             )
             assert "An unexpected error occurred" in result["error"]
             assert "Could not find a valid JSON object" in result["error"]
 
-    def test_instruction_modify_common_not_dict(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_common_not_dict(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session.scalar") as mock_scalar:
             mock_scalar.return_value = None
             mock_response = MagicMock()
             mock_response.message.get_text_content.return_value = "[1, 2, 3]"
             mock_model_instance.invoke_llm.return_value = mock_response
-            result = LLMGenerator.instruction_modify_legacy(
+            result = LLMGenerator.instruction_monexusai_legacy(
                 "tenant_id", "flow_id", "current", "instruction", model_config_entity, "ideal"
             )
             # The exception message is "Expected a JSON object, but got list"
             assert "An unexpected error occurred" in result["error"]
 
-    def test_instruction_modify_common_other_node_type(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_common_other_node_type(self, mock_model_instance, model_config_entity):
         with patch("core.llm_generator.llm_generator.ModelManager.for_tenant") as mock_manager:
             instance = MagicMock()
             mock_manager.return_value.get_model_instance.return_value = instance
@@ -544,7 +544,7 @@ class TestLLMGenerator:
                 workflow_service.get_draft_workflow.return_value = workflow
                 workflow_service.get_node_last_run.return_value = None
 
-                LLMGenerator.instruction_modify_workflow(
+                LLMGenerator.instruction_monexusai_workflow(
                     "tenant_id",
                     "flow_id",
                     "node_id",
@@ -555,27 +555,27 @@ class TestLLMGenerator:
                     workflow_service,
                 )
 
-    def test_instruction_modify_common_invoke_error(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_common_invoke_error(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session.scalar") as mock_scalar:
             mock_scalar.return_value = None
             mock_model_instance.invoke_llm.side_effect = InvokeError("Invoke Failed")
 
-            result = LLMGenerator.instruction_modify_legacy(
+            result = LLMGenerator.instruction_monexusai_legacy(
                 "tenant_id", "flow_id", "current", "instruction", model_config_entity, "ideal"
             )
             assert "Failed to generate code" in result["error"]
 
-    def test_instruction_modify_common_exception(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_common_exception(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session.scalar") as mock_scalar:
             mock_scalar.return_value = None
             mock_model_instance.invoke_llm.side_effect = Exception("Random error")
 
-            result = LLMGenerator.instruction_modify_legacy(
+            result = LLMGenerator.instruction_monexusai_legacy(
                 "tenant_id", "flow_id", "current", "instruction", model_config_entity, "ideal"
             )
             assert "An unexpected error occurred" in result["error"]
 
-    def test_instruction_modify_common_json_error(self, mock_model_instance, model_config_entity):
+    def test_instruction_monexusai_common_json_error(self, mock_model_instance, model_config_entity):
         with patch("extensions.ext_database.db.session.scalar") as mock_scalar:
             mock_scalar.return_value = None
 
@@ -583,7 +583,7 @@ class TestLLMGenerator:
             mock_response.message.get_text_content.return_value = "No JSON here"
             mock_model_instance.invoke_llm.return_value = mock_response
 
-            result = LLMGenerator.instruction_modify_legacy(
+            result = LLMGenerator.instruction_monexusai_legacy(
                 "tenant_id", "flow_id", "current", "instruction", model_config_entity, "ideal"
             )
             assert "An unexpected error occurred" in result["error"]

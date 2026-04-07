@@ -8,17 +8,17 @@ from graphon.nodes.code.exc import (
 from graphon.nodes.code.limits import CodeNodeLimits
 from graphon.variables.types import SegmentType
 
-from configs import dify_config
+from configs import nexusai_config
 
 CodeNode._limits = CodeNodeLimits(
-    max_string_length=dify_config.CODE_MAX_STRING_LENGTH,
-    max_number=dify_config.CODE_MAX_NUMBER,
-    min_number=dify_config.CODE_MIN_NUMBER,
-    max_precision=dify_config.CODE_MAX_PRECISION,
-    max_depth=dify_config.CODE_MAX_DEPTH,
-    max_number_array_length=dify_config.CODE_MAX_NUMBER_ARRAY_LENGTH,
-    max_string_array_length=dify_config.CODE_MAX_STRING_ARRAY_LENGTH,
-    max_object_array_length=dify_config.CODE_MAX_OBJECT_ARRAY_LENGTH,
+    max_string_length=nexusai_config.CODE_MAX_STRING_LENGTH,
+    max_number=nexusai_config.CODE_MAX_NUMBER,
+    min_number=nexusai_config.CODE_MIN_NUMBER,
+    max_precision=nexusai_config.CODE_MAX_PRECISION,
+    max_depth=nexusai_config.CODE_MAX_DEPTH,
+    max_number_array_length=nexusai_config.CODE_MAX_NUMBER_ARRAY_LENGTH,
+    max_string_array_length=nexusai_config.CODE_MAX_STRING_ARRAY_LENGTH,
+    max_object_array_length=nexusai_config.CODE_MAX_OBJECT_ARRAY_LENGTH,
 )
 
 

@@ -342,7 +342,7 @@ class TestPluginValidation:
             created_at=datetime.datetime.now(),
             resource=PluginResourceRequirements(memory=512, permission=None),
             plugins=PluginDeclaration.Plugins(),
-            meta=PluginDeclaration.Meta(version="1.0.0", minimum_dify_version="0.6.0"),
+            meta=PluginDeclaration.Meta(version="1.0.0", minimum_nexusai_version="0.6.0"),
         )
 
         with patch.object(
@@ -355,7 +355,7 @@ class TestPluginValidation:
             assert result.name == "test-plugin"
             assert result.version == "1.0.0"
             assert result.author == "test-author"
-            assert result.meta.minimum_dify_version == "0.6.0"
+            assert result.meta.minimum_nexusai_version == "0.6.0"
             mock_request.assert_called_once()
 
     def test_decode_plugin_from_identifier(self, plugin_installer):
@@ -495,9 +495,9 @@ class TestVersionCompatibility:
             )
             assert declaration.version == version
 
-    def test_minimum_dify_version_validation(self):
-        """Test minimum Dify version validation."""
-        # Arrange & Act: Create declaration with minimum Dify version
+    def test_minimum_nexusai_version_validation(self):
+        """Test minimum NexusAI version validation."""
+        # Arrange & Act: Create declaration with minimum NexusAI version
         declaration = PluginDeclaration(
             version="1.0.0",
             author="test-author",
@@ -509,17 +509,17 @@ class TestVersionCompatibility:
             created_at=datetime.datetime.now(),
             resource=PluginResourceRequirements(memory=512, permission=None),
             plugins=PluginDeclaration.Plugins(),
-            meta=PluginDeclaration.Meta(version="1.0.0", minimum_dify_version="0.6.0"),
+            meta=PluginDeclaration.Meta(version="1.0.0", minimum_nexusai_version="0.6.0"),
         )
 
         # Assert: Verify minimum version is set correctly
-        assert declaration.meta.minimum_dify_version == "0.6.0"
+        assert declaration.meta.minimum_nexusai_version == "0.6.0"
 
-    def test_invalid_minimum_dify_version(self):
-        """Test that invalid minimum Dify version format raises error."""
+    def test_invalid_minimum_nexusai_version(self):
+        """Test that invalid minimum NexusAI version format raises error."""
         # Arrange & Act & Assert: Invalid minimum version should raise ValueError
         with pytest.raises(ValueError, match="Invalid version format"):
-            PluginDeclaration.Meta(version="1.0.0", minimum_dify_version="invalid.version")
+            PluginDeclaration.Meta(version="1.0.0", minimum_nexusai_version="invalid.version")
 
     def test_version_comparison_logic(self):
         """Test version comparison using packaging.version.Version."""
@@ -1065,7 +1065,7 @@ class TestPluginInstallationSources:
         """
         Test plugin installation from package source.
 
-        Package source allows installing plugins from local .difypkg files,
+        Package source allows installing plugins from local .nexusaipkg files,
         useful for private or custom plugins.
         """
         # Arrange & Act: Use package as installation source

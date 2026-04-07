@@ -153,7 +153,7 @@ def patch_core_components(monkeypatch: pytest.MonkeyPatch) -> dict[str, object]:
         DEPLOY_ENV="dev",
         EDITION="cloud",
     )
-    monkeypatch.setattr(client_module, "dify_config", fake_config)
+    monkeypatch.setattr(client_module, "nexusai_config", fake_config)
 
     monkeypatch.setattr(client_module.socket, "gethostname", lambda: "fake-host")
     monkeypatch.setenv("OTEL_EXPORTER_OTLP_PROTOCOL", "")
@@ -216,9 +216,9 @@ def test_resolve_grpc_target_handles_errors() -> None:
     ("method", "attr_name", "args"),
     [
         ("record_llm_duration", "hist_llm_duration", (0.3, {"foo": object()})),
-        ("record_token_usage", "hist_token_usage", (5, "input", "chat", "gpt", "gpt", "addr", "dify")),
-        ("record_time_to_first_token", "hist_time_to_first_token", (0.4, "dify", "gpt")),
-        ("record_time_to_generate", "hist_time_to_generate", (0.6, "dify", "gpt")),
+        ("record_token_usage", "hist_token_usage", (5, "input", "chat", "gpt", "gpt", "addr", "nexusai")),
+        ("record_time_to_first_token", "hist_time_to_first_token", (0.4, "nexusai", "gpt")),
+        ("record_time_to_generate", "hist_time_to_generate", (0.6, "nexusai", "gpt")),
         ("record_trace_duration", "hist_trace_duration", (1.0, {"meta": object()})),
     ],
 )
@@ -506,9 +506,9 @@ def test_record_trace_duration_converts_attributes() -> None:
 @pytest.mark.parametrize(
     ("method", "attr_name", "args"),
     [
-        ("record_token_usage", "hist_token_usage", (5, "input", "chat", "gpt", "gpt", "addr", "dify")),
-        ("record_time_to_first_token", "hist_time_to_first_token", (0.4, "dify", "gpt")),
-        ("record_time_to_generate", "hist_time_to_generate", (0.6, "dify", "gpt")),
+        ("record_token_usage", "hist_token_usage", (5, "input", "chat", "gpt", "gpt", "addr", "nexusai")),
+        ("record_time_to_first_token", "hist_time_to_first_token", (0.4, "nexusai", "gpt")),
+        ("record_time_to_generate", "hist_time_to_generate", (0.6, "nexusai", "gpt")),
         ("record_trace_duration", "hist_trace_duration", (1.0, {"meta": object()})),
     ],
 )

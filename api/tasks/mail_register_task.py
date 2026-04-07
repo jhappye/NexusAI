@@ -4,7 +4,7 @@ import time
 import click
 from celery import shared_task
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_mail import mail
 from libs.email_i18n import EmailType, get_email_i18n_service
 
@@ -63,8 +63,8 @@ def send_email_register_mail_task_when_account_exist(language: str, to: str, acc
     start_at = time.perf_counter()
 
     try:
-        login_url = f"{dify_config.CONSOLE_WEB_URL}/signin"
-        reset_password_url = f"{dify_config.CONSOLE_WEB_URL}/reset-password"
+        login_url = f"{nexusai_config.CONSOLE_WEB_URL}/signin"
+        reset_password_url = f"{nexusai_config.CONSOLE_WEB_URL}/reset-password"
 
         email_service = get_email_i18n_service()
         email_service.send_email(

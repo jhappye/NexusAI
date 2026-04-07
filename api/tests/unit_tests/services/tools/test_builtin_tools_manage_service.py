@@ -235,7 +235,7 @@ class TestGetOauthClientSchema:
     @patch(f"{MODULE}.BuiltinToolManageService.get_custom_oauth_client_params", return_value={})
     @patch(f"{MODULE}.BuiltinToolManageService.is_oauth_system_client_exists", return_value=False)
     @patch(f"{MODULE}.BuiltinToolManageService.is_oauth_custom_client_enabled", return_value=True)
-    @patch(f"{MODULE}.dify_config")
+    @patch(f"{MODULE}.nexusai_config")
     @patch(f"{MODULE}.PluginService")
     @patch(f"{MODULE}.ToolManager")
     def test_returns_schema_dict(self, mock_tm, mock_plugin, mock_config, mock_enabled, mock_sys, mock_params):

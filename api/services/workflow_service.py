@@ -33,13 +33,13 @@ from graphon.variables.variables import Variable
 from sqlalchemy import exists, select
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.apps.advanced_chat.app_config_manager import AdvancedChatAppConfigManager
 from core.app.apps.workflow.app_config_manager import WorkflowAppConfigManager
-from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_dify_run_context
+from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_nexusai_run_context
 from core.app.file_access import DatabaseFileAccessController
 from core.plugin.impl.model_runtime_factory import create_plugin_model_assembly, create_plugin_provider_manager
-from core.repositories import DifyCoreRepositoryFactory
+from core.repositories import NexusAICoreRepositoryFactory
 from core.repositories.human_input_repository import FormCreateParams, HumanInputFormRepositoryImpl
 from core.trigger.constants import is_trigger_node_type
 from core.workflow.human_input_compat import (
@@ -48,7 +48,7 @@ from core.workflow.human_input_compat import (
     parse_human_input_delivery_methods,
 )
 from core.workflow.node_factory import LATEST_VERSION, get_node_type_classes_mapping, is_start_node_type
-from core.workflow.node_runtime import DifyHumanInputNodeRuntime, apply_dify_debug_email_recipient
+from core.workflow.node_runtime import NexusAIHumanInputNodeRuntime, apply_nexusai_debug_email_recipient
 from core.workflow.system_variables import build_bootstrap_variables, build_system_variables, default_system_variables
 from core.workflow.variable_pool_initializer import add_node_inputs_to_pool, add_variables_to_pool
 from core.workflow.workflow_entry import WorkflowEntry
@@ -64,7 +64,7 @@ from models.human_input import HumanInputFormRecipient, RecipientType
 from models.model import App, AppMode
 from models.tools import WorkflowToolProvider
 from models.workflow import Workflow, WorkflowNodeExecutionModel, WorkflowNodeExecutionTriggeredFrom, WorkflowType
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.billing_service import BillingService
 from services.enterprise.plugin_manager_service import PluginCredentialType
 from services.errors.app import (
@@ -98,7 +98,7 @@ class WorkflowService:
         """Initialize WorkflowService with repository dependencies."""
         if session_maker is None:
             session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-        self._node_execution_service_repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(
+        self._node_execution_service_repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(
             session_maker
         )
 
@@ -356,7 +356,7 @@ class WorkflowService:
         self.validate_graph_structure(graph=draft_workflow.graph_dict)
 
         # billing check
-        if dify_config.BILLING_ENABLED:
+        if nexusai_config.BILLING_ENABLED:
             limit_info = BillingService.get_info(app_model.tenant_id)
             if limit_info["subscription"]["plan"] == CloudPlan.SANDBOX:
                 # Check trigger node count limit for SANDBOX plan
@@ -680,13 +680,13 @@ class WorkflowService:
             if node_type == BuiltinNodeTypes.HTTP_REQUEST:
                 filters = {
                     HTTP_REQUEST_CONFIG_FILTER_KEY: build_http_request_config(
-                        max_connect_timeout=dify_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
-                        max_read_timeout=dify_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
-                        max_write_timeout=dify_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
-                        max_binary_size=dify_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
-                        max_text_size=dify_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
-                        ssl_verify=dify_config.HTTP_REQUEST_NODE_SSL_VERIFY,
-                        ssrf_default_max_retries=dify_config.SSRF_DEFAULT_MAX_RETRIES,
+                        max_connect_timeout=nexusai_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
+                        max_read_timeout=nexusai_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
+                        max_write_timeout=nexusai_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
+                        max_binary_size=nexusai_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
+                        max_text_size=nexusai_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
+                        ssl_verify=nexusai_config.HTTP_REQUEST_NODE_SSL_VERIFY,
+                        ssrf_default_max_retries=nexusai_config.SSRF_DEFAULT_MAX_RETRIES,
                     )
                 }
             default_config = node_class.get_default_config(filters=filters)
@@ -715,13 +715,13 @@ class WorkflowService:
         resolved_filters = dict(filters) if filters else {}
         if node_type_enum == BuiltinNodeTypes.HTTP_REQUEST and HTTP_REQUEST_CONFIG_FILTER_KEY not in resolved_filters:
             resolved_filters[HTTP_REQUEST_CONFIG_FILTER_KEY] = build_http_request_config(
-                max_connect_timeout=dify_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
-                max_read_timeout=dify_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
-                max_write_timeout=dify_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
-                max_binary_size=dify_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
-                max_text_size=dify_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
-                ssl_verify=dify_config.HTTP_REQUEST_NODE_SSL_VERIFY,
-                ssrf_default_max_retries=dify_config.SSRF_DEFAULT_MAX_RETRIES,
+                max_connect_timeout=nexusai_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
+                max_read_timeout=nexusai_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
+                max_write_timeout=nexusai_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
+                max_binary_size=nexusai_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
+                max_text_size=nexusai_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
+                ssl_verify=nexusai_config.HTTP_REQUEST_NODE_SSL_VERIFY,
+                ssrf_default_max_retries=nexusai_config.SSRF_DEFAULT_MAX_RETRIES,
             )
         default_config = node_class.get_default_config(filters=resolved_filters or None)
         if not default_config:
@@ -822,7 +822,7 @@ class WorkflowService:
         node_execution.workflow_id = draft_workflow.id
 
         # Create repository and save the node execution
-        repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+        repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
             session_factory=db.engine,
             user=account,
             app_id=app_model.id,
@@ -1020,7 +1020,7 @@ class WorkflowService:
         )
         if delivery_method is None:
             raise ValueError("Delivery method not found.")
-        delivery_method = apply_dify_debug_email_recipient(
+        delivery_method = apply_nexusai_debug_email_recipient(
             delivery_method,
             enabled=True,
             actor_id=account.id,
@@ -1137,7 +1137,7 @@ class WorkflowService:
         graph_init_params = GraphInitParams(
             workflow_id=workflow.id,
             graph_config=workflow.graph_dict,
-            run_context=build_dify_run_context(
+            run_context=build_nexusai_run_context(
                 tenant_id=workflow.tenant_id,
                 app_id=workflow.app_id,
                 user_id=account.id,
@@ -1155,7 +1155,7 @@ class WorkflowService:
             config=node_config,
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
-            runtime=DifyHumanInputNodeRuntime(graph_init_params.run_context),
+            runtime=NexusAIHumanInputNodeRuntime(graph_init_params.run_context),
         )
         return node
 

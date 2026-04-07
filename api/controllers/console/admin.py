@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select
 from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
 
-from configs import dify_config
+from configs import nexusai_config
 from constants.languages import supported_language
 from controllers.console import console_ns
 from controllers.console.wraps import only_edition_cloud
@@ -71,13 +71,13 @@ console_ns.schema_model(
 def admin_required[**P, R](view: Callable[P, R]) -> Callable[P, R]:
     @wraps(view)
     def decorated(*args: P.args, **kwargs: P.kwargs) -> R:
-        if not dify_config.ADMIN_API_KEY:
+        if not nexusai_config.ADMIN_API_KEY:
             raise Unauthorized("API key is invalid.")
 
         auth_token = extract_access_token(request)
         if not auth_token:
             raise Unauthorized("Authorization header is missing.")
-        if auth_token != dify_config.ADMIN_API_KEY:
+        if auth_token != nexusai_config.ADMIN_API_KEY:
             raise Unauthorized("API key is invalid.")
 
         return view(*args, **kwargs)
@@ -380,7 +380,7 @@ class BatchAddNotificationAccountsApi(Resource):
         if not account_ids:
             raise BadRequest("None of the provided emails matched an existing account.")
 
-        # Send to dify-saas in batches of 1000
+        # Send to nexusai-saas in batches of 1000
         total_count = 0
         batch_size = 1000
         for i in range(0, len(account_ids), batch_size):

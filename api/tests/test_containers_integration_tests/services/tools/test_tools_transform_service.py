@@ -30,13 +30,13 @@ class TestToolTransformService:
     @pytest.fixture
     def mock_external_service_dependencies(self):
         """Mock setup for external service dependencies."""
-        with patch("services.tools.tools_transform_service.dify_config") as mock_dify_config:
-            with patch("services.plugin.plugin_service.dify_config", new=mock_dify_config):
+        with patch("services.tools.tools_transform_service.nexusai_config") as mock_nexusai_config:
+            with patch("services.plugin.plugin_service.nexusai_config", new=mock_nexusai_config):
                 # Setup default mock returns
-                mock_dify_config.CONSOLE_API_URL = "https://console.example.com"
+                mock_nexusai_config.CONSOLE_API_URL = "https://console.example.com"
 
                 yield {
-                    "dify_config": mock_dify_config,
+                    "nexusai_config": mock_nexusai_config,
                 }
 
     def _create_test_tool_provider(
@@ -148,7 +148,7 @@ class TestToolTransformService:
         - Proper URL construction with relative path
         """
         # Arrange: Setup mock with empty console URL
-        mock_external_service_dependencies["dify_config"].CONSOLE_API_URL = None
+        mock_external_service_dependencies["nexusai_config"].CONSOLE_API_URL = None
         fake = Faker()
         tenant_id = fake.uuid4()
         filename = "test_icon.png"

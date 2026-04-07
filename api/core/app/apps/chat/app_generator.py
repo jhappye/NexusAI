@@ -9,7 +9,7 @@ from flask import Flask, copy_current_request_context, current_app
 from graphon.model_runtime.errors.invoke import InvokeAuthorizationError
 from pydantic import ValidationError
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import UUID_NIL
 from core.app.app_config.easy_ui_based_app.model_config.converter import ModelConfigConverter
 from core.app.app_config.features.file_upload.manager import FileUploadConfigManager
@@ -253,7 +253,7 @@ class ChatAppGenerator(MessageBasedAppGenerator):
                 logger.exception("Validation Error when generating")
                 queue_manager.publish_error(e, PublishFrom.APPLICATION_MANAGER)
             except ValueError as e:
-                if dify_config.DEBUG:
+                if nexusai_config.DEBUG:
                     logger.exception("Error when generating")
                 queue_manager.publish_error(e, PublishFrom.APPLICATION_MANAGER)
             except Exception as e:

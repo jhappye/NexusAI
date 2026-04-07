@@ -2,7 +2,7 @@
 Extensive unit tests for ``ExternalDatasetService``.
 
 This module focuses on the *external dataset service* surface area, which is responsible
-for integrating with **external knowledge APIs** and wiring them into Dify datasets.
+for integrating with **external knowledge APIs** and wiring them into NexusAI datasets.
 
 The goal of this test suite is twofold:
 
@@ -629,7 +629,7 @@ class TestExternalDatasetServiceAssemblingHeaders:
 
     def test_assembling_headers_no_auth_type_leaves_headers_unchanged(self):
         """
-        For ``no-auth`` we should not modify the headers mapping.
+        For ``no-auth`` we should not monexusai the headers mapping.
         """
 
         auth = Authorization(type="no-auth", config=None)

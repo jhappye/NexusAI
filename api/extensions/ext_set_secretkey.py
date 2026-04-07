@@ -1,6 +1,6 @@
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 
 
-def init_app(app: DifyApp):
-    app.secret_key = dify_config.SECRET_KEY
+def init_app(app: NexusAIApp):
+    app.secret_key = nexusai_config.SECRET_KEY

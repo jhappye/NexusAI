@@ -57,7 +57,7 @@ class TestMemberInviteEmailApi:
         inviter = SimpleNamespace(email="Owner@Example.com", current_tenant=tenant, status="active")
         mock_current_account.return_value = (inviter, tenant.id)
 
-        with patch("controllers.console.workspace.members.dify_config.CONSOLE_WEB_URL", "https://console.example.com"):
+        with patch("controllers.console.workspace.members.nexusai_config.CONSOLE_WEB_URL", "https://console.example.com"):
             with app.test_request_context(
                 "/workspaces/current/members/invite-email",
                 method="POST",

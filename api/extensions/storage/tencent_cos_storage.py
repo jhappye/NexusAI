@@ -2,7 +2,7 @@ from collections.abc import Generator
 
 from qcloud_cos import CosConfig, CosS3Client
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.storage.base_storage import BaseStorage
 
 
@@ -12,20 +12,20 @@ class TencentCosStorage(BaseStorage):
     def __init__(self):
         super().__init__()
 
-        self.bucket_name = dify_config.TENCENT_COS_BUCKET_NAME
-        if dify_config.TENCENT_COS_CUSTOM_DOMAIN:
+        self.bucket_name = nexusai_config.TENCENT_COS_BUCKET_NAME
+        if nexusai_config.TENCENT_COS_CUSTOM_DOMAIN:
             config = CosConfig(
-                Domain=dify_config.TENCENT_COS_CUSTOM_DOMAIN,
-                SecretId=dify_config.TENCENT_COS_SECRET_ID,
-                SecretKey=dify_config.TENCENT_COS_SECRET_KEY,
-                Scheme=dify_config.TENCENT_COS_SCHEME,
+                Domain=nexusai_config.TENCENT_COS_CUSTOM_DOMAIN,
+                SecretId=nexusai_config.TENCENT_COS_SECRET_ID,
+                SecretKey=nexusai_config.TENCENT_COS_SECRET_KEY,
+                Scheme=nexusai_config.TENCENT_COS_SCHEME,
             )
         else:
             config = CosConfig(
-                Region=dify_config.TENCENT_COS_REGION,
-                SecretId=dify_config.TENCENT_COS_SECRET_ID,
-                SecretKey=dify_config.TENCENT_COS_SECRET_KEY,
-                Scheme=dify_config.TENCENT_COS_SCHEME,
+                Region=nexusai_config.TENCENT_COS_REGION,
+                SecretId=nexusai_config.TENCENT_COS_SECRET_ID,
+                SecretKey=nexusai_config.TENCENT_COS_SECRET_KEY,
+                Scheme=nexusai_config.TENCENT_COS_SCHEME,
             )
         self.client = CosS3Client(config)
 

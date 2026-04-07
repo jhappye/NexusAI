@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import Card from '../card'
 
 vi.mock('@/hooks/use-api-access-url', () => ({
-  useDatasetApiAccessUrl: () => 'https://docs.dify.ai/api-reference/datasets',
+  useDatasetApiAccessUrl: () => 'https://docs.nexusai.ai/api-reference/datasets',
 }))
 
 vi.mock('@/app/components/develop/secret-key/secret-key-modal', () => ({
@@ -29,7 +29,7 @@ const renderWithProviders = (ui: React.ReactElement) => {
 
 describe('Card (Service API)', () => {
   const defaultProps = {
-    apiBaseUrl: 'https://api.dify.ai/v1',
+    apiBaseUrl: 'https://api.nexusai.ai/v1',
   }
 
   beforeEach(() => {
@@ -60,7 +60,7 @@ describe('Card (Service API)', () => {
 
     it('should render the API base URL', () => {
       renderWithProviders(<Card {...defaultProps} />)
-      expect(screen.getByText('https://api.dify.ai/v1')).toBeInTheDocument()
+      expect(screen.getByText('https://api.nexusai.ai/v1')).toBeInTheDocument()
     })
 
     it('should render API key button', () => {
@@ -82,7 +82,7 @@ describe('Card (Service API)', () => {
     })
 
     it('should show green indicator when apiBaseUrl is provided', () => {
-      renderWithProviders(<Card apiBaseUrl="https://api.dify.ai" />)
+      renderWithProviders(<Card apiBaseUrl="https://api.nexusai.ai" />)
       // The Indicator component receives color="green" when apiBaseUrl is truthy
       const statusText = screen.getByText(/serviceApi\.enabled/)
       expect(statusText).toHaveClass('text-text-success')
@@ -124,7 +124,7 @@ describe('Card (Service API)', () => {
     it('should render API reference as a link', () => {
       renderWithProviders(<Card {...defaultProps} />)
       const link = screen.getByRole('link')
-      expect(link).toHaveAttribute('href', 'https://docs.dify.ai/api-reference/datasets')
+      expect(link).toHaveAttribute('href', 'https://docs.nexusai.ai/api-reference/datasets')
       expect(link).toHaveAttribute('target', '_blank')
       expect(link).toHaveAttribute('rel', 'noopener noreferrer')
     })
@@ -154,13 +154,13 @@ describe('Card (Service API)', () => {
     })
 
     it('should handle very long apiBaseUrl', () => {
-      const longUrl = `https://api.dify.ai/${'path/'.repeat(50)}`
+      const longUrl = `https://api.nexusai.ai/${'path/'.repeat(50)}`
       renderWithProviders(<Card apiBaseUrl={longUrl} />)
       expect(screen.getByText(longUrl)).toBeInTheDocument()
     })
 
     it('should handle apiBaseUrl with special characters', () => {
-      const specialUrl = 'https://api.dify.ai/v1?key=value&foo=bar'
+      const specialUrl = 'https://api.nexusai.ai/v1?key=value&foo=bar'
       renderWithProviders(<Card apiBaseUrl={specialUrl} />)
       expect(screen.getByText(specialUrl)).toBeInTheDocument()
     })

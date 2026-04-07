@@ -12,7 +12,7 @@ class TestRemoteRecommendAppRetrieval:
 
     @patch.object(
         RemoteRecommendAppRetrieval,
-        "fetch_recommended_app_detail_from_dify_official",
+        "fetch_recommended_app_detail_from_nexusai_official",
         return_value={"id": "app-1"},
     )
     def test_get_recommend_app_detail_success(self, mock_fetch):
@@ -27,7 +27,7 @@ class TestRemoteRecommendAppRetrieval:
     )
     @patch.object(
         RemoteRecommendAppRetrieval,
-        "fetch_recommended_app_detail_from_dify_official",
+        "fetch_recommended_app_detail_from_nexusai_official",
         side_effect=ConnectionError("timeout"),
     )
     def test_get_recommend_app_detail_falls_back_on_error(self, mock_fetch, mock_builtin):
@@ -37,7 +37,7 @@ class TestRemoteRecommendAppRetrieval:
 
     @patch.object(
         RemoteRecommendAppRetrieval,
-        "fetch_recommended_apps_from_dify_official",
+        "fetch_recommended_apps_from_nexusai_official",
         return_value={"recommended_apps": [], "categories": []},
     )
     def test_get_recommended_apps_success(self, mock_fetch):
@@ -51,7 +51,7 @@ class TestRemoteRecommendAppRetrieval:
     )
     @patch.object(
         RemoteRecommendAppRetrieval,
-        "fetch_recommended_apps_from_dify_official",
+        "fetch_recommended_apps_from_nexusai_official",
         side_effect=ValueError("server error"),
     )
     def test_get_recommended_apps_falls_back_on_error(self, mock_fetch, mock_builtin):
@@ -59,8 +59,8 @@ class TestRemoteRecommendAppRetrieval:
         assert result == {"recommended_apps": [{"id": "builtin"}]}
 
 
-class TestFetchFromDifyOfficial:
-    @patch("services.recommend_app.remote.remote_retrieval.dify_config")
+class TestFetchFromNexusAIOfficial:
+    @patch("services.recommend_app.remote.remote_retrieval.nexusai_config")
     @patch("services.recommend_app.remote.remote_retrieval.httpx.get")
     def test_detail_returns_json_on_200(self, mock_get, mock_config):
         mock_config.HOSTED_FETCH_APP_TEMPLATES_REMOTE_DOMAIN = "https://example.com"
@@ -68,22 +68,22 @@ class TestFetchFromDifyOfficial:
         mock_response.json.return_value = {"id": "app-1", "name": "Test"}
         mock_get.return_value = mock_response
 
-        result = RemoteRecommendAppRetrieval.fetch_recommended_app_detail_from_dify_official("app-1")
+        result = RemoteRecommendAppRetrieval.fetch_recommended_app_detail_from_nexusai_official("app-1")
 
         assert result == {"id": "app-1", "name": "Test"}
         mock_get.assert_called_once()
 
-    @patch("services.recommend_app.remote.remote_retrieval.dify_config")
+    @patch("services.recommend_app.remote.remote_retrieval.nexusai_config")
     @patch("services.recommend_app.remote.remote_retrieval.httpx.get")
     def test_detail_returns_none_on_non_200(self, mock_get, mock_config):
         mock_config.HOSTED_FETCH_APP_TEMPLATES_REMOTE_DOMAIN = "https://example.com"
         mock_get.return_value = MagicMock(status_code=404)
 
-        result = RemoteRecommendAppRetrieval.fetch_recommended_app_detail_from_dify_official("app-1")
+        result = RemoteRecommendAppRetrieval.fetch_recommended_app_detail_from_nexusai_official("app-1")
 
         assert result is None
 
-    @patch("services.recommend_app.remote.remote_retrieval.dify_config")
+    @patch("services.recommend_app.remote.remote_retrieval.nexusai_config")
     @patch("services.recommend_app.remote.remote_retrieval.httpx.get")
     def test_apps_returns_sorted_categories_on_200(self, mock_get, mock_config):
         mock_config.HOSTED_FETCH_APP_TEMPLATES_REMOTE_DOMAIN = "https://example.com"
@@ -94,20 +94,20 @@ class TestFetchFromDifyOfficial:
         }
         mock_get.return_value = mock_response
 
-        result = RemoteRecommendAppRetrieval.fetch_recommended_apps_from_dify_official("en-US")
+        result = RemoteRecommendAppRetrieval.fetch_recommended_apps_from_nexusai_official("en-US")
 
         assert result["categories"] == ["agent", "chat", "writing"]
 
-    @patch("services.recommend_app.remote.remote_retrieval.dify_config")
+    @patch("services.recommend_app.remote.remote_retrieval.nexusai_config")
     @patch("services.recommend_app.remote.remote_retrieval.httpx.get")
     def test_apps_raises_on_non_200(self, mock_get, mock_config):
         mock_config.HOSTED_FETCH_APP_TEMPLATES_REMOTE_DOMAIN = "https://example.com"
         mock_get.return_value = MagicMock(status_code=500)
 
         with pytest.raises(ValueError, match="fetch recommended apps failed"):
-            RemoteRecommendAppRetrieval.fetch_recommended_apps_from_dify_official("en-US")
+            RemoteRecommendAppRetrieval.fetch_recommended_apps_from_nexusai_official("en-US")
 
-    @patch("services.recommend_app.remote.remote_retrieval.dify_config")
+    @patch("services.recommend_app.remote.remote_retrieval.nexusai_config")
     @patch("services.recommend_app.remote.remote_retrieval.httpx.get")
     def test_apps_without_categories_key(self, mock_get, mock_config):
         mock_config.HOSTED_FETCH_APP_TEMPLATES_REMOTE_DOMAIN = "https://example.com"
@@ -115,6 +115,6 @@ class TestFetchFromDifyOfficial:
         mock_response.json.return_value = {"recommended_apps": []}
         mock_get.return_value = mock_response
 
-        result = RemoteRecommendAppRetrieval.fetch_recommended_apps_from_dify_official("en-US")
+        result = RemoteRecommendAppRetrieval.fetch_recommended_apps_from_nexusai_official("en-US")
 
         assert "categories" not in result

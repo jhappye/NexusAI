@@ -116,7 +116,7 @@ class TestBillingSandboxPolicy:
 
 class TestCreateMessageCleanPolicy:
     def test_billing_disabled_returns_disabled_policy(self):
-        with patch(f"{MODULE}.dify_config") as cfg:
+        with patch(f"{MODULE}.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = False
             policy = create_message_clean_policy()
 
@@ -124,7 +124,7 @@ class TestCreateMessageCleanPolicy:
 
     def test_billing_enabled_returns_sandbox_policy(self):
         with (
-            patch(f"{MODULE}.dify_config") as cfg,
+            patch(f"{MODULE}.nexusai_config") as cfg,
             patch(f"{MODULE}.BillingService") as bs,
         ):
             cfg.BILLING_ENABLED = True

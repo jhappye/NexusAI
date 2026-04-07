@@ -87,7 +87,7 @@ def test_image_preview_misspelled_not_replaced():
 
 def _build_local_file_mapping(record_id: str, *, tenant_id: str | None = None) -> dict[str, object]:
     mapping: dict[str, object] = {
-        "dify_model_identity": FILE_MODEL_IDENTITY,
+        "nexusai_model_identity": FILE_MODEL_IDENTITY,
         "transfer_method": FileTransferMethod.LOCAL_FILE,
         "reference": build_file_reference(record_id=record_id),
         "type": "document",
@@ -218,7 +218,7 @@ def test_inputs_restore_external_remote_url_file_mappings(owner_cls: type[Conver
     owner = owner_cls(app_id="app-1")
     owner.inputs = {
         "file": {
-            "dify_model_identity": FILE_MODEL_IDENTITY,
+            "nexusai_model_identity": FILE_MODEL_IDENTITY,
             "transfer_method": FileTransferMethod.REMOTE_URL,
             "type": "document",
             "url": "https://example.com/report.pdf",

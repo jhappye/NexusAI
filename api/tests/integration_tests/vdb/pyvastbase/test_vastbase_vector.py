@@ -14,9 +14,9 @@ class VastbaseVectorTest(AbstractVectorTest):
             config=VastbaseVectorConfig(
                 host="localhost",
                 port=5434,
-                user="dify",
-                password="Difyai123456",
-                database="dify",
+                user="nexusai",
+                password="NexusAIai123456",
+                database="nexusai",
                 min_connection=1,
                 max_connection=5,
             ),

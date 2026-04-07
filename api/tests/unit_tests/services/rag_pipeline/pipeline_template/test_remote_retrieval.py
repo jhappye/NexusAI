@@ -8,7 +8,7 @@ from services.rag_pipeline.pipeline_template.remote.remote_retrieval import Remo
 def test_get_pipeline_templates_fallbacks_to_database_on_error(mocker) -> None:
     fetch_mock = mocker.patch.object(
         RemotePipelineTemplateRetrieval,
-        "fetch_pipeline_templates_from_dify_official",
+        "fetch_pipeline_templates_from_nexusai_official",
         side_effect=RuntimeError("boom"),
     )
     fallback_mock = mocker.patch.object(
@@ -29,7 +29,7 @@ def test_get_pipeline_templates_fallbacks_to_database_on_error(mocker) -> None:
 def test_get_pipeline_template_detail_fallbacks_to_database_on_error(mocker) -> None:
     fetch_mock = mocker.patch.object(
         RemotePipelineTemplateRetrieval,
-        "fetch_pipeline_template_detail_from_dify_official",
+        "fetch_pipeline_template_detail_from_nexusai_official",
         side_effect=RuntimeError("boom"),
     )
     fallback_mock = mocker.patch.object(
@@ -46,10 +46,10 @@ def test_get_pipeline_template_detail_fallbacks_to_database_on_error(mocker) -> 
     fallback_mock.assert_called_once_with("tpl-1")
 
 
-def test_fetch_pipeline_templates_from_dify_official(mocker) -> None:
+def test_fetch_pipeline_templates_from_nexusai_official(mocker) -> None:
     mocker.patch(
         "services.rag_pipeline.pipeline_template.remote.remote_retrieval"
-        ".dify_config.HOSTED_FETCH_PIPELINE_TEMPLATES_REMOTE_DOMAIN",
+        ".nexusai_config.HOSTED_FETCH_PIPELINE_TEMPLATES_REMOTE_DOMAIN",
         "https://example.com",
     )
 
@@ -63,19 +63,19 @@ def test_fetch_pipeline_templates_from_dify_official(mocker) -> None:
         side_effect=[success_response, failed_response],
     )
 
-    success_result = RemotePipelineTemplateRetrieval.fetch_pipeline_templates_from_dify_official("en-US")
+    success_result = RemotePipelineTemplateRetrieval.fetch_pipeline_templates_from_nexusai_official("en-US")
 
     with pytest.raises(ValueError):
-        RemotePipelineTemplateRetrieval.fetch_pipeline_templates_from_dify_official("en-US")
+        RemotePipelineTemplateRetrieval.fetch_pipeline_templates_from_nexusai_official("en-US")
 
     assert success_result == {"pipeline_templates": [{"id": "remote-1"}]}
     assert http_get_mock.call_count == 2
 
 
-def test_fetch_pipeline_template_detail_from_dify_official(mocker) -> None:
+def test_fetch_pipeline_template_detail_from_nexusai_official(mocker) -> None:
     mocker.patch(
         "services.rag_pipeline.pipeline_template.remote.remote_retrieval"
-        ".dify_config.HOSTED_FETCH_PIPELINE_TEMPLATES_REMOTE_DOMAIN",
+        ".nexusai_config.HOSTED_FETCH_PIPELINE_TEMPLATES_REMOTE_DOMAIN",
         "https://example.com",
     )
 
@@ -90,9 +90,9 @@ def test_fetch_pipeline_template_detail_from_dify_official(mocker) -> None:
         side_effect=[success_response, failed_response],
     )
 
-    success_result = RemotePipelineTemplateRetrieval.fetch_pipeline_template_detail_from_dify_official("remote-1")
+    success_result = RemotePipelineTemplateRetrieval.fetch_pipeline_template_detail_from_nexusai_official("remote-1")
     with pytest.raises(ValueError):
-        RemotePipelineTemplateRetrieval.fetch_pipeline_template_detail_from_dify_official("missing")
+        RemotePipelineTemplateRetrieval.fetch_pipeline_template_detail_from_nexusai_official("missing")
 
     assert success_result == {"id": "remote-1", "name": "Remote Template"}
     assert http_get_mock.call_count == 2

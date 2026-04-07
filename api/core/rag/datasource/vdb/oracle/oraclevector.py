@@ -11,7 +11,7 @@ import oracledb
 from oracledb.connection import Connection
 from pydantic import BaseModel, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
 from core.rag.datasource.vdb.vector_type import VectorType
@@ -377,12 +377,12 @@ class OracleVectorFactory(AbstractVectorFactory):
         return OracleVector(
             collection_name=collection_name,
             config=OracleVectorConfig(
-                user=dify_config.ORACLE_USER or "system",
-                password=dify_config.ORACLE_PASSWORD or "oracle",
-                dsn=dify_config.ORACLE_DSN or "oracle:1521/freepdb1",
-                config_dir=dify_config.ORACLE_CONFIG_DIR,
-                wallet_location=dify_config.ORACLE_WALLET_LOCATION,
-                wallet_password=dify_config.ORACLE_WALLET_PASSWORD,
-                is_autonomous=dify_config.ORACLE_IS_AUTONOMOUS,
+                user=nexusai_config.ORACLE_USER or "system",
+                password=nexusai_config.ORACLE_PASSWORD or "oracle",
+                dsn=nexusai_config.ORACLE_DSN or "oracle:1521/freepdb1",
+                config_dir=nexusai_config.ORACLE_CONFIG_DIR,
+                wallet_location=nexusai_config.ORACLE_WALLET_LOCATION,
+                wallet_password=nexusai_config.ORACLE_WALLET_PASSWORD,
+                is_autonomous=nexusai_config.ORACLE_IS_AUTONOMOUS,
             ),
         )

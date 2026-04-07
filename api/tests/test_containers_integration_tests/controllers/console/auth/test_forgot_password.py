@@ -44,7 +44,7 @@ class TestForgotPasswordSendEmailApi:
                 "controllers.console.auth.forgot_password.FeatureService.get_system_features",
                 return_value=controller_features,
             ),
-            patch("controllers.console.wraps.dify_config", SimpleNamespace(EDITION="CLOUD")),
+            patch("controllers.console.wraps.nexusai_config", SimpleNamespace(EDITION="CLOUD")),
             patch("controllers.console.wraps.FeatureService.get_system_features", return_value=wraps_features),
         ):
             with app.test_request_context(
@@ -88,7 +88,7 @@ class TestForgotPasswordCheckApi:
 
         wraps_features = SimpleNamespace(enable_email_password_login=True)
         with (
-            patch("controllers.console.wraps.dify_config", SimpleNamespace(EDITION="CLOUD")),
+            patch("controllers.console.wraps.nexusai_config", SimpleNamespace(EDITION="CLOUD")),
             patch("controllers.console.wraps.FeatureService.get_system_features", return_value=wraps_features),
         ):
             with app.test_request_context(
@@ -129,7 +129,7 @@ class TestForgotPasswordResetApi:
 
         wraps_features = SimpleNamespace(enable_email_password_login=True)
         with (
-            patch("controllers.console.wraps.dify_config", SimpleNamespace(EDITION="CLOUD")),
+            patch("controllers.console.wraps.nexusai_config", SimpleNamespace(EDITION="CLOUD")),
             patch("controllers.console.wraps.FeatureService.get_system_features", return_value=wraps_features),
         ):
             with app.test_request_context(

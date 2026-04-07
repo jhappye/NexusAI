@@ -6,7 +6,7 @@ dependencies:
 - current_identifier: null
   type: marketplace
   value:
-    plugin_unique_identifier: langgenius/dify_extractor:0.0.1@50103421d4e002f059b662d21ad2d7a1cf34869abdbe320299d7e382516ebb1c
+    plugin_unique_identifier: langgenius/nexusai_extractor:0.0.1@50103421d4e002f059b662d21ad2d7a1cf34869abdbe320299d7e382516ebb1c
 kind: rag_pipeline
 rag_pipeline:
   description: ''
@@ -225,15 +225,15 @@ workflow:
           type: file
         params:
           file: ''
-        provider_id: langgenius/dify_extractor/dify_extractor
-        provider_name: langgenius/dify_extractor/dify_extractor
+        provider_id: langgenius/nexusai_extractor/nexusai_extractor
+        provider_name: langgenius/nexusai_extractor/nexusai_extractor
         provider_type: builtin
         selected: false
-        title: Dify Extractor
+        title: NexusAI Extractor
         tool_configurations: {}
-        tool_description: Dify Extractor
-        tool_label: Dify Extractor
-        tool_name: dify_extractor
+        tool_description: NexusAI Extractor
+        tool_label: NexusAI Extractor
+        tool_name: nexusai_extractor
         tool_parameters:
           file:
             type: variable

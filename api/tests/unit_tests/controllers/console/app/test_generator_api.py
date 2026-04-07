@@ -179,14 +179,14 @@ def test_instruction_generate_code_node(app, monkeypatch: pytest.MonkeyPatch) ->
     assert response == {"code": "x"}
 
 
-def test_instruction_generate_legacy_modify(app, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_instruction_generate_legacy_monexusai(app, monkeypatch: pytest.MonkeyPatch) -> None:
     api = generator_module.InstructionGenerateApi()
     method = _unwrap(api.post)
 
     monkeypatch.setattr(generator_module, "current_account_with_tenant", lambda: (None, "t1"))
     monkeypatch.setattr(
         generator_module.LLMGenerator,
-        "instruction_modify_legacy",
+        "instruction_monexusai_legacy",
         lambda **_kwargs: {"instruction": "ok"},
     )
 

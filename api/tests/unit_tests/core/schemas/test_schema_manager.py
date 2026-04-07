@@ -41,7 +41,7 @@ def test_get_schema_by_name_success():
     manager = SchemaManager(registry=mock_registry)
     result = manager.get_schema_by_name("my_schema", version="v1")
 
-    expected_uri = "https://dify.ai/schemas/v1/my_schema.json"
+    expected_uri = "https://nexusai.ai/schemas/v1/my_schema.json"
     mock_registry.get_schema.assert_called_once_with(expected_uri)
     assert result == {"name": "my_schema", "schema": mock_schema}
 

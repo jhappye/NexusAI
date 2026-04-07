@@ -7,7 +7,7 @@ from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 from yarl import URL
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper import marketplace
 from core.helper.download import download_with_size_limit
 from core.helper.marketplace import download_plugin_pkg
@@ -188,7 +188,7 @@ class PluginService:
     @classmethod
     def get_plugin_icon_url(cls, tenant_id: str, filename: str) -> str:
         url_prefix = (
-            URL(dify_config.CONSOLE_API_URL or "/") / "console" / "api" / "workspaces" / "current" / "plugin" / "icon"
+            URL(nexusai_config.CONSOLE_API_URL or "/") / "console" / "api" / "workspaces" / "current" / "plugin" / "icon"
         )
         return str(url_prefix % {"tenant_id": tenant_id, "filename": filename})
 
@@ -280,7 +280,7 @@ class PluginService:
         """
         Upgrade plugin with marketplace
         """
-        if not dify_config.MARKETPLACE_ENABLED:
+        if not nexusai_config.MARKETPLACE_ENABLED:
             raise ValueError("marketplace is not enabled")
 
         if original_plugin_unique_identifier == new_plugin_unique_identifier:
@@ -372,7 +372,7 @@ class PluginService:
         """
         PluginService._check_marketplace_only_permission()
         pkg = download_with_size_limit(
-            f"https://github.com/{repo}/releases/download/{version}/{package}", dify_config.PLUGIN_MAX_PACKAGE_SIZE
+            f"https://github.com/{repo}/releases/download/{version}/{package}", nexusai_config.PLUGIN_MAX_PACKAGE_SIZE
         )
         features = FeatureService.get_system_features()
 
@@ -444,7 +444,7 @@ class PluginService:
         """
         Fetch marketplace package
         """
-        if not dify_config.MARKETPLACE_ENABLED:
+        if not nexusai_config.MARKETPLACE_ENABLED:
             raise ValueError("marketplace is not enabled")
 
         features = FeatureService.get_system_features()
@@ -471,7 +471,7 @@ class PluginService:
         Install plugin from marketplace package files,
         returns installation task id
         """
-        if not dify_config.MARKETPLACE_ENABLED:
+        if not nexusai_config.MARKETPLACE_ENABLED:
             raise ValueError("marketplace is not enabled")
 
         manager = PluginInstaller()
@@ -523,7 +523,7 @@ class PluginService:
         if not plugin:
             return manager.uninstall(tenant_id, plugin_installation_id)
 
-        if dify_config.ENTERPRISE_ENABLED:
+        if nexusai_config.ENTERPRISE_ENABLED:
             PluginManagerService.try_pre_uninstall_plugin(
                 PreUninstallPluginRequest(
                     tenant_id=tenant_id,

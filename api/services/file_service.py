@@ -13,7 +13,7 @@ from sqlalchemy import Engine, select
 from sqlalchemy.orm import Session, sessionmaker
 from werkzeug.exceptions import NotFound
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import (
     AUDIO_EXTENSIONS,
     DOCUMENT_EXTENSIONS,
@@ -68,7 +68,7 @@ class FileService:
             filename = filename.split(".")[0][:200] + "." + extension
 
         # check if extension is in blacklist
-        if extension and extension in dify_config.UPLOAD_FILE_EXTENSION_BLACKLIST:
+        if extension and extension in nexusai_config.UPLOAD_FILE_EXTENSION_BLACKLIST:
             raise BlockedFileExtensionError(f"File extension '.{extension}' is not allowed for security reasons")
 
         if source == "datasets" and extension not in DOCUMENT_EXTENSIONS:
@@ -94,7 +94,7 @@ class FileService:
         # save file to db
         upload_file = UploadFile(
             tenant_id=current_tenant_id or "",
-            storage_type=StorageType(dify_config.STORAGE_TYPE),
+            storage_type=StorageType(nexusai_config.STORAGE_TYPE),
             key=file_key,
             name=filename,
             size=file_size,
@@ -121,13 +121,13 @@ class FileService:
     @staticmethod
     def is_file_size_within_limit(*, extension: str, file_size: int) -> bool:
         if extension in IMAGE_EXTENSIONS:
-            file_size_limit = dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
+            file_size_limit = nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
         elif extension in VIDEO_EXTENSIONS:
-            file_size_limit = dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
+            file_size_limit = nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
         elif extension in AUDIO_EXTENSIONS:
-            file_size_limit = dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
+            file_size_limit = nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
         else:
-            file_size_limit = dify_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
+            file_size_limit = nexusai_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
 
         return file_size <= file_size_limit
 
@@ -153,7 +153,7 @@ class FileService:
         # save file to db
         upload_file = UploadFile(
             tenant_id=tenant_id,
-            storage_type=StorageType(dify_config.STORAGE_TYPE),
+            storage_type=StorageType(nexusai_config.STORAGE_TYPE),
             key=file_key,
             name=text_name,
             size=len(text),

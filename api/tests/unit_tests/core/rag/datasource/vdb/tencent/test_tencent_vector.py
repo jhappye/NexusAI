@@ -289,14 +289,14 @@ def test_tencent_factory_existing_and_generated_collection(tencent_module, monke
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(tencent_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(tencent_module.dify_config, "TENCENT_VECTOR_DB_URL", "http://vdb.local")
-    monkeypatch.setattr(tencent_module.dify_config, "TENCENT_VECTOR_DB_API_KEY", "api-key")
-    monkeypatch.setattr(tencent_module.dify_config, "TENCENT_VECTOR_DB_TIMEOUT", 30)
-    monkeypatch.setattr(tencent_module.dify_config, "TENCENT_VECTOR_DB_USERNAME", "user")
-    monkeypatch.setattr(tencent_module.dify_config, "TENCENT_VECTOR_DB_DATABASE", "db")
-    monkeypatch.setattr(tencent_module.dify_config, "TENCENT_VECTOR_DB_SHARD", 1)
-    monkeypatch.setattr(tencent_module.dify_config, "TENCENT_VECTOR_DB_REPLICAS", 2)
-    monkeypatch.setattr(tencent_module.dify_config, "TENCENT_VECTOR_DB_ENABLE_HYBRID_SEARCH", True)
+    monkeypatch.setattr(tencent_module.nexusai_config, "TENCENT_VECTOR_DB_URL", "http://vdb.local")
+    monkeypatch.setattr(tencent_module.nexusai_config, "TENCENT_VECTOR_DB_API_KEY", "api-key")
+    monkeypatch.setattr(tencent_module.nexusai_config, "TENCENT_VECTOR_DB_TIMEOUT", 30)
+    monkeypatch.setattr(tencent_module.nexusai_config, "TENCENT_VECTOR_DB_USERNAME", "user")
+    monkeypatch.setattr(tencent_module.nexusai_config, "TENCENT_VECTOR_DB_DATABASE", "db")
+    monkeypatch.setattr(tencent_module.nexusai_config, "TENCENT_VECTOR_DB_SHARD", 1)
+    monkeypatch.setattr(tencent_module.nexusai_config, "TENCENT_VECTOR_DB_REPLICAS", 2)
+    monkeypatch.setattr(tencent_module.nexusai_config, "TENCENT_VECTOR_DB_ENABLE_HYBRID_SEARCH", True)
 
     with patch.object(tencent_module, "TencentVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

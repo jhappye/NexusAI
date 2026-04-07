@@ -31,7 +31,7 @@ from graphon.enums import WorkflowType
 from sqlalchemy import inspect
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from enums.cloud_plan import CloudPlan
 from extensions.ext_database import db
 from libs.archive_storage import (
@@ -40,7 +40,7 @@ from libs.archive_storage import (
     get_archive_storage,
 )
 from models.workflow import WorkflowAppLog, WorkflowRun
-from repositories.api_workflow_node_execution_repository import DifyAPIWorkflowNodeExecutionRepository
+from repositories.api_workflow_node_execution_repository import NexusAIAPIWorkflowNodeExecutionRepository
 from repositories.api_workflow_run_repository import APIWorkflowRunRepository
 from repositories.sqlalchemy_workflow_trigger_log_repository import SQLAlchemyWorkflowTriggerLogRepository
 from services.billing_service import BillingService
@@ -327,7 +327,7 @@ class WorkflowRunArchiver:
 
     def _filter_paid_tenants(self, tenant_ids: set[str]) -> set[str]:
         """Filter tenant IDs to only include paid tenants."""
-        if not dify_config.BILLING_ENABLED:
+        if not nexusai_config.BILLING_ENABLED:
             # If billing is not enabled, treat all tenants as paid
             return tenant_ids
 
@@ -532,18 +532,18 @@ class WorkflowRunArchiver:
     def _get_workflow_node_execution_repo(
         self,
         session: Session,
-    ) -> DifyAPIWorkflowNodeExecutionRepository:
-        from repositories.factory import DifyAPIRepositoryFactory
+    ) -> NexusAIAPIWorkflowNodeExecutionRepository:
+        from repositories.factory import NexusAIAPIRepositoryFactory
 
         session_maker = sessionmaker(bind=session.get_bind(), expire_on_commit=False)
-        return DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(session_maker)
+        return NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(session_maker)
 
     def _get_workflow_run_repo(self) -> APIWorkflowRunRepository:
         if self.workflow_run_repo is not None:
             return self.workflow_run_repo
 
-        from repositories.factory import DifyAPIRepositoryFactory
+        from repositories.factory import NexusAIAPIRepositoryFactory
 
         session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-        self.workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+        self.workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
         return self.workflow_run_repo

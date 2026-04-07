@@ -19,7 +19,7 @@ from graphon.nodes.base.node import Node
 from opentelemetry import context as context_api
 from opentelemetry.trace import Span, SpanKind, Tracer, get_tracer, set_span_in_context
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.otel.parser import (
     DefaultNodeOTelParser,
     LLMNodeOTelParser,
@@ -61,7 +61,7 @@ class ObservabilityLayer(GraphEngineLayer):
 
     def _init_tracer(self) -> None:
         """Initialize OpenTelemetry tracer in constructor."""
-        if not (dify_config.ENABLE_OTEL or is_instrument_flag_enabled()):
+        if not (nexusai_config.ENABLE_OTEL or is_instrument_flag_enabled()):
             self._is_disabled = True
             return
 

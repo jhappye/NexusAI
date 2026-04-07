@@ -4,17 +4,17 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from core.schemas import resolve_dify_schema_refs
+from core.schemas import resolve_nexusai_schema_refs
 from core.schemas.registry import SchemaRegistry
 from core.schemas.resolver import (
     MaxDepthExceededError,
     SchemaResolver,
-    _has_dify_refs,
-    _has_dify_refs_hybrid,
-    _has_dify_refs_recursive,
-    _is_dify_schema_ref,
+    _has_nexusai_refs,
+    _has_nexusai_refs_hybrid,
+    _has_nexusai_refs_recursive,
+    _is_nexusai_schema_ref,
     _remove_metadata_fields,
-    parse_dify_schema_uri,
+    parse_nexusai_schema_uri,
 )
 
 
@@ -33,9 +33,9 @@ class TestSchemaResolver:
 
     def test_simple_ref_resolution(self):
         """Test resolving a simple $ref to a complete schema"""
-        schema_with_ref = {"$ref": "https://dify.ai/schemas/v1/qa_structure.json"}
+        schema_with_ref = {"$ref": "https://nexusai.ai/schemas/v1/qa_structure.json"}
 
-        resolved = resolve_dify_schema_refs(schema_with_ref)
+        resolved = resolve_nexusai_schema_refs(schema_with_ref)
 
         # Should be resolved to the actual qa_structure schema
         assert resolved["type"] == "object"
@@ -53,12 +53,12 @@ class TestSchemaResolver:
         nested_schema = {
             "type": "object",
             "properties": {
-                "file_data": {"$ref": "https://dify.ai/schemas/v1/file.json"},
+                "file_data": {"$ref": "https://nexusai.ai/schemas/v1/file.json"},
                 "metadata": {"type": "string", "description": "Additional metadata"},
             },
         }
 
-        resolved = resolve_dify_schema_refs(nested_schema)
+        resolved = resolve_nexusai_schema_refs(nested_schema)
 
         # Original structure should be preserved
         assert resolved["type"] == "object"
@@ -80,11 +80,11 @@ class TestSchemaResolver:
         """Test resolving $refs in array items"""
         array_schema = {
             "type": "array",
-            "items": {"$ref": "https://dify.ai/schemas/v1/general_structure.json"},
+            "items": {"$ref": "https://nexusai.ai/schemas/v1/general_structure.json"},
             "description": "Array of general structures",
         }
 
-        resolved = resolve_dify_schema_refs(array_schema)
+        resolved = resolve_nexusai_schema_refs(array_schema)
 
         # Array structure should be preserved
         assert resolved["type"] == "array"
@@ -95,24 +95,24 @@ class TestSchemaResolver:
         assert items_schema["type"] == "array"
         assert items_schema["title"] == "General Structure"
 
-    def test_non_dify_ref_unchanged(self):
-        """Test that non-Dify $refs are left unchanged"""
+    def test_non_nexusai_ref_unchanged(self):
+        """Test that non-NexusAI $refs are left unchanged"""
         external_ref_schema = {
             "type": "object",
             "properties": {
                 "external_data": {"$ref": "https://example.com/external-schema.json"},
-                "dify_data": {"$ref": "https://dify.ai/schemas/v1/file.json"},
+                "nexusai_data": {"$ref": "https://nexusai.ai/schemas/v1/file.json"},
             },
         }
 
-        resolved = resolve_dify_schema_refs(external_ref_schema)
+        resolved = resolve_nexusai_schema_refs(external_ref_schema)
 
         # External $ref should remain unchanged
         assert resolved["properties"]["external_data"]["$ref"] == "https://example.com/external-schema.json"
 
-        # Dify $ref should be resolved
-        assert resolved["properties"]["dify_data"]["type"] == "object"
-        assert resolved["properties"]["dify_data"]["title"] == "File"
+        # NexusAI $ref should be resolved
+        assert resolved["properties"]["nexusai_data"]["type"] == "object"
+        assert resolved["properties"]["nexusai_data"]["title"] == "File"
 
     def test_no_refs_schema_unchanged(self):
         """Test that schemas without $refs are returned unchanged"""
@@ -125,7 +125,7 @@ class TestSchemaResolver:
             "required": ["name"],
         }
 
-        resolved = resolve_dify_schema_refs(simple_schema)
+        resolved = resolve_nexusai_schema_refs(simple_schema)
 
         # Should be identical to input
         assert resolved == simple_schema
@@ -137,20 +137,20 @@ class TestSchemaResolver:
     def test_recursion_depth_protection(self):
         """Test that excessive recursion depth is prevented"""
         # Create a moderately nested structure
-        deep_schema = {"$ref": "https://dify.ai/schemas/v1/qa_structure.json"}
+        deep_schema = {"$ref": "https://nexusai.ai/schemas/v1/qa_structure.json"}
 
         # Wrap it in fewer layers to make the test more reasonable
         for _ in range(2):
             deep_schema = {"type": "object", "properties": {"nested": deep_schema}}
 
         # Should handle normal cases fine with reasonable depth
-        resolved = resolve_dify_schema_refs(deep_schema, max_depth=25)
+        resolved = resolve_nexusai_schema_refs(deep_schema, max_depth=25)
         assert resolved is not None
         assert resolved["type"] == "object"
 
         # Should raise error with very low max_depth
         with pytest.raises(MaxDepthExceededError) as exc_info:
-            resolve_dify_schema_refs(deep_schema, max_depth=5)
+            resolve_nexusai_schema_refs(deep_schema, max_depth=5)
         assert exc_info.value.max_depth == 5
 
     def test_circular_reference_detection(self):
@@ -158,12 +158,12 @@ class TestSchemaResolver:
         # Mock registry with circular reference
         mock_registry = MagicMock()
         mock_registry.get_schema.side_effect = lambda uri: {
-            "$ref": "https://dify.ai/schemas/v1/circular.json",
+            "$ref": "https://nexusai.ai/schemas/v1/circular.json",
             "type": "object",
         }
 
-        schema = {"$ref": "https://dify.ai/schemas/v1/circular.json"}
-        resolved = resolve_dify_schema_refs(schema, registry=mock_registry)
+        schema = {"$ref": "https://nexusai.ai/schemas/v1/circular.json"}
+        resolved = resolve_nexusai_schema_refs(schema, registry=mock_registry)
 
         # Should mark circular reference
         assert "$circular_ref" in resolved
@@ -174,33 +174,33 @@ class TestSchemaResolver:
         mock_registry = MagicMock()
         mock_registry.get_schema.return_value = None
 
-        schema = {"$ref": "https://dify.ai/schemas/v1/unknown.json"}
-        resolved = resolve_dify_schema_refs(schema, registry=mock_registry)
+        schema = {"$ref": "https://nexusai.ai/schemas/v1/unknown.json"}
+        resolved = resolve_nexusai_schema_refs(schema, registry=mock_registry)
 
         # Should keep the original $ref when schema not found
-        assert resolved["$ref"] == "https://dify.ai/schemas/v1/unknown.json"
+        assert resolved["$ref"] == "https://nexusai.ai/schemas/v1/unknown.json"
 
     def test_primitive_types_unchanged(self):
         """Test that primitive types are returned unchanged"""
-        assert resolve_dify_schema_refs("string") == "string"
-        assert resolve_dify_schema_refs(123) == 123
-        assert resolve_dify_schema_refs(True) is True
-        assert resolve_dify_schema_refs(None) is None
-        assert resolve_dify_schema_refs(3.14) == 3.14
+        assert resolve_nexusai_schema_refs("string") == "string"
+        assert resolve_nexusai_schema_refs(123) == 123
+        assert resolve_nexusai_schema_refs(True) is True
+        assert resolve_nexusai_schema_refs(None) is None
+        assert resolve_nexusai_schema_refs(3.14) == 3.14
 
     def test_cache_functionality(self):
         """Test that caching works correctly"""
-        schema = {"$ref": "https://dify.ai/schemas/v1/file.json"}
+        schema = {"$ref": "https://nexusai.ai/schemas/v1/file.json"}
 
         # First resolution should fetch from registry
-        resolved1 = resolve_dify_schema_refs(schema)
+        resolved1 = resolve_nexusai_schema_refs(schema)
 
         # Mock the registry to return different data
         with patch.object(self.registry, "get_schema", autospec=True) as mock_get:
             mock_get.return_value = {"type": "different"}
 
             # Second resolution should use cache
-            resolved2 = resolve_dify_schema_refs(schema)
+            resolved2 = resolve_nexusai_schema_refs(schema)
 
             # Should be the same as first resolution (from cache)
             assert resolved1 == resolved2
@@ -211,21 +211,21 @@ class TestSchemaResolver:
         SchemaResolver.clear_cache()
 
         # Now it should fetch again
-        resolved3 = resolve_dify_schema_refs(schema)
+        resolved3 = resolve_nexusai_schema_refs(schema)
         assert resolved3 == resolved1
 
     def test_thread_safety(self):
         """Test that the resolver is thread-safe"""
         schema = {
             "type": "object",
-            "properties": {f"prop_{i}": {"$ref": "https://dify.ai/schemas/v1/file.json"} for i in range(10)},
+            "properties": {f"prop_{i}": {"$ref": "https://nexusai.ai/schemas/v1/file.json"} for i in range(10)},
         }
 
         results = []
 
         def resolve_in_thread():
             try:
-                result = resolve_dify_schema_refs(schema)
+                result = resolve_nexusai_schema_refs(schema)
                 results.append(result)
                 return True
             except Exception as e:
@@ -247,17 +247,17 @@ class TestSchemaResolver:
         complex_schema = {
             "type": "object",
             "properties": {
-                "files": {"type": "array", "items": {"$ref": "https://dify.ai/schemas/v1/file.json"}},
+                "files": {"type": "array", "items": {"$ref": "https://nexusai.ai/schemas/v1/file.json"}},
                 "nested": {
                     "type": "object",
                     "properties": {
-                        "qa": {"$ref": "https://dify.ai/schemas/v1/qa_structure.json"},
+                        "qa": {"$ref": "https://nexusai.ai/schemas/v1/qa_structure.json"},
                         "data": {
                             "type": "array",
                             "items": {
                                 "type": "object",
                                 "properties": {
-                                    "general": {"$ref": "https://dify.ai/schemas/v1/general_structure.json"}
+                                    "general": {"$ref": "https://nexusai.ai/schemas/v1/general_structure.json"}
                                 },
                             },
                         },
@@ -266,7 +266,7 @@ class TestSchemaResolver:
             },
         }
 
-        resolved = resolve_dify_schema_refs(complex_schema, max_depth=20)
+        resolved = resolve_nexusai_schema_refs(complex_schema, max_depth=20)
 
         # Check structure is preserved
         assert resolved["type"] == "object"
@@ -283,73 +283,73 @@ class TestSchemaResolver:
 class TestUtilityFunctions:
     """Test utility functions"""
 
-    def test_is_dify_schema_ref(self):
-        """Test _is_dify_schema_ref function"""
-        # Valid Dify refs
-        assert _is_dify_schema_ref("https://dify.ai/schemas/v1/file.json")
-        assert _is_dify_schema_ref("https://dify.ai/schemas/v2/complex_name.json")
-        assert _is_dify_schema_ref("https://dify.ai/schemas/v999/test-file.json")
+    def test_is_nexusai_schema_ref(self):
+        """Test _is_nexusai_schema_ref function"""
+        # Valid NexusAI refs
+        assert _is_nexusai_schema_ref("https://nexusai.ai/schemas/v1/file.json")
+        assert _is_nexusai_schema_ref("https://nexusai.ai/schemas/v2/complex_name.json")
+        assert _is_nexusai_schema_ref("https://nexusai.ai/schemas/v999/test-file.json")
 
         # Invalid refs
-        assert not _is_dify_schema_ref("https://example.com/schema.json")
-        assert not _is_dify_schema_ref("https://dify.ai/other/path.json")
-        assert not _is_dify_schema_ref("not a uri")
-        assert not _is_dify_schema_ref("")
-        assert not _is_dify_schema_ref(None)
-        assert not _is_dify_schema_ref(123)
-        assert not _is_dify_schema_ref(["list"])
+        assert not _is_nexusai_schema_ref("https://example.com/schema.json")
+        assert not _is_nexusai_schema_ref("https://nexusai.ai/other/path.json")
+        assert not _is_nexusai_schema_ref("not a uri")
+        assert not _is_nexusai_schema_ref("")
+        assert not _is_nexusai_schema_ref(None)
+        assert not _is_nexusai_schema_ref(123)
+        assert not _is_nexusai_schema_ref(["list"])
 
-    def test_has_dify_refs(self):
-        """Test _has_dify_refs function"""
-        # Schemas with Dify refs
-        assert _has_dify_refs({"$ref": "https://dify.ai/schemas/v1/file.json"})
-        assert _has_dify_refs(
-            {"type": "object", "properties": {"data": {"$ref": "https://dify.ai/schemas/v1/file.json"}}}
+    def test_has_nexusai_refs(self):
+        """Test _has_nexusai_refs function"""
+        # Schemas with NexusAI refs
+        assert _has_nexusai_refs({"$ref": "https://nexusai.ai/schemas/v1/file.json"})
+        assert _has_nexusai_refs(
+            {"type": "object", "properties": {"data": {"$ref": "https://nexusai.ai/schemas/v1/file.json"}}}
         )
-        assert _has_dify_refs([{"type": "string"}, {"$ref": "https://dify.ai/schemas/v1/file.json"}])
-        assert _has_dify_refs(
+        assert _has_nexusai_refs([{"type": "string"}, {"$ref": "https://nexusai.ai/schemas/v1/file.json"}])
+        assert _has_nexusai_refs(
             {
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "properties": {"nested": {"$ref": "https://dify.ai/schemas/v1/qa_structure.json"}},
+                    "properties": {"nested": {"$ref": "https://nexusai.ai/schemas/v1/qa_structure.json"}},
                 },
             }
         )
 
-        # Schemas without Dify refs
-        assert not _has_dify_refs({"type": "string"})
-        assert not _has_dify_refs(
+        # Schemas without NexusAI refs
+        assert not _has_nexusai_refs({"type": "string"})
+        assert not _has_nexusai_refs(
             {"type": "object", "properties": {"name": {"type": "string"}, "age": {"type": "number"}}}
         )
-        assert not _has_dify_refs(
+        assert not _has_nexusai_refs(
             [{"type": "string"}, {"type": "number"}, {"type": "object", "properties": {"name": {"type": "string"}}}]
         )
 
-        # Schemas with non-Dify refs (should return False)
-        assert not _has_dify_refs({"$ref": "https://example.com/schema.json"})
-        assert not _has_dify_refs(
+        # Schemas with non-NexusAI refs (should return False)
+        assert not _has_nexusai_refs({"$ref": "https://example.com/schema.json"})
+        assert not _has_nexusai_refs(
             {"type": "object", "properties": {"external": {"$ref": "https://example.com/external.json"}}}
         )
 
         # Primitive types
-        assert not _has_dify_refs("string")
-        assert not _has_dify_refs(123)
-        assert not _has_dify_refs(True)
-        assert not _has_dify_refs(None)
+        assert not _has_nexusai_refs("string")
+        assert not _has_nexusai_refs(123)
+        assert not _has_nexusai_refs(True)
+        assert not _has_nexusai_refs(None)
 
-    def test_has_dify_refs_hybrid_vs_recursive(self):
+    def test_has_nexusai_refs_hybrid_vs_recursive(self):
         """Test that hybrid and recursive detection give same results"""
         test_schemas = [
             # No refs
             {"type": "string"},
             {"type": "object", "properties": {"name": {"type": "string"}}},
             [{"type": "string"}, {"type": "number"}],
-            # With Dify refs
-            {"$ref": "https://dify.ai/schemas/v1/file.json"},
-            {"type": "object", "properties": {"data": {"$ref": "https://dify.ai/schemas/v1/file.json"}}},
-            [{"type": "string"}, {"$ref": "https://dify.ai/schemas/v1/qa_structure.json"}],
-            # With non-Dify refs
+            # With NexusAI refs
+            {"$ref": "https://nexusai.ai/schemas/v1/file.json"},
+            {"type": "object", "properties": {"data": {"$ref": "https://nexusai.ai/schemas/v1/file.json"}}},
+            [{"type": "string"}, {"$ref": "https://nexusai.ai/schemas/v1/qa_structure.json"}],
+            # With non-NexusAI refs
             {"$ref": "https://example.com/schema.json"},
             {"type": "object", "properties": {"external": {"$ref": "https://example.com/external.json"}}},
             # Complex nested
@@ -359,7 +359,7 @@ class TestUtilityFunctions:
                     "level1": {
                         "type": "object",
                         "properties": {
-                            "level2": {"type": "array", "items": {"$ref": "https://dify.ai/schemas/v1/file.json"}}
+                            "level2": {"type": "array", "items": {"$ref": "https://nexusai.ai/schemas/v1/file.json"}}
                         },
                     }
                 },
@@ -376,22 +376,22 @@ class TestUtilityFunctions:
         ]
 
         for schema in test_schemas:
-            hybrid_result = _has_dify_refs_hybrid(schema)
-            recursive_result = _has_dify_refs_recursive(schema)
+            hybrid_result = _has_nexusai_refs_hybrid(schema)
+            recursive_result = _has_nexusai_refs_recursive(schema)
 
             assert hybrid_result == recursive_result, f"Mismatch for schema: {schema}"
 
-    def test_parse_dify_schema_uri(self):
-        """Test parse_dify_schema_uri function"""
+    def test_parse_nexusai_schema_uri(self):
+        """Test parse_nexusai_schema_uri function"""
         # Valid URIs
-        assert parse_dify_schema_uri("https://dify.ai/schemas/v1/file.json") == ("v1", "file")
-        assert parse_dify_schema_uri("https://dify.ai/schemas/v2/complex_name.json") == ("v2", "complex_name")
-        assert parse_dify_schema_uri("https://dify.ai/schemas/v999/test-file.json") == ("v999", "test-file")
+        assert parse_nexusai_schema_uri("https://nexusai.ai/schemas/v1/file.json") == ("v1", "file")
+        assert parse_nexusai_schema_uri("https://nexusai.ai/schemas/v2/complex_name.json") == ("v2", "complex_name")
+        assert parse_nexusai_schema_uri("https://nexusai.ai/schemas/v999/test-file.json") == ("v999", "test-file")
 
         # Invalid URIs
-        assert parse_dify_schema_uri("https://example.com/schema.json") == ("", "")
-        assert parse_dify_schema_uri("invalid") == ("", "")
-        assert parse_dify_schema_uri("") == ("", "")
+        assert parse_nexusai_schema_uri("https://example.com/schema.json") == ("", "")
+        assert parse_nexusai_schema_uri("invalid") == ("", "")
+        assert parse_nexusai_schema_uri("") == ("", "")
 
     def test_remove_metadata_fields(self):
         """Test _remove_metadata_fields function"""
@@ -437,7 +437,7 @@ class TestSchemaResolverClass:
         """Test that cache is shared between resolver instances"""
         SchemaResolver.clear_cache()
 
-        schema = {"$ref": "https://dify.ai/schemas/v1/file.json"}
+        schema = {"$ref": "https://nexusai.ai/schemas/v1/file.json"}
 
         # First resolver populates cache
         resolver1 = SchemaResolver()
@@ -455,9 +455,9 @@ class TestSchemaResolverClass:
     def test_resolver_with_list_schema(self):
         """Test resolver with list as root schema"""
         list_schema = [
-            {"$ref": "https://dify.ai/schemas/v1/file.json"},
+            {"$ref": "https://nexusai.ai/schemas/v1/file.json"},
             {"type": "string"},
-            {"$ref": "https://dify.ai/schemas/v1/qa_structure.json"},
+            {"$ref": "https://nexusai.ai/schemas/v1/qa_structure.json"},
         ]
 
         resolver = SchemaResolver()
@@ -479,7 +479,7 @@ class TestSchemaResolverClass:
         schema = {
             "type": "object",
             "properties": {
-                f"prop_{i}": {"$ref": "https://dify.ai/schemas/v1/file.json"}
+                f"prop_{i}": {"$ref": "https://nexusai.ai/schemas/v1/file.json"}
                 for i in range(50)  # Reduced to avoid depth issues
             },
         }
@@ -489,7 +489,7 @@ class TestSchemaResolverClass:
         for _ in range(3):
             SchemaResolver.clear_cache()
             start = time.perf_counter()
-            result1 = resolve_dify_schema_refs(schema)
+            result1 = resolve_nexusai_schema_refs(schema)
             time_no_cache = time.perf_counter() - start
             results1.append(time_no_cache)
 
@@ -497,12 +497,12 @@ class TestSchemaResolverClass:
 
         # Second run (with cache) - run multiple times
         # Warm up cache first
-        resolve_dify_schema_refs(schema)
+        resolve_nexusai_schema_refs(schema)
 
         results2 = []
         for _ in range(3):
             start = time.perf_counter()
-            result2 = resolve_dify_schema_refs(schema)
+            result2 = resolve_nexusai_schema_refs(schema)
             time_with_cache = time.perf_counter() - start
             results2.append(time_with_cache)
 
@@ -537,7 +537,7 @@ class TestSchemaResolverClass:
         fast_times = []
         for _ in range(10):
             start = time.perf_counter()
-            result_fast = resolve_dify_schema_refs(no_refs_schema)
+            result_fast = resolve_nexusai_schema_refs(no_refs_schema)
             elapsed = time.perf_counter() - start
             fast_times.append(elapsed)
 
@@ -550,7 +550,7 @@ class TestSchemaResolverClass:
         with_refs_schema = {
             "type": "object",
             "properties": {
-                f"property_{i}": {"$ref": "https://dify.ai/schemas/v1/file.json"}
+                f"property_{i}": {"$ref": "https://nexusai.ai/schemas/v1/file.json"}
                 for i in range(20)  # Fewer to avoid depth issues but still comparable
             },
         }
@@ -561,7 +561,7 @@ class TestSchemaResolverClass:
         for _ in range(10):
             SchemaResolver.clear_cache()
             start = time.perf_counter()
-            result_slow = resolve_dify_schema_refs(with_refs_schema, max_depth=50)
+            result_slow = resolve_nexusai_schema_refs(with_refs_schema, max_depth=50)
             elapsed = time.perf_counter() - start
             slow_times.append(elapsed)
 
@@ -590,7 +590,7 @@ class TestSchemaResolverClass:
 
         # Test batch processing performance
         start = time.perf_counter()
-        results = [resolve_dify_schema_refs(schema) for schema in schemas_without_refs]
+        results = [resolve_nexusai_schema_refs(schema) for schema in schemas_without_refs]
         batch_time = time.perf_counter() - start
 
         # Verify all results are identical to inputs (fast path used)
@@ -601,8 +601,8 @@ class TestSchemaResolverClass:
         avg_time_per_schema = batch_time / len(schemas_without_refs)
         assert avg_time_per_schema < 0.001
 
-    def test_has_dify_refs_performance(self):
-        """Test that _has_dify_refs is fast for large schemas without refs"""
+    def test_has_nexusai_refs_performance(self):
+        """Test that _has_nexusai_refs is fast for large schemas without refs"""
         # Create a very large schema without refs
         large_schema = {"type": "object", "properties": {}}
 
@@ -612,11 +612,11 @@ class TestSchemaResolverClass:
             current["properties"][f"level_{i}"] = {"type": "object", "properties": {}}
             current = current["properties"][f"level_{i}"]
 
-        # _has_dify_refs should be fast even for large schemas
+        # _has_nexusai_refs should be fast even for large schemas
         times = []
         for _ in range(50):
             start = time.perf_counter()
-            has_refs = _has_dify_refs(large_schema)
+            has_refs = _has_nexusai_refs(large_schema)
             elapsed = time.perf_counter() - start
             times.append(elapsed)
 
@@ -657,19 +657,19 @@ class TestSchemaResolverClass:
             },
             # Case 3: Large schema without refs
             {"name": "large_no_refs", "schema": {"type": "object", "properties": {}}, "expected": False},
-            # Case 4: Schema with Dify refs
+            # Case 4: Schema with NexusAI refs
             {
-                "name": "with_dify_refs",
+                "name": "with_nexusai_refs",
                 "schema": {
                     "type": "object",
                     "properties": {
-                        "file": {"$ref": "https://dify.ai/schemas/v1/file.json"},
+                        "file": {"$ref": "https://nexusai.ai/schemas/v1/file.json"},
                         "data": {"type": "string"},
                     },
                 },
                 "expected": True,
             },
-            # Case 5: Schema with non-Dify refs
+            # Case 5: Schema with non-NexusAI refs
             {
                 "name": "with_external_refs",
                 "schema": {
@@ -693,14 +693,14 @@ class TestSchemaResolverClass:
             name = test_case["name"]
 
             # Test correctness first
-            assert _has_dify_refs_hybrid(schema) == expected
-            assert _has_dify_refs_recursive(schema) == expected
+            assert _has_nexusai_refs_hybrid(schema) == expected
+            assert _has_nexusai_refs_recursive(schema) == expected
 
             # Measure hybrid performance
             hybrid_times = []
             for _ in range(10):
                 start = time.perf_counter()
-                result_hybrid = _has_dify_refs_hybrid(schema)
+                result_hybrid = _has_nexusai_refs_hybrid(schema)
                 elapsed = time.perf_counter() - start
                 hybrid_times.append(elapsed)
 
@@ -708,7 +708,7 @@ class TestSchemaResolverClass:
             recursive_times = []
             for _ in range(10):
                 start = time.perf_counter()
-                result_recursive = _has_dify_refs_recursive(schema)
+                result_recursive = _has_nexusai_refs_recursive(schema)
                 elapsed = time.perf_counter() - start
                 recursive_times.append(elapsed)
 
@@ -737,8 +737,8 @@ class TestSchemaResolverClass:
         }
 
         # Both methods should return False
-        assert not _has_dify_refs_hybrid(schema_false_positive)
-        assert not _has_dify_refs_recursive(schema_false_positive)
+        assert not _has_nexusai_refs_hybrid(schema_false_positive)
+        assert not _has_nexusai_refs_recursive(schema_false_positive)
 
         # Case 2: Complex URL patterns
         complex_schema = {
@@ -747,16 +747,16 @@ class TestSchemaResolverClass:
                 "config": {
                     "type": "object",
                     "properties": {
-                        "dify_url": {"type": "string", "default": "https://dify.ai/schemas/info"},
-                        "actual_ref": {"$ref": "https://dify.ai/schemas/v1/file.json"},
+                        "nexusai_url": {"type": "string", "default": "https://nexusai.ai/schemas/info"},
+                        "actual_ref": {"$ref": "https://nexusai.ai/schemas/v1/file.json"},
                     },
                 }
             },
         }
 
         # Both methods should return True (due to actual_ref)
-        assert _has_dify_refs_hybrid(complex_schema)
-        assert _has_dify_refs_recursive(complex_schema)
+        assert _has_nexusai_refs_hybrid(complex_schema)
+        assert _has_nexusai_refs_recursive(complex_schema)
 
         # Case 3: Non-JSON serializable objects (should fall back to recursive)
         import datetime
@@ -764,9 +764,9 @@ class TestSchemaResolverClass:
         non_serializable = {
             "type": "object",
             "timestamp": datetime.datetime.now(),
-            "data": {"$ref": "https://dify.ai/schemas/v1/file.json"},
+            "data": {"$ref": "https://nexusai.ai/schemas/v1/file.json"},
         }
 
         # Hybrid should fall back to recursive and still work
-        assert _has_dify_refs_hybrid(non_serializable)
-        assert _has_dify_refs_recursive(non_serializable)
+        assert _has_nexusai_refs_hybrid(non_serializable)
+        assert _has_nexusai_refs_recursive(non_serializable)

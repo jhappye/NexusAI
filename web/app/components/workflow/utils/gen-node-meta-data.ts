@@ -1,5 +1,5 @@
 import type { BlockEnum } from '@/app/components/workflow/types'
-import type { UseDifyNodesPath } from '@/types/doc-paths'
+import type { UseNexusAINodesPath } from '@/types/doc-paths'
 import { BlockClassificationEnum } from '@/app/components/workflow/block-selector/types'
 
 type GenNodeMetaDataParams = {
@@ -8,7 +8,7 @@ type GenNodeMetaDataParams = {
   type: BlockEnum
   title?: string
   author?: string
-  helpLinkUri?: UseDifyNodesPath
+  helpLinkUri?: UseNexusAINodesPath
   isRequired?: boolean
   isUndeletable?: boolean
   isStart?: boolean
@@ -20,7 +20,7 @@ export const genNodeMetaData = ({
   sort,
   type,
   title = '',
-  author = 'Dify',
+  author = 'NexusAI',
   helpLinkUri,
   isRequired = false,
   isUndeletable = false,

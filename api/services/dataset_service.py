@@ -18,7 +18,7 @@ from sqlalchemy import delete, exists, func, select, update
 from sqlalchemy.orm import Session
 from werkzeug.exceptions import Forbidden, NotFound
 
-from configs import dify_config
+from configs import nexusai_config
 from core.db.session_factory import session_factory
 from core.errors.error import LLMBadRequestError, ProviderTokenNotInitError
 from core.helper.name_generator import generate_incremental_name
@@ -755,7 +755,7 @@ class DatasetService:
 
         Args:
             data: Update data dictionary
-            filtered_data: Filtered update data to modify
+            filtered_data: Filtered update data to monexusai
         """
         # assert isinstance(current_user, Account) and current_user.current_tenant_id is not None
         try:
@@ -791,7 +791,7 @@ class DatasetService:
         Args:
             dataset: Current dataset object
             data: Update data dictionary
-            filtered_data: Filtered update data to modify
+            filtered_data: Filtered update data to monexusai
 
         Returns:
             str: Action to perform ('update' or None)
@@ -815,7 +815,7 @@ class DatasetService:
 
         Args:
             dataset: Current dataset object
-            filtered_data: Filtered update data to modify
+            filtered_data: Filtered update data to monexusai
         """
         # If the dataset already has embedding model settings, use those
         if dataset.embedding_model_provider and dataset.embedding_model:
@@ -839,7 +839,7 @@ class DatasetService:
         Args:
             dataset: Current dataset object
             data: Update data dictionary
-            filtered_data: Filtered update data to modify
+            filtered_data: Filtered update data to monexusai
 
         Returns:
             str: Action to perform ('update' or None)
@@ -873,7 +873,7 @@ class DatasetService:
         Args:
             dataset: Current dataset object
             data: Update data dictionary
-            filtered_data: Filtered update data to modify
+            filtered_data: Filtered update data to monexusai
         """
         # assert isinstance(current_user, Account) and current_user.current_tenant_id is not None
 
@@ -1248,7 +1248,7 @@ class DocumentService:
             "segmentation": {"delimiter": "\n", "max_tokens": 1024, "chunk_overlap": 50},
         },
         "limits": {
-            "indexing_max_segmentation_tokens_length": dify_config.INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH,
+            "indexing_max_segmentation_tokens_length": nexusai_config.INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH,
         },
     }
 
@@ -1911,7 +1911,7 @@ class DocumentService:
                         website_info = knowledge_config.data_source.info_list.website_info_list
                         assert website_info
                         count = len(website_info.urls)
-                    batch_upload_limit = int(dify_config.BATCH_UPLOAD_LIMIT)
+                    batch_upload_limit = int(nexusai_config.BATCH_UPLOAD_LIMIT)
 
                     if features.billing.subscription.plan == CloudPlan.SANDBOX and count > 1:
                         raise ValueError("Your current plan does not support batch upload, please upgrade your plan.")
@@ -2223,7 +2223,7 @@ class DocumentService:
     #                 elif knowledge_config.data_source.info_list.data_source_type == "website_crawl":
     #                     website_info = knowledge_config.data_source.info_list.website_info_list
     #                     count = len(website_info.urls)  # type: ignore
-    #                 batch_upload_limit = int(dify_config.BATCH_UPLOAD_LIMIT)
+    #                 batch_upload_limit = int(nexusai_config.BATCH_UPLOAD_LIMIT)
 
     #                 if features.billing.subscription.plan == CloudPlan.SANDBOX and count > 1:
     #                     raise ValueError("Your current plan does not support batch upload, please upgrade your plan.")
@@ -2705,7 +2705,7 @@ class DocumentService:
                     count = len(website_info.urls)
             if features.billing.subscription.plan == CloudPlan.SANDBOX and count > 1:
                 raise ValueError("Your current plan does not support batch upload, please upgrade your plan.")
-            batch_upload_limit = int(dify_config.BATCH_UPLOAD_LIMIT)
+            batch_upload_limit = int(nexusai_config.BATCH_UPLOAD_LIMIT)
             if count > batch_upload_limit:
                 raise ValueError(f"You have reached the batch upload limit of {batch_upload_limit}.")
 
@@ -3136,7 +3136,7 @@ class SegmentService:
         if args.get("attachment_ids"):
             if not isinstance(args["attachment_ids"], list):
                 raise ValueError("Attachment IDs is invalid")
-            single_chunk_attachment_limit = dify_config.SINGLE_CHUNK_ATTACHMENT_LIMIT
+            single_chunk_attachment_limit = nexusai_config.SINGLE_CHUNK_ATTACHMENT_LIMIT
             if len(args["attachment_ids"]) > single_chunk_attachment_limit:
                 raise ValueError(f"Exceeded maximum attachment limit of {single_chunk_attachment_limit}")
 

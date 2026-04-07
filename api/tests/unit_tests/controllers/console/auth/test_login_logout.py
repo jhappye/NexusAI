@@ -74,7 +74,7 @@ class TestLoginApi:
         return token_pair
 
     @patch("controllers.console.wraps.db")
-    @patch("controllers.console.auth.login.dify_config.BILLING_ENABLED", False)
+    @patch("controllers.console.auth.login.nexusai_config.BILLING_ENABLED", False)
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     @patch("controllers.console.auth.login.AccountService.authenticate")
@@ -126,7 +126,7 @@ class TestLoginApi:
         assert response.json["result"] == "success"
 
     @patch("controllers.console.wraps.db")
-    @patch("controllers.console.auth.login.dify_config.BILLING_ENABLED", False)
+    @patch("controllers.console.auth.login.nexusai_config.BILLING_ENABLED", False)
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     @patch("controllers.console.auth.login.AccountService.authenticate")
@@ -180,7 +180,7 @@ class TestLoginApi:
         assert response.json["result"] == "success"
 
     @patch("controllers.console.wraps.db")
-    @patch("controllers.console.auth.login.dify_config.BILLING_ENABLED", False)
+    @patch("controllers.console.auth.login.nexusai_config.BILLING_ENABLED", False)
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     def test_login_fails_when_rate_limited(self, mock_get_invitation, mock_is_rate_limit, mock_db, app):
@@ -205,7 +205,7 @@ class TestLoginApi:
                 login_api.post()
 
     @patch("controllers.console.wraps.db")
-    @patch("controllers.console.auth.login.dify_config.BILLING_ENABLED", True)
+    @patch("controllers.console.auth.login.nexusai_config.BILLING_ENABLED", True)
     @patch("controllers.console.auth.login.BillingService.is_email_in_freeze")
     def test_login_fails_when_account_frozen(self, mock_is_frozen, mock_db, app):
         """
@@ -228,7 +228,7 @@ class TestLoginApi:
                 login_api.post()
 
     @patch("controllers.console.wraps.db")
-    @patch("controllers.console.auth.login.dify_config.BILLING_ENABLED", False)
+    @patch("controllers.console.auth.login.nexusai_config.BILLING_ENABLED", False)
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     @patch("controllers.console.auth.login.AccountService.authenticate")
@@ -267,7 +267,7 @@ class TestLoginApi:
         mock_add_rate_limit.assert_called_once_with("test@example.com")
 
     @patch("controllers.console.wraps.db")
-    @patch("controllers.console.auth.login.dify_config.BILLING_ENABLED", False)
+    @patch("controllers.console.auth.login.nexusai_config.BILLING_ENABLED", False)
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     @patch("controllers.console.auth.login.AccountService.authenticate")
@@ -296,7 +296,7 @@ class TestLoginApi:
                 login_api.post()
 
     @patch("controllers.console.wraps.db")
-    @patch("controllers.console.auth.login.dify_config.BILLING_ENABLED", False)
+    @patch("controllers.console.auth.login.nexusai_config.BILLING_ENABLED", False)
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     @patch("controllers.console.auth.login.AccountService.authenticate")
@@ -341,7 +341,7 @@ class TestLoginApi:
                 login_api.post()
 
     @patch("controllers.console.wraps.db")
-    @patch("controllers.console.auth.login.dify_config.BILLING_ENABLED", False)
+    @patch("controllers.console.auth.login.nexusai_config.BILLING_ENABLED", False)
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     def test_login_invitation_email_mismatch(self, mock_get_invitation, mock_is_rate_limit, mock_db, app):
@@ -372,7 +372,7 @@ class TestLoginApi:
                 login_api.post()
 
     @patch("controllers.console.wraps.db")
-    @patch("controllers.console.auth.login.dify_config.BILLING_ENABLED", False)
+    @patch("controllers.console.auth.login.nexusai_config.BILLING_ENABLED", False)
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     @patch("controllers.console.auth.login.AccountService.authenticate")

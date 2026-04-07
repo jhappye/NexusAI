@@ -9,7 +9,7 @@ Test objectives:
 from unittest.mock import patch
 
 from extensions.otel.decorators.handlers.workflow_app_runner_handler import WorkflowAppRunnerHandler
-from extensions.otel.semconv import DifySpanAttributes, GenAIAttributes
+from extensions.otel.semconv import NexusAISpanAttributes, GenAIAttributes
 
 
 class TestWorkflowAppRunnerHandler:
@@ -41,7 +41,7 @@ class TestWorkflowAppRunnerHandler:
         for field in required_config_fields:
             assert field in config_fields, f"Handler expects app_config.{field} but field is missing"
 
-    @patch("extensions.otel.decorators.base.dify_config.ENABLE_OTEL", True)
+    @patch("extensions.otel.decorators.base.nexusai_config.ENABLE_OTEL", True)
     def test_all_span_attributes_set_correctly(
         self, tracer_provider_with_memory_exporter, memory_span_exporter, mock_workflow_runner
     ):
@@ -69,8 +69,8 @@ class TestWorkflowAppRunnerHandler:
         assert len(spans) == 1
         attrs = spans[0].attributes
 
-        assert attrs[DifySpanAttributes.APP_ID] == test_app_id
-        assert attrs[DifySpanAttributes.TENANT_ID] == test_tenant_id
+        assert attrs[NexusAISpanAttributes.APP_ID] == test_app_id
+        assert attrs[NexusAISpanAttributes.TENANT_ID] == test_tenant_id
         assert attrs[GenAIAttributes.USER_ID] == test_user_id
-        assert attrs[DifySpanAttributes.WORKFLOW_ID] == test_workflow_id
-        assert attrs[DifySpanAttributes.STREAMING] is False
+        assert attrs[NexusAISpanAttributes.WORKFLOW_ID] == test_workflow_id
+        assert attrs[NexusAISpanAttributes.STREAMING] is False

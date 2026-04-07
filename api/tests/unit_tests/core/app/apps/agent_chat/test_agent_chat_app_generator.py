@@ -281,7 +281,7 @@ class TestAgentChatAppGeneratorWorker:
         mocker.patch("core.app.apps.agent_chat.app_generator.AgentChatAppRunner", return_value=runner)
         mocker.patch("core.app.apps.agent_chat.app_generator.db.session.close")
 
-        mocker.patch("core.app.apps.agent_chat.app_generator.dify_config", new=mocker.MagicMock(DEBUG=True))
+        mocker.patch("core.app.apps.agent_chat.app_generator.nexusai_config", new=mocker.MagicMock(DEBUG=True))
         logger = mocker.patch("core.app.apps.agent_chat.app_generator.logger")
 
         generator._generate_worker(

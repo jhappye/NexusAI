@@ -85,14 +85,14 @@ describe('MaintenanceNotice', () => {
     })
 
     it('should jump to notice when description is clicked and href is valid', () => {
-      setNoticeHref('https://dify.ai/notice')
+      setNoticeHref('https://nexusai.ai/notice')
       render(<MaintenanceNotice />)
 
       const desc = screen.getByText('Notice Description')
       fireEvent.click(desc)
 
       expect(windowOpenSpy).toHaveBeenCalledWith(
-        'https://dify.ai/notice',
+        'https://nexusai.ai/notice',
         '_blank',
       )
     })

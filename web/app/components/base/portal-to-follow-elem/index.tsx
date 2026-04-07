@@ -2,7 +2,7 @@
 /**
  * @deprecated Use semantic overlay primitives from `@/app/components/base/ui/` instead.
  * This component will be removed after migration is complete.
- * See: https://github.com/langgenius/dify/issues/32767
+ * See: https://github.com/langgenius/nexusai/issues/32767
  *
  * Migration guide:
  * - Tooltip → `@/app/components/base/ui/tooltip`

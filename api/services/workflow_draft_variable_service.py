@@ -25,7 +25,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.sql.expression import and_, or_
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.entities.app_invoke_entities import InvokeFrom
 from core.app.file_access import DatabaseFileAccessController
 from core.trigger.constants import is_trigger_node_type
@@ -45,7 +45,7 @@ from models import Account, App, Conversation
 from models.enums import ConversationFromSource, DraftVariableType
 from models.utils.file_input_compat import build_file_from_stored_mapping
 from models.workflow import Workflow, WorkflowDraftVariable, WorkflowDraftVariableFile, is_system_variable_editable
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.file_service import FileService
 from services.variable_truncator import VariableTruncator
 
@@ -217,7 +217,7 @@ class WorkflowDraftVariableService:
         # Ensure the session is bound to a engine.
         assert isinstance(engine, Engine)
         session_maker = sessionmaker(bind=engine, expire_on_commit=False)
-        self._api_node_execution_repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(
+        self._api_node_execution_repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(
             session_maker
         )
 
@@ -674,7 +674,7 @@ def _batch_upsert_draft_variable(
     # insert operations instead of the ORM layer.
 
     # Use different insert statements based on database type
-    if dify_config.SQLALCHEMY_DATABASE_URI_SCHEME == "postgresql":
+    if nexusai_config.SQLALCHEMY_DATABASE_URI_SCHEME == "postgresql":
         stmt = pg_insert(WorkflowDraftVariable).values([_model_to_insertion_dict(v) for v in draft_vars])
         if policy == _UpsertPolicy.OVERWRITE:
             stmt = stmt.on_conflict_do_update(
@@ -1025,9 +1025,9 @@ class DraftVariableSaver:
         # Ideally, these should be co-located for better maintainability.
         # However, due to the current code structure, this is not straightforward.
         truncator = VariableTruncator(
-            max_size_bytes=dify_config.WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE,
-            array_element_limit=dify_config.WORKFLOW_VARIABLE_TRUNCATION_ARRAY_LENGTH,
-            string_length_limit=dify_config.WORKFLOW_VARIABLE_TRUNCATION_STRING_LENGTH,
+            max_size_bytes=nexusai_config.WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE,
+            array_element_limit=nexusai_config.WORKFLOW_VARIABLE_TRUNCATION_ARRAY_LENGTH,
+            string_length_limit=nexusai_config.WORKFLOW_VARIABLE_TRUNCATION_STRING_LENGTH,
         )
         truncation_result = truncator.truncate(value_seg)
         if not truncation_result.truncated:

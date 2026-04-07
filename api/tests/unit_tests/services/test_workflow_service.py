@@ -737,7 +737,7 @@ class TestWorkflowService:
         with (
             patch.object(workflow_service, "validate_graph_structure"),
             patch("services.workflow_service.app_published_workflow_was_updated"),
-            patch("services.workflow_service.dify_config") as mock_config,
+            patch("services.workflow_service.nexusai_config") as mock_config,
             patch("services.workflow_service.Workflow.new") as mock_workflow_new,
         ):
             # Disable billing
@@ -801,7 +801,7 @@ class TestWorkflowService:
 
         with (
             patch.object(workflow_service, "validate_graph_structure"),
-            patch("services.workflow_service.dify_config") as mock_config,
+            patch("services.workflow_service.nexusai_config") as mock_config,
             patch("services.workflow_service.BillingService") as MockBillingService,
             patch("services.workflow_service.app_published_workflow_was_updated"),
         ):
@@ -2382,7 +2382,7 @@ class TestWorkflowServiceDraftExecution:
             patch("services.workflow_service._setup_variable_pool"),
             patch("services.workflow_service.DraftVarLoader"),
             patch("services.workflow_service.WorkflowEntry.single_step_run") as mock_run,
-            patch("services.workflow_service.DifyCoreRepositoryFactory") as mock_repo_factory,
+            patch("services.workflow_service.NexusAICoreRepositoryFactory") as mock_repo_factory,
             patch("services.workflow_service.DraftVariableSaver") as mock_saver_cls,
             patch("services.workflow_service.storage"),
         ):
@@ -2454,7 +2454,7 @@ class TestWorkflowServiceDraftExecution:
             patch("services.workflow_service.add_variables_to_pool") as mock_add_variables_to_pool,
             patch("services.workflow_service.DraftVarLoader"),
             patch("services.workflow_service.WorkflowEntry.single_step_run") as mock_run,
-            patch("services.workflow_service.DifyCoreRepositoryFactory"),
+            patch("services.workflow_service.NexusAICoreRepositoryFactory"),
             patch("services.workflow_service.DraftVariableSaver"),
             patch("services.workflow_service.storage"),
         ):
@@ -2611,7 +2611,7 @@ class TestWorkflowServiceHumanInputOperations:
             patch("models.workflow.Workflow.get_node_type_from_node_config", return_value=BuiltinNodeTypes.HUMAN_INPUT),
             patch("services.workflow_service.HumanInputNodeData.model_validate"),
             patch.object(service, "_resolve_human_input_delivery_method") as mock_resolve,
-            patch("services.workflow_service.apply_dify_debug_email_recipient"),
+            patch("services.workflow_service.apply_nexusai_debug_email_recipient"),
             patch.object(service, "_build_human_input_variable_pool"),
             patch.object(service, "_build_human_input_node"),
             patch.object(service, "_create_human_input_delivery_test_form", return_value=("form-1", [])),
@@ -2755,8 +2755,8 @@ class TestWorkflowServiceFreeNodeExecution:
         with (
             patch("services.workflow_service.GraphInitParams") as mock_graph_init_params,
             patch("services.workflow_service.GraphRuntimeState"),
-            patch("services.workflow_service.build_dify_run_context"),
-            patch("services.workflow_service.DifyHumanInputNodeRuntime") as mock_runtime_cls,
+            patch("services.workflow_service.build_nexusai_run_context"),
+            patch("services.workflow_service.NexusAIHumanInputNodeRuntime") as mock_runtime_cls,
             patch("services.workflow_service.HumanInputNode") as mock_node_cls,
         ):
             node = service._build_human_input_node(

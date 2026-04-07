@@ -53,7 +53,7 @@ def _config(module):
         port=8123,
         user="default",
         password="",
-        database="dify",
+        database="nexusai",
         fts_params="",
     )
 
@@ -100,12 +100,12 @@ def test_factory_initializes_lower_case_collection_name(myscale_module, monkeypa
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(myscale_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(myscale_module.dify_config, "MYSCALE_HOST", "localhost")
-    monkeypatch.setattr(myscale_module.dify_config, "MYSCALE_PORT", 8123)
-    monkeypatch.setattr(myscale_module.dify_config, "MYSCALE_USER", "default")
-    monkeypatch.setattr(myscale_module.dify_config, "MYSCALE_PASSWORD", "")
-    monkeypatch.setattr(myscale_module.dify_config, "MYSCALE_DATABASE", "dify")
-    monkeypatch.setattr(myscale_module.dify_config, "MYSCALE_FTS_PARAMS", "")
+    monkeypatch.setattr(myscale_module.nexusai_config, "MYSCALE_HOST", "localhost")
+    monkeypatch.setattr(myscale_module.nexusai_config, "MYSCALE_PORT", 8123)
+    monkeypatch.setattr(myscale_module.nexusai_config, "MYSCALE_USER", "default")
+    monkeypatch.setattr(myscale_module.nexusai_config, "MYSCALE_PASSWORD", "")
+    monkeypatch.setattr(myscale_module.nexusai_config, "MYSCALE_DATABASE", "nexusai")
+    monkeypatch.setattr(myscale_module.nexusai_config, "MYSCALE_FTS_PARAMS", "")
 
     with patch.object(myscale_module, "MyScaleVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())
@@ -145,7 +145,7 @@ def test_create_collection_builds_expected_sql(myscale_module):
         port=8123,
         user="default",
         password="",
-        database="dify",
+        database="nexusai",
         fts_params="tokenizer=unicode",
     )
     vector = myscale_module.MyScaleVector("collection_1", config)
@@ -155,7 +155,7 @@ def test_create_collection_builds_expected_sql(myscale_module):
 
     assert vector._client.command.call_count == 2
     sql = vector._client.command.call_args_list[1].args[0]
-    assert "CREATE TABLE IF NOT EXISTS dify.collection_1" in sql
+    assert "CREATE TABLE IF NOT EXISTS nexusai.collection_1" in sql
     assert "CONSTRAINT cons_vec_len CHECK length(vector) = 3" in sql
     assert "INDEX text_idx text TYPE fts('tokenizer=unicode')" in sql
 
@@ -173,7 +173,7 @@ def test_add_texts_inserts_rows_and_returns_ids(myscale_module, monkeypatch):
 
     assert ids == ["doc-a", "generated-uuid"]
     sql = vector._client.command.call_args.args[0]
-    assert "INSERT INTO dify.collection_1" in sql
+    assert "INSERT INTO nexusai.collection_1" in sql
     assert "te xt 1" in sql
 
 
@@ -227,4 +227,4 @@ def test_delete_drops_table(myscale_module):
 
     vector.delete()
 
-    vector._client.command.assert_called_once_with("DROP TABLE IF EXISTS dify.collection_1")
+    vector._client.command.assert_called_once_with("DROP TABLE IF EXISTS nexusai.collection_1")

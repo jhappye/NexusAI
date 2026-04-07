@@ -188,7 +188,7 @@ def test_workflow_trace(trace_instance, monkeypatch):
 
     mock_factory = MagicMock()
     mock_factory.create_workflow_node_execution_repository.return_value = repo
-    monkeypatch.setattr("core.ops.langsmith_trace.langsmith_trace.DifyCoreRepositoryFactory", mock_factory)
+    monkeypatch.setattr("core.ops.langsmith_trace.langsmith_trace.NexusAICoreRepositoryFactory", mock_factory)
 
     monkeypatch.setattr(trace_instance, "get_service_account_with_tenant", lambda app_id: MagicMock())
 
@@ -258,7 +258,7 @@ def test_workflow_trace_no_start_time(trace_instance, monkeypatch):
     repo.get_by_workflow_execution.return_value = []
     mock_factory = MagicMock()
     mock_factory.create_workflow_node_execution_repository.return_value = repo
-    monkeypatch.setattr("core.ops.langsmith_trace.langsmith_trace.DifyCoreRepositoryFactory", mock_factory)
+    monkeypatch.setattr("core.ops.langsmith_trace.langsmith_trace.NexusAICoreRepositoryFactory", mock_factory)
     monkeypatch.setattr(trace_instance, "get_service_account_with_tenant", lambda app_id: MagicMock())
 
     trace_instance.add_run = MagicMock()
@@ -567,7 +567,7 @@ def test_workflow_trace_usage_extraction_error(trace_instance, monkeypatch, capl
 
     mock_factory = MagicMock()
     mock_factory.create_workflow_node_execution_repository.return_value = repo
-    monkeypatch.setattr("core.ops.langsmith_trace.langsmith_trace.DifyCoreRepositoryFactory", mock_factory)
+    monkeypatch.setattr("core.ops.langsmith_trace.langsmith_trace.NexusAICoreRepositoryFactory", mock_factory)
     monkeypatch.setattr("core.ops.langsmith_trace.langsmith_trace.sessionmaker", lambda bind: lambda: MagicMock())
     monkeypatch.setattr("core.ops.langsmith_trace.langsmith_trace.db", MagicMock(engine="engine"))
     monkeypatch.setattr(trace_instance, "get_service_account_with_tenant", lambda app_id: MagicMock())

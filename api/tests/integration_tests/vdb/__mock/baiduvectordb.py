@@ -30,7 +30,7 @@ class MockBaiduVectorDBClass:
         return [
             Database(
                 conn=self.conn,
-                database_name="dify",
+                database_name="nexusai",
                 config=self._config,
             )
         ]
@@ -64,7 +64,7 @@ class MockBaiduVectorDBClass:
             1,
             None,
             enable_dynamic_field=False,
-            description="table for dify",
+            description="table for nexusai",
             config=config,
             state=TableState.NORMAL,
         )

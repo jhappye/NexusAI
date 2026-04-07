@@ -8,7 +8,7 @@ from typing import Any, Concatenate
 from mo_vector.client import MoVectorClient  # type: ignore
 from pydantic import BaseModel, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import parse_metadata_json
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -38,7 +38,7 @@ class MatrixoneConfig(BaseModel):
     port: int = 6001
     user: str = "dump"
     password: str = "111"
-    database: str = "dify"
+    database: str = "nexusai"
     metric: str = "l2"
 
     @model_validator(mode="before")
@@ -223,11 +223,11 @@ class MatrixoneVectorFactory(AbstractVectorFactory):
             dataset.index_struct = json.dumps(self.gen_index_struct_dict(VectorType.MATRIXONE, collection_name))
 
         config = MatrixoneConfig(
-            host=dify_config.MATRIXONE_HOST or "localhost",
-            port=dify_config.MATRIXONE_PORT or 6001,
-            user=dify_config.MATRIXONE_USER or "dump",
-            password=dify_config.MATRIXONE_PASSWORD or "111",
-            database=dify_config.MATRIXONE_DATABASE or "dify",
-            metric=dify_config.MATRIXONE_METRIC or "l2",
+            host=nexusai_config.MATRIXONE_HOST or "localhost",
+            port=nexusai_config.MATRIXONE_PORT or 6001,
+            user=nexusai_config.MATRIXONE_USER or "dump",
+            password=nexusai_config.MATRIXONE_PASSWORD or "111",
+            database=nexusai_config.MATRIXONE_DATABASE or "nexusai",
+            metric=nexusai_config.MATRIXONE_METRIC or "l2",
         )
         return MatrixoneVector(collection_name=collection_name, config=config)

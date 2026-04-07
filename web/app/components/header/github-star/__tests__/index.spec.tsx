@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 import GithubStar from '../index'
 
-const GITHUB_STAR_URL = 'https://ungh.cc/repos/langgenius/dify'
+const GITHUB_STAR_URL = 'https://ungh.cc/repos/langgenius/nexusai'
 
 const renderWithQueryClient = () => {
   const queryClient = new QueryClient({

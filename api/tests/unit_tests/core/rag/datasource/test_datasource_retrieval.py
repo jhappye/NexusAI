@@ -19,7 +19,7 @@ def create_mock_document(
     content: str,
     doc_id: str,
     score: float = 0.8,
-    provider: str = "dify",
+    provider: str = "nexusai",
     additional_metadata: dict | None = None,
 ) -> Document:
     """
@@ -32,7 +32,7 @@ def create_mock_document(
         content: The text content of the document
         doc_id: Unique identifier for the document chunk
         score: Relevance score (0.0 to 1.0)
-        provider: Document provider ("dify" or "external")
+        provider: Document provider ("nexusai" or "external")
         additional_metadata: Optional extra metadata fields
 
     Returns:
@@ -697,7 +697,7 @@ class TestRetrievalServiceInternals:
         assert RetrievalService.format_retrieval_documents([]) == []
 
     def test_format_retrieval_documents_without_document_id_returns_empty_list(self):
-        documents = [Document(page_content="content", metadata={"doc_id": "doc-1", "score": 0.4}, provider="dify")]
+        documents = [Document(page_content="content", metadata={"doc_id": "doc-1", "score": 0.4}, provider="nexusai")]
 
         assert RetrievalService.format_retrieval_documents(documents) == []
 
@@ -728,7 +728,7 @@ class TestRetrievalServiceInternals:
             Document(
                 page_content="child node content",
                 metadata={"document_id": "doc-parent", "doc_id": "child-node-1", "score": 0.7},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="parent image",
@@ -738,12 +738,12 @@ class TestRetrievalServiceInternals:
                     "doc_type": DocType.IMAGE,
                     "score": 0.8,
                 },
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="text index node",
                 metadata={"document_id": "doc-text", "doc_id": "index-node-1", "score": 0.6},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="text image node",
@@ -753,7 +753,7 @@ class TestRetrievalServiceInternals:
                     "doc_type": DocType.IMAGE,
                     "score": 0.65,
                 },
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="summary candidate 1",
@@ -764,7 +764,7 @@ class TestRetrievalServiceInternals:
                     "original_chunk_id": "segment-summary",
                     "score": "0.9",
                 },
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="summary candidate 2",
@@ -775,7 +775,7 @@ class TestRetrievalServiceInternals:
                     "original_chunk_id": "segment-summary",
                     "score": "0.95",
                 },
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="invalid score summary",
@@ -786,7 +786,7 @@ class TestRetrievalServiceInternals:
                     "original_chunk_id": "segment-parent-summary",
                     "score": "invalid",
                 },
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="valid parent summary",
@@ -797,7 +797,7 @@ class TestRetrievalServiceInternals:
                     "original_chunk_id": "segment-parent-summary",
                     "score": "0.4",
                 },
-                provider="dify",
+                provider="nexusai",
             ),
         ]
 
@@ -884,7 +884,7 @@ class TestRetrievalServiceInternals:
         monkeypatch.setattr(retrieval_service_module.db.session, "rollback", rollback)
         monkeypatch.setattr(retrieval_service_module.db.session, "scalars", Mock(side_effect=RuntimeError("db error")))
 
-        documents = [Document(page_content="content", metadata={"document_id": "doc-1"}, provider="dify")]
+        documents = [Document(page_content="content", metadata={"document_id": "doc-1"}, provider="nexusai")]
 
         with pytest.raises(RuntimeError, match="db error"):
             RetrievalService.format_retrieval_documents(documents)

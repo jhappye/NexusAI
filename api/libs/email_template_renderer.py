@@ -10,7 +10,7 @@ from flask import render_template_string
 from jinja2.runtime import Context
 from jinja2.sandbox import ImmutableSandboxedEnvironment
 
-from configs import dify_config
+from configs import nexusai_config
 from configs.feature import TemplateMode
 
 
@@ -35,8 +35,8 @@ def render_email_template(template: str, substitutions: Mapping[str, str]) -> st
     In sandbox mode, a sandboxed environment with timeout is used.
     In disabled mode, the template is returned without rendering.
     """
-    mode = dify_config.MAIL_TEMPLATING_MODE
-    timeout = dify_config.MAIL_TEMPLATING_TIMEOUT
+    mode = nexusai_config.MAIL_TEMPLATING_MODE
+    timeout = nexusai_config.MAIL_TEMPLATING_TIMEOUT
 
     if mode == TemplateMode.UNSAFE:
         return render_template_string(template, **substitutions)

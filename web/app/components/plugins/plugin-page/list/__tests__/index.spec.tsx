@@ -47,7 +47,7 @@ const createPluginDeclaration = (overrides: Partial<PluginDeclaration> = {}): Pl
   agent_strategy: null,
   meta: {
     version: '1.0.0',
-    minimum_dify_version: '0.5.0',
+    minimum_nexusai_version: '0.5.0',
   },
   trigger: {} as unknown as PluginDeclaration['trigger'],
   ...overrides,
@@ -75,7 +75,7 @@ const createPluginDetail = (overrides: Partial<PluginDetail> = {}): PluginDetail
   meta: {
     repo: 'test-author/test-plugin',
     version: '1.0.0',
-    package: 'test-plugin.difypkg',
+    package: 'test-plugin.nexusaipkg',
   },
   status: 'active',
   deprecated_reason: '',

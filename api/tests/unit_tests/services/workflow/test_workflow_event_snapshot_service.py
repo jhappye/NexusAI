@@ -615,7 +615,7 @@ def test_build_workflow_event_stream_should_emit_ping_and_terminal_snapshot_even
         create_api_workflow_run_repository=MagicMock(return_value=workflow_run_repo),
         create_api_workflow_node_execution_repository=MagicMock(return_value=node_repo),
     )
-    monkeypatch.setattr(service_module, "DifyAPIRepositoryFactory", factory)
+    monkeypatch.setattr(service_module, "NexusAIAPIRepositoryFactory", factory)
     monkeypatch.setattr(service_module.MessageGenerator, "get_response_topic", MagicMock(return_value=topic))
     monkeypatch.setattr(
         service_module,
@@ -671,7 +671,7 @@ def test_build_workflow_event_stream_should_emit_periodic_ping_and_stop_after_id
         create_api_workflow_run_repository=MagicMock(return_value=workflow_run_repo),
         create_api_workflow_node_execution_repository=MagicMock(return_value=node_repo),
     )
-    monkeypatch.setattr(service_module, "DifyAPIRepositoryFactory", factory)
+    monkeypatch.setattr(service_module, "NexusAIAPIRepositoryFactory", factory)
     monkeypatch.setattr(service_module.MessageGenerator, "get_response_topic", MagicMock(return_value=topic))
     monkeypatch.setattr(service_module, "_load_resumption_context", MagicMock(return_value=None))
     monkeypatch.setattr(service_module, "_build_snapshot_events", MagicMock(return_value=[]))
@@ -725,7 +725,7 @@ def test_build_workflow_event_stream_should_exit_when_buffer_done_and_empty(
         create_api_workflow_run_repository=MagicMock(return_value=workflow_run_repo),
         create_api_workflow_node_execution_repository=MagicMock(return_value=node_repo),
     )
-    monkeypatch.setattr(service_module, "DifyAPIRepositoryFactory", factory)
+    monkeypatch.setattr(service_module, "NexusAIAPIRepositoryFactory", factory)
     monkeypatch.setattr(service_module.MessageGenerator, "get_response_topic", MagicMock(return_value=topic))
     monkeypatch.setattr(service_module, "_load_resumption_context", MagicMock(return_value=None))
     monkeypatch.setattr(service_module, "_build_snapshot_events", MagicMock(return_value=[]))
@@ -768,7 +768,7 @@ def test_build_workflow_event_stream_should_continue_when_pause_loading_fails(
         create_api_workflow_run_repository=MagicMock(return_value=workflow_run_repo),
         create_api_workflow_node_execution_repository=MagicMock(return_value=node_repo),
     )
-    monkeypatch.setattr(service_module, "DifyAPIRepositoryFactory", factory)
+    monkeypatch.setattr(service_module, "NexusAIAPIRepositoryFactory", factory)
     monkeypatch.setattr(service_module.MessageGenerator, "get_response_topic", MagicMock(return_value=topic))
     monkeypatch.setattr(service_module, "_load_resumption_context", MagicMock(return_value=None))
     monkeypatch.setattr(service_module, "_resolve_task_id", MagicMock(return_value="task-1"))

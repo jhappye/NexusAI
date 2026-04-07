@@ -697,7 +697,7 @@ def test_import_rag_pipeline_yaml_url_handles_empty_content_after_github_rewrite
     result = service.import_rag_pipeline(
         account=account,
         import_mode="yaml-url",
-        yaml_url="https://github.com/langgenius/dify/blob/main/pipeline.yml",
+        yaml_url="https://github.com/langgenius/nexusai/blob/main/pipeline.yml",
     )
 
     assert result.status == ImportStatus.FAILED

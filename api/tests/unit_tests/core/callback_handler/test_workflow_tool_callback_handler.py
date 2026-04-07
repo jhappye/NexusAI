@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, call
 import pytest
 
 from core.callback_handler.workflow_tool_callback_handler import (
-    DifyWorkflowCallbackHandler,
+    NexusAIWorkflowCallbackHandler,
 )
 
 
@@ -20,7 +20,7 @@ class DummyToolInvokeMessage:
 @pytest.fixture
 def handler():
     """Fixture to create handler instance with deterministic color."""
-    instance = DifyWorkflowCallbackHandler()
+    instance = NexusAIWorkflowCallbackHandler()
     instance.color = "blue"
     return instance
 
@@ -31,7 +31,7 @@ def mock_print_text(mocker):
     return mocker.patch("core.callback_handler.workflow_tool_callback_handler.print_text")
 
 
-class TestDifyWorkflowCallbackHandler:
+class TestNexusAIWorkflowCallbackHandler:
     def test_on_tool_execution_single_output_success(self, handler, mock_print_text):
         # Arrange
         tool_name = "test_tool"

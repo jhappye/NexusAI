@@ -1,22 +1,22 @@
 """
-DifyAPI Repository Factory for creating repository instances.
+NexusAIAPI Repository Factory for creating repository instances.
 
-This factory is specifically designed for DifyAPI repositories that handle
+This factory is specifically designed for NexusAIAPI repositories that handle
 service-layer operations with dependency injection patterns.
 """
 
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
-from core.repositories import DifyCoreRepositoryFactory, RepositoryImportError
+from configs import nexusai_config
+from core.repositories import NexusAICoreRepositoryFactory, RepositoryImportError
 from libs.module_loading import import_string
-from repositories.api_workflow_node_execution_repository import DifyAPIWorkflowNodeExecutionRepository
+from repositories.api_workflow_node_execution_repository import NexusAIAPIWorkflowNodeExecutionRepository
 from repositories.api_workflow_run_repository import APIWorkflowRunRepository
 
 
-class DifyAPIRepositoryFactory(DifyCoreRepositoryFactory):
+class NexusAIAPIRepositoryFactory(NexusAICoreRepositoryFactory):
     """
-    Factory for creating DifyAPI repository instances based on configuration.
+    Factory for creating NexusAIAPI repository instances based on configuration.
 
     This factory handles the creation of repositories that are specifically designed
     for service-layer operations and use dependency injection with sessionmaker
@@ -26,9 +26,9 @@ class DifyAPIRepositoryFactory(DifyCoreRepositoryFactory):
     @classmethod
     def create_api_workflow_node_execution_repository(
         cls, session_maker: sessionmaker[Session]
-    ) -> DifyAPIWorkflowNodeExecutionRepository:
+    ) -> NexusAIAPIWorkflowNodeExecutionRepository:
         """
-        Create a DifyAPIWorkflowNodeExecutionRepository instance based on configuration.
+        Create a NexusAIAPIWorkflowNodeExecutionRepository instance based on configuration.
 
         This repository is designed for service-layer operations and uses dependency injection
         with a sessionmaker for better testability and separation of concerns. It provides
@@ -39,19 +39,19 @@ class DifyAPIRepositoryFactory(DifyCoreRepositoryFactory):
             session_maker: SQLAlchemy sessionmaker to inject for database session management.
 
         Returns:
-            Configured DifyAPIWorkflowNodeExecutionRepository instance
+            Configured NexusAIAPIWorkflowNodeExecutionRepository instance
 
         Raises:
             RepositoryImportError: If the configured repository cannot be imported or instantiated
         """
-        class_path = dify_config.API_WORKFLOW_NODE_EXECUTION_REPOSITORY
+        class_path = nexusai_config.API_WORKFLOW_NODE_EXECUTION_REPOSITORY
 
         try:
             repository_class = import_string(class_path)
             return repository_class(session_maker=session_maker)
         except (ImportError, Exception) as e:
             raise RepositoryImportError(
-                f"Failed to create DifyAPIWorkflowNodeExecutionRepository from '{class_path}': {e}"
+                f"Failed to create NexusAIAPIWorkflowNodeExecutionRepository from '{class_path}': {e}"
             ) from e
 
     @classmethod
@@ -73,7 +73,7 @@ class DifyAPIRepositoryFactory(DifyCoreRepositoryFactory):
         Raises:
             RepositoryImportError: If the configured repository cannot be imported or instantiated
         """
-        class_path = dify_config.API_WORKFLOW_RUN_REPOSITORY
+        class_path = nexusai_config.API_WORKFLOW_RUN_REPOSITORY
 
         try:
             repository_class = import_string(class_path)

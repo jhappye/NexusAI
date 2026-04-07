@@ -228,9 +228,9 @@ def test_huawei_factory_branches(huawei_module, monkeypatch):
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(huawei_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(huawei_module.dify_config, "HUAWEI_CLOUD_HOSTS", "http://huawei-es:9200")
-    monkeypatch.setattr(huawei_module.dify_config, "HUAWEI_CLOUD_USER", "user")
-    monkeypatch.setattr(huawei_module.dify_config, "HUAWEI_CLOUD_PASSWORD", "pass")
+    monkeypatch.setattr(huawei_module.nexusai_config, "HUAWEI_CLOUD_HOSTS", "http://huawei-es:9200")
+    monkeypatch.setattr(huawei_module.nexusai_config, "HUAWEI_CLOUD_USER", "user")
+    monkeypatch.setattr(huawei_module.nexusai_config, "HUAWEI_CLOUD_PASSWORD", "pass")
 
     with patch.object(huawei_module, "HuaweiCloudVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

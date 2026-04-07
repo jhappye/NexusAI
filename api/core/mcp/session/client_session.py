@@ -4,12 +4,12 @@ from typing import Any, Protocol
 
 from pydantic import AnyUrl, TypeAdapter
 
-from configs import dify_config
+from configs import nexusai_config
 from core.mcp import types
 from core.mcp.entities import SUPPORTED_PROTOCOL_VERSIONS, RequestContext
 from core.mcp.session.base_session import BaseSession, RequestResponder
 
-DEFAULT_CLIENT_INFO = types.Implementation(name="Dify", version=dify_config.project.version)
+DEFAULT_CLIENT_INFO = types.Implementation(name="NexusAI", version=nexusai_config.project.version)
 
 
 class SamplingFnT(Protocol):

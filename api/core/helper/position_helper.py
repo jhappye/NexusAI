@@ -3,7 +3,7 @@ from collections import OrderedDict
 from collections.abc import Callable
 from functools import lru_cache
 
-from configs import dify_config
+from configs import nexusai_config
 from core.tools.utils.yaml_utils import load_yaml_file_cached
 
 
@@ -37,7 +37,7 @@ def get_tool_position_map(folder_path: str, file_name: str = "_position.yaml") -
 
     return pin_position_map(
         position_map,
-        pin_list=dify_config.POSITION_TOOL_PINS_LIST,
+        pin_list=nexusai_config.POSITION_TOOL_PINS_LIST,
     )
 
 

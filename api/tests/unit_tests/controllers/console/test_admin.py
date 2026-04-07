@@ -23,7 +23,7 @@ def bypass_only_edition_cloud(mocker):
     Bypass only_edition_cloud decorator by setting EDITION to "CLOUD".
     """
     mocker.patch(
-        "controllers.console.wraps.dify_config.EDITION",
+        "controllers.console.wraps.nexusai_config.EDITION",
         new="CLOUD",
     )
 
@@ -34,7 +34,7 @@ def mock_admin_auth(mocker):
     Provide valid admin authentication for controller tests.
     """
     mocker.patch(
-        "controllers.console.admin.dify_config.ADMIN_API_KEY",
+        "controllers.console.admin.nexusai_config.ADMIN_API_KEY",
         "test-admin-key",
     )
     mocker.patch(
@@ -545,10 +545,10 @@ class TestAdminRequiredDecorator:
 
     def setup_method(self):
         """Set up test fixtures."""
-        # Mock dify_config
-        self.dify_config_patcher = patch("controllers.console.admin.dify_config")
-        self.mock_dify_config = self.dify_config_patcher.start()
-        self.mock_dify_config.ADMIN_API_KEY = "test-admin-key"
+        # Mock nexusai_config
+        self.nexusai_config_patcher = patch("controllers.console.admin.nexusai_config")
+        self.mock_nexusai_config = self.nexusai_config_patcher.start()
+        self.mock_nexusai_config.ADMIN_API_KEY = "test-admin-key"
 
         # Mock extract_access_token
         self.token_patcher = patch("controllers.console.admin.extract_access_token")
@@ -556,7 +556,7 @@ class TestAdminRequiredDecorator:
 
     def teardown_method(self):
         """Clean up test fixtures."""
-        self.dify_config_patcher.stop()
+        self.nexusai_config_patcher.stop()
         self.token_patcher.stop()
 
     def test_admin_required_success(self):
@@ -587,7 +587,7 @@ class TestAdminRequiredDecorator:
         """Test admin_required when no API key is configured."""
         from controllers.console.admin import admin_required
 
-        self.mock_dify_config.ADMIN_API_KEY = None
+        self.mock_nexusai_config.ADMIN_API_KEY = None
 
         @admin_required
         def test_view():

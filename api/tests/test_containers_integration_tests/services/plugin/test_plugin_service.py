@@ -156,7 +156,7 @@ class TestCheckPluginInstallationScope:
 
 
 class TestGetPluginIconUrl:
-    @patch("services.plugin.plugin_service.dify_config")
+    @patch("services.plugin.plugin_service.nexusai_config")
     def test_constructs_url_with_params(self, mock_config):
         mock_config.CONSOLE_API_URL = "https://console.example.com"
 
@@ -201,14 +201,14 @@ class TestIsPluginVerified:
 
 
 class TestUpgradePluginWithMarketplace:
-    @patch("services.plugin.plugin_service.dify_config")
+    @patch("services.plugin.plugin_service.nexusai_config")
     def test_raises_when_marketplace_disabled(self, mock_config):
         mock_config.MARKETPLACE_ENABLED = False
 
         with pytest.raises(ValueError, match="marketplace is not enabled"):
             PluginService.upgrade_plugin_with_marketplace("t1", "old-uid", "new-uid")
 
-    @patch("services.plugin.plugin_service.dify_config")
+    @patch("services.plugin.plugin_service.nexusai_config")
     def test_raises_when_same_identifier(self, mock_config):
         mock_config.MARKETPLACE_ENABLED = True
 
@@ -218,7 +218,7 @@ class TestUpgradePluginWithMarketplace:
     @patch("services.plugin.plugin_service.marketplace")
     @patch("services.plugin.plugin_service.FeatureService")
     @patch("services.plugin.plugin_service.PluginInstaller")
-    @patch("services.plugin.plugin_service.dify_config")
+    @patch("services.plugin.plugin_service.nexusai_config")
     def test_skips_download_when_already_installed(self, mock_config, mock_installer_cls, mock_fs, mock_marketplace):
         mock_config.MARKETPLACE_ENABLED = True
         mock_fs.get_system_features.return_value = _make_features()
@@ -234,7 +234,7 @@ class TestUpgradePluginWithMarketplace:
     @patch("services.plugin.plugin_service.download_plugin_pkg")
     @patch("services.plugin.plugin_service.FeatureService")
     @patch("services.plugin.plugin_service.PluginInstaller")
-    @patch("services.plugin.plugin_service.dify_config")
+    @patch("services.plugin.plugin_service.nexusai_config")
     def test_downloads_when_not_installed(self, mock_config, mock_installer_cls, mock_fs, mock_download):
         mock_config.MARKETPLACE_ENABLED = True
         mock_fs.get_system_features.return_value = _make_features()
@@ -260,7 +260,7 @@ class TestUpgradePluginWithGithub:
         installer = mock_installer_cls.return_value
         installer.upgrade_plugin.return_value = MagicMock()
 
-        PluginService.upgrade_plugin_with_github("t1", "old-uid", "new-uid", "org/repo", "v1", "pkg.difypkg")
+        PluginService.upgrade_plugin_with_github("t1", "old-uid", "new-uid", "org/repo", "v1", "pkg.nexusaipkg")
 
         installer.upgrade_plugin.assert_called_once()
         call_args = installer.upgrade_plugin.call_args
@@ -282,7 +282,7 @@ class TestUploadPkg:
 
 
 class TestInstallFromMarketplacePkg:
-    @patch("services.plugin.plugin_service.dify_config")
+    @patch("services.plugin.plugin_service.nexusai_config")
     def test_raises_when_marketplace_disabled(self, mock_config):
         mock_config.MARKETPLACE_ENABLED = False
 
@@ -292,7 +292,7 @@ class TestInstallFromMarketplacePkg:
     @patch("services.plugin.plugin_service.download_plugin_pkg")
     @patch("services.plugin.plugin_service.FeatureService")
     @patch("services.plugin.plugin_service.PluginInstaller")
-    @patch("services.plugin.plugin_service.dify_config")
+    @patch("services.plugin.plugin_service.nexusai_config")
     def test_downloads_when_not_cached(self, mock_config, mock_installer_cls, mock_fs, mock_download):
         mock_config.MARKETPLACE_ENABLED = True
         mock_fs.get_system_features.return_value = _make_features()
@@ -314,7 +314,7 @@ class TestInstallFromMarketplacePkg:
 
     @patch("services.plugin.plugin_service.FeatureService")
     @patch("services.plugin.plugin_service.PluginInstaller")
-    @patch("services.plugin.plugin_service.dify_config")
+    @patch("services.plugin.plugin_service.nexusai_config")
     def test_uses_cached_when_already_downloaded(self, mock_config, mock_installer_cls, mock_fs):
         mock_config.MARKETPLACE_ENABLED = True
         mock_fs.get_system_features.return_value = _make_features()
@@ -386,7 +386,7 @@ class TestUninstall:
         installer.list_plugins.return_value = [plugin]
         installer.uninstall.return_value = True
 
-        with patch("services.plugin.plugin_service.dify_config") as mock_config:
+        with patch("services.plugin.plugin_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = False
             result = PluginService.uninstall(tenant_id, "install-1")
 

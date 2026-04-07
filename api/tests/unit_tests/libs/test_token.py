@@ -31,25 +31,25 @@ def test_extract_access_token():
 
 
 def test_real_cookie_name_uses_host_prefix_without_domain(monkeypatch):
-    monkeypatch.setattr(token.dify_config, "CONSOLE_WEB_URL", "https://console.example.com", raising=False)
-    monkeypatch.setattr(token.dify_config, "CONSOLE_API_URL", "https://api.example.com", raising=False)
-    monkeypatch.setattr(token.dify_config, "COOKIE_DOMAIN", "", raising=False)
+    monkeypatch.setattr(token.nexusai_config, "CONSOLE_WEB_URL", "https://console.example.com", raising=False)
+    monkeypatch.setattr(token.nexusai_config, "CONSOLE_API_URL", "https://api.example.com", raising=False)
+    monkeypatch.setattr(token.nexusai_config, "COOKIE_DOMAIN", "", raising=False)
 
     assert token._real_cookie_name("csrf_token") == "__Host-csrf_token"
 
 
 def test_real_cookie_name_without_host_prefix_when_domain_present(monkeypatch):
-    monkeypatch.setattr(token.dify_config, "CONSOLE_WEB_URL", "https://console.example.com", raising=False)
-    monkeypatch.setattr(token.dify_config, "CONSOLE_API_URL", "https://api.example.com", raising=False)
-    monkeypatch.setattr(token.dify_config, "COOKIE_DOMAIN", ".example.com", raising=False)
+    monkeypatch.setattr(token.nexusai_config, "CONSOLE_WEB_URL", "https://console.example.com", raising=False)
+    monkeypatch.setattr(token.nexusai_config, "CONSOLE_API_URL", "https://api.example.com", raising=False)
+    monkeypatch.setattr(token.nexusai_config, "COOKIE_DOMAIN", ".example.com", raising=False)
 
     assert token._real_cookie_name("csrf_token") == "csrf_token"
 
 
 def test_set_csrf_cookie_includes_domain_when_configured(monkeypatch):
-    monkeypatch.setattr(token.dify_config, "CONSOLE_WEB_URL", "https://console.example.com", raising=False)
-    monkeypatch.setattr(token.dify_config, "CONSOLE_API_URL", "https://api.example.com", raising=False)
-    monkeypatch.setattr(token.dify_config, "COOKIE_DOMAIN", ".example.com", raising=False)
+    monkeypatch.setattr(token.nexusai_config, "CONSOLE_WEB_URL", "https://console.example.com", raising=False)
+    monkeypatch.setattr(token.nexusai_config, "CONSOLE_API_URL", "https://api.example.com", raising=False)
+    monkeypatch.setattr(token.nexusai_config, "COOKIE_DOMAIN", ".example.com", raising=False)
 
     response = Response()
     request = MagicMock()

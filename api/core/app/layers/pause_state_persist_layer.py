@@ -11,7 +11,7 @@ from core.app.entities.app_invoke_entities import AdvancedChatAppGenerateEntity,
 from core.workflow.system_variables import SystemVariableKey, get_system_text
 from models.model import AppMode
 from repositories.api_workflow_run_repository import APIWorkflowRunRepository
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 
 
 # Wrapper types for `WorkflowAppGenerateEntity` and
@@ -81,7 +81,7 @@ class PauseStatePersistenceLayer(GraphEngineLayer):
         self._generate_entity = generate_entity
 
     def _get_repo(self) -> APIWorkflowRunRepository:
-        return DifyAPIRepositoryFactory.create_api_workflow_run_repository(self._session_maker)
+        return NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(self._session_maker)
 
     def on_graph_start(self) -> None:
         """

@@ -20,8 +20,8 @@ from core.llm_generator.prompts import (
     CONVERSATION_TITLE_PROMPT,
     GENERATOR_QA_PROMPT,
     JAVASCRIPT_CODE_GENERATOR_PROMPT_TEMPLATE,
-    LLM_MODIFY_CODE_SYSTEM,
-    LLM_MODIFY_PROMPT_SYSTEM,
+    LLM_MONEXUSAI_CODE_SYSTEM,
+    LLM_MONEXUSAI_PROMPT_SYSTEM,
     PYTHON_CODE_GENERATOR_PROMPT_TEMPLATE,
     SUGGESTED_QUESTIONS_MAX_TOKENS,
     SUGGESTED_QUESTIONS_TEMPERATURE,
@@ -416,7 +416,7 @@ class LLMGenerator:
             return {"output": "", "error": f"An unexpected error occurred: {str(e)}"}
 
     @staticmethod
-    def instruction_modify_legacy(
+    def instruction_monexusai_legacy(
         tenant_id: str,
         flow_id: str,
         current: str,
@@ -428,7 +428,7 @@ class LLMGenerator:
             select(Message).where(Message.app_id == flow_id).order_by(Message.created_at.desc()).limit(1)
         )
         if not last_run:
-            return LLMGenerator.__instruction_modify_common(
+            return LLMGenerator.__instruction_monexusai_common(
                 tenant_id=tenant_id,
                 model_config=model_config,
                 last_run=None,
@@ -443,7 +443,7 @@ class LLMGenerator:
             "answer": last_run.answer,
             "error": last_run.error,
         }
-        return LLMGenerator.__instruction_modify_common(
+        return LLMGenerator.__instruction_monexusai_common(
             tenant_id=tenant_id,
             model_config=model_config,
             last_run=last_run_dict,
@@ -455,7 +455,7 @@ class LLMGenerator:
         )
 
     @staticmethod
-    def instruction_modify_workflow(
+    def instruction_monexusai_workflow(
         tenant_id: str,
         flow_id: str,
         node_id: str,
@@ -485,7 +485,7 @@ class LLMGenerator:
                 node_type = "llm"
 
         if not last_run:  # Node is not executed yet
-            return LLMGenerator.__instruction_modify_common(
+            return LLMGenerator.__instruction_monexusai_common(
                 tenant_id=tenant_id,
                 model_config=model_config,
                 last_run=None,
@@ -518,7 +518,7 @@ class LLMGenerator:
             "agent_log": agent_log_of(last_run),
         }
 
-        return LLMGenerator.__instruction_modify_common(
+        return LLMGenerator.__instruction_monexusai_common(
             tenant_id=tenant_id,
             model_config=model_config,
             last_run=last_run_dict,
@@ -530,7 +530,7 @@ class LLMGenerator:
         )
 
     @staticmethod
-    def __instruction_modify_common(
+    def __instruction_monexusai_common(
         tenant_id: str,
         model_config: ModelConfig,
         last_run: dict | None,
@@ -558,11 +558,11 @@ class LLMGenerator:
         )
         match node_type:
             case "llm" | "agent":
-                system_prompt = LLM_MODIFY_PROMPT_SYSTEM
+                system_prompt = LLM_MONEXUSAI_PROMPT_SYSTEM
             case "code":
-                system_prompt = LLM_MODIFY_CODE_SYSTEM
+                system_prompt = LLM_MONEXUSAI_CODE_SYSTEM
             case _:
-                system_prompt = LLM_MODIFY_PROMPT_SYSTEM
+                system_prompt = LLM_MONEXUSAI_PROMPT_SYSTEM
         prompt_messages = [
             SystemPromptMessage(content=system_prompt),
             UserPromptMessage(

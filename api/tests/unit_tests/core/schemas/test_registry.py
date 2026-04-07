@@ -66,7 +66,7 @@ class TestSchemaRegistry:
         registry._load_schema("v1", "test", schema_path)
 
         assert registry.versions["v1"]["test"] == schema_content
-        uri = "https://dify.ai/schemas/v1/test.json"
+        uri = "https://nexusai.ai/schemas/v1/test.json"
         assert registry.metadata[uri]["title"] == "Test Schema"
         assert registry.metadata[uri]["version"] == "v1"
 
@@ -97,13 +97,13 @@ class TestSchemaRegistry:
         registry.versions = {"v1": {"test": {"type": "object"}}}
 
         # Valid URI
-        assert registry.get_schema("https://dify.ai/schemas/v1/test.json") == {"type": "object"}
+        assert registry.get_schema("https://nexusai.ai/schemas/v1/test.json") == {"type": "object"}
 
         # Invalid URI
         assert registry.get_schema("invalid-uri") is None
 
         # Missing version
-        assert registry.get_schema("https://dify.ai/schemas/v2/test.json") is None
+        assert registry.get_schema("https://nexusai.ai/schemas/v2/test.json") is None
 
     def test_list_versions(self):
         registry = SchemaRegistry("/tmp")

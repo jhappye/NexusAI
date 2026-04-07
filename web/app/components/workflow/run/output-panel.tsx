@@ -42,12 +42,12 @@ const OutputPanel: FC<OutputPanelProps> = ({
     for (const key in outputs) {
       if (Array.isArray(outputs[key])) {
         outputs[key].map((output: any) => {
-          if (output?.dify_model_identity === '__dify__file__')
+          if (output?.nexusai_model_identity === '__nexusai__file__')
             fileList.push(output)
           return null
         })
       }
-      else if (outputs[key]?.dify_model_identity === '__dify__file__') {
+      else if (outputs[key]?.nexusai_model_identity === '__nexusai__file__') {
         fileList.push(outputs[key])
       }
     }

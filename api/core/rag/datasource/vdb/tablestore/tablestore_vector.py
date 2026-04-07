@@ -8,7 +8,7 @@ import tablestore  # type: ignore
 from pydantic import BaseModel, model_validator
 from tablestore import BatchGetRowRequest, TableInBatchGetRowItem
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import Field, parse_metadata_json
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -405,10 +405,10 @@ class TableStoreVectorFactory(AbstractVectorFactory):
         return TableStoreVector(
             collection_name=collection_name,
             config=TableStoreConfig(
-                endpoint=dify_config.TABLESTORE_ENDPOINT,
-                instance_name=dify_config.TABLESTORE_INSTANCE_NAME,
-                access_key_id=dify_config.TABLESTORE_ACCESS_KEY_ID,
-                access_key_secret=dify_config.TABLESTORE_ACCESS_KEY_SECRET,
-                normalize_full_text_bm25_score=dify_config.TABLESTORE_NORMALIZE_FULLTEXT_BM25_SCORE,
+                endpoint=nexusai_config.TABLESTORE_ENDPOINT,
+                instance_name=nexusai_config.TABLESTORE_INSTANCE_NAME,
+                access_key_id=nexusai_config.TABLESTORE_ACCESS_KEY_ID,
+                access_key_secret=nexusai_config.TABLESTORE_ACCESS_KEY_SECRET,
+                normalize_full_text_bm25_score=nexusai_config.TABLESTORE_NORMALIZE_FULLTEXT_BM25_SCORE,
             ),
         )

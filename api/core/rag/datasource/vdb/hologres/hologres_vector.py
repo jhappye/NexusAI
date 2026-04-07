@@ -8,7 +8,7 @@ from holo_search_sdk.types import BaseQuantizationType, DistanceType, TokenizerT
 from psycopg import sql as psql
 from pydantic import BaseModel, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import parse_metadata_json
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -345,16 +345,16 @@ class HologresVectorFactory(AbstractVectorFactory):
         return HologresVector(
             collection_name=collection_name,
             config=HologresVectorConfig(
-                host=dify_config.HOLOGRES_HOST or "",
-                port=dify_config.HOLOGRES_PORT,
-                database=dify_config.HOLOGRES_DATABASE or "",
-                access_key_id=dify_config.HOLOGRES_ACCESS_KEY_ID or "",
-                access_key_secret=dify_config.HOLOGRES_ACCESS_KEY_SECRET or "",
-                schema_name=dify_config.HOLOGRES_SCHEMA,
-                tokenizer=dify_config.HOLOGRES_TOKENIZER,
-                distance_method=dify_config.HOLOGRES_DISTANCE_METHOD,
-                base_quantization_type=dify_config.HOLOGRES_BASE_QUANTIZATION_TYPE,
-                max_degree=dify_config.HOLOGRES_MAX_DEGREE,
-                ef_construction=dify_config.HOLOGRES_EF_CONSTRUCTION,
+                host=nexusai_config.HOLOGRES_HOST or "",
+                port=nexusai_config.HOLOGRES_PORT,
+                database=nexusai_config.HOLOGRES_DATABASE or "",
+                access_key_id=nexusai_config.HOLOGRES_ACCESS_KEY_ID or "",
+                access_key_secret=nexusai_config.HOLOGRES_ACCESS_KEY_SECRET or "",
+                schema_name=nexusai_config.HOLOGRES_SCHEMA,
+                tokenizer=nexusai_config.HOLOGRES_TOKENIZER,
+                distance_method=nexusai_config.HOLOGRES_DISTANCE_METHOD,
+                base_quantization_type=nexusai_config.HOLOGRES_BASE_QUANTIZATION_TYPE,
+                max_degree=nexusai_config.HOLOGRES_MAX_DEGREE,
+                ef_construction=nexusai_config.HOLOGRES_EF_CONSTRUCTION,
             ),
         )

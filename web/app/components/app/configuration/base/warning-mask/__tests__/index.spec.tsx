@@ -11,14 +11,14 @@ describe('WarningMask', () => {
       render(
         <WarningMask
           title="Access Restricted"
-          description="Only workspace owners may modify this section."
+          description="Only workspace owners may monexusai this section."
           footer={footer}
         />,
       )
 
       // Assert
       expect(screen.getByText('Access Restricted')).toBeInTheDocument()
-      expect(screen.getByText('Only workspace owners may modify this section.')).toBeInTheDocument()
+      expect(screen.getByText('Only workspace owners may monexusai this section.')).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument()
     })
   })

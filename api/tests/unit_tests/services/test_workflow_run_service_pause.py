@@ -124,7 +124,7 @@ class TestWorkflowRunService:
         """Create WorkflowRunService instance with mocked dependencies."""
         session_factory, _ = mock_session_factory
 
-        with patch("services.workflow_run_service.DifyAPIRepositoryFactory", autospec=True) as mock_factory:
+        with patch("services.workflow_run_service.NexusAIAPIRepositoryFactory", autospec=True) as mock_factory:
             mock_factory.create_api_workflow_run_repository.return_value = mock_workflow_run_repository
             service = WorkflowRunService(session_factory)
             return service
@@ -135,7 +135,7 @@ class TestWorkflowRunService:
         mock_engine = create_autospec(Engine)
         session_factory, _ = mock_session_factory
 
-        with patch("services.workflow_run_service.DifyAPIRepositoryFactory", autospec=True) as mock_factory:
+        with patch("services.workflow_run_service.NexusAIAPIRepositoryFactory", autospec=True) as mock_factory:
             mock_factory.create_api_workflow_run_repository.return_value = mock_workflow_run_repository
             service = WorkflowRunService(mock_engine)
             return service
@@ -146,7 +146,7 @@ class TestWorkflowRunService:
         """Test WorkflowRunService initialization with session_factory."""
         session_factory, _ = mock_session_factory
 
-        with patch("services.workflow_run_service.DifyAPIRepositoryFactory", autospec=True) as mock_factory:
+        with patch("services.workflow_run_service.NexusAIAPIRepositoryFactory", autospec=True) as mock_factory:
             mock_factory.create_api_workflow_run_repository.return_value = mock_workflow_run_repository
             service = WorkflowRunService(session_factory)
 
@@ -158,7 +158,7 @@ class TestWorkflowRunService:
         mock_engine = create_autospec(Engine)
         session_factory, _ = mock_session_factory
 
-        with patch("services.workflow_run_service.DifyAPIRepositoryFactory", autospec=True) as mock_factory:
+        with patch("services.workflow_run_service.NexusAIAPIRepositoryFactory", autospec=True) as mock_factory:
             mock_factory.create_api_workflow_run_repository.return_value = mock_workflow_run_repository
             with patch(
                 "services.workflow_run_service.sessionmaker", return_value=session_factory, autospec=True
@@ -201,7 +201,7 @@ def repository_factory_mocks(monkeypatch: pytest.MonkeyPatch) -> tuple[MagicMock
         create_api_workflow_node_execution_repository=MagicMock(return_value=node_repo),
         create_api_workflow_run_repository=MagicMock(return_value=workflow_run_repo),
     )
-    monkeypatch.setattr(service_module, "DifyAPIRepositoryFactory", factory)
+    monkeypatch.setattr(service_module, "NexusAIAPIRepositoryFactory", factory)
 
     # Assert
     return node_repo, workflow_run_repo, factory

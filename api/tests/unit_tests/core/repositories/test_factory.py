@@ -12,7 +12,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker
 
 from core.repositories.factory import (
-    DifyCoreRepositoryFactory,
+    NexusAICoreRepositoryFactory,
     RepositoryImportError,
     WorkflowExecutionRepository,
     WorkflowNodeExecutionRepository,
@@ -51,7 +51,7 @@ class TestRepositoryFactory:
             import_string("invalidpath")
         assert "doesn't look like a module path" in str(exc_info.value)
 
-    @patch("core.repositories.factory.dify_config", autospec=True)
+    @patch("core.repositories.factory.nexusai_config", autospec=True)
     def test_create_workflow_execution_repository_success(self, mock_config):
         """Test successful WorkflowExecutionRepository creation."""
         # Setup mock configuration
@@ -70,7 +70,7 @@ class TestRepositoryFactory:
 
         # Mock import_string
         with patch("core.repositories.factory.import_string", return_value=mock_repository_class, autospec=True):
-            result = DifyCoreRepositoryFactory.create_workflow_execution_repository(
+            result = NexusAICoreRepositoryFactory.create_workflow_execution_repository(
                 session_factory=mock_session_factory,
                 user=mock_user,
                 app_id=app_id,
@@ -86,7 +86,7 @@ class TestRepositoryFactory:
             )
             assert result is mock_repository_instance
 
-    @patch("core.repositories.factory.dify_config", autospec=True)
+    @patch("core.repositories.factory.nexusai_config", autospec=True)
     def test_create_workflow_execution_repository_import_error(self, mock_config):
         """Test WorkflowExecutionRepository creation with import error."""
         # Setup mock configuration with invalid class path
@@ -96,7 +96,7 @@ class TestRepositoryFactory:
         mock_user = MagicMock(spec=Account)
 
         with pytest.raises(RepositoryImportError) as exc_info:
-            DifyCoreRepositoryFactory.create_workflow_execution_repository(
+            NexusAICoreRepositoryFactory.create_workflow_execution_repository(
                 session_factory=mock_session_factory,
                 user=mock_user,
                 app_id="test-app-id",
@@ -104,7 +104,7 @@ class TestRepositoryFactory:
             )
         assert "Failed to create WorkflowExecutionRepository" in str(exc_info.value)
 
-    @patch("core.repositories.factory.dify_config", autospec=True)
+    @patch("core.repositories.factory.nexusai_config", autospec=True)
     def test_create_workflow_execution_repository_instantiation_error(self, mock_config):
         """Test WorkflowExecutionRepository creation with instantiation error."""
         # Setup mock configuration
@@ -120,7 +120,7 @@ class TestRepositoryFactory:
         # Mock import_string to return a failing class
         with patch("core.repositories.factory.import_string", return_value=mock_repository_class, autospec=True):
             with pytest.raises(RepositoryImportError) as exc_info:
-                DifyCoreRepositoryFactory.create_workflow_execution_repository(
+                NexusAICoreRepositoryFactory.create_workflow_execution_repository(
                     session_factory=mock_session_factory,
                     user=mock_user,
                     app_id="test-app-id",
@@ -128,7 +128,7 @@ class TestRepositoryFactory:
                 )
             assert "Failed to create WorkflowExecutionRepository" in str(exc_info.value)
 
-    @patch("core.repositories.factory.dify_config", autospec=True)
+    @patch("core.repositories.factory.nexusai_config", autospec=True)
     def test_create_workflow_node_execution_repository_success(self, mock_config):
         """Test successful WorkflowNodeExecutionRepository creation."""
         # Setup mock configuration
@@ -147,7 +147,7 @@ class TestRepositoryFactory:
 
         # Mock import_string
         with patch("core.repositories.factory.import_string", return_value=mock_repository_class, autospec=True):
-            result = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+            result = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
                 session_factory=mock_session_factory,
                 user=mock_user,
                 app_id=app_id,
@@ -163,7 +163,7 @@ class TestRepositoryFactory:
             )
             assert result is mock_repository_instance
 
-    @patch("core.repositories.factory.dify_config", autospec=True)
+    @patch("core.repositories.factory.nexusai_config", autospec=True)
     def test_create_workflow_node_execution_repository_import_error(self, mock_config):
         """Test WorkflowNodeExecutionRepository creation with import error."""
         # Setup mock configuration with invalid class path
@@ -173,7 +173,7 @@ class TestRepositoryFactory:
         mock_user = MagicMock(spec=EndUser)
 
         with pytest.raises(RepositoryImportError) as exc_info:
-            DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+            NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
                 session_factory=mock_session_factory,
                 user=mock_user,
                 app_id="test-app-id",
@@ -181,7 +181,7 @@ class TestRepositoryFactory:
             )
         assert "Failed to create WorkflowNodeExecutionRepository" in str(exc_info.value)
 
-    @patch("core.repositories.factory.dify_config", autospec=True)
+    @patch("core.repositories.factory.nexusai_config", autospec=True)
     def test_create_workflow_node_execution_repository_instantiation_error(self, mock_config):
         """Test WorkflowNodeExecutionRepository creation with instantiation error."""
         # Setup mock configuration
@@ -197,7 +197,7 @@ class TestRepositoryFactory:
         # Mock import_string to return a failing class
         with patch("core.repositories.factory.import_string", return_value=mock_repository_class, autospec=True):
             with pytest.raises(RepositoryImportError) as exc_info:
-                DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+                NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
                     session_factory=mock_session_factory,
                     user=mock_user,
                     app_id="test-app-id",
@@ -211,7 +211,7 @@ class TestRepositoryFactory:
         error = RepositoryImportError(error_message)
         assert str(error) == error_message
 
-    @patch("core.repositories.factory.dify_config", autospec=True)
+    @patch("core.repositories.factory.nexusai_config", autospec=True)
     def test_create_with_engine_instead_of_sessionmaker(self, mock_config):
         """Test repository creation with Engine instead of sessionmaker."""
         # Setup mock configuration
@@ -230,7 +230,7 @@ class TestRepositoryFactory:
 
         # Mock import_string
         with patch("core.repositories.factory.import_string", return_value=mock_repository_class, autospec=True):
-            result = DifyCoreRepositoryFactory.create_workflow_execution_repository(
+            result = NexusAICoreRepositoryFactory.create_workflow_execution_repository(
                 session_factory=mock_engine,  # Using Engine instead of sessionmaker
                 user=mock_user,
                 app_id=app_id,

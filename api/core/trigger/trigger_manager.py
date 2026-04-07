@@ -10,7 +10,7 @@ from typing import Any
 from flask import Request
 
 import contexts
-from configs import dify_config
+from configs import nexusai_config
 from core.plugin.entities.plugin_daemon import CredentialType, PluginTriggerProviderEntity
 from core.plugin.entities.request import TriggerInvokeEventResponse
 from core.plugin.impl.exc import PluginDaemonError, PluginNotFoundError
@@ -42,7 +42,7 @@ class TriggerManager:
             tenant_id=tenant_id, provider_id=TriggerProviderID(provider_id)
         )
         filename = provider.declaration.identity.icon
-        base_url = f"{dify_config.CONSOLE_API_URL}/console/api/workspaces/current/plugin/icon"
+        base_url = f"{nexusai_config.CONSOLE_API_URL}/console/api/workspaces/current/plugin/icon"
         return f"{base_url}?tenant_id={tenant_id}&filename={filename}"
 
     @classmethod

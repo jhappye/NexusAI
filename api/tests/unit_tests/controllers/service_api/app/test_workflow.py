@@ -25,7 +25,7 @@ from werkzeug.exceptions import BadRequest, NotFound
 from controllers.service_api.app.error import NotWorkflowAppError
 from controllers.service_api.app.workflow import (
     AppQueueManager,
-    DifyAPIRepositoryFactory,
+    NexusAIAPIRepositoryFactory,
     GraphEngineManager,
     WorkflowAppLogApi,
     WorkflowLogQuery,
@@ -324,12 +324,12 @@ class TestWorkflowRunRepository:
     """Test workflow run repository interface."""
 
     def test_repository_factory_can_create_workflow_run_repository(self):
-        """Test DifyAPIRepositoryFactory can create workflow run repository."""
-        from repositories.factory import DifyAPIRepositoryFactory
+        """Test NexusAIAPIRepositoryFactory can create workflow run repository."""
+        from repositories.factory import NexusAIAPIRepositoryFactory
 
-        assert hasattr(DifyAPIRepositoryFactory, "create_api_workflow_run_repository")
+        assert hasattr(NexusAIAPIRepositoryFactory, "create_api_workflow_run_repository")
 
-    @patch("repositories.factory.DifyAPIRepositoryFactory.create_api_workflow_run_repository")
+    @patch("repositories.factory.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository")
     def test_workflow_run_repository_get_by_id(self, mock_factory):
         """Test workflow run repository get_workflow_run_by_id method."""
         mock_repo = Mock()
@@ -339,9 +339,9 @@ class TestWorkflowRunRepository:
         mock_repo.get_workflow_run_by_id.return_value = mock_run
         mock_factory.return_value = mock_repo
 
-        from repositories.factory import DifyAPIRepositoryFactory
+        from repositories.factory import NexusAIAPIRepositoryFactory
 
-        repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(Mock())
+        repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(Mock())
 
         result = repo.get_workflow_run_by_id(tenant_id="tenant_123", app_id="app_456", run_id="run_789")
 
@@ -364,7 +364,7 @@ class TestWorkflowRunDetailApi:
         workflow_module = sys.modules["controllers.service_api.app.workflow"]
         monkeypatch.setattr(workflow_module, "db", SimpleNamespace(engine=object()))
         monkeypatch.setattr(
-            DifyAPIRepositoryFactory,
+            NexusAIAPIRepositoryFactory,
             "create_api_workflow_run_repository",
             lambda *_args, **_kwargs: repo,
         )
@@ -532,7 +532,7 @@ class TestWorkflowRunDetailApiGet:
     directly; ``marshal_with`` is a no-op when calling directly.
     """
 
-    @patch("controllers.service_api.app.workflow.DifyAPIRepositoryFactory")
+    @patch("controllers.service_api.app.workflow.NexusAIAPIRepositoryFactory")
     @patch("controllers.service_api.app.workflow.db")
     def test_get_workflow_run_success(
         self,

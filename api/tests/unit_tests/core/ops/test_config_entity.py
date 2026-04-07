@@ -103,8 +103,8 @@ class TestPhoenixConfig:
 
     def test_endpoint_validation_with_path(self):
         """Test endpoint validation with path"""
-        config = PhoenixConfig(endpoint="https://app.phoenix.arize.com/s/dify-integration")
-        assert config.endpoint == "https://app.phoenix.arize.com/s/dify-integration"
+        config = PhoenixConfig(endpoint="https://app.phoenix.arize.com/s/nexusai-integration")
+        assert config.endpoint == "https://app.phoenix.arize.com/s/nexusai-integration"
 
     def test_endpoint_validation_without_path(self):
         """Test endpoint validation without path"""
@@ -303,7 +303,7 @@ class TestAliyunConfig:
     def test_default_values(self):
         """Test default values are set correctly"""
         config = AliyunConfig(license_key="test_license", endpoint="https://tracing-analysis-dc-hz.aliyuncs.com")
-        assert config.app_name == "dify_app"
+        assert config.app_name == "nexusai_app"
 
     def test_missing_required_fields(self):
         """Test that required fields are enforced"""
@@ -321,7 +321,7 @@ class TestAliyunConfig:
         config = AliyunConfig(
             license_key="test_license", endpoint="https://tracing-analysis-dc-hz.aliyuncs.com", app_name=""
         )
-        assert config.app_name == "dify_app"
+        assert config.app_name == "nexusai_app"
 
     def test_endpoint_validation_empty(self):
         """Test endpoint validation with empty value"""
@@ -390,14 +390,14 @@ class TestConfigIntegration:
         """Test that URL normalization works consistently across configs"""
         # Test that paths are removed from endpoints
         arize_config = ArizeConfig(endpoint="https://arize.com/api/v1/test")
-        phoenix_with_path_config = PhoenixConfig(endpoint="https://app.phoenix.arize.com/s/dify-integration")
+        phoenix_with_path_config = PhoenixConfig(endpoint="https://app.phoenix.arize.com/s/nexusai-integration")
         phoenix_without_path_config = PhoenixConfig(endpoint="https://app.phoenix.arize.com")
         aliyun_config = AliyunConfig(
             license_key="test_license", endpoint="https://tracing-analysis-dc-hz.aliyuncs.com/api/v1/traces"
         )
 
         assert arize_config.endpoint == "https://arize.com"
-        assert phoenix_with_path_config.endpoint == "https://app.phoenix.arize.com/s/dify-integration"
+        assert phoenix_with_path_config.endpoint == "https://app.phoenix.arize.com/s/nexusai-integration"
         assert phoenix_without_path_config.endpoint == "https://app.phoenix.arize.com"
         assert aliyun_config.endpoint == "https://tracing-analysis-dc-hz.aliyuncs.com/api/v1/traces"
 
@@ -413,4 +413,4 @@ class TestConfigIntegration:
         assert arize_config.project == "default"
         assert phoenix_config.project == "default"
         assert opik_config.project == "Default Project"
-        assert aliyun_config.app_name == "dify_app"
+        assert aliyun_config.app_name == "nexusai_app"

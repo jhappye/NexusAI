@@ -1115,7 +1115,7 @@ class TestDocumentServiceSaveDocumentWithDatasetId:
 
         with (
             patch("services.dataset_service.FeatureService.get_features", return_value=_make_features(enabled=True)),
-            patch("services.dataset_service.dify_config.BATCH_UPLOAD_LIMIT", 1),
+            patch("services.dataset_service.nexusai_config.BATCH_UPLOAD_LIMIT", 1),
             patch.object(DocumentService, "check_documents_upload_quota") as check_quota,
         ):
             with pytest.raises(ValueError, match="batch upload limit of 1"):
@@ -1658,7 +1658,7 @@ class TestDocumentServiceSaveWithoutDatasetBilling:
 
         with (
             patch("services.dataset_service.FeatureService.get_features", return_value=features),
-            patch("services.dataset_service.dify_config.BATCH_UPLOAD_LIMIT", "10"),
+            patch("services.dataset_service.nexusai_config.BATCH_UPLOAD_LIMIT", "10"),
             patch.object(DocumentService, "check_documents_upload_quota") as check_quota,
             patch(
                 "services.dataset_service.Dataset",
@@ -1693,7 +1693,7 @@ class TestDocumentServiceSaveWithoutDatasetBilling:
 
         with (
             patch("services.dataset_service.FeatureService.get_features", return_value=_make_features(enabled=True)),
-            patch("services.dataset_service.dify_config.BATCH_UPLOAD_LIMIT", "1"),
+            patch("services.dataset_service.nexusai_config.BATCH_UPLOAD_LIMIT", "1"),
             patch.object(DocumentService, "check_documents_upload_quota") as check_quota,
         ):
             with pytest.raises(ValueError, match="batch upload limit of 1"):

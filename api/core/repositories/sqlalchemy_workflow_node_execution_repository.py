@@ -20,7 +20,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 from tenacity import before_sleep_log, retry, retry_if_exception, stop_after_attempt
 
-from configs import dify_config
+from configs import nexusai_config
 from core.repositories.factory import OrderConfig, WorkflowNodeExecutionRepository
 from extensions.ext_storage import storage
 from libs.helper import extract_tenant_id
@@ -111,9 +111,9 @@ class SQLAlchemyWorkflowNodeExecutionRepository(WorkflowNodeExecutionRepository)
 
     def _create_truncator(self) -> VariableTruncator:
         return VariableTruncator(
-            max_size_bytes=dify_config.WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE,
-            array_element_limit=dify_config.WORKFLOW_VARIABLE_TRUNCATION_ARRAY_LENGTH,
-            string_length_limit=dify_config.WORKFLOW_VARIABLE_TRUNCATION_STRING_LENGTH,
+            max_size_bytes=nexusai_config.WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE,
+            array_element_limit=nexusai_config.WORKFLOW_VARIABLE_TRUNCATION_ARRAY_LENGTH,
+            string_length_limit=nexusai_config.WORKFLOW_VARIABLE_TRUNCATION_STRING_LENGTH,
         )
 
     def _to_domain_model(self, db_model: WorkflowNodeExecutionModel) -> WorkflowNodeExecution:

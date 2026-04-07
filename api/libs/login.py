@@ -8,9 +8,9 @@ from flask import Response, current_app, g, has_request_context, request
 from flask_login.config import EXEMPT_METHODS
 from werkzeug.local import LocalProxy
 
-from configs import dify_config
-from dify_app import DifyApp
-from extensions.ext_login import DifyLoginManager
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
+from extensions.ext_login import NexusAILoginManager
 from libs.token import check_csrf_token
 from models import Account
 
@@ -29,9 +29,9 @@ def _resolve_current_user() -> EndUser | Account | None:
     return get_current_object() if callable(get_current_object) else user_proxy  # type: ignore
 
 
-def _get_login_manager() -> DifyLoginManager:
-    """Return the project login manager with Dify's narrowed unauthorized contract."""
-    app = cast(DifyApp, current_app)
+def _get_login_manager() -> NexusAILoginManager:
+    """Return the project login manager with NexusAI's narrowed unauthorized contract."""
+    app = cast(NexusAIApp, current_app)
     return app.login_manager
 
 
@@ -84,12 +84,12 @@ def login_required[**P, R](func: Callable[P, R]) -> Callable[P, R | Response]:
 
     @wraps(func)
     def decorated_view(*args: P.args, **kwargs: P.kwargs) -> R | Response:
-        if request.method in EXEMPT_METHODS or dify_config.LOGIN_DISABLED:
+        if request.method in EXEMPT_METHODS or nexusai_config.LOGIN_DISABLED:
             return current_app.ensure_sync(func)(*args, **kwargs)
 
         user = _resolve_current_user()
         if user is None or not user.is_authenticated:
-            # `DifyLoginManager` guarantees that the registered unauthorized handler
+            # `NexusAILoginManager` guarantees that the registered unauthorized handler
             # is surfaced here as a concrete Flask `Response`.
             unauthorized_response: Response = _get_login_manager().unauthorized()
             return unauthorized_response

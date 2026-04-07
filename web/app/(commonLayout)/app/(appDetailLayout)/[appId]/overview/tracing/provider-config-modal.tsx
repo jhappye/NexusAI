@@ -411,7 +411,7 @@ const ProviderConfigModal: FC<Props> = ({
                               isRequired
                               value={(config as TencentConfig).service_name}
                               onChange={handleConfigChange('service_name')}
-                              placeholder="dify_app"
+                              placeholder="nexusai_app"
                             />
                           </>
                         )}

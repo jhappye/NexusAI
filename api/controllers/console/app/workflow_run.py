@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.console import console_ns
 from controllers.console.app.wraps import get_app_model
 from controllers.console.wraps import account_initialization_required, setup_required
@@ -34,7 +34,7 @@ from libs.helper import uuid_value
 from libs.login import current_user, login_required
 from models import Account, App, AppMode, EndUser, WorkflowArchiveLog, WorkflowRunTriggeredFrom
 from models.workflow import WorkflowRun
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.retention.workflow_run.constants import ARCHIVE_BUNDLE_NAME
 from services.workflow_run_service import WorkflowRunService
 
@@ -42,7 +42,7 @@ from services.workflow_run_service import WorkflowRunService
 def _build_backstage_input_url(form_token: str | None) -> str | None:
     if not form_token:
         return None
-    base_url = dify_config.APP_WEB_URL
+    base_url = nexusai_config.APP_WEB_URL
     if not base_url:
         return None
     return f"{base_url.rstrip('/')}/form/{form_token}"
@@ -495,7 +495,7 @@ class ConsoleWorkflowPauseDetailsApi(Resource):
 
         # Query WorkflowRun to determine if workflow is suspended
         session_maker = sessionmaker(bind=db.engine)
-        workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker=session_maker)
+        workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker=session_maker)
 
         workflow_run = db.session.get(WorkflowRun, workflow_run_id)
         if not workflow_run:

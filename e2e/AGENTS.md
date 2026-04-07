@@ -1,6 +1,6 @@
 # E2E
 
-This package contains the repository-level end-to-end tests for Dify.
+This package contains the repository-level end-to-end tests for NexusAI.
 
 This file is the canonical package guide for `e2e/`. Keep detailed workflow, architecture, debugging, and reporting documentation here. Keep `README.md` as a minimal pointer to this file so the two documents do not drift.
 

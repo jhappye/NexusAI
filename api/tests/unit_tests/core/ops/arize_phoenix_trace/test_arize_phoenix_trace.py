@@ -139,7 +139,7 @@ def test_safe_json_dumps():
 
 def test_wrap_span_metadata():
     res = wrap_span_metadata({"a": 1}, b=2)
-    assert res == {"a": 1, "b": 2, "created_from": "Dify"}
+    assert res == {"a": 1, "b": 2, "created_from": "NexusAI"}
 
 
 @patch("core.ops.arize_phoenix_trace.arize_phoenix_trace.GrpcOTLPSpanExporter")
@@ -229,7 +229,7 @@ def test_trace_exception(trace_instance):
 
 
 @patch("core.ops.arize_phoenix_trace.arize_phoenix_trace.sessionmaker")
-@patch("core.ops.arize_phoenix_trace.arize_phoenix_trace.DifyCoreRepositoryFactory")
+@patch("core.ops.arize_phoenix_trace.arize_phoenix_trace.NexusAICoreRepositoryFactory")
 @patch("core.ops.arize_phoenix_trace.arize_phoenix_trace.db")
 def test_workflow_trace_full(mock_db, mock_repo_factory, mock_sessionmaker, trace_instance):
     mock_db.engine = MagicMock()
@@ -395,4 +395,4 @@ def test_api_check_success(trace_instance):
 
 def test_ensure_root_span_basic(trace_instance):
     trace_instance.ensure_root_span("tid")
-    assert "tid" in trace_instance.dify_trace_ids
+    assert "tid" in trace_instance.nexusai_trace_ids

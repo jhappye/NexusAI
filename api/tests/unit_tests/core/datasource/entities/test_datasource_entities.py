@@ -125,7 +125,7 @@ def test_datasource_provider_identity():
     assert identity.tags == [ToolLabelEnum.SEARCH]
 
     # Test generate_datasource_icon_url
-    with patch("core.datasource.entities.datasource_entities.dify_config") as mock_config:
+    with patch("core.datasource.entities.datasource_entities.nexusai_config") as mock_config:
         mock_config.CONSOLE_API_URL = "http://api.example.com"
         url = identity.generate_datasource_icon_url("tenant123")
         assert "http://api.example.com/console/api/workspaces/current/plugin/icon" in url
@@ -133,12 +133,12 @@ def test_datasource_provider_identity():
         assert "filename=icon.png" in url
 
     # Test hardcoded icon
-    identity.icon = "https://assets.dify.ai/images/File%20Upload.svg"
+    identity.icon = "https://assets.nexusai.ai/images/File%20Upload.svg"
     assert identity.generate_datasource_icon_url("tenant123") == identity.icon
 
     # Test with empty CONSOLE_API_URL
     identity.icon = "test.png"
-    with patch("core.datasource.entities.datasource_entities.dify_config") as mock_config:
+    with patch("core.datasource.entities.datasource_entities.nexusai_config") as mock_config:
         mock_config.CONSOLE_API_URL = None
         url = identity.generate_datasource_icon_url("tenant123")
         assert url.startswith("/console/api/workspaces/current/plugin/icon")

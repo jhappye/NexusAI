@@ -38,10 +38,10 @@ vi.mock('@/app/components/base/ui/toast', () => ({
   toast: toastMocks.api,
 }))
 
-// Mock modifyDocMetadata
-const mockModifyDocMetadata = vi.fn()
+// Mock monexusaiDocMetadata
+const mockMonexusaiDocMetadata = vi.fn()
 vi.mock('@/service/datasets', () => ({
-  modifyDocMetadata: (...args: unknown[]) => mockModifyDocMetadata(...args),
+  monexusaiDocMetadata: (...args: unknown[]) => mockMonexusaiDocMetadata(...args),
 }))
 
 // Mock useMetadataMap and related hooks
@@ -242,7 +242,7 @@ describe('Metadata', () => {
     })
 
     it('should save metadata when save button is clicked', async () => {
-      mockModifyDocMetadata.mockResolvedValueOnce({})
+      mockMonexusaiDocMetadata.mockResolvedValueOnce({})
       render(<Metadata {...defaultProps} />)
 
       // Enter edit mode
@@ -251,12 +251,12 @@ describe('Metadata', () => {
       fireEvent.click(screen.getByText(/operation\.save/i))
 
       await waitFor(() => {
-        expect(mockModifyDocMetadata).toHaveBeenCalled()
+        expect(mockMonexusaiDocMetadata).toHaveBeenCalled()
       })
     })
 
     it('should show success notification after successful save', async () => {
-      mockModifyDocMetadata.mockResolvedValueOnce({})
+      mockMonexusaiDocMetadata.mockResolvedValueOnce({})
       render(<Metadata {...defaultProps} />)
 
       // Enter edit mode
@@ -274,7 +274,7 @@ describe('Metadata', () => {
     })
 
     it('should show error notification after failed save', async () => {
-      mockModifyDocMetadata.mockRejectedValueOnce(new Error('Save failed'))
+      mockMonexusaiDocMetadata.mockRejectedValueOnce(new Error('Save failed'))
       render(<Metadata {...defaultProps} />)
 
       // Enter edit mode
@@ -583,10 +583,10 @@ describe('useMetadataState coverage', () => {
     })
   })
 
-  describe('saveMetadata calls modifyDocMetadata with correct body', () => {
+  describe('saveMetadata calls monexusaiDocMetadata with correct body', () => {
     it('should pass doc_type and doc_metadata in save request', async () => {
       // Arrange
-      mockModifyDocMetadata.mockResolvedValueOnce({})
+      mockMonexusaiDocMetadata.mockResolvedValueOnce({})
       render(<Metadata {...defaultProps} />)
 
       // Enter edit mode
@@ -597,7 +597,7 @@ describe('useMetadataState coverage', () => {
 
       // Assert
       await waitFor(() => {
-        expect(mockModifyDocMetadata).toHaveBeenCalledWith(
+        expect(mockMonexusaiDocMetadata).toHaveBeenCalledWith(
           expect.objectContaining({
             datasetId: 'test-dataset-id',
             documentId: 'test-document-id',

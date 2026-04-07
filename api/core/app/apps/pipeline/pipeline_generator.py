@@ -17,7 +17,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
 import contexts
-from configs import dify_config
+from configs import nexusai_config
 from core.app.apps.base_app_generator import BaseAppGenerator
 from core.app.apps.base_app_queue_manager import AppQueueManager, PublishFrom
 from core.app.apps.draft_variable_saver import DraftVariableSaverFactory
@@ -38,7 +38,7 @@ from core.datasource.online_drive.online_drive_plugin import OnlineDriveDatasour
 from core.entities.knowledge_entities import PipelineDataset, PipelineDocument
 from core.rag.index_processor.constant.built_in_field import BuiltInField
 from core.repositories.factory import (
-    DifyCoreRepositoryFactory,
+    NexusAICoreRepositoryFactory,
     WorkflowExecutionRepository,
     WorkflowNodeExecutionRepository,
 )
@@ -204,14 +204,14 @@ class PipelineGenerator(BaseAppGenerator):
                 workflow_triggered_from = WorkflowRunTriggeredFrom.RAG_PIPELINE_RUN
             # Create workflow node execution repository
             session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
-            workflow_execution_repository = DifyCoreRepositoryFactory.create_workflow_execution_repository(
+            workflow_execution_repository = NexusAICoreRepositoryFactory.create_workflow_execution_repository(
                 session_factory=session_factory,
                 user=user,
                 app_id=application_generate_entity.app_config.app_id,
                 triggered_from=workflow_triggered_from,
             )
 
-            workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+            workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
                 session_factory=session_factory,
                 user=user,
                 app_id=application_generate_entity.app_config.app_id,
@@ -407,14 +407,14 @@ class PipelineGenerator(BaseAppGenerator):
         # Create workflow node execution repository
         session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
 
-        workflow_execution_repository = DifyCoreRepositoryFactory.create_workflow_execution_repository(
+        workflow_execution_repository = NexusAICoreRepositoryFactory.create_workflow_execution_repository(
             session_factory=session_factory,
             user=user,
             app_id=application_generate_entity.app_config.app_id,
             triggered_from=WorkflowRunTriggeredFrom.RAG_PIPELINE_DEBUGGING,
         )
 
-        workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+        workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
             session_factory=session_factory,
             user=user,
             app_id=application_generate_entity.app_config.app_id,
@@ -503,14 +503,14 @@ class PipelineGenerator(BaseAppGenerator):
         # Create workflow node execution repository
         session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
 
-        workflow_execution_repository = DifyCoreRepositoryFactory.create_workflow_execution_repository(
+        workflow_execution_repository = NexusAICoreRepositoryFactory.create_workflow_execution_repository(
             session_factory=session_factory,
             user=user,
             app_id=application_generate_entity.app_config.app_id,
             triggered_from=WorkflowRunTriggeredFrom.RAG_PIPELINE_DEBUGGING,
         )
 
-        workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+        workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
             session_factory=session_factory,
             user=user,
             app_id=application_generate_entity.app_config.app_id,
@@ -610,7 +610,7 @@ class PipelineGenerator(BaseAppGenerator):
                 logger.exception("Validation Error when generating")
                 queue_manager.publish_error(e, PublishFrom.APPLICATION_MANAGER)
             except ValueError as e:
-                if dify_config.DEBUG:
+                if nexusai_config.DEBUG:
                     logger.exception("Error when generating")
                 queue_manager.publish_error(e, PublishFrom.APPLICATION_MANAGER)
             except Exception as e:

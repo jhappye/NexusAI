@@ -1,11 +1,11 @@
 from yarl import URL
 
-from configs import dify_config
+from configs import nexusai_config
 
 """
 Basic URL for thirdparty trigger services
 """
-base_url = URL(dify_config.TRIGGER_URL)
+base_url = URL(nexusai_config.TRIGGER_URL)
 
 
 def generate_plugin_trigger_endpoint_url(endpoint_id: str) -> str:

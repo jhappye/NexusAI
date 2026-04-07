@@ -50,9 +50,9 @@ def _config(module):
     return module.VastbaseVectorConfig(
         host="localhost",
         port=5432,
-        user="dify",
+        user="nexusai",
         password="secret",
-        database="dify",
+        database="nexusai",
         min_connection=1,
         max_connection=5,
     )
@@ -84,9 +84,9 @@ def test_vastbase_config_rejects_invalid_connection_window(vastbase_module):
             {
                 "host": "localhost",
                 "port": 5432,
-                "user": "dify",
+                "user": "nexusai",
                 "password": "secret",
-                "database": "dify",
+                "database": "nexusai",
                 "min_connection": 6,
                 "max_connection": 5,
             }
@@ -250,13 +250,13 @@ def test_vastbase_factory_uses_existing_or_generated_collection(vastbase_module,
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(vastbase_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(vastbase_module.dify_config, "VASTBASE_HOST", "localhost")
-    monkeypatch.setattr(vastbase_module.dify_config, "VASTBASE_PORT", 5432)
-    monkeypatch.setattr(vastbase_module.dify_config, "VASTBASE_USER", "dify")
-    monkeypatch.setattr(vastbase_module.dify_config, "VASTBASE_PASSWORD", "secret")
-    monkeypatch.setattr(vastbase_module.dify_config, "VASTBASE_DATABASE", "dify")
-    monkeypatch.setattr(vastbase_module.dify_config, "VASTBASE_MIN_CONNECTION", 1)
-    monkeypatch.setattr(vastbase_module.dify_config, "VASTBASE_MAX_CONNECTION", 5)
+    monkeypatch.setattr(vastbase_module.nexusai_config, "VASTBASE_HOST", "localhost")
+    monkeypatch.setattr(vastbase_module.nexusai_config, "VASTBASE_PORT", 5432)
+    monkeypatch.setattr(vastbase_module.nexusai_config, "VASTBASE_USER", "nexusai")
+    monkeypatch.setattr(vastbase_module.nexusai_config, "VASTBASE_PASSWORD", "secret")
+    monkeypatch.setattr(vastbase_module.nexusai_config, "VASTBASE_DATABASE", "nexusai")
+    monkeypatch.setattr(vastbase_module.nexusai_config, "VASTBASE_MIN_CONNECTION", 1)
+    monkeypatch.setattr(vastbase_module.nexusai_config, "VASTBASE_MAX_CONNECTION", 5)
 
     with patch.object(vastbase_module, "VastbaseVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

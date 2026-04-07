@@ -79,7 +79,7 @@ class TestBaseIndexProcessor:
 
     def test_get_splitter_validates_custom_length(self, processor: _ForwardingBaseIndexProcessor) -> None:
         with patch(
-            "core.rag.index_processor.index_processor_base.dify_config.INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH", 1000
+            "core.rag.index_processor.index_processor_base.nexusai_config.INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH", 1000
         ):
             with pytest.raises(ValueError, match="between 50 and 1000"):
                 processor._get_splitter("custom", 49, 0, "", None)

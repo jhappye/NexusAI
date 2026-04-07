@@ -579,7 +579,7 @@ class TestConvertToHttpRequestNodeVariants:
             icon_background="#FFFFFF",
         )
 
-        ext = APIBasedExtension(tenant_id="tenant_id", name="api-1", api_key="enc", api_endpoint="https://dify.ai")
+        ext = APIBasedExtension(tenant_id="tenant_id", name="api-1", api_key="enc", api_endpoint="https://nexusai.ai")
         ext.id = "ext_id"
 
         converter = WorkflowConverter()

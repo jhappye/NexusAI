@@ -37,9 +37,9 @@ from graphon.nodes.tool_runtime_entities import (
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, DifyRunContext
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, NexusAIRunContext
 from core.app.file_access import DatabaseFileAccessController
-from core.callback_handler.workflow_tool_callback_handler import DifyWorkflowCallbackHandler
+from core.callback_handler.workflow_tool_callback_handler import NexusAIWorkflowCallbackHandler
 from core.llm_generator.output_parser.errors import OutputParserError
 from core.llm_generator.output_parser.structured_output import invoke_llm_with_structured_output
 from core.model_manager import ModelInstance
@@ -87,25 +87,25 @@ if TYPE_CHECKING:
 _file_access_controller = DatabaseFileAccessController()
 
 
-def resolve_dify_run_context(run_context: Mapping[str, Any] | DifyRunContext) -> DifyRunContext:
-    if isinstance(run_context, DifyRunContext):
+def resolve_nexusai_run_context(run_context: Mapping[str, Any] | NexusAIRunContext) -> NexusAIRunContext:
+    if isinstance(run_context, NexusAIRunContext):
         return run_context
 
-    raw_ctx = run_context.get(DIFY_RUN_CONTEXT_KEY)
+    raw_ctx = run_context.get(NEXUSAI_RUN_CONTEXT_KEY)
     if raw_ctx is None:
-        raise ValueError(f"run_context missing required key: {DIFY_RUN_CONTEXT_KEY}")
-    if isinstance(raw_ctx, DifyRunContext):
+        raise ValueError(f"run_context missing required key: {NEXUSAI_RUN_CONTEXT_KEY}")
+    if isinstance(raw_ctx, NexusAIRunContext):
         return raw_ctx
-    return DifyRunContext.model_validate(raw_ctx)
+    return NexusAIRunContext.model_validate(raw_ctx)
 
 
-def apply_dify_debug_email_recipient(
+def apply_nexusai_debug_email_recipient(
     method: DeliveryChannelConfig,
     *,
     enabled: bool,
     actor_id: str | None,
 ) -> DeliveryChannelConfig:
-    """Apply the Dify debugger-specific email recipient override outside `graphon`."""
+    """Apply the NexusAI debugger-specific email recipient override outside `graphon`."""
     if not enabled:
         return method
     if not isinstance(method, EmailDeliveryMethod):
@@ -124,9 +124,9 @@ def apply_dify_debug_email_recipient(
     return method.model_copy(update={"config": debug_config})
 
 
-class DifyFileReferenceFactory(FileReferenceFactoryProtocol):
-    def __init__(self, run_context: Mapping[str, Any] | DifyRunContext) -> None:
-        self._run_context = resolve_dify_run_context(run_context)
+class NexusAIFileReferenceFactory(FileReferenceFactoryProtocol):
+    def __init__(self, run_context: Mapping[str, Any] | NexusAIRunContext) -> None:
+        self._run_context = resolve_nexusai_run_context(run_context)
 
     def build_from_mapping(self, *, mapping: Mapping[str, Any]):
         return file_factory.build_from_mapping(
@@ -136,7 +136,7 @@ class DifyFileReferenceFactory(FileReferenceFactoryProtocol):
         )
 
 
-class DifyPreparedLLM(PreparedLLMProtocol):
+class NexusAIPreparedLLM(PreparedLLMProtocol):
     """Workflow-layer adapter that hides the full `ModelInstance` API from `graphon` nodes."""
 
     def __init__(self, model_instance: ModelInstance) -> None:
@@ -215,7 +215,7 @@ class DifyPreparedLLM(PreparedLLMProtocol):
         return isinstance(error, OutputParserError)
 
 
-class DifyPromptMessageSerializer(PromptMessageSerializerProtocol):
+class NexusAIPromptMessageSerializer(PromptMessageSerializerProtocol):
     def serialize(
         self,
         *,
@@ -228,8 +228,8 @@ class DifyPromptMessageSerializer(PromptMessageSerializerProtocol):
         )
 
 
-class DifyRetrieverAttachmentLoader(RetrieverAttachmentLoaderProtocol):
-    """Resolve retriever attachments through Dify persistence and return graph file references."""
+class NexusAIRetrieverAttachmentLoader(RetrieverAttachmentLoaderProtocol):
+    """Resolve retriever attachments through NexusAI persistence and return graph file references."""
 
     def __init__(self, *, file_reference_factory: FileReferenceFactoryProtocol) -> None:
         self._file_reference_factory = file_reference_factory
@@ -260,18 +260,18 @@ class DifyRetrieverAttachmentLoader(RetrieverAttachmentLoaderProtocol):
         ]
 
 
-class DifyToolFileManager(ToolFileManagerProtocol):
+class NexusAIToolFileManager(ToolFileManagerProtocol):
     """Workflow adapter that resolves conversation scope outside `graphon`."""
 
     _conversation_id_getter: Callable[[], str | None] | None
 
     def __init__(
         self,
-        run_context: Mapping[str, Any] | DifyRunContext,
+        run_context: Mapping[str, Any] | NexusAIRunContext,
         *,
         conversation_id_getter: Callable[[], str | None] | None = None,
     ) -> None:
-        self._run_context = resolve_dify_run_context(run_context)
+        self._run_context = resolve_nexusai_run_context(run_context)
         self._manager = ToolFileManager()
         self._conversation_id_getter = conversation_id_getter
 
@@ -317,10 +317,10 @@ class _WorkflowToolRuntimeBinding:
     conversation_id: str | None = None
 
 
-class DifyToolNodeRuntime(ToolNodeRuntimeProtocol):
-    def __init__(self, run_context: Mapping[str, Any] | DifyRunContext) -> None:
-        self._run_context = resolve_dify_run_context(run_context)
-        self._file_reference_factory = DifyFileReferenceFactory(self._run_context)
+class NexusAIToolNodeRuntime(ToolNodeRuntimeProtocol):
+    def __init__(self, run_context: Mapping[str, Any] | NexusAIRunContext) -> None:
+        self._run_context = resolve_nexusai_run_context(run_context)
+        self._file_reference_factory = NexusAIFileReferenceFactory(self._run_context)
 
     @property
     def file_reference_factory(self) -> FileReferenceFactoryProtocol:
@@ -377,7 +377,7 @@ class DifyToolNodeRuntime(ToolNodeRuntimeProtocol):
     ) -> Generator[ToolRuntimeMessage, None, None]:
         runtime_binding = self._binding_from_handle(tool_runtime)
         tool = runtime_binding.tool
-        callback = DifyWorkflowCallbackHandler()
+        callback = NexusAIWorkflowCallbackHandler()
 
         try:
             messages = ToolEngine.generic_invoke(
@@ -448,7 +448,7 @@ class DifyToolNodeRuntime(ToolNodeRuntimeProtocol):
 
     @staticmethod
     def _tool_from_handle(tool_runtime: ToolRuntimeHandle) -> Tool:
-        return DifyToolNodeRuntime._binding_from_handle(tool_runtime).tool
+        return NexusAIToolNodeRuntime._binding_from_handle(tool_runtime).tool
 
     @staticmethod
     def _binding_from_handle(tool_runtime: ToolRuntimeHandle) -> _WorkflowToolRuntimeBinding:
@@ -571,15 +571,15 @@ class DifyToolNodeRuntime(ToolNodeRuntimeProtocol):
         return ToolRuntimeInvocationError(str(exc))
 
 
-class DifyHumanInputNodeRuntime(HumanInputNodeRuntimeProtocol):
+class NexusAIHumanInputNodeRuntime(HumanInputNodeRuntimeProtocol):
     def __init__(
         self,
-        run_context: Mapping[str, Any] | DifyRunContext,
+        run_context: Mapping[str, Any] | NexusAIRunContext,
         *,
         workflow_execution_id_getter: Callable[[], str | None] | None = None,
         form_repository: HumanInputFormRepository | None = None,
     ) -> None:
-        self._run_context = resolve_dify_run_context(run_context)
+        self._run_context = resolve_nexusai_run_context(run_context)
         self._workflow_execution_id_getter = workflow_execution_id_getter
         self._form_repository = form_repository
 
@@ -595,7 +595,7 @@ class DifyHumanInputNodeRuntime(HumanInputNodeRuntimeProtocol):
         if invoke_source in {"debugger", "explore"}:
             methods = [method for method in methods if method.type != DeliveryMethodType.WEBAPP]
         return [
-            apply_dify_debug_email_recipient(
+            apply_nexusai_debug_email_recipient(
                 method,
                 enabled=invoke_source == "debugger",
                 actor_id=self._run_context.user_id,
@@ -624,8 +624,8 @@ class DifyHumanInputNodeRuntime(HumanInputNodeRuntimeProtocol):
             submission_actor_id=self._run_context.user_id if invoke_source in {"debugger", "explore"} else None,
         )
 
-    def with_form_repository(self, form_repository: HumanInputFormRepository) -> DifyHumanInputNodeRuntime:
-        return DifyHumanInputNodeRuntime(
+    def with_form_repository(self, form_repository: HumanInputFormRepository) -> NexusAIHumanInputNodeRuntime:
+        return NexusAIHumanInputNodeRuntime(
             self._run_context,
             workflow_execution_id_getter=self._workflow_execution_id_getter,
             form_repository=form_repository,
@@ -656,16 +656,16 @@ class DifyHumanInputNodeRuntime(HumanInputNodeRuntimeProtocol):
         return repo.create_form(params)
 
 
-def build_dify_llm_file_saver(
+def build_nexusai_llm_file_saver(
     *,
-    run_context: Mapping[str, Any] | DifyRunContext,
+    run_context: Mapping[str, Any] | NexusAIRunContext,
     http_client: HttpClientProtocol,
     conversation_id_getter: Callable[[], str | None] | None = None,
 ) -> LLMFileSaver:
     from graphon.nodes.llm.file_saver import FileSaverImpl
 
     return FileSaverImpl(
-        tool_file_manager=DifyToolFileManager(run_context, conversation_id_getter=conversation_id_getter),
-        file_reference_factory=DifyFileReferenceFactory(run_context),
+        tool_file_manager=NexusAIToolFileManager(run_context, conversation_id_getter=conversation_id_getter),
+        file_reference_factory=NexusAIFileReferenceFactory(run_context),
         http_client=http_client,
     )

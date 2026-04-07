@@ -9,7 +9,7 @@ from flask import render_template_string
 from jinja2.runtime import Context
 from jinja2.sandbox import ImmutableSandboxedEnvironment
 
-from configs import dify_config
+from configs import nexusai_config
 from configs.feature import TemplateMode
 from extensions.ext_mail import mail
 from libs.email_i18n import get_email_i18n_service
@@ -29,8 +29,8 @@ class SandboxedEnvironment(ImmutableSandboxedEnvironment):
 
 
 def _render_template_with_strategy(body: str, substitutions: Mapping[str, str]) -> str:
-    mode = dify_config.MAIL_TEMPLATING_MODE
-    timeout = dify_config.MAIL_TEMPLATING_TIMEOUT
+    mode = nexusai_config.MAIL_TEMPLATING_MODE
+    timeout = nexusai_config.MAIL_TEMPLATING_TIMEOUT
     if mode == TemplateMode.UNSAFE:
         return render_template_string(body, **substitutions)
     if mode == TemplateMode.SANDBOX:

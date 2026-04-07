@@ -11,8 +11,8 @@ from graphon.file import FileTransferMethod, FileType
 from yarl import URL
 
 from core.app.entities.app_invoke_entities import InvokeFrom
-from core.callback_handler.agent_tool_callback_handler import DifyAgentCallbackHandler
-from core.callback_handler.workflow_tool_callback_handler import DifyWorkflowCallbackHandler
+from core.callback_handler.agent_tool_callback_handler import NexusAIAgentCallbackHandler
+from core.callback_handler.workflow_tool_callback_handler import NexusAIWorkflowCallbackHandler
 from core.ops.ops_trace_manager import TraceQueueManager
 from core.tools.__base.tool import Tool
 from core.tools.entities.tool_entities import (
@@ -52,7 +52,7 @@ class ToolEngine:
         tenant_id: str,
         message: Message,
         invoke_from: InvokeFrom,
-        agent_tool_callback: DifyAgentCallbackHandler,
+        agent_tool_callback: NexusAIAgentCallbackHandler,
         trace_manager: TraceQueueManager | None = None,
         conversation_id: str | None = None,
         app_id: str | None = None,
@@ -158,7 +158,7 @@ class ToolEngine:
         tool: Tool,
         tool_parameters: dict[str, Any],
         user_id: str,
-        workflow_tool_callback: DifyWorkflowCallbackHandler,
+        workflow_tool_callback: NexusAIWorkflowCallbackHandler,
         workflow_call_depth: int,
         conversation_id: str | None = None,
         app_id: str | None = None,

@@ -1,6 +1,6 @@
 import re
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper import marketplace
 from core.plugin.entities.plugin import PluginDependency, PluginInstallationSource
 from core.plugin.impl.plugin import PluginInstaller
@@ -125,7 +125,7 @@ class DependenciesAnalysisService:
         Generate the latest version of dependencies
         """
         dependencies = list(set(dependencies))
-        if not dify_config.MARKETPLACE_ENABLED:
+        if not nexusai_config.MARKETPLACE_ENABLED:
             return []
         deps = marketplace.batch_fetch_plugin_manifests(dependencies)
         return [

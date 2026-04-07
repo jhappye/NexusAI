@@ -1,4 +1,4 @@
-const DEFAULT_PROXY_TARGET = 'https://cloud.dify.ai'
+const DEFAULT_PROXY_TARGET = 'https://cloud.nexusai.ai'
 
 const SECURE_COOKIE_PREFIX_PATTERN = /^__(Host|Secure)-/
 const SAME_SITE_NONE_PATTERN = /^samesite=none$/i

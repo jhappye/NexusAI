@@ -52,7 +52,7 @@ def _config(module, *, enable_pq=False):
         port=6600,
         user="postgres",
         password="password",
-        database="dify",
+        database="nexusai",
         min_connection=1,
         max_connection=5,
         enable_pq=enable_pq,
@@ -380,14 +380,14 @@ def test_opengauss_factory_uses_existing_or_generated_collection(opengauss_modul
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(opengauss_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(opengauss_module.dify_config, "OPENGAUSS_HOST", "localhost")
-    monkeypatch.setattr(opengauss_module.dify_config, "OPENGAUSS_PORT", 6600)
-    monkeypatch.setattr(opengauss_module.dify_config, "OPENGAUSS_USER", "postgres")
-    monkeypatch.setattr(opengauss_module.dify_config, "OPENGAUSS_PASSWORD", "password")
-    monkeypatch.setattr(opengauss_module.dify_config, "OPENGAUSS_DATABASE", "dify")
-    monkeypatch.setattr(opengauss_module.dify_config, "OPENGAUSS_MIN_CONNECTION", 1)
-    monkeypatch.setattr(opengauss_module.dify_config, "OPENGAUSS_MAX_CONNECTION", 5)
-    monkeypatch.setattr(opengauss_module.dify_config, "OPENGAUSS_ENABLE_PQ", False)
+    monkeypatch.setattr(opengauss_module.nexusai_config, "OPENGAUSS_HOST", "localhost")
+    monkeypatch.setattr(opengauss_module.nexusai_config, "OPENGAUSS_PORT", 6600)
+    monkeypatch.setattr(opengauss_module.nexusai_config, "OPENGAUSS_USER", "postgres")
+    monkeypatch.setattr(opengauss_module.nexusai_config, "OPENGAUSS_PASSWORD", "password")
+    monkeypatch.setattr(opengauss_module.nexusai_config, "OPENGAUSS_DATABASE", "nexusai")
+    monkeypatch.setattr(opengauss_module.nexusai_config, "OPENGAUSS_MIN_CONNECTION", 1)
+    monkeypatch.setattr(opengauss_module.nexusai_config, "OPENGAUSS_MAX_CONNECTION", 5)
+    monkeypatch.setattr(opengauss_module.nexusai_config, "OPENGAUSS_ENABLE_PQ", False)
 
     with patch.object(opengauss_module, "OpenGauss", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

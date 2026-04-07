@@ -7,7 +7,7 @@ import psycopg2.extras
 import psycopg2.pool
 from pydantic import BaseModel, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
 from core.rag.datasource.vdb.vector_type import VectorType
@@ -252,13 +252,13 @@ class OpenGaussFactory(AbstractVectorFactory):
         return OpenGauss(
             collection_name=collection_name,
             config=OpenGaussConfig(
-                host=dify_config.OPENGAUSS_HOST or "localhost",
-                port=dify_config.OPENGAUSS_PORT,
-                user=dify_config.OPENGAUSS_USER or "postgres",
-                password=dify_config.OPENGAUSS_PASSWORD or "",
-                database=dify_config.OPENGAUSS_DATABASE or "dify",
-                min_connection=dify_config.OPENGAUSS_MIN_CONNECTION,
-                max_connection=dify_config.OPENGAUSS_MAX_CONNECTION,
-                enable_pq=dify_config.OPENGAUSS_ENABLE_PQ or False,
+                host=nexusai_config.OPENGAUSS_HOST or "localhost",
+                port=nexusai_config.OPENGAUSS_PORT,
+                user=nexusai_config.OPENGAUSS_USER or "postgres",
+                password=nexusai_config.OPENGAUSS_PASSWORD or "",
+                database=nexusai_config.OPENGAUSS_DATABASE or "nexusai",
+                min_connection=nexusai_config.OPENGAUSS_MIN_CONNECTION,
+                max_connection=nexusai_config.OPENGAUSS_MAX_CONNECTION,
+                enable_pq=nexusai_config.OPENGAUSS_ENABLE_PQ or False,
             ),
         )

@@ -4,11 +4,11 @@ from flask import request
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.fastopenapi import console_router
 from libs.helper import EmailStr, extract_remote_ip
 from libs.password import valid_password
-from models.model import DifySetup, db
+from models.model import NexusAISetup, db
 from services.account_service import RegisterService, TenantService
 
 from .error import AlreadySetupError, NotInitValidateError
@@ -52,7 +52,7 @@ def get_setup_status_api() -> SetupStatusResponse:
 
     Only bootstrap-safe status information should be returned by this endpoint.
     """
-    if dify_config.EDITION == "SELF_HOSTED":
+    if nexusai_config.EDITION == "SELF_HOSTED":
         setup_status = get_setup_status()
         if setup_status and not isinstance(setup_status, bool):
             return SetupStatusResponse(step="finished", setup_at=setup_status.setup_at.isoformat())
@@ -99,8 +99,8 @@ def setup_system(payload: SetupRequestPayload) -> SetupResponse:
     return SetupResponse(result="success")
 
 
-def get_setup_status() -> DifySetup | bool | None:
-    if dify_config.EDITION == "SELF_HOSTED":
-        return db.session.scalar(select(DifySetup).limit(1))
+def get_setup_status() -> NexusAISetup | bool | None:
+    if nexusai_config.EDITION == "SELF_HOSTED":
+        return db.session.scalar(select(NexusAISetup).limit(1))
 
     return True

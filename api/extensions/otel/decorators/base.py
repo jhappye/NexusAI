@@ -4,7 +4,7 @@ from typing import cast
 
 from opentelemetry.trace import get_tracer
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.otel.decorators.handler import SpanHandler
 from extensions.otel.runtime import is_instrument_flag_enabled
 
@@ -31,7 +31,7 @@ def trace_span[**P, R](handler_class: type[SpanHandler] | None = None) -> Callab
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-            if not (dify_config.ENABLE_OTEL or is_instrument_flag_enabled()):
+            if not (nexusai_config.ENABLE_OTEL or is_instrument_flag_enabled()):
                 return func(*args, **kwargs)
 
             handler = _get_handler_instance(handler_class or SpanHandler)

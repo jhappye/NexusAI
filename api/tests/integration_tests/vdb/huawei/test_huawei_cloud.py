@@ -11,11 +11,11 @@ class HuaweiCloudVectorTest(AbstractVectorTest):
     def __init__(self):
         super().__init__()
         self.vector = HuaweiCloudVector(
-            "dify",
+            "nexusai",
             HuaweiCloudVectorConfig(
                 hosts="https://127.0.0.1:9200",
-                username="dify",
-                password="dify",
+                username="nexusai",
+                password="nexusai",
             ),
         )
 

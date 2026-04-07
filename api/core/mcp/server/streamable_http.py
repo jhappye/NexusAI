@@ -5,7 +5,7 @@ from typing import Any, NotRequired, TypedDict, cast
 
 from graphon.variables.input_entities import VariableEntity, VariableEntityType
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.entities.app_invoke_entities import InvokeFrom
 from core.app.features.rate_limiting.rate_limit import RateLimitGenerator
 from core.mcp import types as mcp_types
@@ -38,7 +38,7 @@ def handle_mcp_request(
     Handle MCP request and return JSON-RPC response
 
     Args:
-        app: The Dify app instance
+        app: The NexusAI app instance
         request: The JSON-RPC request message
         user_input_form: List of variable entities for the app
         mcp_server: The MCP server configuration
@@ -110,7 +110,7 @@ def handle_initialize(description: str) -> mcp_types.InitializeResult:
     return mcp_types.InitializeResult(
         protocolVersion=mcp_types.SERVER_LATEST_PROTOCOL_VERSION,
         capabilities=capabilities,
-        serverInfo=mcp_types.Implementation(name="Dify", version=dify_config.project.version),
+        serverInfo=mcp_types.Implementation(name="NexusAI", version=nexusai_config.project.version),
         instructions=description,
     )
 
@@ -192,7 +192,7 @@ def prepare_tool_arguments(app: App, arguments: dict[str, Any]) -> ToolArguments
     elif app.mode == AppMode.COMPLETION:
         return {"query": "", "inputs": arguments}
     else:
-        # Chat modes - create a copy to avoid modifying original dict
+        # Chat modes - create a copy to avoid monexusaiing original dict
         args_copy = arguments.copy()
         query = args_copy.pop("query", "")
         return {"query": query, "inputs": args_copy}

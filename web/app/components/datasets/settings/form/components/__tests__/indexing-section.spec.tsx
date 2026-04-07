@@ -15,7 +15,7 @@ vi.mock('react-i18next', () => ({
 }))
 
 vi.mock('@/context/i18n', () => ({
-  useDocLink: () => (path: string) => `https://docs.dify.ai${path}`,
+  useDocLink: () => (path: string) => `https://docs.nexusai.ai${path}`,
 }))
 
 vi.mock('@/app/components/base/divider', () => ({

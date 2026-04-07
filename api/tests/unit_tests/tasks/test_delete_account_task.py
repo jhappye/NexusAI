@@ -64,7 +64,7 @@ class TestDeleteAccountTask:
         account = _set_account_found(mock_db_session, email="a@b.com")
 
         # Enable billing
-        with patch("tasks.delete_account_task.dify_config.BILLING_ENABLED", True):
+        with patch("tasks.delete_account_task.nexusai_config.BILLING_ENABLED", True):
             # Act
             delete_account_task(account_id)
 
@@ -78,7 +78,7 @@ class TestDeleteAccountTask:
         account = _set_account_found(mock_db_session, email="x@y.com")
 
         # Disable billing
-        with patch("tasks.delete_account_task.dify_config.BILLING_ENABLED", False):
+        with patch("tasks.delete_account_task.nexusai_config.BILLING_ENABLED", False):
             # Act
             delete_account_task(account_id)
 
@@ -92,7 +92,7 @@ class TestDeleteAccountTask:
         _set_account_missing(mock_db_session)
 
         # Enable billing
-        with patch("tasks.delete_account_task.dify_config.BILLING_ENABLED", True):
+        with patch("tasks.delete_account_task.nexusai_config.BILLING_ENABLED", True):
             # Act
             delete_account_task(account_id)
 
@@ -109,7 +109,7 @@ class TestDeleteAccountTask:
         mock_deps["billing"].delete_account.side_effect = RuntimeError("billing down")
 
         # Enable billing
-        with patch("tasks.delete_account_task.dify_config.BILLING_ENABLED", True):
+        with patch("tasks.delete_account_task.nexusai_config.BILLING_ENABLED", True):
             # Act & Assert
             with pytest.raises(RuntimeError):
                 delete_account_task(account_id)

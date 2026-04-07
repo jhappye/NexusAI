@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
-from configs import dify_config
+from configs import nexusai_config
 from enums.cloud_plan import CloudPlan
 from services.billing_service import BillingService, SubscriptionPlan
 
@@ -193,7 +193,7 @@ def create_message_clean_policy(
         graceful_period_days: Grace period in days after subscription expiration (default: 21)
         current_timestamp: Current Unix timestamp for testing (default: None, uses current time)
     """
-    if not dify_config.BILLING_ENABLED:
+    if not nexusai_config.BILLING_ENABLED:
         logger.info("create_message_clean_policy: billing disabled, using BillingDisabledPolicy")
         return BillingDisabledPolicy()
 

@@ -22,7 +22,7 @@ from sqlalchemy.dialects.mysql import LONGTEXT
 HOST = "127.0.0.1"
 PORT = 2881
 USER = "root@test"
-PASSWORD = "difyai123456"
+PASSWORD = "nexusaiai123456"
 DATABASE = "test"
 
 VEC_DIM = 1536

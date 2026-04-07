@@ -173,11 +173,11 @@ def test_resume_path_runs_worker_with_runtime_state(mocker):
     mocker.patch("core.app.apps.workflow.app_generator.threading.Thread", ImmediateThread)
 
     mocker.patch(
-        "core.app.apps.workflow.app_generator.DifyCoreRepositoryFactory.create_workflow_execution_repository",
+        "core.app.apps.workflow.app_generator.NexusAICoreRepositoryFactory.create_workflow_execution_repository",
         return_value=MagicMock(),
     )
     mocker.patch(
-        "core.app.apps.workflow.app_generator.DifyCoreRepositoryFactory.create_workflow_node_execution_repository",
+        "core.app.apps.workflow.app_generator.NexusAICoreRepositoryFactory.create_workflow_node_execution_repository",
         return_value=MagicMock(),
     )
 

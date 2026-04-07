@@ -35,22 +35,22 @@ class TestCheckVersionUpdate:
 
         with (
             patch.object(
-                version_module.dify_config,
+                version_module.nexusai_config,
                 "CHECK_UPDATE_URL",
                 "",
             ),
             patch.object(
-                version_module.dify_config.project,
+                version_module.nexusai_config.project,
                 "version",
                 "1.0.0",
             ),
             patch.object(
-                version_module.dify_config,
+                version_module.nexusai_config,
                 "CAN_REPLACE_LOGO",
                 True,
             ),
             patch.object(
-                version_module.dify_config,
+                version_module.nexusai_config,
                 "MODEL_LB_ENABLED",
                 False,
             ),
@@ -67,7 +67,7 @@ class TestCheckVersionUpdate:
 
         with (
             patch.object(
-                version_module.dify_config,
+                version_module.nexusai_config,
                 "CHECK_UPDATE_URL",
                 "http://example.com",
             ),
@@ -99,7 +99,7 @@ class TestCheckVersionUpdate:
 
         with (
             patch.object(
-                version_module.dify_config,
+                version_module.nexusai_config,
                 "CHECK_UPDATE_URL",
                 "http://example.com",
             ),
@@ -109,17 +109,17 @@ class TestCheckVersionUpdate:
                 return_value=response,
             ),
             patch.object(
-                version_module.dify_config.project,
+                version_module.nexusai_config.project,
                 "version",
                 "1.0.0",
             ),
             patch.object(
-                version_module.dify_config,
+                version_module.nexusai_config,
                 "CAN_REPLACE_LOGO",
                 False,
             ),
             patch.object(
-                version_module.dify_config,
+                version_module.nexusai_config,
                 "MODEL_LB_ENABLED",
                 True,
             ),
@@ -141,7 +141,7 @@ class TestCheckVersionUpdate:
 
         with (
             patch.object(
-                version_module.dify_config,
+                version_module.nexusai_config,
                 "CHECK_UPDATE_URL",
                 "http://example.com",
             ),
@@ -151,7 +151,7 @@ class TestCheckVersionUpdate:
                 return_value=response,
             ),
             patch.object(
-                version_module.dify_config.project,
+                version_module.nexusai_config.project,
                 "version",
                 "1.2.0",
             ),

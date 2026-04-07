@@ -2,7 +2,7 @@ const EnterpriseNoise = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="148" viewBox="0 0 100% 148" fill="none">
       <g opacity="0.05" filter="url(#filter0_g_1_5499)">
-        <rect y="0" width="100%" height="96" fill="var(--color-saas-dify-blue-accessible)" />
+        <rect y="0" width="100%" height="96" fill="var(--color-saas-nexusai-blue-accessible)" />
       </g>
       <defs>
         <filter id="filter0_g_1_5499" x="0" y="0" width="100%" height="296" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">

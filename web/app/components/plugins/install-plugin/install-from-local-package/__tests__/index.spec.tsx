@@ -44,12 +44,12 @@ const createMockDependencies = (): Dependency[] => [
   },
 ]
 
-const createMockFile = (name: string = 'test-plugin.difypkg'): File => {
+const createMockFile = (name: string = 'test-plugin.nexusaipkg'): File => {
   return new File(['test content'], name, { type: 'application/octet-stream' })
 }
 
 const createMockBundleFile = (): File => {
-  return new File(['bundle content'], 'test-bundle.difybndl', { type: 'application/octet-stream' })
+  return new File(['bundle content'], 'test-bundle.nexusaibndl', { type: 'application/octet-stream' })
 }
 
 // Mock external dependencies
@@ -273,7 +273,7 @@ describe('InstallFromLocalPackage', () => {
       render(<InstallFromLocalPackage {...defaultProps} />)
 
       expect(screen.getByTestId('uploading-step')).toBeInTheDocument()
-      expect(screen.getByTestId('file-name')).toHaveTextContent('test-plugin.difypkg')
+      expect(screen.getByTestId('file-name')).toHaveTextContent('test-plugin.nexusaipkg')
     })
 
     it('should render with correct modal title for uploading step', () => {
@@ -761,15 +761,15 @@ describe('InstallFromLocalPackage', () => {
   // Edge Cases Tests
   // ================================
   describe('Edge Cases', () => {
-    it('should handle file with .difypkg extension as package', () => {
-      const pkgFile = createMockFile('my-plugin.difypkg')
+    it('should handle file with .nexusaipkg extension as package', () => {
+      const pkgFile = createMockFile('my-plugin.nexusaipkg')
       render(<InstallFromLocalPackage {...defaultProps} file={pkgFile} />)
 
       expect(screen.getByTestId('is-bundle')).toHaveTextContent('false')
     })
 
-    it('should handle file with .difybndl extension as bundle', () => {
-      const bundleFile = createMockFile('my-bundle.difybndl')
+    it('should handle file with .nexusaibndl extension as bundle', () => {
+      const bundleFile = createMockFile('my-bundle.nexusaibndl')
       render(<InstallFromLocalPackage {...defaultProps} file={bundleFile} />)
 
       expect(screen.getByTestId('is-bundle')).toHaveTextContent('true')
@@ -816,10 +816,10 @@ describe('InstallFromLocalPackage', () => {
     })
 
     it('should display correct file name in uploading step', () => {
-      const customFile = createMockFile('custom-plugin-name.difypkg')
+      const customFile = createMockFile('custom-plugin-name.nexusaipkg')
       render(<InstallFromLocalPackage {...defaultProps} file={customFile} />)
 
-      expect(screen.getByTestId('file-name')).toHaveTextContent('custom-plugin-name.difypkg')
+      expect(screen.getByTestId('file-name')).toHaveTextContent('custom-plugin-name.nexusaipkg')
     })
 
     it('should handle rapid state transitions', async () => {
@@ -963,9 +963,9 @@ describe('InstallFromLocalPackage', () => {
   describe('Prop Variations', () => {
     it('should work with different file names', () => {
       const files = [
-        createMockFile('plugin-a.difypkg'),
-        createMockFile('plugin-b.difypkg'),
-        createMockFile('bundle-c.difybndl'),
+        createMockFile('plugin-a.nexusaipkg'),
+        createMockFile('plugin-b.nexusaipkg'),
+        createMockFile('bundle-c.nexusaibndl'),
       ]
 
       files.forEach((file) => {
@@ -993,7 +993,7 @@ describe('InstallFromLocalPackage', () => {
 
     it('should handle different file types correctly', () => {
       // Package file
-      const { rerender } = render(<InstallFromLocalPackage {...defaultProps} file={createMockFile('test.difypkg')} />)
+      const { rerender } = render(<InstallFromLocalPackage {...defaultProps} file={createMockFile('test.nexusaipkg')} />)
       expect(screen.getByTestId('is-bundle')).toHaveTextContent('false')
 
       // Bundle file
@@ -1418,7 +1418,7 @@ describe('Uploading Step', () => {
   describe('Rendering', () => {
     it('should render uploading state with file name', () => {
       const defaultProps = {
-        file: createMockFile('my-custom-plugin.difypkg'),
+        file: createMockFile('my-custom-plugin.nexusaipkg'),
         onClose: vi.fn(),
         onSuccess: vi.fn(),
       }
@@ -1426,7 +1426,7 @@ describe('Uploading Step', () => {
       render(<InstallFromLocalPackage {...defaultProps} />)
 
       expect(screen.getByTestId('uploading-step')).toBeInTheDocument()
-      expect(screen.getByTestId('file-name')).toHaveTextContent('my-custom-plugin.difypkg')
+      expect(screen.getByTestId('file-name')).toHaveTextContent('my-custom-plugin.nexusaipkg')
     })
 
     it('should pass isBundle=true for bundle files', () => {
@@ -1523,9 +1523,9 @@ describe('Uploading Step', () => {
   })
 
   describe('File Type Detection', () => {
-    it('should detect .difypkg as package', () => {
+    it('should detect .nexusaipkg as package', () => {
       const defaultProps = {
-        file: createMockFile('test.difypkg'),
+        file: createMockFile('test.nexusaipkg'),
         onClose: vi.fn(),
         onSuccess: vi.fn(),
       }
@@ -1535,9 +1535,9 @@ describe('Uploading Step', () => {
       expect(screen.getByTestId('is-bundle')).toHaveTextContent('false')
     })
 
-    it('should detect .difybndl as bundle', () => {
+    it('should detect .nexusaibndl as bundle', () => {
       const defaultProps = {
-        file: createMockFile('test.difybndl'),
+        file: createMockFile('test.nexusaibndl'),
         onClose: vi.fn(),
         onSuccess: vi.fn(),
       }

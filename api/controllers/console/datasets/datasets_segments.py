@@ -9,7 +9,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from werkzeug.exceptions import Forbidden, NotFound
 
 import services
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import register_schema_models
 from controllers.console import console_ns
 from controllers.console.app.error import ProviderNotInitializeError
@@ -164,7 +164,7 @@ class DatasetDocumentSegmentListApi(Resource):
             escaped_keyword = escape_like_pattern(keyword)
             # Search in both content and keywords fields
             # Use database-specific methods for JSON array search
-            if dify_config.SQLALCHEMY_DATABASE_URI_SCHEME == "postgresql":
+            if nexusai_config.SQLALCHEMY_DATABASE_URI_SCHEME == "postgresql":
                 # PostgreSQL: Use jsonb_array_elements_text to properly handle Unicode/Chinese text
                 keywords_condition = func.array_to_string(
                     func.array(

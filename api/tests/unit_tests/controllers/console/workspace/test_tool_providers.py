@@ -58,7 +58,7 @@ def controller_module(monkeypatch: pytest.MonkeyPatch):
             ("controllers.console.wraps.is_admin_or_owner_required", _noop),
             ("controllers.console.wraps.enterprise_license_required", _noop),
         ]
-        monkeypatch.setenv("DIFY_SETUP_READY", "true")
+        monkeypatch.setenv("NEXUSAI_SETUP_READY", "true")
         with ExitStack() as stack:
             for target, value in patch_targets:
                 stack.enter_context(patch(target, value))
@@ -72,8 +72,8 @@ def controller_module(monkeypatch: pytest.MonkeyPatch):
     global _WRAPS_MODULE
     wraps_module = importlib.import_module("controllers.console.wraps")
     _WRAPS_MODULE = wraps_module
-    monkeypatch.setattr(module.dify_config, "EDITION", "CLOUD")
-    monkeypatch.setattr(wraps_module.dify_config, "EDITION", "CLOUD")
+    monkeypatch.setattr(module.nexusai_config, "EDITION", "CLOUD")
+    monkeypatch.setattr(wraps_module.nexusai_config, "EDITION", "CLOUD")
 
     login_module = importlib.import_module("libs.login")
     monkeypatch.setattr(login_module, "check_csrf_token", lambda *args, **kwargs: None)

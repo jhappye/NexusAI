@@ -11,7 +11,7 @@ from libs.datetime_utils import parse_time_range
 from libs.login import current_account_with_tenant, login_required
 from models.enums import WorkflowRunTriggeredFrom
 from models.model import AppMode
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 
 DEFAULT_REF_TEMPLATE_SWAGGER_2_0 = "#/definitions/{model}"
 
@@ -39,7 +39,7 @@ class WorkflowDailyRunsStatistic(Resource):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-        self._workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+        self._workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
 
     @console_ns.doc("get_workflow_daily_runs_statistic")
     @console_ns.doc(description="Get workflow daily runs statistics")
@@ -79,7 +79,7 @@ class WorkflowDailyTerminalsStatistic(Resource):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-        self._workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+        self._workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
 
     @console_ns.doc("get_workflow_daily_terminals_statistic")
     @console_ns.doc(description="Get workflow daily terminals statistics")
@@ -119,7 +119,7 @@ class WorkflowDailyTokenCostStatistic(Resource):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-        self._workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+        self._workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
 
     @console_ns.doc("get_workflow_daily_token_cost_statistic")
     @console_ns.doc(description="Get workflow daily token cost statistics")
@@ -159,7 +159,7 @@ class WorkflowAverageAppInteractionStatistic(Resource):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-        self._workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+        self._workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
 
     @console_ns.doc("get_workflow_average_app_interaction_statistic")
     @console_ns.doc(description="Get workflow average app interaction statistics")

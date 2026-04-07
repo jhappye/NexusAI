@@ -62,7 +62,7 @@ export default function Support({ closeAccountDropdown }: SupportProps) {
           )}
           <DropdownMenuLinkItem
             className="justify-between"
-            href="https://forum.dify.ai/"
+            href="https://forum.nexusai.ai/"
             rel="noopener noreferrer"
             target="_blank"
           >

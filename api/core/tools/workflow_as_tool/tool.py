@@ -333,7 +333,7 @@ class WorkflowTool(Tool):
         for key, value in outputs.items():
             if isinstance(value, list):
                 for item in value:
-                    if isinstance(item, dict) and item.get("dify_model_identity") == FILE_MODEL_IDENTITY:
+                    if isinstance(item, dict) and item.get("nexusai_model_identity") == FILE_MODEL_IDENTITY:
                         item = self._update_file_mapping(item)
                         file = build_from_mapping(
                             mapping=item,
@@ -341,7 +341,7 @@ class WorkflowTool(Tool):
                             access_controller=_file_access_controller,
                         )
                         files.append(file)
-            elif isinstance(value, dict) and value.get("dify_model_identity") == FILE_MODEL_IDENTITY:
+            elif isinstance(value, dict) and value.get("nexusai_model_identity") == FILE_MODEL_IDENTITY:
                 value = self._update_file_mapping(value)
                 file = build_from_mapping(
                     mapping=value,

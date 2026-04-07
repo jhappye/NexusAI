@@ -8,7 +8,7 @@ from pydantic import BaseModel, model_validator
 from sqlalchemy.orm import sessionmaker
 from werkzeug.exceptions import BadRequest, Forbidden
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import register_schema_models
 from controllers.web.error import NotFoundError
 from core.plugin.entities.plugin_daemon import CredentialType
@@ -443,7 +443,7 @@ class TriggerOAuthAuthorizeApi(Resource):
             )
 
             # Build redirect URI for callback
-            redirect_uri = f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/trigger/callback"
+            redirect_uri = f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/trigger/callback"
 
             # Get authorization URL
             authorization_url_response = oauth_handler.get_authorization_url(
@@ -513,7 +513,7 @@ class TriggerOAuthCallbackApi(Resource):
 
         # Get OAuth credentials from callback
         oauth_handler = OAuthHandler()
-        redirect_uri = f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/trigger/callback"
+        redirect_uri = f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/trigger/callback"
 
         credentials_response = oauth_handler.get_credentials(
             tenant_id=tenant_id,
@@ -542,7 +542,7 @@ class TriggerOAuthCallbackApi(Resource):
             ),
         )
         # Redirect to OAuth callback page
-        return redirect(f"{dify_config.CONSOLE_WEB_URL}/oauth-callback")
+        return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/oauth-callback")
 
 
 @console_ns.route("/workspaces/current/trigger-provider/<path:provider>/oauth/client")
@@ -575,7 +575,7 @@ class TriggerOAuthClientManageApi(Resource):
                 provider_id=provider_id,
             )
             provider_controller = TriggerManager.get_trigger_provider(user.current_tenant_id, provider_id)
-            redirect_uri = f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/trigger/callback"
+            redirect_uri = f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/trigger/callback"
             return jsonable_encoder(
                 {
                     "configured": bool(custom_params or system_client_exists),

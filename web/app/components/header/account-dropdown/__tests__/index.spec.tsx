@@ -62,7 +62,7 @@ vi.mock('@/next/navigation', async (importOriginal) => {
 })
 
 vi.mock('@/context/i18n', () => ({
-  useDocLink: () => (path: string) => `https://docs.dify.ai${path}`,
+  useDocLink: () => (path: string) => `https://docs.nexusai.ai${path}`,
 }))
 
 // Mock config and env

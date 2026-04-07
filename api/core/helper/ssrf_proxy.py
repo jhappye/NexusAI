@@ -9,13 +9,13 @@ from typing import Any
 import httpx
 from pydantic import TypeAdapter, ValidationError
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper.http_client_pooling import get_pooled_http_client
 from core.tools.errors import ToolSSRFError
 
 logger = logging.getLogger(__name__)
 
-SSRF_DEFAULT_MAX_RETRIES = dify_config.SSRF_DEFAULT_MAX_RETRIES
+SSRF_DEFAULT_MAX_RETRIES = nexusai_config.SSRF_DEFAULT_MAX_RETRIES
 
 BACKOFF_FACTOR = 0.5
 STATUS_FORCELIST = [429, 500, 502, 503, 504]
@@ -26,9 +26,9 @@ _HEADERS_ADAPTER: TypeAdapter[Headers] = TypeAdapter(Headers)
 _SSL_VERIFIED_POOL_KEY = "ssrf:verified"
 _SSL_UNVERIFIED_POOL_KEY = "ssrf:unverified"
 _SSRF_CLIENT_LIMITS = httpx.Limits(
-    max_connections=dify_config.SSRF_POOL_MAX_CONNECTIONS,
-    max_keepalive_connections=dify_config.SSRF_POOL_MAX_KEEPALIVE_CONNECTIONS,
-    keepalive_expiry=dify_config.SSRF_POOL_KEEPALIVE_EXPIRY,
+    max_connections=nexusai_config.SSRF_POOL_MAX_CONNECTIONS,
+    max_keepalive_connections=nexusai_config.SSRF_POOL_MAX_KEEPALIVE_CONNECTIONS,
+    keepalive_expiry=nexusai_config.SSRF_POOL_KEEPALIVE_EXPIRY,
 )
 
 
@@ -45,23 +45,23 @@ max_retries_exceeded_error = MaxRetriesExceededError
 def _create_proxy_mounts() -> dict[str, httpx.HTTPTransport]:
     return {
         "http://": httpx.HTTPTransport(
-            proxy=dify_config.SSRF_PROXY_HTTP_URL,
+            proxy=nexusai_config.SSRF_PROXY_HTTP_URL,
         ),
         "https://": httpx.HTTPTransport(
-            proxy=dify_config.SSRF_PROXY_HTTPS_URL,
+            proxy=nexusai_config.SSRF_PROXY_HTTPS_URL,
         ),
     }
 
 
 def _build_ssrf_client(verify: bool) -> httpx.Client:
-    if dify_config.SSRF_PROXY_ALL_URL:
+    if nexusai_config.SSRF_PROXY_ALL_URL:
         return httpx.Client(
-            proxy=dify_config.SSRF_PROXY_ALL_URL,
+            proxy=nexusai_config.SSRF_PROXY_ALL_URL,
             verify=verify,
             limits=_SSRF_CLIENT_LIMITS,
         )
 
-    if dify_config.SSRF_PROXY_HTTP_URL and dify_config.SSRF_PROXY_HTTPS_URL:
+    if nexusai_config.SSRF_PROXY_HTTP_URL and nexusai_config.SSRF_PROXY_HTTPS_URL:
         return httpx.Client(
             mounts=_create_proxy_mounts(),
             verify=verify,
@@ -113,7 +113,7 @@ def _inject_trace_headers(headers: Headers | None) -> Headers:
             return headers
 
     # Skip if OTEL is enabled - HTTPXClientInstrumentor handles this automatically
-    if dify_config.ENABLE_OTEL:
+    if nexusai_config.ENABLE_OTEL:
         return headers
 
     # Generate and inject traceparent for non-OTEL scenarios
@@ -139,14 +139,14 @@ def make_request(method: str, url: str, max_retries: int = SSRF_DEFAULT_MAX_RETR
 
     if "timeout" not in kwargs:
         kwargs["timeout"] = httpx.Timeout(
-            timeout=dify_config.SSRF_DEFAULT_TIME_OUT,
-            connect=dify_config.SSRF_DEFAULT_CONNECT_TIME_OUT,
-            read=dify_config.SSRF_DEFAULT_READ_TIME_OUT,
-            write=dify_config.SSRF_DEFAULT_WRITE_TIME_OUT,
+            timeout=nexusai_config.SSRF_DEFAULT_TIME_OUT,
+            connect=nexusai_config.SSRF_DEFAULT_CONNECT_TIME_OUT,
+            read=nexusai_config.SSRF_DEFAULT_READ_TIME_OUT,
+            write=nexusai_config.SSRF_DEFAULT_WRITE_TIME_OUT,
         )
 
     # prioritize per-call option, which can be switched on and off inside the HTTP node on the web UI
-    verify_option = kwargs.pop("ssl_verify", dify_config.HTTP_REQUEST_NODE_SSL_VERIFY)
+    verify_option = kwargs.pop("ssl_verify", nexusai_config.HTTP_REQUEST_NODE_SSL_VERIFY)
     if not isinstance(verify_option, bool):
         raise ValueError("ssl_verify must be a boolean")
     client = _get_ssrf_client(verify_option)

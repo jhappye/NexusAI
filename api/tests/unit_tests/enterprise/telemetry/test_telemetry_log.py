@@ -142,7 +142,7 @@ class TestEmitTelemetryLog:
         mock_logger.isEnabledFor.return_value = True
 
         emit_telemetry_log(
-            event_name="dify.workflow.run",
+            event_name="nexusai.workflow.run",
             attributes={"tenant_id": "t1"},
             signal="metric_only",
         )
@@ -152,8 +152,8 @@ class TestEmitTelemetryLog:
         assert args[0] == "telemetry.%s"
         assert args[1] == "metric_only"
         extra = kwargs["extra"]
-        assert extra["attributes"]["dify.event.name"] == "dify.workflow.run"
-        assert extra["attributes"]["dify.event.signal"] == "metric_only"
+        assert extra["attributes"]["nexusai.event.name"] == "nexusai.workflow.run"
+        assert extra["attributes"]["nexusai.event.signal"] == "metric_only"
 
     @patch("enterprise.telemetry.telemetry_log.logger")
     def test_no_log_when_info_disabled(self, mock_logger: MagicMock) -> None:
@@ -161,7 +161,7 @@ class TestEmitTelemetryLog:
 
         mock_logger.isEnabledFor.return_value = False
 
-        emit_telemetry_log(event_name="dify.workflow.run", attributes={})
+        emit_telemetry_log(event_name="nexusai.workflow.run", attributes={})
 
         mock_logger.info.assert_not_called()
 
@@ -243,7 +243,7 @@ class TestEmitTelemetryLog:
         mock_logger.isEnabledFor.return_value = True
 
         emit_telemetry_log(
-            event_name="dify.node.run",
+            event_name="nexusai.node.run",
             attributes={"node_type": "code", "elapsed": 0.5},
         )
 
@@ -262,7 +262,7 @@ class TestEmitTelemetryLog:
         args = mock_logger.info.call_args[0]
         assert args[1] == "span_detail"
         extra = mock_logger.info.call_args.kwargs["extra"]
-        assert extra["attributes"]["dify.event.signal"] == "span_detail"
+        assert extra["attributes"]["nexusai.event.signal"] == "span_detail"
 
 
 # ---------------------------------------------------------------------------
@@ -284,7 +284,7 @@ class TestEmitMetricOnlyEvent:
         mock_logger.isEnabledFor.return_value = True
 
         emit_metric_only_event(
-            event_name="dify.app.created",
+            event_name="nexusai.app.created",
             attributes={"app_id": "app-1"},
             tenant_id="t1",
             user_id="u1",
@@ -292,8 +292,8 @@ class TestEmitMetricOnlyEvent:
 
         mock_logger.info.assert_called_once()
         extra = mock_logger.info.call_args.kwargs["extra"]
-        assert extra["attributes"]["dify.event.signal"] == "metric_only"
-        assert extra["attributes"]["dify.event.name"] == "dify.app.created"
+        assert extra["attributes"]["nexusai.event.signal"] == "metric_only"
+        assert extra["attributes"]["nexusai.event.name"] == "nexusai.app.created"
         assert extra["attributes"]["app_id"] == "app-1"
         assert extra["tenant_id"] == "t1"
         assert extra["user_id"] == "u1"
@@ -306,7 +306,7 @@ class TestEmitMetricOnlyEvent:
         uid = "123e4567-e89b-12d3-a456-426614174000"
 
         emit_metric_only_event(
-            event_name="dify.workflow.run",
+            event_name="nexusai.workflow.run",
             attributes={},
             trace_id_source=uid,
             span_id_source=uid,
@@ -322,6 +322,6 @@ class TestEmitMetricOnlyEvent:
 
         mock_logger.isEnabledFor.return_value = False
 
-        emit_metric_only_event(event_name="dify.workflow.run", attributes={})
+        emit_metric_only_event(event_name="nexusai.workflow.run", attributes={})
 
         mock_logger.info.assert_not_called()

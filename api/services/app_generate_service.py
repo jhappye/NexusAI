@@ -6,7 +6,7 @@ import uuid
 from collections.abc import Callable, Generator, Mapping
 from typing import TYPE_CHECKING, Any, Union
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.apps.advanced_chat.app_generator import AdvancedChatAppGenerator
 from core.app.apps.agent_chat.app_generator import AgentChatAppGenerator
 from core.app.apps.chat.app_generator import ChatAppGenerator
@@ -61,7 +61,7 @@ class AppGenerateService:
                 started = True
                 return True
 
-        channel_type = dify_config.PUBSUB_REDIS_CHANNEL_TYPE
+        channel_type = nexusai_config.PUBSUB_REDIS_CHANNEL_TYPE
         if channel_type == "streams":
             # With Redis Streams, we can safely start right away; consumers can read past events.
             _try_start()
@@ -104,7 +104,7 @@ class AppGenerateService:
         :return:
         """
         quota_charge = unlimited()
-        if dify_config.BILLING_ENABLED:
+        if nexusai_config.BILLING_ENABLED:
             try:
                 quota_charge = QuotaType.WORKFLOW.consume(app_model.tenant_id)
             except QuotaExceededError:
@@ -275,8 +275,8 @@ class AppGenerateService:
         Returns:
             The maximum number of active requests allowed
         """
-        app_limit = app.max_active_requests or dify_config.APP_DEFAULT_ACTIVE_REQUESTS
-        config_limit = dify_config.APP_MAX_ACTIVE_REQUESTS
+        app_limit = app.max_active_requests or nexusai_config.APP_DEFAULT_ACTIVE_REQUESTS
+        config_limit = nexusai_config.APP_MAX_ACTIVE_REQUESTS
 
         # Filter out infinite (0) values and return the minimum, or 0 if both are infinite
         limits = [limit for limit in [app_limit, config_limit] if limit > 0]

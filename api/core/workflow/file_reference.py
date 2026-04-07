@@ -4,7 +4,7 @@ import base64
 import json
 from dataclasses import dataclass
 
-_FILE_REFERENCE_PREFIX = "dify-file-ref:"
+_FILE_REFERENCE_PREFIX = "nexusai-file-ref:"
 
 
 @dataclass(frozen=True)

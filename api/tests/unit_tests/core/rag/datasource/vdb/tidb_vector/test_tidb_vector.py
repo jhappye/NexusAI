@@ -23,8 +23,8 @@ def _config(tidb_module):
         port=4000,
         user="root",
         password="secret",
-        database="dify",
-        program_name="dify-app",
+        database="nexusai",
+        program_name="nexusai-app",
     )
 
 
@@ -52,7 +52,7 @@ def test_init_get_type_and_distance_func(tidb_module, monkeypatch):
     vector = tidb_module.TiDBVector("collection_1", _config(tidb_module), distance_func="L2")
 
     assert vector.get_type() == tidb_module.VectorType.TIDB_VECTOR
-    assert vector._url.startswith("mysql+pymysql://root:secret@localhost:4000/dify")
+    assert vector._url.startswith("mysql+pymysql://root:secret@localhost:4000/nexusai")
     assert vector._dimension == 1536
     assert vector._get_distance_func() == "VEC_L2_DISTANCE"
 
@@ -425,12 +425,12 @@ def test_tidb_factory_uses_existing_or_generated_collection(tidb_module, monkeyp
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(tidb_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(tidb_module.dify_config, "TIDB_VECTOR_HOST", "localhost")
-    monkeypatch.setattr(tidb_module.dify_config, "TIDB_VECTOR_PORT", 4000)
-    monkeypatch.setattr(tidb_module.dify_config, "TIDB_VECTOR_USER", "root")
-    monkeypatch.setattr(tidb_module.dify_config, "TIDB_VECTOR_PASSWORD", "secret")
-    monkeypatch.setattr(tidb_module.dify_config, "TIDB_VECTOR_DATABASE", "dify")
-    monkeypatch.setattr(tidb_module.dify_config, "APPLICATION_NAME", "dify-app")
+    monkeypatch.setattr(tidb_module.nexusai_config, "TIDB_VECTOR_HOST", "localhost")
+    monkeypatch.setattr(tidb_module.nexusai_config, "TIDB_VECTOR_PORT", 4000)
+    monkeypatch.setattr(tidb_module.nexusai_config, "TIDB_VECTOR_USER", "root")
+    monkeypatch.setattr(tidb_module.nexusai_config, "TIDB_VECTOR_PASSWORD", "secret")
+    monkeypatch.setattr(tidb_module.nexusai_config, "TIDB_VECTOR_DATABASE", "nexusai")
+    monkeypatch.setattr(tidb_module.nexusai_config, "APPLICATION_NAME", "nexusai-app")
 
     with patch.object(tidb_module, "TiDBVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

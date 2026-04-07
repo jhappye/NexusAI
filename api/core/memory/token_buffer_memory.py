@@ -22,7 +22,7 @@ from factories import file_factory
 from models.model import AppMode, Conversation, Message, MessageFile
 from models.workflow import Workflow
 from repositories.api_workflow_run_repository import APIWorkflowRunRepository
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 
 _file_access_controller = DatabaseFileAccessController()
 
@@ -41,7 +41,7 @@ class TokenBufferMemory:
     def workflow_run_repo(self) -> APIWorkflowRunRepository:
         if self._workflow_run_repo is None:
             session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-            self._workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+            self._workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
         return self._workflow_run_repo
 
     def _build_prompt_message_with_files(

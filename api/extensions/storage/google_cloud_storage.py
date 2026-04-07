@@ -6,7 +6,7 @@ from typing import Any
 from google.cloud import storage as google_cloud_storage  # type: ignore
 from pydantic import TypeAdapter
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.storage.base_storage import BaseStorage
 
 _service_account_adapter: TypeAdapter[dict[str, Any]] = TypeAdapter(dict[str, Any])
@@ -18,8 +18,8 @@ class GoogleCloudStorage(BaseStorage):
     def __init__(self):
         super().__init__()
 
-        self.bucket_name = dify_config.GOOGLE_STORAGE_BUCKET_NAME
-        service_account_json_str = dify_config.GOOGLE_STORAGE_SERVICE_ACCOUNT_JSON_BASE64
+        self.bucket_name = nexusai_config.GOOGLE_STORAGE_BUCKET_NAME
+        service_account_json_str = nexusai_config.GOOGLE_STORAGE_SERVICE_ACCOUNT_JSON_BASE64
         # if service_account_json_str is empty, use Application Default Credentials
         if service_account_json_str:
             service_account_json = base64.b64decode(service_account_json_str).decode("utf-8")

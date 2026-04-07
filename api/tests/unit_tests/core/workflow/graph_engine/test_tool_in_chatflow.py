@@ -41,6 +41,6 @@ def test_tool_in_chatflow():
     stream_chunk_count = len(stream_chunk_events)
 
     assert stream_chunk_count == 1, f"Expected 1 streaming events, but got {stream_chunk_count}"
-    assert stream_chunk_events[0].chunk == "hello, dify!", (
-        f"Expected chunk to be 'hello, dify!', but got {stream_chunk_events[0].chunk}"
+    assert stream_chunk_events[0].chunk == "hello, nexusai!", (
+        f"Expected chunk to be 'hello, nexusai!', but got {stream_chunk_events[0].chunk}"
     )

@@ -126,12 +126,12 @@ def test_generate_debugger_calls_generate(generator, mocker):
     mocker.patch.object(generator, "_prepare_user_inputs", return_value={"k": "v"})
 
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_execution_repository",
         return_value=MagicMock(),
     )
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_node_execution_repository",
         return_value=MagicMock(),
     )
@@ -201,12 +201,12 @@ def test_generate_published_pipeline_creates_documents_and_delay(generator, mock
     mocker.patch.object(module.db, "session", db_session)
 
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_execution_repository",
         return_value=MagicMock(),
     )
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_node_execution_repository",
         return_value=MagicMock(),
     )
@@ -248,12 +248,12 @@ def test_generate_is_retry_calls_generate(generator, mocker):
     mocker.patch.object(generator, "_prepare_user_inputs", return_value={"k": "v"})
 
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_execution_repository",
         return_value=MagicMock(),
     )
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_node_execution_repository",
         return_value=MagicMock(),
     )
@@ -448,12 +448,12 @@ def test_single_iteration_generate_success(generator, mocker):
         return_value=SimpleNamespace(app_id="pipe", tenant_id="tenant"),
     )
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_execution_repository",
         return_value=MagicMock(),
     )
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_node_execution_repository",
         return_value=MagicMock(),
     )
@@ -488,12 +488,12 @@ def test_single_loop_generate_success(generator, mocker):
         return_value=SimpleNamespace(app_id="pipe", tenant_id="tenant"),
     )
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_execution_repository",
         return_value=MagicMock(),
     )
     mocker.patch.object(
-        module.DifyCoreRepositoryFactory,
+        module.NexusAICoreRepositoryFactory,
         "create_workflow_node_execution_repository",
         return_value=MagicMock(),
     )

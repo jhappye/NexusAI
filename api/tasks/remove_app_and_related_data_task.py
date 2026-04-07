@@ -11,7 +11,7 @@ from sqlalchemy.engine import CursorResult
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.db.session_factory import session_factory
 from extensions.ext_database import db
 from libs.archive_storage import ArchiveStorageNotConfiguredError, get_archive_storage
@@ -47,7 +47,7 @@ from models.workflow import (
     WorkflowAppLog,
     WorkflowArchiveLog,
 )
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.api_token_service import ApiTokenCache
 
 logger = logging.getLogger(__name__)
@@ -71,7 +71,7 @@ def remove_app_and_related_data_task(self, tenant_id: str, app_id: str):
         _delete_app_workflow_runs(tenant_id, app_id)
         _delete_app_workflow_node_executions(tenant_id, app_id)
         _delete_app_workflow_app_logs(tenant_id, app_id)
-        if dify_config.BILLING_ENABLED and dify_config.ARCHIVE_STORAGE_ENABLED:
+        if nexusai_config.BILLING_ENABLED and nexusai_config.ARCHIVE_STORAGE_ENABLED:
             _delete_app_workflow_archive_logs(tenant_id, app_id)
             _delete_archived_workflow_run_files(tenant_id, app_id)
         _delete_app_conversations(tenant_id, app_id)
@@ -228,7 +228,7 @@ def _delete_app_workflows(tenant_id: str, app_id: str):
 def _delete_app_workflow_runs(tenant_id: str, app_id: str):
     """Delete all workflow runs for an app using the service repository."""
     session_maker = sessionmaker(bind=db.engine)
-    workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+    workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
 
     deleted_count = workflow_run_repo.delete_runs_by_app(
         tenant_id=tenant_id,
@@ -242,7 +242,7 @@ def _delete_app_workflow_runs(tenant_id: str, app_id: str):
 def _delete_app_workflow_node_executions(tenant_id: str, app_id: str):
     """Delete all workflow node executions for an app using the service repository."""
     session_maker = sessionmaker(bind=db.engine)
-    node_execution_repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(session_maker)
+    node_execution_repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(session_maker)
 
     deleted_count = node_execution_repo.delete_executions_by_app(
         tenant_id=tenant_id,

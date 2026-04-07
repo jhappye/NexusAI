@@ -6,7 +6,7 @@ from flask_restx import Resource
 from sqlalchemy import func, select
 from werkzeug.exceptions import NotFound, Unauthorized
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import HEADER_NAME_APP_CODE
 from controllers.web import web_ns
 from controllers.web.error import WebAppAuthRequiredError
@@ -169,7 +169,7 @@ def exchange_token_for_existing_web_user(app_code: str, enterprise_user_decoded:
         db.session.add(end_user)
         db.session.commit()
 
-    exp = int((datetime.now(UTC) + timedelta(minutes=dify_config.ACCESS_TOKEN_EXPIRE_MINUTES)).timestamp())
+    exp = int((datetime.now(UTC) + timedelta(minutes=nexusai_config.ACCESS_TOKEN_EXPIRE_MINUTES)).timestamp())
     if exchanged_token_expires_unix:
         exp = int(exchanged_token_expires_unix)
 

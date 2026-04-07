@@ -1,5 +1,5 @@
 """
-Logstore extension for Dify application.
+Logstore extension for NexusAI application.
 
 This extension initializes the logstore (Aliyun SLS) on application startup,
 creating necessary projects, logstores, and indexes if they don't exist.
@@ -10,8 +10,8 @@ import os
 
 from dotenv import load_dotenv
 
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 
 logger = logging.getLogger(__name__)
 
@@ -46,10 +46,10 @@ def is_enabled() -> bool:
 
     # Check if any repository configuration points to logstore implementation
     repository_configs = [
-        dify_config.CORE_WORKFLOW_EXECUTION_REPOSITORY,
-        dify_config.CORE_WORKFLOW_NODE_EXECUTION_REPOSITORY,
-        dify_config.API_WORKFLOW_NODE_EXECUTION_REPOSITORY,
-        dify_config.API_WORKFLOW_RUN_REPOSITORY,
+        nexusai_config.CORE_WORKFLOW_EXECUTION_REPOSITORY,
+        nexusai_config.CORE_WORKFLOW_NODE_EXECUTION_REPOSITORY,
+        nexusai_config.API_WORKFLOW_NODE_EXECUTION_REPOSITORY,
+        nexusai_config.API_WORKFLOW_RUN_REPOSITORY,
     ]
 
     uses_logstore = any("logstore" in config.lower() for config in repository_configs)
@@ -61,13 +61,13 @@ def is_enabled() -> bool:
     return True
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     """
     Initialize logstore on application startup.
     If initialization fails, the application continues running without logstore features.
 
     Args:
-        app: The Dify application instance
+        app: The NexusAI application instance
     """
     try:
         from extensions.logstore.aliyun_logstore import AliyunLogStore

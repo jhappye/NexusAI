@@ -45,8 +45,8 @@ class TestPluginEndpointClientDelete:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-api-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-api-key"),
         ):
             yield
 

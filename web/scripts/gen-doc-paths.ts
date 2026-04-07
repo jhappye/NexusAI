@@ -1,7 +1,7 @@
 // GENERATE BY script
 // DON NOT EDIT IT MANUALLY
 //
-// This script fetches the docs.json from dify-docs repository
+// This script fetches the docs.json from nexusai-docs repository
 // and generates TypeScript types for documentation paths.
 //
 // Usage: pnpm gen-doc-paths
@@ -11,7 +11,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const DOCS_JSON_URL = 'https://raw.githubusercontent.com/langgenius/dify-docs/refs/heads/main/docs.json'
+const DOCS_JSON_URL = 'https://raw.githubusercontent.com/langgenius/nexusai-docs/refs/heads/main/docs.json'
 const OUTPUT_PATH = path.resolve(__dirname, '../types/doc-paths.ts')
 
 type NavItem = string | NavObject | NavItem[]
@@ -58,7 +58,7 @@ type DocsJson = {
   [key: string]: unknown
 }
 
-const OPENAPI_BASE_URL = 'https://raw.githubusercontent.com/langgenius/dify-docs/refs/heads/main/'
+const OPENAPI_BASE_URL = 'https://raw.githubusercontent.com/langgenius/nexusai-docs/refs/heads/main/'
 
 /**
  * Convert summary to URL slug
@@ -258,7 +258,7 @@ function generateTypeDefinitions(
     '// GENERATE BY script',
     '// DON NOT EDIT IT MANUALLY',
     '//',
-    '// Generated from: https://raw.githubusercontent.com/langgenius/dify-docs/refs/heads/main/docs.json',
+    '// Generated from: https://raw.githubusercontent.com/langgenius/nexusai-docs/refs/heads/main/docs.json',
     `// Generated at: ${new Date().toISOString()}`,
     '',
     '// Language prefixes',
@@ -283,12 +283,12 @@ function generateTypeDefinitions(
 
     lines.push('')
 
-    // Add UseDifyNodesPath helper type after UseDifyPath
-    if (section === 'use-dify') {
-      lines.push('// UseDify node paths (without prefix)')
+    // Add UseNexusAINodesPath helper type after UseNexusAIPath
+    if (section === 'use-nexusai') {
+      lines.push('// UseNexusAI node paths (without prefix)')
       // eslint-disable-next-line no-template-curly-in-string
-      lines.push('type ExtractNodesPath<T> = T extends `/use-dify/nodes/${infer Path}` ? Path : never')
-      lines.push('export type UseDifyNodesPath = ExtractNodesPath<UseDifyPath>')
+      lines.push('type ExtractNodesPath<T> = T extends `/use-nexusai/nodes/${infer Path}` ? Path : never')
+      lines.push('export type UseNexusAINodesPath = ExtractNodesPath<UseNexusAIPath>')
       lines.push('')
     }
   }
@@ -324,7 +324,7 @@ function generateTypeDefinitions(
   // Generate full path type with language prefix
   lines.push('// Full documentation path with language prefix')
   // eslint-disable-next-line no-template-curly-in-string
-  lines.push('export type DifyDocPath = `${DocLanguage}/${DocPathWithoutLang}`')
+  lines.push('export type NexusAIDocPath = `${DocLanguage}/${DocPathWithoutLang}`')
   lines.push('')
 
   // Generate API reference path translations map

@@ -8,7 +8,7 @@ class SupabaseStorageConfig(BaseSettings):
     """
 
     SUPABASE_BUCKET_NAME: str | None = Field(
-        description="Name of the Supabase bucket to store and retrieve objects (e.g., 'dify-bucket')",
+        description="Name of the Supabase bucket to store and retrieve objects (e.g., 'nexusai-bucket')",
         default=None,
     )
 

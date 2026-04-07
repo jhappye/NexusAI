@@ -235,7 +235,7 @@ describe('useUploader Hook', () => {
       })
 
       // Create mock file
-      const file = new File(['content'], 'test.difypkg', { type: 'application/octet-stream' })
+      const file = new File(['content'], 'test.nexusaipkg', { type: 'application/octet-stream' })
 
       // Trigger drop event
       const dropEvent = new Event('drop', { bubbles: true, cancelable: true })
@@ -310,7 +310,7 @@ describe('useUploader Hook', () => {
         }),
       )
 
-      const file = new File(['content'], 'test.difypkg', { type: 'application/octet-stream' })
+      const file = new File(['content'], 'test.nexusaipkg', { type: 'application/octet-stream' })
       const mockEvent = {
         target: {
           files: [file],
@@ -372,7 +372,7 @@ describe('useUploader Hook', () => {
 
       // Create a mock input element with value property
       const mockInput = {
-        value: 'test.difypkg',
+        value: 'test.nexusaipkg',
       }
 
       // Override the fileUploader ref

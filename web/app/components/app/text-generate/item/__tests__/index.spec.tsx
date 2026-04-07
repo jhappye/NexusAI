@@ -82,7 +82,7 @@ vi.mock('../workflow-body', () => ({
   }) => (
     <div>
       <div>{`workflow-body:${currentTab}`}</div>
-      <button onClick={() => void onSubmitHumanInputForm('token-1', { action: 'submit', inputs: { name: 'dify' } })}>submit-human-input</button>
+      <button onClick={() => void onSubmitHumanInputForm('token-1', { action: 'submit', inputs: { name: 'nexusai' } })}>submit-human-input</button>
       <button onClick={() => void onSwitchTab('LOG')}>switch-workflow-tab</button>
     </div>
   ),
@@ -199,7 +199,7 @@ describe('GenerationItem', () => {
 
     expect(mockSubmitHumanInputFormWorkflow).toHaveBeenCalledWith('token-1', {
       action: 'submit',
-      inputs: { name: 'dify' },
+      inputs: { name: 'nexusai' },
     })
   })
 
@@ -228,7 +228,7 @@ describe('GenerationItem', () => {
 
     expect(mockSubmitHumanInputForm).toHaveBeenCalledWith('token-1', {
       action: 'submit',
-      inputs: { name: 'dify' },
+      inputs: { name: 'nexusai' },
     })
     expect(screen.getByText('workflow-body:LOG')).toBeInTheDocument()
   })

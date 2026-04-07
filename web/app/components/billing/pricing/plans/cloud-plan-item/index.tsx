@@ -106,7 +106,7 @@ const CloudPlanItem: FC<CloudPlanItemProps> = ({
               <div className="text-[30px] font-medium leading-[1.2] text-text-primary">{t(`${i18nPrefix}.name`, { ns: 'billing' })}</div>
               {
                 isMostPopularPlan && (
-                  <div className="flex items-center justify-center bg-saas-dify-blue-static px-1.5 py-1">
+                  <div className="flex items-center justify-center bg-saas-nexusai-blue-static px-1.5 py-1">
                     <span className="text-text-primary-on-surface system-2xs-semibold-uppercase">
                       {t('plansCommon.mostPopular', { ns: 'billing' })}
                     </span>

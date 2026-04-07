@@ -283,7 +283,7 @@ def test_rehydration_storage_failure_emits_degraded_event():
         mock_emit.assert_called_once()
         call_args = mock_emit.call_args
         assert call_args[1]["event_name"] == EnterpriseTelemetryEvent.REHYDRATION_FAILED
-        assert "dify.telemetry.error" in call_args[1]["attributes"]
+        assert "nexusai.telemetry.error" in call_args[1]["attributes"]
 
 
 def test_rehydration_emits_degraded_event_on_empty_payload():
@@ -305,7 +305,7 @@ def test_rehydration_emits_degraded_event_on_empty_payload():
         mock_emit.assert_called_once()
         call_args = mock_emit.call_args
         assert call_args[1]["event_name"] == EnterpriseTelemetryEvent.REHYDRATION_FAILED
-        assert "dify.telemetry.error" in call_args[1]["attributes"]
+        assert "nexusai.telemetry.error" in call_args[1]["attributes"]
 
 
 def test_on_app_created_emits_correct_event(mock_redis):
@@ -334,11 +334,11 @@ def test_on_app_created_emits_correct_event(mock_redis):
         assert call_args[1]["event_name"] == EnterpriseTelemetryEvent.APP_CREATED
         assert call_args[1]["tenant_id"] == "tenant-123"
         attrs = call_args[1]["attributes"]
-        assert attrs["dify.app_id"] == "app-789"
-        assert attrs["dify.tenant_id"] == "tenant-123"
-        assert attrs["dify.event.id"] == "event-456"
-        assert attrs["dify.app.mode"] == "chat"
-        assert "dify.app.created_at" in attrs
+        assert attrs["nexusai.app_id"] == "app-789"
+        assert attrs["nexusai.tenant_id"] == "tenant-123"
+        assert attrs["nexusai.event.id"] == "event-456"
+        assert attrs["nexusai.app.mode"] == "chat"
+        assert "nexusai.app.created_at" in attrs
 
         from enterprise.telemetry.entities import EnterpriseTelemetryCounter
 
@@ -377,10 +377,10 @@ def test_on_app_updated_emits_correct_event(mock_redis):
         assert call_args[1]["event_name"] == EnterpriseTelemetryEvent.APP_UPDATED
         assert call_args[1]["tenant_id"] == "tenant-123"
         attrs = call_args[1]["attributes"]
-        assert attrs["dify.app_id"] == "app-789"
-        assert attrs["dify.tenant_id"] == "tenant-123"
-        assert attrs["dify.event.id"] == "event-456"
-        assert "dify.app.updated_at" in attrs
+        assert attrs["nexusai.app_id"] == "app-789"
+        assert attrs["nexusai.tenant_id"] == "tenant-123"
+        assert attrs["nexusai.event.id"] == "event-456"
+        assert "nexusai.app.updated_at" in attrs
 
         from enterprise.telemetry.entities import EnterpriseTelemetryCounter
 
@@ -418,10 +418,10 @@ def test_on_app_deleted_emits_correct_event(mock_redis):
         assert call_args[1]["event_name"] == EnterpriseTelemetryEvent.APP_DELETED
         assert call_args[1]["tenant_id"] == "tenant-123"
         attrs = call_args[1]["attributes"]
-        assert attrs["dify.app_id"] == "app-789"
-        assert attrs["dify.tenant_id"] == "tenant-123"
-        assert attrs["dify.event.id"] == "event-456"
-        assert "dify.app.deleted_at" in attrs
+        assert attrs["nexusai.app_id"] == "app-789"
+        assert attrs["nexusai.tenant_id"] == "tenant-123"
+        assert attrs["nexusai.event.id"] == "event-456"
+        assert "nexusai.app.deleted_at" in attrs
 
         from enterprise.telemetry.entities import EnterpriseTelemetryCounter
 
@@ -464,10 +464,10 @@ def test_on_feedback_created_emits_correct_event(mock_redis):
 
         mock_emit.assert_called_once()
         call_args = mock_emit.call_args
-        assert call_args[1]["event_name"] == "dify.feedback.created"
-        assert call_args[1]["attributes"]["dify.message.id"] == "msg-001"
-        assert call_args[1]["attributes"]["dify.feedback.content"] == "Great!"
-        assert "dify.feedback.created_at" in call_args[1]["attributes"]
+        assert call_args[1]["event_name"] == "nexusai.feedback.created"
+        assert call_args[1]["attributes"]["nexusai.message.id"] == "msg-001"
+        assert call_args[1]["attributes"]["nexusai.feedback.content"] == "Great!"
+        assert "nexusai.feedback.created_at" in call_args[1]["attributes"]
         assert call_args[1]["tenant_id"] == "tenant-123"
         assert call_args[1]["user_id"] == "user-456"
 
@@ -508,4 +508,4 @@ def test_on_feedback_created_without_content(mock_redis):
 
         mock_emit.assert_called_once()
         call_args = mock_emit.call_args
-        assert "dify.feedback.content" not in call_args[1]["attributes"]
+        assert "nexusai.feedback.content" not in call_args[1]["attributes"]

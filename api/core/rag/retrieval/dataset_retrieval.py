@@ -189,7 +189,7 @@ class DatasetRetrieval:
                     f"Model {request.model_name} credentials is not initialized."
                 )
             elif provider_model.status == ModelStatus.NO_PERMISSION:
-                raise exc.ModelNotSupportedError(f"Dify Hosted OpenAI {request.model_name} currently not support.")
+                raise exc.ModelNotSupportedError(f"NexusAI Hosted OpenAI {request.model_name} currently not support.")
             elif provider_model.status == ModelStatus.QUOTA_EXCEEDED:
                 raise exc.ModelQuotaExceededError(f"Model provider {request.model_provider} quota exceeded.")
 
@@ -247,7 +247,7 @@ class DatasetRetrieval:
                 attachment_ids=request.attachment_ids,
             )
 
-        dify_documents = [item for item in all_documents if item.provider == "dify"]
+        nexusai_documents = [item for item in all_documents if item.provider == "nexusai"]
         external_documents = [item for item in all_documents if item.provider == "external"]
         retrieval_resource_list = []
         # deal with external documents
@@ -271,9 +271,9 @@ class DatasetRetrieval:
                 content=item.page_content,
             )
             retrieval_resource_list.append(source)
-        # deal with dify documents
-        if dify_documents:
-            records = RetrievalService.format_retrieval_documents(dify_documents)
+        # deal with nexusai documents
+        if nexusai_documents:
+            records = RetrievalService.format_retrieval_documents(nexusai_documents)
             dataset_ids = [i.segment.dataset_id for i in records]
             document_ids = [i.segment.document_id for i in records]
 
@@ -465,7 +465,7 @@ class DatasetRetrieval:
                 metadata_condition,
             )
 
-        dify_documents = [item for item in all_documents if item.provider == "dify"]
+        nexusai_documents = [item for item in all_documents if item.provider == "nexusai"]
         external_documents = [item for item in all_documents if item.provider == "external"]
         document_context_list: list[DocumentContext] = []
         context_files: list[File] = []
@@ -484,9 +484,9 @@ class DatasetRetrieval:
                 content=item.page_content,
             )
             retrieval_resource_list.append(source)
-        # deal with dify documents
-        if dify_documents:
-            records = RetrievalService.format_retrieval_documents(dify_documents)
+        # deal with nexusai documents
+        if nexusai_documents:
+            records = RetrievalService.format_retrieval_documents(nexusai_documents)
             if records:
                 for record in records:
                     segment = record.segment
@@ -867,7 +867,7 @@ class DatasetRetrieval:
         retrieval_resource_list = []
         doc_ids_filter = []
         for document in all_documents:
-            if document.provider == "dify":
+            if document.provider == "nexusai":
                 doc_id = document.metadata.get("doc_id")
                 if doc_id and doc_id not in doc_ids_filter:
                     doc_ids_filter.append(doc_id)
@@ -881,8 +881,8 @@ class DatasetRetrieval:
     ):
         """Handle retrieval end."""
         with flask_app.app_context():
-            dify_documents = [document for document in documents if document.provider == "dify"]
-            if not dify_documents:
+            nexusai_documents = [document for document in documents if document.provider == "nexusai"]
+            if not nexusai_documents:
                 self._send_trace_task(message_id, documents, timer)
                 return
 
@@ -890,7 +890,7 @@ class DatasetRetrieval:
                 # Collect all document_ids and batch fetch DatasetDocuments
                 document_ids = {
                     doc.metadata["document_id"]
-                    for doc in dify_documents
+                    for doc in nexusai_documents
                     if doc.metadata and "document_id" in doc.metadata
                 }
                 if not document_ids:
@@ -907,7 +907,7 @@ class DatasetRetrieval:
                 normal_text_docs: list[tuple[Document, DatasetDocument]] = []
                 normal_image_docs: list[tuple[Document, DatasetDocument]] = []
 
-                for doc in dify_documents:
+                for doc in nexusai_documents:
                     if not doc.metadata or "document_id" not in doc.metadata:
                         continue
                     dataset_doc = dataset_doc_map.get(doc.metadata["document_id"])
@@ -1597,7 +1597,7 @@ class DatasetRetrieval:
         if provider_model.status == ModelStatus.NO_CONFIGURE:
             raise ValueError(f"Model {model_name} credentials is not initialized.")
         elif provider_model.status == ModelStatus.NO_PERMISSION:
-            raise ValueError(f"Dify Hosted OpenAI {model_name} currently not support.")
+            raise ValueError(f"NexusAI Hosted OpenAI {model_name} currently not support.")
         elif provider_model.status == ModelStatus.QUOTA_EXCEEDED:
             raise ValueError(f"Model provider {provider_name} quota exceeded.")
 

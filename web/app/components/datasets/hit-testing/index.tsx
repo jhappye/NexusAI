@@ -33,7 +33,7 @@ import QueryInput from './components/query-input'
 import Records from './components/records'
 import ResultItem from './components/result-item'
 import ResultItemExternal from './components/result-item-external'
-import ModifyRetrievalModal from './modify-retrieval-modal'
+import MonexusaiRetrievalModal from './monexusai-retrieval-modal'
 
 const limit = 10
 
@@ -61,7 +61,7 @@ const HitTestingPage: FC<Props> = ({ datasetId }: Props) => {
   const isExternal = currentDataset?.provider === 'external'
 
   const [retrievalConfig, setRetrievalConfig] = useState(currentDataset?.retrieval_model_dict as RetrievalConfig)
-  const [isShowModifyRetrievalModal, setIsShowModifyRetrievalModal] = useState(false)
+  const [isShowMonexusaiRetrievalModal, setIsShowMonexusaiRetrievalModal] = useState(false)
   const [isShowRightPanel, { setTrue: showRightPanel, setFalse: hideRightPanel, set: setShowRightPanel }] = useBoolean(!isMobile)
 
   const { mutateAsync: hitTestingMutation, isPending: isHitTestingPending } = useHitTesting(datasetId)
@@ -130,7 +130,7 @@ const HitTestingPage: FC<Props> = ({ datasetId }: Props) => {
           queries={queries}
           setQueries={setQueries}
           isExternal={isExternal}
-          onClickRetrievalMethod={() => setIsShowModifyRetrievalModal(true)}
+          onClickRetrievalMethod={() => setIsShowMonexusaiRetrievalModal(true)}
           retrievalConfig={retrievalConfig}
           isEconomy={currentDataset?.indexing_technique === 'economy'}
           hitTestingMutation={hitTestingMutation}
@@ -182,20 +182,20 @@ const HitTestingPage: FC<Props> = ({ datasetId }: Props) => {
       </FloatRightContainer>
       <Drawer
         unmount={true}
-        isOpen={isShowModifyRetrievalModal}
-        onClose={() => setIsShowModifyRetrievalModal(false)}
+        isOpen={isShowMonexusaiRetrievalModal}
+        onClose={() => setIsShowMonexusaiRetrievalModal(false)}
         footer={null}
         mask={isMobile}
         panelClassName="mt-16 mx-2 sm:mr-2 mb-3 p-0! max-w-[640px]! rounded-xl"
       >
-        <ModifyRetrievalModal
+        <MonexusaiRetrievalModal
           indexMethod={currentDataset?.indexing_technique || ''}
           value={retrievalConfig}
-          isShow={isShowModifyRetrievalModal}
-          onHide={() => setIsShowModifyRetrievalModal(false)}
+          isShow={isShowMonexusaiRetrievalModal}
+          onHide={() => setIsShowMonexusaiRetrievalModal(false)}
           onSave={(value) => {
             setRetrievalConfig(value)
-            setIsShowModifyRetrievalModal(false)
+            setIsShowMonexusaiRetrievalModal(false)
           }}
         />
       </Drawer>

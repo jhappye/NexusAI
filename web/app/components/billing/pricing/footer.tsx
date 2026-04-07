@@ -25,7 +25,7 @@ const Footer = ({
             <span className="system-xs-regular">{t('plansCommon.taxTipSecond', { ns: 'billing' })}</span>
           </div>
         )}
-        <span className="flex h-fit items-center gap-x-1 text-saas-dify-blue-accessible">
+        <span className="flex h-fit items-center gap-x-1 text-saas-nexusai-blue-accessible">
           <Link
             href={pricingPageURL}
             className="system-md-regular hover:underline focus-visible:underline focus-visible:outline-hidden"

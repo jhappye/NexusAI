@@ -254,7 +254,7 @@ class TestDatasetIndexingTaskIntegration:
         features.vector_space.size = 50
 
         # Act
-        with patch("tasks.document_indexing_task.dify_config.BATCH_UPLOAD_LIMIT", "2"):
+        with patch("tasks.document_indexing_task.nexusai_config.BATCH_UPLOAD_LIMIT", "2"):
             _document_indexing(dataset.id, document_ids)
 
         # Assert
@@ -526,7 +526,7 @@ class TestDatasetIndexingTaskIntegration:
 
         # Act
         with (
-            patch("tasks.document_indexing_task.dify_config.TENANT_ISOLATED_TASK_CONCURRENCY", concurrency_limit),
+            patch("tasks.document_indexing_task.nexusai_config.TENANT_ISOLATED_TASK_CONCURRENCY", concurrency_limit),
             patch(
                 "tasks.document_indexing_task.TenantIsolatedTaskQueue.pull_tasks",
                 return_value=pending_tasks[:concurrency_limit],
@@ -559,7 +559,7 @@ class TestDatasetIndexingTaskIntegration:
 
         # Act
         with (
-            patch("tasks.document_indexing_task.dify_config.TENANT_ISOLATED_TASK_CONCURRENCY", 3),
+            patch("tasks.document_indexing_task.nexusai_config.TENANT_ISOLATED_TASK_CONCURRENCY", 3),
             patch(
                 "tasks.document_indexing_task.TenantIsolatedTaskQueue.pull_tasks",
                 return_value=ordered_tasks,
@@ -726,7 +726,7 @@ class TestDatasetIndexingTaskIntegration:
         features.vector_space.size = 0
 
         # Act
-        with patch("tasks.document_indexing_task.dify_config.BATCH_UPLOAD_LIMIT", str(batch_limit)):
+        with patch("tasks.document_indexing_task.nexusai_config.BATCH_UPLOAD_LIMIT", str(batch_limit)):
             _document_indexing(dataset.id, document_ids)
 
         # Assert

@@ -1,7 +1,7 @@
-from dify_app import DifyApp
+from nexusai_app import NexusAIApp
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     from commands import (
         add_qdrant_index,
         archive_workflow_runs,

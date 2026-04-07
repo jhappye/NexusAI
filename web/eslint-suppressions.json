@@ -2960,7 +2960,7 @@
       "count": 1
     }
   },
-  "app/components/base/logo/dify-logo.tsx": {
+  "app/components/base/logo/nexusai-logo.tsx": {
     "react-refresh/only-export-components": {
       "count": 2
     }
@@ -5280,12 +5280,12 @@
       "count": 3
     }
   },
-  "app/components/datasets/hit-testing/modify-external-retrieval-modal.tsx": {
+  "app/components/datasets/hit-testing/monexusai-external-retrieval-modal.tsx": {
     "tailwindcss/enforce-consistent-class-order": {
       "count": 2
     }
   },
-  "app/components/datasets/hit-testing/modify-retrieval-modal.tsx": {
+  "app/components/datasets/hit-testing/monexusai-retrieval-modal.tsx": {
     "tailwindcss/enforce-consistent-class-order": {
       "count": 3
     }

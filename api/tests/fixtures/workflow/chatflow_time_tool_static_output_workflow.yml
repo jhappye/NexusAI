@@ -1,5 +1,5 @@
 app:
-  description: this is a simple chatflow that should output 'hello, dify!' with any
+  description: this is a simple chatflow that should output 'hello, nexusai!' with any
     input
   icon: 🤖
   icon_background: '#FFEAD5'
@@ -346,7 +346,7 @@ workflow:
     - data:
         desc: ''
         selected: false
-        template: hello, dify!
+        template: hello, nexusai!
         title: Template
         type: template-transform
         variables: []

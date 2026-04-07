@@ -10,7 +10,7 @@ import psycopg2.extras
 import psycopg2.pool
 from pydantic import BaseModel, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
 from core.rag.datasource.vdb.vector_type import VectorType
@@ -282,13 +282,13 @@ class PGVectorFactory(AbstractVectorFactory):
         return PGVector(
             collection_name=collection_name,
             config=PGVectorConfig(
-                host=dify_config.PGVECTOR_HOST or "localhost",
-                port=dify_config.PGVECTOR_PORT,
-                user=dify_config.PGVECTOR_USER or "postgres",
-                password=dify_config.PGVECTOR_PASSWORD or "",
-                database=dify_config.PGVECTOR_DATABASE or "postgres",
-                min_connection=dify_config.PGVECTOR_MIN_CONNECTION,
-                max_connection=dify_config.PGVECTOR_MAX_CONNECTION,
-                pg_bigm=dify_config.PGVECTOR_PG_BIGM,
+                host=nexusai_config.PGVECTOR_HOST or "localhost",
+                port=nexusai_config.PGVECTOR_PORT,
+                user=nexusai_config.PGVECTOR_USER or "postgres",
+                password=nexusai_config.PGVECTOR_PASSWORD or "",
+                database=nexusai_config.PGVECTOR_DATABASE or "postgres",
+                min_connection=nexusai_config.PGVECTOR_MIN_CONNECTION,
+                max_connection=nexusai_config.PGVECTOR_MAX_CONNECTION,
+                pg_bigm=nexusai_config.PGVECTOR_PG_BIGM,
             ),
         )

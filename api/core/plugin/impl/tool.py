@@ -3,13 +3,13 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from configs import dify_config
+from configs import nexusai_config
 
 # from core.plugin.entities.plugin import GenericProviderID, ToolProviderID
 from core.plugin.entities.plugin_daemon import CredentialType, PluginBasicBooleanResponse, PluginToolProviderEntity
 from core.plugin.impl.base import BasePluginClient
 from core.plugin.utils.chunk_merger import merge_blob_chunks
-from core.schemas.resolver import resolve_dify_schema_refs
+from core.schemas.resolver import resolve_nexusai_schema_refs
 from core.tools.entities.tool_entities import ToolInvokeMessage, ToolParameter
 from models.provider_ids import GenericProviderID, ToolProviderID
 
@@ -28,7 +28,7 @@ class PluginToolManager(BasePluginClient):
                     tool["identity"]["provider"] = provider_name
                     # resolve refs
                     if tool.get("output_schema"):
-                        tool["output_schema"] = resolve_dify_schema_refs(tool["output_schema"])
+                        tool["output_schema"] = resolve_nexusai_schema_refs(tool["output_schema"])
 
             return json_response
 
@@ -62,7 +62,7 @@ class PluginToolManager(BasePluginClient):
                     tool["identity"]["provider"] = tool_provider_id.provider_name
                     # resolve refs
                     if tool.get("output_schema"):
-                        tool["output_schema"] = resolve_dify_schema_refs(tool["output_schema"])
+                        tool["output_schema"] = resolve_nexusai_schema_refs(tool["output_schema"])
 
             return json_response
 
@@ -124,7 +124,7 @@ class PluginToolManager(BasePluginClient):
             },
         )
 
-        return merge_blob_chunks(response, max_file_size=dify_config.PLUGIN_MAX_FILE_SIZE)
+        return merge_blob_chunks(response, max_file_size=nexusai_config.PLUGIN_MAX_FILE_SIZE)
 
     def validate_provider_credentials(
         self, tenant_id: str, user_id: str, provider: str, credentials: dict[str, Any]

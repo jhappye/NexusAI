@@ -12,11 +12,11 @@ from celery import shared_task  # type: ignore
 from flask import current_app, g
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.entities.app_invoke_entities import InvokeFrom, RagPipelineGenerateEntity
 from core.app.entities.rag_pipeline_invoke_entities import RagPipelineInvokeEntity
 from core.rag.pipeline.queue import TenantIsolatedTaskQueue
-from core.repositories.factory import DifyCoreRepositoryFactory
+from core.repositories.factory import NexusAICoreRepositoryFactory
 from extensions.ext_database import db
 from models import Account, Tenant
 from models.dataset import Pipeline
@@ -79,7 +79,7 @@ def priority_rag_pipeline_run_task(
 
         # Check if there are waiting tasks in the queue
         # Use rpop to get the next task from the queue (FIFO order)
-        next_file_ids = tenant_isolated_task_queue.pull_tasks(count=dify_config.TENANT_ISOLATED_TASK_CONCURRENCY)
+        next_file_ids = tenant_isolated_task_queue.pull_tasks(count=nexusai_config.TENANT_ISOLATED_TASK_CONCURRENCY)
         logger.info("priority rag pipeline tenant isolation queue %s next files: %s", tenant_id, next_file_ids)
 
         if next_file_ids:
@@ -143,7 +143,7 @@ def run_single_rag_pipeline_task(rag_pipeline_invoke_entity: Mapping[str, Any], 
 
                 # Create workflow repositories
                 session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
-                workflow_execution_repository = DifyCoreRepositoryFactory.create_workflow_execution_repository(
+                workflow_execution_repository = NexusAICoreRepositoryFactory.create_workflow_execution_repository(
                     session_factory=session_factory,
                     user=account,
                     app_id=entity.app_config.app_id,
@@ -151,7 +151,7 @@ def run_single_rag_pipeline_task(rag_pipeline_invoke_entity: Mapping[str, Any], 
                 )
 
                 workflow_node_execution_repository = (
-                    DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+                    NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
                         session_factory=session_factory,
                         user=account,
                         app_id=entity.app_config.app_id,

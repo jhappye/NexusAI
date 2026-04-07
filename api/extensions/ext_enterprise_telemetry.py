@@ -14,10 +14,10 @@ import atexit
 import logging
 from typing import TYPE_CHECKING
 
-from configs import dify_config
+from configs import nexusai_config
 
 if TYPE_CHECKING:
-    from dify_app import DifyApp
+    from nexusai_app import NexusAIApp
     from enterprise.telemetry.exporter import EnterpriseExporter
 
 logger = logging.getLogger(__name__)
@@ -26,10 +26,10 @@ _exporter: EnterpriseExporter | None = None
 
 
 def is_enabled() -> bool:
-    return bool(dify_config.ENTERPRISE_ENABLED and dify_config.ENTERPRISE_TELEMETRY_ENABLED)
+    return bool(nexusai_config.ENTERPRISE_ENABLED and nexusai_config.ENTERPRISE_TELEMETRY_ENABLED)
 
 
-def init_app(app: DifyApp) -> None:
+def init_app(app: NexusAIApp) -> None:
     global _exporter
 
     if not is_enabled():
@@ -37,7 +37,7 @@ def init_app(app: DifyApp) -> None:
 
     from enterprise.telemetry.exporter import EnterpriseExporter
 
-    _exporter = EnterpriseExporter(dify_config)
+    _exporter = EnterpriseExporter(nexusai_config)
     atexit.register(_exporter.shutdown)
 
     # Import to trigger @signal.connect decorator registration

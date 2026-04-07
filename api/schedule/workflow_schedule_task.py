@@ -4,7 +4,7 @@ from celery import current_app, group, shared_task
 from sqlalchemy import and_, select
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_database import db
 from libs.datetime_utils import naive_utc_now
 from libs.schedule_utils import calculate_next_run_at
@@ -42,10 +42,10 @@ def poll_workflow_schedules() -> None:
                 logger.debug("Batch processed: %d dispatched", dispatched_count)
 
                 # Circuit breaker: check if we've hit the per-tick limit (if enabled)
-                if 0 < dify_config.WORKFLOW_SCHEDULE_MAX_DISPATCH_PER_TICK <= total_dispatched:
+                if 0 < nexusai_config.WORKFLOW_SCHEDULE_MAX_DISPATCH_PER_TICK <= total_dispatched:
                     logger.warning(
                         "Circuit breaker activated: reached dispatch limit (%d), will continue next tick",
-                        dify_config.WORKFLOW_SCHEDULE_MAX_DISPATCH_PER_TICK,
+                        nexusai_config.WORKFLOW_SCHEDULE_MAX_DISPATCH_PER_TICK,
                     )
                     break
         if total_dispatched > 0:
@@ -80,7 +80,7 @@ def _fetch_due_schedules(session: Session) -> list[WorkflowSchedulePlan]:
         )
         .order_by(WorkflowSchedulePlan.next_run_at.asc())
         .with_for_update(skip_locked=True)
-        .limit(dify_config.WORKFLOW_SCHEDULE_POLLER_BATCH_SIZE)
+        .limit(nexusai_config.WORKFLOW_SCHEDULE_POLLER_BATCH_SIZE)
     )
 
     return list(due_schedules)

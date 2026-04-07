@@ -16,7 +16,7 @@ class TestVolcengineTos(BaseStorageTest):
     @pytest.fixture(autouse=True)
     def setup_method(self, setup_volcengine_tos_mock):
         """Executed before each test method."""
-        with patch("extensions.storage.volcengine_tos_storage.dify_config") as mock_config:
+        with patch("extensions.storage.volcengine_tos_storage.nexusai_config") as mock_config:
             mock_config.VOLCENGINE_TOS_ACCESS_KEY = "test_access_key"
             mock_config.VOLCENGINE_TOS_SECRET_KEY = "test_secret_key"
             mock_config.VOLCENGINE_TOS_ENDPOINT = "test_endpoint"
@@ -25,8 +25,8 @@ class TestVolcengineTos(BaseStorageTest):
 
         self.storage.bucket_name = get_example_bucket()
         self.storage.client = TosClientV2(
-            ak="dify",
-            sk="dify",
+            ak="nexusai",
+            sk="nexusai",
             endpoint="https://xxx.volces.com",
             region="cn-beijing",
         )

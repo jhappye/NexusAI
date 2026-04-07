@@ -12,8 +12,8 @@ from graphon.runtime import GraphRuntimeState, VariablePool
 from graphon.utils.condition.entities import Condition, SubCondition, SubVariableCondition
 from graphon.variables import ArrayFileSegment
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
-from core.workflow.node_factory import DifyNodeFactory
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
+from core.workflow.node_factory import NexusAINodeFactory
 from core.workflow.system_variables import build_system_variables
 from extensions.ext_database import db
 from tests.workflow_test_utils import build_test_graph_init_params
@@ -55,7 +55,7 @@ def test_execute_if_else_result_true():
     pool.add(["start", "not_null"], "1212")
 
     graph_runtime_state = GraphRuntimeState(variable_pool=pool, start_at=time.perf_counter())
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )
@@ -149,7 +149,7 @@ def test_execute_if_else_result_false():
     pool.add(["start", "array_not_contains"], ["ab", "def"])
 
     graph_runtime_state = GraphRuntimeState(variable_pool=pool, start_at=time.perf_counter())
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )
@@ -233,7 +233,7 @@ def test_array_file_contains_file_name():
     graph_init_params.graph_config = {}
     graph_init_params.call_depth = 0
     graph_init_params.run_context = {
-        DIFY_RUN_CONTEXT_KEY: {
+        NEXUSAI_RUN_CONTEXT_KEY: {
             "tenant_id": "test_tenant",
             "app_id": "test_app",
             "user_id": "test_user",
@@ -322,7 +322,7 @@ def test_execute_if_else_boolean_conditions(condition: Condition):
     pool.add(["start", "mixed_array"], [True, "false", 1, 0])
 
     graph_runtime_state = GraphRuntimeState(variable_pool=pool, start_at=time.perf_counter())
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )
@@ -376,7 +376,7 @@ def test_execute_if_else_boolean_false_conditions():
     pool.add(["start", "bool_array"], [True, False, True])
 
     graph_runtime_state = GraphRuntimeState(variable_pool=pool, start_at=time.perf_counter())
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )
@@ -444,7 +444,7 @@ def test_execute_if_else_boolean_cases_structure():
     pool.add(["start", "bool_false"], False)
 
     graph_runtime_state = GraphRuntimeState(variable_pool=pool, start_at=time.perf_counter())
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )

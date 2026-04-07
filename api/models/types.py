@@ -9,7 +9,7 @@ from sqlalchemy.dialects.postgresql import BYTEA, JSONB, UUID
 from sqlalchemy.engine.interfaces import Dialect
 from sqlalchemy.sql.type_api import TypeEngine
 
-from configs import dify_config
+from configs import nexusai_config
 
 
 class StringUUID(TypeDecorator[uuid.UUID | str | None]):
@@ -154,7 +154,7 @@ class EnumText[T: enum.StrEnum](TypeDecorator[T | None]):
 
 def adjusted_json_index(index_name, column_name):
     index_name = index_name or f"{column_name}_idx"
-    if dify_config.DB_TYPE == "postgresql":
+    if nexusai_config.DB_TYPE == "postgresql":
         return sa.Index(index_name, column_name, postgresql_using="gin")
     else:
         return None

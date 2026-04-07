@@ -29,9 +29,9 @@ def test_request_success(mocker):
 
 
 def test_request_with_ssrf_proxy(mocker):
-    # Mock dify_config
-    mocker.patch("configs.dify_config.SSRF_PROXY_HTTP_URL", "http://proxy:8080")
-    mocker.patch("configs.dify_config.SSRF_PROXY_HTTPS_URL", "https://proxy:8081")
+    # Mock nexusai_config
+    mocker.patch("configs.nexusai_config.SSRF_PROXY_HTTP_URL", "http://proxy:8080")
+    mocker.patch("configs.nexusai_config.SSRF_PROXY_HTTPS_URL", "https://proxy:8081")
 
     # Mock httpx.Client
     mock_client = mocker.MagicMock()
@@ -60,9 +60,9 @@ def test_request_with_ssrf_proxy(mocker):
 
 
 def test_request_with_only_one_proxy_config(mocker):
-    # Mock dify_config with only one proxy
-    mocker.patch("configs.dify_config.SSRF_PROXY_HTTP_URL", "http://proxy:8080")
-    mocker.patch("configs.dify_config.SSRF_PROXY_HTTPS_URL", None)
+    # Mock nexusai_config with only one proxy
+    mocker.patch("configs.nexusai_config.SSRF_PROXY_HTTP_URL", "http://proxy:8080")
+    mocker.patch("configs.nexusai_config.SSRF_PROXY_HTTPS_URL", None)
 
     # Mock httpx.Client
     mock_client = mocker.MagicMock()

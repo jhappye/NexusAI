@@ -69,7 +69,7 @@ class TestPluginTriggerDebugEventPoller:
 
         with patch("services.trigger.trigger_service.TriggerService") as mock_trigger_svc:
             mock_trigger_svc.invoke_trigger_event.return_value = TriggerInvokeEventResponse(
-                variables={"repo": "dify"},
+                variables={"repo": "nexusai"},
                 cancelled=False,
             )
 
@@ -77,7 +77,7 @@ class TestPluginTriggerDebugEventPoller:
             result = poller.poll()
 
         assert result is not None
-        assert result.workflow_args["inputs"] == {"repo": "dify"}
+        assert result.workflow_args["inputs"] == {"repo": "nexusai"}
 
     @patch("core.trigger.debug.event_selectors.TriggerDebugEventBus")
     def test_returns_none_when_no_event(self, mock_bus):

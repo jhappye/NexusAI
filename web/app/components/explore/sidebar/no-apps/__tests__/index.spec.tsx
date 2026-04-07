@@ -5,7 +5,7 @@ import NoApps from '../index'
 let mockTheme = Theme.light
 
 vi.mock('@/context/i18n', () => ({
-  useDocLink: () => (path: string) => `https://docs.dify.ai${path}`,
+  useDocLink: () => (path: string) => `https://docs.nexusai.ai${path}`,
 }))
 
 vi.mock('@/hooks/use-theme', () => ({
@@ -32,7 +32,7 @@ describe('NoApps', () => {
 
       const link = screen.getByText('explore.sidebar.noApps.learnMore')
       expect(link.tagName).toBe('A')
-      expect(link).toHaveAttribute('href', 'https://docs.dify.ai/use-dify/publish/README')
+      expect(link).toHaveAttribute('href', 'https://docs.nexusai.ai/use-nexusai/publish/README')
       expect(link).toHaveAttribute('target', '_blank')
       expect(link).toHaveAttribute('rel', 'noopener noreferrer')
     })

@@ -19,7 +19,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from core.entities.model_entities import DefaultModelEntity, DefaultModelProviderEntity
 from core.entities.provider_configuration import ProviderConfiguration, ProviderConfigurations, ProviderModelBundle
 from core.entities.provider_entities import (
@@ -171,8 +171,8 @@ class ProviderManager:
         for provider_entity in provider_entities:
             # handle include, exclude
             if is_filtered(
-                include_set=dify_config.POSITION_PROVIDER_INCLUDES_SET,
-                exclude_set=dify_config.POSITION_PROVIDER_EXCLUDES_SET,
+                include_set=nexusai_config.POSITION_PROVIDER_INCLUDES_SET,
+                exclude_set=nexusai_config.POSITION_PROVIDER_EXCLUDES_SET,
                 data=provider_entity,
                 name_func=lambda x: x.provider,
             ):
@@ -208,7 +208,7 @@ class ProviderManager:
 
             if preferred_provider_type_record:
                 preferred_provider_type = preferred_provider_type_record.preferred_provider_type
-            elif dify_config.EDITION == "CLOUD" and system_configuration.enabled:
+            elif nexusai_config.EDITION == "CLOUD" and system_configuration.enabled:
                 preferred_provider_type = ProviderType.SYSTEM
             elif custom_configuration.provider or custom_configuration.models:
                 preferred_provider_type = ProviderType.CUSTOM
@@ -924,7 +924,7 @@ class ProviderManager:
                 quota_type_to_provider_records_dict[provider_record.quota_type] = provider_record  # type: ignore[index]
         quota_configurations = []
 
-        if dify_config.EDITION == "CLOUD":
+        if nexusai_config.EDITION == "CLOUD":
             from services.credit_pool_service import CreditPoolService
 
             trail_pool = CreditPoolService.get_pool(

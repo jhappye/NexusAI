@@ -125,7 +125,7 @@ describe('Header', () => {
   it('should render header with main nav components', () => {
     render(<Header />)
 
-    expect(screen.getByRole('img', { name: /dify logo/i })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /nexusai logo/i })).toBeInTheDocument()
     expect(screen.getByTestId('workplace-selector')).toBeInTheDocument()
     expect(screen.getByTestId('app-nav')).toBeInTheDocument()
     expect(screen.getByTestId('account-dropdown')).toBeInTheDocument()
@@ -169,7 +169,7 @@ describe('Header', () => {
     mockMedia = 'mobile'
     render(<Header />)
 
-    expect(screen.getByRole('img', { name: /dify logo/i })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /nexusai logo/i })).toBeInTheDocument()
     expect(screen.queryByTestId('env-nav')).not.toBeInTheDocument()
   })
 
@@ -182,10 +182,10 @@ describe('Header', () => {
 
     expect(screen.getByText('Acme Workspace')).toBeInTheDocument()
     expect(screen.getByRole('img', { name: /logo/i })).toBeInTheDocument()
-    expect(screen.queryByRole('img', { name: /dify logo/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('img', { name: /nexusai logo/i })).not.toBeInTheDocument()
   })
 
-  it('should show default Dify logo when branding is enabled but no workspace_logo', () => {
+  it('should show default NexusAI logo when branding is enabled but no workspace_logo', () => {
     mockBrandingEnabled = true
     mockBrandingTitle = 'Custom Title'
     mockBrandingLogo = null
@@ -193,17 +193,17 @@ describe('Header', () => {
     render(<Header />)
 
     expect(screen.getByText('Custom Title')).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: /dify logo/i })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /nexusai logo/i })).toBeInTheDocument()
   })
 
-  it('should show default Dify text when branding enabled but no application_title', () => {
+  it('should show default NexusAI text when branding enabled but no application_title', () => {
     mockBrandingEnabled = true
     mockBrandingTitle = null
     mockBrandingLogo = null
 
     render(<Header />)
 
-    expect(screen.getByText('Dify')).toBeInTheDocument()
+    expect(screen.getByText('NexusAI')).toBeInTheDocument()
   })
 
   it('should show dataset nav for editor who is not dataset operator', () => {

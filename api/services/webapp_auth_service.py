@@ -6,7 +6,7 @@ from typing import Any
 from sqlalchemy import select
 from werkzeug.exceptions import NotFound, Unauthorized
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_database import db
 from libs.helper import TokenManager
 from libs.passport import PassportService
@@ -115,7 +115,7 @@ class WebAppAuthService:
 
     @classmethod
     def _get_account_jwt_token(cls, account: Account) -> str:
-        exp_dt = datetime.now(UTC) + timedelta(minutes=dify_config.ACCESS_TOKEN_EXPIRE_MINUTES * 24)
+        exp_dt = datetime.now(UTC) + timedelta(minutes=nexusai_config.ACCESS_TOKEN_EXPIRE_MINUTES * 24)
         exp = int(exp_dt.timestamp())
 
         payload = {

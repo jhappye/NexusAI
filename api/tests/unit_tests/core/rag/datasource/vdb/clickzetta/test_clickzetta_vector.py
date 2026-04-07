@@ -60,7 +60,7 @@ def _config(module):
         service="service",
         workspace="workspace",
         vcluster="cluster",
-        schema_name="dify",
+        schema_name="nexusai",
     )
 
 
@@ -223,18 +223,18 @@ def test_factory_initializes_clickzetta_vector(clickzetta_module, monkeypatch):
     dataset = SimpleNamespace(id="dataset-1")
 
     monkeypatch.setattr(clickzetta_module.Dataset, "gen_collection_name_by_id", lambda _id: "COLLECTION")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_USERNAME", "username")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_PASSWORD", "password")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_INSTANCE", "instance")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_SERVICE", "service")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_WORKSPACE", "workspace")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_VCLUSTER", "cluster")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_SCHEMA", "dify")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_BATCH_SIZE", 10)
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_ENABLE_INVERTED_INDEX", True)
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_ANALYZER_TYPE", "chinese")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_ANALYZER_MODE", "smart")
-    monkeypatch.setattr(clickzetta_module.dify_config, "CLICKZETTA_VECTOR_DISTANCE_FUNCTION", "cosine_distance")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_USERNAME", "username")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_PASSWORD", "password")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_INSTANCE", "instance")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_SERVICE", "service")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_WORKSPACE", "workspace")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_VCLUSTER", "cluster")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_SCHEMA", "nexusai")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_BATCH_SIZE", 10)
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_ENABLE_INVERTED_INDEX", True)
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_ANALYZER_TYPE", "chinese")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_ANALYZER_MODE", "smart")
+    monkeypatch.setattr(clickzetta_module.nexusai_config, "CLICKZETTA_VECTOR_DISTANCE_FUNCTION", "cosine_distance")
 
     with patch.object(clickzetta_module, "ClickzettaVector", return_value="vector") as vector_cls:
         result = factory.init_vector(dataset, attributes=[], embeddings=MagicMock())
@@ -252,7 +252,7 @@ def test_connection_pool_singleton_and_config_key(clickzetta_module, monkeypatch
     key = pool_1._get_config_key(_config(clickzetta_module))
 
     assert pool_1 is pool_2
-    assert "username:instance:service:workspace:cluster:dify" in key
+    assert "username:instance:service:workspace:cluster:nexusai" in key
 
 
 def test_connection_pool_create_connection_retries_and_configures(clickzetta_module, monkeypatch):

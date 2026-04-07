@@ -136,7 +136,7 @@ class TestWorkflowTraceWithoutMessageId:
             patch("core.ops.opik_trace.opik_trace.db") as mock_db,
             patch("core.ops.opik_trace.opik_trace.sessionmaker"),
             patch(
-                "core.ops.opik_trace.opik_trace.DifyCoreRepositoryFactory.create_workflow_node_execution_repository",
+                "core.ops.opik_trace.opik_trace.NexusAICoreRepositoryFactory.create_workflow_node_execution_repository",
                 return_value=fake_repo,
             ),
         ):
@@ -245,8 +245,8 @@ class TestWorkflowTraceWithoutMessageId:
     def test_root_span_id_differs_from_trace_id(self):
         """The root span must have a different ID from the Opik trace to maintain correct hierarchy."""
         trace_info = _make_workflow_trace_info(message_id=None)
-        dify_trace_id = trace_info.trace_id or trace_info.workflow_run_id
-        opik_trace_id = prepare_opik_uuid(trace_info.start_time, dify_trace_id)
+        nexusai_trace_id = trace_info.trace_id or trace_info.workflow_run_id
+        opik_trace_id = prepare_opik_uuid(trace_info.start_time, nexusai_trace_id)
         root_span_id = self._expected_root_span_id(trace_info)
         assert root_span_id != opik_trace_id
 
@@ -268,7 +268,7 @@ class TestWorkflowTraceWithMessageId:
             patch("core.ops.opik_trace.opik_trace.db") as mock_db,
             patch("core.ops.opik_trace.opik_trace.sessionmaker"),
             patch(
-                "core.ops.opik_trace.opik_trace.DifyCoreRepositoryFactory.create_workflow_node_execution_repository",
+                "core.ops.opik_trace.opik_trace.NexusAICoreRepositoryFactory.create_workflow_node_execution_repository",
                 return_value=fake_repo,
             ),
         ):

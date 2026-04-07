@@ -931,10 +931,10 @@ def test_encrypt_decrypt_dataset_id_respects_config(monkeypatch):
     tenant_id = "tenant-1"
     dataset_uuid = "00000000-0000-0000-0000-000000000000"
 
-    monkeypatch.setattr(app_dsl_service.dify_config, "DSL_EXPORT_ENCRYPT_DATASET_ID", False)
+    monkeypatch.setattr(app_dsl_service.nexusai_config, "DSL_EXPORT_ENCRYPT_DATASET_ID", False)
     assert AppDslService.encrypt_dataset_id(dataset_id=dataset_uuid, tenant_id=tenant_id) == dataset_uuid
 
-    monkeypatch.setattr(app_dsl_service.dify_config, "DSL_EXPORT_ENCRYPT_DATASET_ID", True)
+    monkeypatch.setattr(app_dsl_service.nexusai_config, "DSL_EXPORT_ENCRYPT_DATASET_ID", True)
     encrypted = AppDslService.encrypt_dataset_id(dataset_id=dataset_uuid, tenant_id=tenant_id)
     assert encrypted != dataset_uuid
     assert base64.b64decode(encrypted.encode())
@@ -947,12 +947,12 @@ def test_decrypt_dataset_id_returns_plain_uuid_unchanged():
 
 
 def test_decrypt_dataset_id_returns_none_on_invalid_data(monkeypatch):
-    monkeypatch.setattr(app_dsl_service.dify_config, "DSL_EXPORT_ENCRYPT_DATASET_ID", True)
+    monkeypatch.setattr(app_dsl_service.nexusai_config, "DSL_EXPORT_ENCRYPT_DATASET_ID", True)
     assert AppDslService.decrypt_dataset_id(encrypted_data="not-base64", tenant_id="tenant-1") is None
 
 
 def test_decrypt_dataset_id_returns_none_when_decrypted_is_not_uuid(monkeypatch):
-    monkeypatch.setattr(app_dsl_service.dify_config, "DSL_EXPORT_ENCRYPT_DATASET_ID", True)
+    monkeypatch.setattr(app_dsl_service.nexusai_config, "DSL_EXPORT_ENCRYPT_DATASET_ID", True)
     encrypted = AppDslService.encrypt_dataset_id(dataset_id="not-a-uuid", tenant_id="tenant-1")
     assert AppDslService.decrypt_dataset_id(encrypted_data=encrypted, tenant_id="tenant-1") is None
 

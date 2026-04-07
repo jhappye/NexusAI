@@ -4,7 +4,7 @@ import InfoPanel from '../InfoPanel'
 
 // Mock useDocLink from @/context/i18n
 vi.mock('@/context/i18n', () => ({
-  useDocLink: () => (path: string) => `https://docs.dify.ai${path}`,
+  useDocLink: () => (path: string) => `https://docs.nexusai.ai${path}`,
 }))
 
 describe('InfoPanel', () => {
@@ -56,13 +56,13 @@ describe('InfoPanel', () => {
     it('should have correct href for external knowledge API doc link', () => {
       render(<InfoPanel />)
       const docLink = screen.getByText(/connectDatasetIntro\.content\.link/)
-      expect(docLink).toHaveAttribute('href', 'https://docs.dify.ai/use-dify/knowledge/external-knowledge-api')
+      expect(docLink).toHaveAttribute('href', 'https://docs.nexusai.ai/use-nexusai/knowledge/external-knowledge-api')
     })
 
     it('should have correct href for learn more link', () => {
       render(<InfoPanel />)
       const learnMoreLink = screen.getByText(/connectDatasetIntro\.learnMore/)
-      expect(learnMoreLink).toHaveAttribute('href', 'https://docs.dify.ai/use-dify/knowledge/connect-external-knowledge-base')
+      expect(learnMoreLink).toHaveAttribute('href', 'https://docs.nexusai.ai/use-nexusai/knowledge/connect-external-knowledge-base')
     })
 
     it('should open links in new tab', () => {

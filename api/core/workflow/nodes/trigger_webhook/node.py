@@ -27,9 +27,9 @@ class TriggerWebhookNode(Node[WebhookData]):
     _file_reference_factory: FileReferenceFactoryProtocol
 
     def post_init(self) -> None:
-        from core.workflow.node_runtime import DifyFileReferenceFactory
+        from core.workflow.node_runtime import NexusAIFileReferenceFactory
 
-        self._file_reference_factory = DifyFileReferenceFactory(self.graph_init_params.run_context)
+        self._file_reference_factory = NexusAIFileReferenceFactory(self.graph_init_params.run_context)
 
     @classmethod
     def get_default_config(cls, filters: Mapping[str, object] | None = None) -> Mapping[str, object]:

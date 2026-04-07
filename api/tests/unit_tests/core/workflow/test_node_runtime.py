@@ -7,7 +7,7 @@ from graphon.model_runtime.entities.common_entities import I18nObject
 from graphon.model_runtime.entities.model_entities import AIModelEntity, FetchFrom, ModelType
 from graphon.nodes.human_input.entities import HumanInputNodeData
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, DifyRunContext, InvokeFrom, UserFrom
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, NexusAIRunContext, InvokeFrom, UserFrom
 from core.llm_generator.output_parser.errors import OutputParserError
 from core.workflow import node_runtime
 from core.workflow.file_reference import parse_file_reference
@@ -20,15 +20,15 @@ from core.workflow.human_input_compat import (
     _WebAppDeliveryConfig,
 )
 from core.workflow.node_runtime import (
-    DifyFileReferenceFactory,
-    DifyHumanInputNodeRuntime,
-    DifyPreparedLLM,
-    DifyPromptMessageSerializer,
-    DifyRetrieverAttachmentLoader,
-    DifyToolFileManager,
-    apply_dify_debug_email_recipient,
-    build_dify_llm_file_saver,
-    resolve_dify_run_context,
+    NexusAIFileReferenceFactory,
+    NexusAIHumanInputNodeRuntime,
+    NexusAIPreparedLLM,
+    NexusAIPromptMessageSerializer,
+    NexusAIRetrieverAttachmentLoader,
+    NexusAIToolFileManager,
+    apply_nexusai_debug_email_recipient,
+    build_nexusai_llm_file_saver,
+    resolve_nexusai_run_context,
 )
 from tests.workflow_test_utils import build_test_run_context
 
@@ -65,22 +65,22 @@ def _build_email_method(*, debug_mode: bool = False) -> EmailDeliveryMethod:
     )
 
 
-def test_resolve_dify_run_context_accepts_mapping_payload() -> None:
-    run_context = resolve_dify_run_context(_build_run_context())
+def test_resolve_nexusai_run_context_accepts_mapping_payload() -> None:
+    run_context = resolve_nexusai_run_context(_build_run_context())
 
     assert run_context.tenant_id == "tenant-id"
     assert run_context.invoke_from == InvokeFrom.DEBUGGER
 
 
-def test_resolve_dify_run_context_requires_reserved_key() -> None:
-    with pytest.raises(ValueError, match=DIFY_RUN_CONTEXT_KEY):
-        resolve_dify_run_context({})
+def test_resolve_nexusai_run_context_requires_reserved_key() -> None:
+    with pytest.raises(ValueError, match=NEXUSAI_RUN_CONTEXT_KEY):
+        resolve_nexusai_run_context({})
 
 
-def test_apply_dify_debug_email_recipient_rewrites_debug_target() -> None:
+def test_apply_nexusai_debug_email_recipient_rewrites_debug_target() -> None:
     method = _build_email_method(debug_mode=True)
 
-    updated = apply_dify_debug_email_recipient(method, enabled=True, actor_id="actor-id")
+    updated = apply_nexusai_debug_email_recipient(method, enabled=True, actor_id="actor-id")
 
     assert isinstance(updated, EmailDeliveryMethod)
     assert updated.config.recipients.include_bound_group is False
@@ -96,18 +96,18 @@ def test_apply_dify_debug_email_recipient_rewrites_debug_target() -> None:
         (True, WebAppDeliveryMethod(enabled=True, config=_WebAppDeliveryConfig())),
     ],
 )
-def test_apply_dify_debug_email_recipient_noops_when_override_is_not_needed(
+def test_apply_nexusai_debug_email_recipient_noops_when_override_is_not_needed(
     enabled: bool,
     method: object,
 ) -> None:
-    assert apply_dify_debug_email_recipient(method, enabled=enabled, actor_id="actor-id") is method
+    assert apply_nexusai_debug_email_recipient(method, enabled=enabled, actor_id="actor-id") is method
 
 
-def test_dify_file_reference_factory_passes_tenant_id(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_nexusai_file_reference_factory_passes_tenant_id(monkeypatch: pytest.MonkeyPatch) -> None:
     build_from_mapping = MagicMock(return_value=sentinel.file)
     monkeypatch.setattr(node_runtime.file_factory, "build_from_mapping", build_from_mapping)
 
-    factory = DifyFileReferenceFactory(_build_run_context())
+    factory = NexusAIFileReferenceFactory(_build_run_context())
 
     result = factory.build_from_mapping(mapping={"id": "upload-file"})
 
@@ -119,7 +119,7 @@ def test_dify_file_reference_factory_passes_tenant_id(monkeypatch: pytest.Monkey
     )
 
 
-def test_dify_prepared_llm_wraps_model_instance_calls() -> None:
+def test_nexusai_prepared_llm_wraps_model_instance_calls() -> None:
     model_schema = _build_model_schema()
     model_type_instance = SimpleNamespace(get_model_schema=Mock(return_value=model_schema))
     model_instance = SimpleNamespace(
@@ -132,7 +132,7 @@ def test_dify_prepared_llm_wraps_model_instance_calls() -> None:
         get_llm_num_tokens=Mock(return_value=32),
         invoke_llm=Mock(return_value=sentinel.result),
     )
-    prepared = DifyPreparedLLM(model_instance)
+    prepared = NexusAIPreparedLLM(model_instance)
 
     assert prepared.provider == "langgenius/openai/openai"
     assert prepared.model_name == "gpt-4o-mini"
@@ -161,26 +161,26 @@ def test_dify_prepared_llm_wraps_model_instance_calls() -> None:
     )
 
 
-def test_dify_prepared_llm_requires_model_schema() -> None:
+def test_nexusai_prepared_llm_requires_model_schema() -> None:
     model_instance = SimpleNamespace(
         model_name="gpt-4o-mini",
         credentials={},
         model_type_instance=SimpleNamespace(get_model_schema=Mock(return_value=None)),
     )
-    prepared = DifyPreparedLLM(model_instance)
+    prepared = NexusAIPreparedLLM(model_instance)
 
     with pytest.raises(ValueError, match="Model schema not found"):
         prepared.get_model_schema()
 
 
-def test_dify_prepared_llm_delegates_structured_output_helper(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_nexusai_prepared_llm_delegates_structured_output_helper(monkeypatch: pytest.MonkeyPatch) -> None:
     model_instance = SimpleNamespace(
         provider="langgenius/openai/openai",
         model_name="gpt-4o-mini",
         credentials={"api_key": "secret"},
         model_type_instance=SimpleNamespace(get_model_schema=Mock(return_value=_build_model_schema())),
     )
-    prepared = DifyPreparedLLM(model_instance)
+    prepared = NexusAIPreparedLLM(model_instance)
     invoke_structured = MagicMock(return_value=sentinel.structured)
     monkeypatch.setattr(node_runtime, "invoke_llm_with_structured_output", invoke_structured)
 
@@ -205,18 +205,18 @@ def test_dify_prepared_llm_delegates_structured_output_helper(monkeypatch: pytes
     )
 
 
-def test_dify_prepared_llm_identifies_structured_output_errors() -> None:
-    prepared = DifyPreparedLLM(SimpleNamespace())
+def test_nexusai_prepared_llm_identifies_structured_output_errors() -> None:
+    prepared = NexusAIPreparedLLM(SimpleNamespace())
 
     assert prepared.is_structured_output_parse_error(OutputParserError("bad json")) is True
     assert prepared.is_structured_output_parse_error(ValueError("other")) is False
 
 
-def test_dify_prompt_message_serializer_delegates(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_nexusai_prompt_message_serializer_delegates(monkeypatch: pytest.MonkeyPatch) -> None:
     serialize = MagicMock(return_value={"prompt": "value"})
     monkeypatch.setattr(node_runtime.PromptMessageUtil, "prompt_messages_to_prompt_for_saving", serialize)
 
-    result = DifyPromptMessageSerializer().serialize(
+    result = NexusAIPromptMessageSerializer().serialize(
         model_mode="chat",
         prompt_messages=[],
     )
@@ -228,7 +228,7 @@ def test_dify_prompt_message_serializer_delegates(monkeypatch: pytest.MonkeyPatc
     )
 
 
-def test_dify_retriever_attachment_loader_builds_graph_files(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_nexusai_retriever_attachment_loader_builds_graph_files(monkeypatch: pytest.MonkeyPatch) -> None:
     upload_file = SimpleNamespace(
         id="upload-file-id",
         name="diagram.png",
@@ -251,7 +251,7 @@ def test_dify_retriever_attachment_loader_builds_graph_files(monkeypatch: pytest
     build_from_mapping = MagicMock(return_value=sentinel.file)
     monkeypatch.setattr(node_runtime, "db", SimpleNamespace(engine=object()))
     monkeypatch.setattr(node_runtime, "Session", MagicMock(return_value=_SessionContext()))
-    loader = DifyRetrieverAttachmentLoader(
+    loader = NexusAIRetrieverAttachmentLoader(
         file_reference_factory=SimpleNamespace(build_from_mapping=build_from_mapping)
     )
 
@@ -266,14 +266,14 @@ def test_dify_retriever_attachment_loader_builds_graph_files(monkeypatch: pytest
     assert parse_file_reference(mapping["reference"]).storage_key is None
 
 
-def test_dify_tool_file_manager_resolves_conversation_id_for_tool_files(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_nexusai_tool_file_manager_resolves_conversation_id_for_tool_files(monkeypatch: pytest.MonkeyPatch) -> None:
     create_file_by_raw = MagicMock(return_value=SimpleNamespace(id="tool-file-id"))
     manager_instance = SimpleNamespace(create_file_by_raw=create_file_by_raw)
     monkeypatch.setattr(node_runtime, "ToolFileManager", MagicMock(return_value=manager_instance))
     conversation_id_getter = MagicMock(return_value="conversation-id")
 
-    manager = DifyToolFileManager(
-        DifyRunContext(
+    manager = NexusAIToolFileManager(
+        NexusAIRunContext(
             tenant_id="tenant-id",
             app_id="app-id",
             user_id="user-id",
@@ -301,25 +301,25 @@ def test_dify_tool_file_manager_resolves_conversation_id_for_tool_files(monkeypa
     )
 
 
-def test_dify_tool_file_manager_delegates_file_generator_lookup(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_nexusai_tool_file_manager_delegates_file_generator_lookup(monkeypatch: pytest.MonkeyPatch) -> None:
     get_file_generator = MagicMock(return_value=sentinel.generator)
     monkeypatch.setattr(
         node_runtime,
         "ToolFileManager",
         MagicMock(return_value=SimpleNamespace(get_file_generator_by_tool_file_id=get_file_generator)),
     )
-    manager = DifyToolFileManager(_build_run_context())
+    manager = NexusAIToolFileManager(_build_run_context())
 
     assert manager.get_file_generator_by_tool_file_id("tool-file-id") is sentinel.generator
     get_file_generator.assert_called_once_with("tool-file-id")
 
 
-def test_dify_human_input_runtime_builds_debug_repository(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_nexusai_human_input_runtime_builds_debug_repository(monkeypatch: pytest.MonkeyPatch) -> None:
     repository = MagicMock()
     repository_cls = MagicMock(return_value=repository)
     monkeypatch.setattr(node_runtime, "HumanInputFormRepositoryImpl", repository_cls)
 
-    runtime = DifyHumanInputNodeRuntime(
+    runtime = NexusAIHumanInputNodeRuntime(
         _build_run_context(),
         workflow_execution_id_getter=lambda: "workflow-execution-id",
     )
@@ -334,7 +334,7 @@ def test_dify_human_input_runtime_builds_debug_repository(monkeypatch: pytest.Mo
     )
 
 
-def test_dify_human_input_runtime_create_form_filters_debugger_delivery_methods() -> None:
+def test_nexusai_human_input_runtime_create_form_filters_debugger_delivery_methods() -> None:
     repository = MagicMock()
     repository.create_form.return_value = sentinel.form
     node_data = HumanInputNodeData(
@@ -344,7 +344,7 @@ def test_dify_human_input_runtime_create_form_filters_debugger_delivery_methods(
             _build_email_method(debug_mode=True),
         ],
     )
-    runtime = DifyHumanInputNodeRuntime(
+    runtime = NexusAIHumanInputNodeRuntime(
         _build_run_context(),
         workflow_execution_id_getter=lambda: "workflow-execution-id",
         form_repository=repository,
@@ -368,7 +368,7 @@ def test_dify_human_input_runtime_create_form_filters_debugger_delivery_methods(
     assert params.delivery_methods[0].config.recipients.items[0].reference_id == "user-id"
 
 
-def test_dify_human_input_runtime_preserves_webapp_delivery_for_web_invocations() -> None:
+def test_nexusai_human_input_runtime_preserves_webapp_delivery_for_web_invocations() -> None:
     repository = MagicMock()
     repository.create_form.return_value = sentinel.form
     node_data = HumanInputNodeData(
@@ -378,7 +378,7 @@ def test_dify_human_input_runtime_preserves_webapp_delivery_for_web_invocations(
             _build_email_method(debug_mode=True),
         ],
     )
-    runtime = DifyHumanInputNodeRuntime(
+    runtime = NexusAIHumanInputNodeRuntime(
         _build_run_context(invoke_from=InvokeFrom.WEB_APP),
         form_repository=repository,
     )
@@ -399,12 +399,12 @@ def test_dify_human_input_runtime_preserves_webapp_delivery_for_web_invocations(
     assert params.delivery_methods[1].config.recipients.include_bound_group is True
 
 
-def test_build_dify_llm_file_saver_wires_runtime_adapters(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_build_nexusai_llm_file_saver_wires_runtime_adapters(monkeypatch: pytest.MonkeyPatch) -> None:
     file_saver_cls = MagicMock(return_value=sentinel.file_saver)
     monkeypatch.setattr("graphon.nodes.llm.file_saver.FileSaverImpl", file_saver_cls)
     http_client = MagicMock()
 
-    saver = build_dify_llm_file_saver(
+    saver = build_nexusai_llm_file_saver(
         run_context=_build_run_context(),
         http_client=http_client,
         conversation_id_getter=lambda: "conversation-id",
@@ -413,6 +413,6 @@ def test_build_dify_llm_file_saver_wires_runtime_adapters(monkeypatch: pytest.Mo
     assert saver is sentinel.file_saver
     tool_file_manager = file_saver_cls.call_args.kwargs["tool_file_manager"]
     file_reference_factory = file_saver_cls.call_args.kwargs["file_reference_factory"]
-    assert isinstance(tool_file_manager, DifyToolFileManager)
-    assert isinstance(file_reference_factory, DifyFileReferenceFactory)
+    assert isinstance(tool_file_manager, NexusAIToolFileManager)
+    assert isinstance(file_reference_factory, NexusAIFileReferenceFactory)
     assert file_saver_cls.call_args.kwargs["http_client"] is http_client

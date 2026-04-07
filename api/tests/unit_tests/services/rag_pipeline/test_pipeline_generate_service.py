@@ -10,8 +10,8 @@ from services.rag_pipeline.pipeline_generate_service import PipelineGenerateServ
 
 
 def test_get_max_active_requests_uses_smallest_non_zero_limit(mocker) -> None:
-    mocker.patch("services.rag_pipeline.pipeline_generate_service.dify_config.APP_DEFAULT_ACTIVE_REQUESTS", 5)
-    mocker.patch("services.rag_pipeline.pipeline_generate_service.dify_config.APP_MAX_ACTIVE_REQUESTS", 3)
+    mocker.patch("services.rag_pipeline.pipeline_generate_service.nexusai_config.APP_DEFAULT_ACTIVE_REQUESTS", 5)
+    mocker.patch("services.rag_pipeline.pipeline_generate_service.nexusai_config.APP_MAX_ACTIVE_REQUESTS", 3)
 
     app_model = cast(App, SimpleNamespace(max_active_requests=10))
 
@@ -21,8 +21,8 @@ def test_get_max_active_requests_uses_smallest_non_zero_limit(mocker) -> None:
 
 
 def test_get_max_active_requests_returns_zero_when_all_unlimited(mocker) -> None:
-    mocker.patch("services.rag_pipeline.pipeline_generate_service.dify_config.APP_DEFAULT_ACTIVE_REQUESTS", 0)
-    mocker.patch("services.rag_pipeline.pipeline_generate_service.dify_config.APP_MAX_ACTIVE_REQUESTS", 0)
+    mocker.patch("services.rag_pipeline.pipeline_generate_service.nexusai_config.APP_DEFAULT_ACTIVE_REQUESTS", 0)
+    mocker.patch("services.rag_pipeline.pipeline_generate_service.nexusai_config.APP_MAX_ACTIVE_REQUESTS", 0)
 
     app_model = cast(App, SimpleNamespace(max_active_requests=0))
 

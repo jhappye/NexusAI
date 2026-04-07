@@ -160,10 +160,10 @@ const createMockGitHubPayload = (overrides: Partial<UpdateFromGitHubPayload> = {
     id: 'github-original-id',
     repo: 'owner/repo',
     version: '1.0.0',
-    package: 'test-package.difypkg',
+    package: 'test-package.nexusaipkg',
     releases: [
-      { tag_name: 'v1.0.0', assets: [{ id: 1, name: 'plugin.difypkg', browser_download_url: 'https://github.com/test' }] },
-      { tag_name: 'v2.0.0', assets: [{ id: 2, name: 'plugin.difypkg', browser_download_url: 'https://github.com/test' }] },
+      { tag_name: 'v1.0.0', assets: [{ id: 1, name: 'plugin.nexusaipkg', browser_download_url: 'https://github.com/test' }] },
+      { tag_name: 'v2.0.0', assets: [{ id: 2, name: 'plugin.nexusaipkg', browser_download_url: 'https://github.com/test' }] },
     ],
   },
   ...overrides,

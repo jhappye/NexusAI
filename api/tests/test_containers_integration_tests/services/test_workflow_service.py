@@ -1543,11 +1543,11 @@ class TestWorkflowService:
         from unittest.mock import patch
 
         from core.model_manager import ModelInstance
-        from core.workflow.node_factory import DifyNodeFactory
+        from core.workflow.node_factory import NexusAINodeFactory
 
         # Act
         with patch.object(
-            DifyNodeFactory,
+            NexusAINodeFactory,
             "_build_model_instance_for_llm_node",
             return_value=MagicMock(spec=ModelInstance),
             autospec=True,

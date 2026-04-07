@@ -7,11 +7,11 @@ from flask.testing import FlaskClient
 from graphon.enums import WorkflowExecutionStatus
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import HEADER_NAME_CSRF_TOKEN
 from libs.datetime_utils import naive_utc_now
 from libs.token import _real_cookie_name, generate_csrf_token
-from models import Account, DifySetup, Tenant, TenantAccountJoin
+from models import Account, NexusAISetup, Tenant, TenantAccountJoin
 from models.account import AccountStatus, TenantAccountRole
 from models.enums import ConversationFromSource, CreatorUserRole
 from models.model import App, AppMode, Conversation, Message
@@ -47,8 +47,8 @@ def _create_account_and_tenant(db_session: Session) -> tuple[Account, Tenant]:
     account.timezone = "UTC"
     db_session.commit()
 
-    dify_setup = DifySetup(version=dify_config.project.version)
-    db_session.add(dify_setup)
+    nexusai_setup = NexusAISetup(version=nexusai_config.project.version)
+    db_session.add(nexusai_setup)
     db_session.commit()
 
     return account, tenant

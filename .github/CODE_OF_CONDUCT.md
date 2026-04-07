@@ -1,4 +1,4 @@
-# Dify Code of Conduct
+# NexusAI Code of Conduct
 
 ## Our Pledge
 

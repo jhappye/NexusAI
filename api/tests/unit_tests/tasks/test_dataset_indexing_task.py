@@ -471,7 +471,7 @@ class TestBatchProcessing:
         mock_feature_service.get_features.return_value.vector_space.limit = 1000
         mock_feature_service.get_features.return_value.vector_space.size = 0
 
-        with patch("tasks.document_indexing_task.dify_config.BATCH_UPLOAD_LIMIT", str(batch_limit)):
+        with patch("tasks.document_indexing_task.nexusai_config.BATCH_UPLOAD_LIMIT", str(batch_limit)):
             # Act
             _document_indexing(dataset_id, document_ids)
 
@@ -846,7 +846,7 @@ class TestErrorHandling:
 
         mock_db_session.query.return_value.where.return_value.first.return_value = mock_dataset
 
-        with patch("tasks.document_indexing_task.dify_config.TENANT_ISOLATED_TASK_CONCURRENCY", concurrency_limit):
+        with patch("tasks.document_indexing_task.nexusai_config.TENANT_ISOLATED_TASK_CONCURRENCY", concurrency_limit):
             with patch("tasks.document_indexing_task.normal_document_indexing_task") as mock_task:
                 # Act
                 _document_indexing_with_tenant_queue(tenant_id, dataset_id, document_ids, mock_task)
@@ -979,7 +979,7 @@ class TestAdvancedScenarios:
         mock_redis.rpop.side_effect = waiting_tasks[:concurrency_limit] + [None]
         mock_db_session.query.return_value.where.return_value.first.return_value = mock_dataset
 
-        with patch("tasks.document_indexing_task.dify_config.TENANT_ISOLATED_TASK_CONCURRENCY", concurrency_limit):
+        with patch("tasks.document_indexing_task.nexusai_config.TENANT_ISOLATED_TASK_CONCURRENCY", concurrency_limit):
             with patch("tasks.document_indexing_task.normal_document_indexing_task") as mock_task:
                 # Act
                 _document_indexing_with_tenant_queue(tenant_id, dataset_id, document_ids, mock_task)
@@ -1072,7 +1072,7 @@ class TestAdvancedScenarios:
         mock_redis.rpop.side_effect = tasks + [None]
         mock_db_session.query.return_value.where.return_value.first.return_value = mock_dataset
 
-        with patch("tasks.document_indexing_task.dify_config.TENANT_ISOLATED_TASK_CONCURRENCY", 3):
+        with patch("tasks.document_indexing_task.nexusai_config.TENANT_ISOLATED_TASK_CONCURRENCY", 3):
             with patch("tasks.document_indexing_task.normal_document_indexing_task") as mock_task:
                 # Act
                 _document_indexing_with_tenant_queue(tenant_id, dataset_id, document_ids, mock_task)
@@ -1384,7 +1384,7 @@ class TestPerformanceScenarios:
         mock_feature_service.get_features.return_value.vector_space.limit = 10000
         mock_feature_service.get_features.return_value.vector_space.size = 0
 
-        with patch("tasks.document_indexing_task.dify_config.BATCH_UPLOAD_LIMIT", str(batch_limit)):
+        with patch("tasks.document_indexing_task.nexusai_config.BATCH_UPLOAD_LIMIT", str(batch_limit)):
             # Act
             _document_indexing(dataset_id, document_ids)
 
@@ -1435,7 +1435,7 @@ class TestPerformanceScenarios:
         mock_redis.rpop.side_effect = waiting_tasks[:concurrency_limit] + [None]
         mock_db_session.query.return_value.where.return_value.first.return_value = mock_dataset
 
-        with patch("tasks.document_indexing_task.dify_config.TENANT_ISOLATED_TASK_CONCURRENCY", concurrency_limit):
+        with patch("tasks.document_indexing_task.nexusai_config.TENANT_ISOLATED_TASK_CONCURRENCY", concurrency_limit):
             with patch("tasks.document_indexing_task.normal_document_indexing_task") as mock_task:
                 # Act
                 _document_indexing_with_tenant_queue(tenant_id, dataset_id, document_ids, mock_task)
@@ -1586,7 +1586,7 @@ class TestDocumentIndexingTaskSummaryFlow:
         monkeypatch.setattr(
             "tasks.document_indexing_task.FeatureService.get_features", MagicMock(return_value=features)
         )
-        monkeypatch.setattr("tasks.document_indexing_task.dify_config.BATCH_UPLOAD_LIMIT", "1")
+        monkeypatch.setattr("tasks.document_indexing_task.nexusai_config.BATCH_UPLOAD_LIMIT", "1")
 
         # Act
         _document_indexing("dataset-1", ["doc-1", "doc-2"])

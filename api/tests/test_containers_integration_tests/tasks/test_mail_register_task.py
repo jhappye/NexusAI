@@ -87,8 +87,8 @@ class TestMailRegisterTask:
         to_email = fake.email()
         account_name = fake.name()
 
-        with patch("tasks.mail_register_task.dify_config", autospec=True) as mock_config:
-            mock_config.CONSOLE_WEB_URL = "https://console.dify.ai"
+        with patch("tasks.mail_register_task.nexusai_config", autospec=True) as mock_config:
+            mock_config.CONSOLE_WEB_URL = "https://console.nexusai.ai"
 
             send_email_register_mail_task_when_account_exist(language=language, to=to_email, account_name=account_name)
 
@@ -98,8 +98,8 @@ class TestMailRegisterTask:
                 to=to_email,
                 template_context={
                     "to": to_email,
-                    "login_url": "https://console.dify.ai/signin",
-                    "reset_password_url": "https://console.dify.ai/reset-password",
+                    "login_url": "https://console.nexusai.ai/signin",
+                    "reset_password_url": "https://console.nexusai.ai/reset-password",
                     "account_name": account_name,
                 },
             )

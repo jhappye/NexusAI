@@ -47,9 +47,9 @@ def mock_dependencies(monkeypatch):
     monkeypatch.setattr(pe, "UploadFile", FakeUploadFile)
 
     # Mock config
-    monkeypatch.setattr(pe.dify_config, "FILES_URL", "http://files.local")
-    monkeypatch.setattr(pe.dify_config, "INTERNAL_FILES_URL", None)
-    monkeypatch.setattr(pe.dify_config, "STORAGE_TYPE", "local")
+    monkeypatch.setattr(pe.nexusai_config, "FILES_URL", "http://files.local")
+    monkeypatch.setattr(pe.nexusai_config, "INTERNAL_FILES_URL", None)
+    monkeypatch.setattr(pe.nexusai_config, "STORAGE_TYPE", "local")
 
     return SimpleNamespace(saves=saves, db=db_stub, UploadFile=FakeUploadFile)
 

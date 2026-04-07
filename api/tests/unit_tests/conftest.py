@@ -29,7 +29,7 @@ redis_mock.incr = MagicMock(return_value=1)
 
 # Ensure OpenDAL fs writes to tmp to avoid polluting workspace
 os.environ.setdefault("OPENDAL_SCHEME", "fs")
-os.environ.setdefault("OPENDAL_FS_ROOT", "/tmp/dify-storage")
+os.environ.setdefault("OPENDAL_FS_ROOT", "/tmp/nexusai-storage")
 os.environ.setdefault("STORAGE_TYPE", "opendal")
 
 from core.db.session_factory import configure_session_factory, session_factory
@@ -96,14 +96,14 @@ def reset_redis_mock():
 def reset_secret_key():
     """Ensure SECRET_KEY-dependent logic sees an empty config value by default."""
 
-    from configs import dify_config
+    from configs import nexusai_config
 
-    original = dify_config.SECRET_KEY
-    dify_config.SECRET_KEY = ""
+    original = nexusai_config.SECRET_KEY
+    nexusai_config.SECRET_KEY = ""
     try:
         yield
     finally:
-        dify_config.SECRET_KEY = original
+        nexusai_config.SECRET_KEY = original
 
 
 @pytest.fixture(scope="session")

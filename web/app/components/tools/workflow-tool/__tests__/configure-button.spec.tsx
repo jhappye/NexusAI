@@ -1604,7 +1604,7 @@ describe('Integration Tests', () => {
         expect(screen.getByTestId('drawer')).toBeInTheDocument()
       })
 
-      // Modify description
+      // Monexusai description
       const descInput = screen.getByPlaceholderText('tools.createTool.descriptionPlaceholder')
       await user.clear(descInput)
       await user.type(descInput, 'Updated description')

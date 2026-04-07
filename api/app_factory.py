@@ -5,11 +5,11 @@ from flask import request
 from opentelemetry.trace import get_current_span
 from opentelemetry.trace.span import INVALID_SPAN_ID, INVALID_TRACE_ID
 
-from configs import dify_config
+from configs import nexusai_config
 from contexts.wrapper import RecyclableContextVar
 from controllers.console.error import UnauthorizedAndForceLogout
 from core.logging.context import init_request_context
-from dify_app import DifyApp
+from nexusai_app import NexusAIApp
 from services.enterprise.enterprise_service import EnterpriseService
 from services.feature_service import LicenseStatus
 
@@ -44,17 +44,17 @@ _CONSOLE_EXEMPT_PREFIXES = (
 # ----------------------------
 # Application Factory Function
 # ----------------------------
-def create_flask_app_with_configs() -> DifyApp:
+def create_flask_app_with_configs() -> NexusAIApp:
     """
     create a raw flask app
     with configs loaded from .env file
     """
-    dify_app = DifyApp(__name__)
-    dify_app.config.from_mapping(dify_config.model_dump())
-    dify_app.config["RESTX_INCLUDE_ALL_MODELS"] = True
+    nexusai_app = NexusAIApp(__name__)
+    nexusai_app.config.from_mapping(nexusai_config.model_dump())
+    nexusai_app.config["RESTX_INCLUDE_ALL_MODELS"] = True
 
     # add before request hook
-    @dify_app.before_request
+    @nexusai_app.before_request
     def before_request():
         # Initialize logging context for this request
         init_request_context()
@@ -63,7 +63,7 @@ def create_flask_app_with_configs() -> DifyApp:
         # Enterprise license validation for API endpoints (both console and webapp)
         # When license expires, block all API access except bootstrap endpoints needed
         # for the frontend to load the license expiration page without infinite reloads.
-        if dify_config.ENTERPRISE_ENABLED:
+        if nexusai_config.ENTERPRISE_ENABLED:
             is_console_api = request.path.startswith("/console/api/")
             is_webapp_api = request.path.startswith("/api/")
 
@@ -95,7 +95,7 @@ def create_flask_app_with_configs() -> DifyApp:
 
     # add after request hook for injecting trace headers from OpenTelemetry span context
     # Only adds headers when OTEL is enabled and has valid context
-    @dify_app.after_request
+    @nexusai_app.after_request
     def add_trace_headers(response):
         try:
             span = get_current_span()
@@ -119,20 +119,20 @@ def create_flask_app_with_configs() -> DifyApp:
     _ = before_request
     _ = add_trace_headers
 
-    return dify_app
+    return nexusai_app
 
 
-def create_app() -> DifyApp:
+def create_app() -> NexusAIApp:
     start_time = time.perf_counter()
     app = create_flask_app_with_configs()
     initialize_extensions(app)
     end_time = time.perf_counter()
-    if dify_config.DEBUG:
+    if nexusai_config.DEBUG:
         logger.info("Finished create_app (%s ms)", round((end_time - start_time) * 1000, 2))
     return app
 
 
-def initialize_extensions(app: DifyApp):
+def initialize_extensions(app: NexusAIApp):
     # Initialize Flask context capture for workflow execution
     from context.flask_app_context import init_flask_context
     from extensions import (
@@ -202,18 +202,18 @@ def initialize_extensions(app: DifyApp):
         short_name = ext.__name__.split(".")[-1]
         is_enabled = ext.is_enabled() if hasattr(ext, "is_enabled") else True
         if not is_enabled:
-            if dify_config.DEBUG:
+            if nexusai_config.DEBUG:
                 logger.info("Skipped %s", short_name)
             continue
 
         start_time = time.perf_counter()
         ext.init_app(app)
         end_time = time.perf_counter()
-        if dify_config.DEBUG:
+        if nexusai_config.DEBUG:
             logger.info("Loaded %s (%s ms)", short_name, round((end_time - start_time) * 1000, 2))
 
 
-def create_migrations_app() -> DifyApp:
+def create_migrations_app() -> NexusAIApp:
     app = create_flask_app_with_configs()
     from extensions import ext_database, ext_migrate
 

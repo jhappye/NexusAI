@@ -24,7 +24,7 @@ type Props = {
   onHide: () => void
   onSave: (value: RetrievalConfig) => void
 }
-const ModifyRetrievalModal: FC<Props> = ({ indexMethod, value, isShow, onHide, onSave }) => {
+const MonexusaiRetrievalModal: FC<Props> = ({ indexMethod, value, isShow, onHide, onSave }) => {
   const ref = useRef(null)
   const { t } = useTranslation()
   const docLink = useDocLink()
@@ -78,7 +78,7 @@ const ModifyRetrievalModal: FC<Props> = ({ indexMethod, value, isShow, onHide, o
         <div className="text-base font-semibold text-text-primary">
           <div>{t('form.retrievalSetting.title', { ns: 'datasetSettings' })}</div>
           <div className="text-xs font-normal leading-[18px] text-text-tertiary">
-            <a target="_blank" rel="noopener noreferrer" href={docLink('/use-dify/knowledge/create-knowledge/setting-indexing-methods')} className="text-text-accent">
+            <a target="_blank" rel="noopener noreferrer" href={docLink('/use-nexusai/knowledge/create-knowledge/setting-indexing-methods')} className="text-text-accent">
               {t('form.retrievalSetting.learnMore', { ns: 'datasetSettings' })}
             </a>
             {t('form.retrievalSetting.description', { ns: 'datasetSettings' })}
@@ -106,4 +106,4 @@ const ModifyRetrievalModal: FC<Props> = ({ indexMethod, value, isShow, onHide, o
     </div>
   )
 }
-export default React.memo(ModifyRetrievalModal)
+export default React.memo(MonexusaiRetrievalModal)

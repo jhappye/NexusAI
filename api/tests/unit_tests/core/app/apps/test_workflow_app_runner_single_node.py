@@ -147,7 +147,7 @@ def test_single_node_run_validates_target_node_config(monkeypatch) -> None:
     monkeypatch.setattr(NodeConfigDictAdapter, "validate_python", record_validate_python)
 
     with (
-        patch("core.app.apps.workflow_app_runner.DifyNodeFactory"),
+        patch("core.app.apps.workflow_app_runner.NexusAINodeFactory"),
         patch("core.app.apps.workflow_app_runner.Graph.init", return_value=MagicMock()),
         patch("core.app.apps.workflow_app_runner.load_into_variable_pool"),
         patch("core.app.apps.workflow_app_runner.WorkflowEntry.mapping_user_inputs_to_variable_pool"),

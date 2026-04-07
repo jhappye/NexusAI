@@ -80,7 +80,7 @@ def test_resume_app_execution_queries_message_by_conversation_and_workflow_run(m
     workflow_run_repo = MagicMock()
     workflow_run_repo.get_workflow_pause.return_value = pause_entity
     mocker.patch(
-        "tasks.app_generate.workflow_execute_task.DifyAPIRepositoryFactory.create_api_workflow_run_repository",
+        "tasks.app_generate.workflow_execute_task.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository",
         return_value=workflow_run_repo,
     )
 
@@ -155,7 +155,7 @@ def test_resume_app_execution_returns_early_when_advanced_chat_missing_conversat
     workflow_run_repo = MagicMock()
     workflow_run_repo.get_workflow_pause.return_value = pause_entity
     mocker.patch(
-        "tasks.app_generate.workflow_execute_task.DifyAPIRepositoryFactory.create_api_workflow_run_repository",
+        "tasks.app_generate.workflow_execute_task.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository",
         return_value=workflow_run_repo,
     )
 

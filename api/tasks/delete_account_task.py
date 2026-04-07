@@ -2,7 +2,7 @@ import logging
 
 from celery import shared_task
 
-from configs import dify_config
+from configs import nexusai_config
 from core.db.session_factory import session_factory
 from models import Account
 from services.billing_service import BillingService
@@ -16,7 +16,7 @@ def delete_account_task(account_id):
     with session_factory.create_session() as session:
         account = session.query(Account).where(Account.id == account_id).first()
         try:
-            if dify_config.BILLING_ENABLED:
+            if nexusai_config.BILLING_ENABLED:
                 BillingService.delete_account(account_id)
         except Exception:
             logger.exception("Failed to delete account %s from billing service.", account_id)

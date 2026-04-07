@@ -148,7 +148,7 @@ export const downloadDocumentsZip = ({ datasetId, documentIds }: DocumentDownloa
   })
 }
 
-export const modifyDocMetadata = ({ datasetId, documentId, body }: CommonDocReq & { body: { doc_type: string, doc_metadata: Record<string, any> } }): Promise<CommonResponse> => {
+export const monexusaiDocMetadata = ({ datasetId, documentId, body }: CommonDocReq & { body: { doc_type: string, doc_metadata: Record<string, any> } }): Promise<CommonResponse> => {
   return put<CommonResponse>(`/datasets/${datasetId}/documents/${documentId}/metadata`, { body })
 }
 

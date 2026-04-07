@@ -16,7 +16,7 @@ from graphon.model_runtime.runtime import ModelRuntime
 from pydantic import ValidationError
 from redis import RedisError
 
-from configs import dify_config
+from configs import nexusai_config
 from core.plugin.entities.plugin_daemon import PluginModelProviderEntity
 from core.plugin.impl.asset import PluginAssetManager
 from core.plugin.impl.model import PluginModelClient
@@ -26,7 +26,7 @@ from models.provider_ids import ModelProviderID
 logger = logging.getLogger(__name__)
 
 # `TS` means tenant scope
-TENANT_SCOPE_SCHEMA_CACHE_USER_ID = "__DIFY_TS__"
+TENANT_SCOPE_SCHEMA_CACHE_USER_ID = "__NEXUSAI_TS__"
 
 
 class PluginModelRuntime(ModelRuntime):
@@ -184,7 +184,7 @@ class PluginModelRuntime(ModelRuntime):
 
         if schema:
             try:
-                redis_client.setex(cache_key, dify_config.PLUGIN_MODEL_SCHEMA_CACHE_TTL, schema.model_dump_json())
+                redis_client.setex(cache_key, nexusai_config.PLUGIN_MODEL_SCHEMA_CACHE_TTL, schema.model_dump_json())
             except (RedisError, RuntimeError) as exc:
                 logger.warning(
                     "Failed to write plugin model schema cache for model %s: %s",
@@ -232,7 +232,7 @@ class PluginModelRuntime(ModelRuntime):
         prompt_messages: Sequence[PromptMessage],
         tools: Sequence[PromptMessageTool] | None,
     ) -> int:
-        if not dify_config.PLUGIN_BASED_TOKEN_COUNTING_ENABLED:
+        if not nexusai_config.PLUGIN_BASED_TOKEN_COUNTING_ENABLED:
             return 0
 
         plugin_id, provider_name = self._split_provider(provider)

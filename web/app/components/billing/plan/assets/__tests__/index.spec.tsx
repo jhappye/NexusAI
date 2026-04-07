@@ -130,7 +130,7 @@ describe('Billing Plan Assets - Integration Tests', () => {
 
       components.forEach((Component) => {
         const { container } = render(<Component />)
-        const elementsWithBlue = container.querySelectorAll('[fill="var(--color-saas-dify-blue-inverted)"]')
+        const elementsWithBlue = container.querySelectorAll('[fill="var(--color-saas-nexusai-blue-inverted)"]')
         const elementsWithQuaternary = container.querySelectorAll('[fill="var(--color-text-quaternary)"]')
 
         expect(elementsWithBlue.length).toBeGreaterThan(0)

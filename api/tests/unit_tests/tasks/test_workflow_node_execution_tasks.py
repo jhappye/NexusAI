@@ -333,7 +333,7 @@
 # class TestHelperFunctions:
 #     """Test cases for helper functions."""
 
-#     @patch("tasks.workflow_node_execution_tasks.dify_config")
+#     @patch("tasks.workflow_node_execution_tasks.nexusai_config")
 #     def test_create_truncator(self, mock_config):
 #         """Test _create_truncator function."""
 #         mock_config.WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE = 1000

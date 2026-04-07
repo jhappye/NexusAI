@@ -36,7 +36,7 @@ def test_get_init_status_not_started(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_validate_init_password_already_setup(app, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(init_validate.dify_config, "EDITION", "SELF_HOSTED")
+    monkeypatch.setattr(init_validate.nexusai_config, "EDITION", "SELF_HOSTED")
     monkeypatch.setattr(init_validate.TenantService, "get_tenant_count", lambda: 1)
     app.secret_key = "test-secret"
 
@@ -46,7 +46,7 @@ def test_validate_init_password_already_setup(app, monkeypatch: pytest.MonkeyPat
 
 
 def test_validate_init_password_wrong_password(app, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(init_validate.dify_config, "EDITION", "SELF_HOSTED")
+    monkeypatch.setattr(init_validate.nexusai_config, "EDITION", "SELF_HOSTED")
     monkeypatch.setattr(init_validate.TenantService, "get_tenant_count", lambda: 0)
     monkeypatch.setenv("INIT_PASSWORD", "expected")
     app.secret_key = "test-secret"
@@ -58,7 +58,7 @@ def test_validate_init_password_wrong_password(app, monkeypatch: pytest.MonkeyPa
 
 
 def test_validate_init_password_success(app, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(init_validate.dify_config, "EDITION", "SELF_HOSTED")
+    monkeypatch.setattr(init_validate.nexusai_config, "EDITION", "SELF_HOSTED")
     monkeypatch.setattr(init_validate.TenantService, "get_tenant_count", lambda: 0)
     monkeypatch.setenv("INIT_PASSWORD", "expected")
     app.secret_key = "test-secret"
@@ -70,12 +70,12 @@ def test_validate_init_password_success(app, monkeypatch: pytest.MonkeyPatch) ->
 
 
 def test_get_init_validate_status_not_self_hosted(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(init_validate.dify_config, "EDITION", "CLOUD")
+    monkeypatch.setattr(init_validate.nexusai_config, "EDITION", "CLOUD")
     assert init_validate.get_init_validate_status() is True
 
 
 def test_get_init_validate_status_validated_session(app, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(init_validate.dify_config, "EDITION", "SELF_HOSTED")
+    monkeypatch.setattr(init_validate.nexusai_config, "EDITION", "SELF_HOSTED")
     monkeypatch.setenv("INIT_PASSWORD", "expected")
     app.secret_key = "test-secret"
 
@@ -85,7 +85,7 @@ def test_get_init_validate_status_validated_session(app, monkeypatch: pytest.Mon
 
 
 def test_get_init_validate_status_setup_exists(app, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(init_validate.dify_config, "EDITION", "SELF_HOSTED")
+    monkeypatch.setattr(init_validate.nexusai_config, "EDITION", "SELF_HOSTED")
     monkeypatch.setenv("INIT_PASSWORD", "expected")
     monkeypatch.setattr(init_validate, "Session", lambda *_args, **_kwargs: _SessionStub(True))
     monkeypatch.setattr(init_validate, "db", SimpleNamespace(engine=object()))
@@ -97,7 +97,7 @@ def test_get_init_validate_status_setup_exists(app, monkeypatch: pytest.MonkeyPa
 
 
 def test_get_init_validate_status_not_validated(app, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(init_validate.dify_config, "EDITION", "SELF_HOSTED")
+    monkeypatch.setattr(init_validate.nexusai_config, "EDITION", "SELF_HOSTED")
     monkeypatch.setenv("INIT_PASSWORD", "expected")
     monkeypatch.setattr(init_validate, "Session", lambda *_args, **_kwargs: _SessionStub(False))
     monkeypatch.setattr(init_validate, "db", SimpleNamespace(engine=object()))

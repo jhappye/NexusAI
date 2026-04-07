@@ -1,10 +1,10 @@
 import os
 import time
 
-from dify_app import DifyApp
+from nexusai_app import NexusAIApp
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     os.environ["TZ"] = "UTC"
     # windows platform not support tzset
     if hasattr(time, "tzset"):

@@ -16,10 +16,10 @@ from sqlalchemy.orm import Session, sessionmaker
 from libs.datetime_utils import naive_utc_now
 from models.enums import CreatorUserRole, WorkflowRunTriggeredFrom
 from models.workflow import WorkflowRun, WorkflowType
-from repositories.sqlalchemy_api_workflow_run_repository import DifyAPISQLAlchemyWorkflowRunRepository
+from repositories.sqlalchemy_api_workflow_run_repository import NexusAIAPISQLAlchemyWorkflowRunRepository
 
 
-class _TestWorkflowRunRepository(DifyAPISQLAlchemyWorkflowRunRepository):
+class _TestWorkflowRunRepository(NexusAIAPISQLAlchemyWorkflowRunRepository):
     """Concrete repository for tests where save() is not under test."""
 
     def save(self, execution: WorkflowExecution) -> None:
@@ -78,7 +78,7 @@ def _cleanup_scope_data(session: Session, scope: _TestScope) -> None:
 
 
 @pytest.fixture
-def repository(db_session_with_containers: Session) -> DifyAPISQLAlchemyWorkflowRunRepository:
+def repository(db_session_with_containers: Session) -> NexusAIAPISQLAlchemyWorkflowRunRepository:
     """Build a repository backed by the testcontainers database engine."""
     engine = db_session_with_containers.get_bind()
     assert isinstance(engine, Engine)
@@ -98,7 +98,7 @@ class TestGetPaginatedWorkflowRuns:
 
     def test_returns_runs_without_status_filter(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -125,7 +125,7 @@ class TestGetPaginatedWorkflowRuns:
 
     def test_filters_by_status(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -148,7 +148,7 @@ class TestGetPaginatedWorkflowRuns:
 
     def test_pagination_has_more(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -175,7 +175,7 @@ class TestGetPaginatedWorkflowRuns:
 
     def test_cursor_based_pagination(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -219,7 +219,7 @@ class TestGetPaginatedWorkflowRuns:
 
     def test_invalid_last_id_raises(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         test_scope: _TestScope,
     ) -> None:
         """Raise ValueError when last_id refers to a non-existent run."""
@@ -235,7 +235,7 @@ class TestGetPaginatedWorkflowRuns:
 
     def test_tenant_isolation(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -266,7 +266,7 @@ class TestGetWorkflowRunsCount:
 
     def test_count_without_status_filter(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -293,7 +293,7 @@ class TestGetWorkflowRunsCount:
 
     def test_count_with_status_filter(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -315,7 +315,7 @@ class TestGetWorkflowRunsCount:
 
     def test_count_with_invalid_status_raises(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -333,7 +333,7 @@ class TestGetWorkflowRunsCount:
 
     def test_count_with_time_range(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -361,7 +361,7 @@ class TestGetWorkflowRunsCount:
 
     def test_count_with_status_and_time_range(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:

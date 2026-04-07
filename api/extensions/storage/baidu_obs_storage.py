@@ -6,7 +6,7 @@ from baidubce.auth.bce_credentials import BceCredentials
 from baidubce.bce_client_configuration import BceClientConfiguration
 from baidubce.services.bos.bos_client import BosClient
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.storage.base_storage import BaseStorage
 
 
@@ -15,13 +15,13 @@ class BaiduObsStorage(BaseStorage):
 
     def __init__(self):
         super().__init__()
-        self.bucket_name = dify_config.BAIDU_OBS_BUCKET_NAME
+        self.bucket_name = nexusai_config.BAIDU_OBS_BUCKET_NAME
         client_config = BceClientConfiguration(
             credentials=BceCredentials(
-                access_key_id=dify_config.BAIDU_OBS_ACCESS_KEY,
-                secret_access_key=dify_config.BAIDU_OBS_SECRET_KEY,
+                access_key_id=nexusai_config.BAIDU_OBS_ACCESS_KEY,
+                secret_access_key=nexusai_config.BAIDU_OBS_SECRET_KEY,
             ),
-            endpoint=dify_config.BAIDU_OBS_ENDPOINT,
+            endpoint=nexusai_config.BAIDU_OBS_ENDPOINT,
         )
 
         self.client = BosClient(config=client_config)

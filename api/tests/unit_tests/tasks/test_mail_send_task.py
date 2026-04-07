@@ -13,7 +13,7 @@ from unittest.mock import ANY, MagicMock, patch
 
 import pytest
 
-from configs import dify_config
+from configs import nexusai_config
 from configs.feature import TemplateMode
 from libs.email_i18n import EmailType
 from tasks.mail_inner_task import _render_template_with_strategy, send_inner_email_task
@@ -37,7 +37,7 @@ class TestEmailTemplateRendering:
         substitutions = {"name": "John", "code": "123456"}
 
         # Act
-        with patch.object(dify_config, "MAIL_TEMPLATING_MODE", TemplateMode.UNSAFE):
+        with patch.object(nexusai_config, "MAIL_TEMPLATING_MODE", TemplateMode.UNSAFE):
             result = _render_template_with_strategy(body, substitutions)
 
         # Assert
@@ -50,8 +50,8 @@ class TestEmailTemplateRendering:
         substitutions = {"name": "Alice", "code": "654321"}
 
         # Act
-        with patch.object(dify_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
-            with patch.object(dify_config, "MAIL_TEMPLATING_TIMEOUT", 3):
+        with patch.object(nexusai_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
+            with patch.object(nexusai_config, "MAIL_TEMPLATING_TIMEOUT", 3):
                 result = _render_template_with_strategy(body, substitutions)
 
         # Assert
@@ -64,7 +64,7 @@ class TestEmailTemplateRendering:
         substitutions = {"name": "Bob", "code": "999999"}
 
         # Act
-        with patch.object(dify_config, "MAIL_TEMPLATING_MODE", TemplateMode.DISABLED):
+        with patch.object(nexusai_config, "MAIL_TEMPLATING_MODE", TemplateMode.DISABLED):
             result = _render_template_with_strategy(body, substitutions)
 
         # Assert - should return body unchanged
@@ -77,8 +77,8 @@ class TestEmailTemplateRendering:
         substitutions: dict[str, str] = {}
 
         # Act & Assert - sandbox blocks ranges larger than MAX_RANGE (100000)
-        with patch.object(dify_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
-            with patch.object(dify_config, "MAIL_TEMPLATING_TIMEOUT", 1):
+        with patch.object(nexusai_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
+            with patch.object(nexusai_config, "MAIL_TEMPLATING_TIMEOUT", 1):
                 # Should raise OverflowError for range too big
                 with pytest.raises((TimeoutError, RuntimeError, OverflowError)):
                     _render_template_with_strategy(body, substitutions)
@@ -90,7 +90,7 @@ class TestEmailTemplateRendering:
         substitutions: dict[str, str] = {}
 
         # Act & Assert
-        with patch.object(dify_config, "MAIL_TEMPLATING_MODE", "invalid_mode"):
+        with patch.object(nexusai_config, "MAIL_TEMPLATING_MODE", "invalid_mode"):
             with pytest.raises(ValueError, match="Unsupported mail templating mode"):
                 _render_template_with_strategy(body, substitutions)
 
@@ -101,7 +101,7 @@ class TestEmailTemplateRendering:
         substitutions = {"name": "Test<User>", "code": "ABC&123"}
 
         # Act
-        with patch.object(dify_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
+        with patch.object(nexusai_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
             result = _render_template_with_strategy(body, substitutions)
 
         # Assert
@@ -115,7 +115,7 @@ class TestEmailTemplateRendering:
         substitutions = {"name": "John"}
 
         # Act - sandbox mode renders undefined variables as empty strings by default
-        with patch.object(dify_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
+        with patch.object(nexusai_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
             result = _render_template_with_strategy(body, substitutions)
 
         # Assert - undefined variable is rendered as empty string
@@ -431,7 +431,7 @@ class TestMailTaskRetryLogic:
 
     @patch("tasks.mail_reset_password_task.get_email_i18n_service")
     @patch("tasks.mail_reset_password_task.mail")
-    @patch("tasks.mail_reset_password_task.dify_config")
+    @patch("tasks.mail_reset_password_task.nexusai_config")
     def test_reset_password_when_account_not_exist_with_register(self, mock_config, mock_mail, mock_email_service):
         """Test reset password task when account doesn't exist and registration is allowed."""
         # Arrange
@@ -509,7 +509,7 @@ class TestMailTaskInternationalization:
 
     @patch("tasks.mail_register_task.get_email_i18n_service")
     @patch("tasks.mail_register_task.mail")
-    @patch("tasks.mail_register_task.dify_config")
+    @patch("tasks.mail_register_task.nexusai_config")
     def test_account_exist_task_includes_urls(self, mock_config, mock_mail, mock_email_service):
         """Test account exist task includes proper URLs in template context."""
         # Arrange
@@ -697,7 +697,7 @@ class TestSendGridIntegration:
 class TestMailExtension:
     """Test mail extension initialization and configuration."""
 
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_init_smtp_configuration(self, mock_config):
         """Test mail extension initializes SMTP client correctly."""
         # Arrange
@@ -722,7 +722,7 @@ class TestMailExtension:
         assert mail.is_inited() is True
         assert mail._client is not None
 
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_init_without_mail_type(self, mock_config):
         """Test mail extension skips initialization when MAIL_TYPE is not set."""
         # Arrange
@@ -739,7 +739,7 @@ class TestMailExtension:
         # Assert
         assert mail.is_inited() is False
 
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_send_validates_parameters(self, mock_config):
         """Test mail send validates required parameters."""
         # Arrange
@@ -761,7 +761,7 @@ class TestMailExtension:
         with pytest.raises(ValueError, match="mail html is not set"):
             mail.send(to="test@example.com", subject="Test", html="")
 
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_send_uses_default_from(self, mock_config):
         """Test mail send uses default from address when not provided."""
         # Arrange
@@ -920,7 +920,7 @@ class TestEdgeCasesAndErrorHandling:
     and various error scenarios to ensure robust error handling.
     """
 
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_init_invalid_smtp_config_missing_server(self, mock_config):
         """
         Test mail initialization fails when SMTP server is missing.
@@ -942,7 +942,7 @@ class TestEdgeCasesAndErrorHandling:
         with pytest.raises(ValueError, match="SMTP_SERVER and SMTP_PORT are required"):
             mail.init_app(mock_app)
 
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_init_invalid_smtp_opportunistic_tls_without_tls(self, mock_config):
         """
         Test mail initialization fails with opportunistic TLS but TLS disabled.
@@ -966,7 +966,7 @@ class TestEdgeCasesAndErrorHandling:
         with pytest.raises(ValueError, match="SMTP_OPPORTUNISTIC_TLS is not supported without enabling SMTP_USE_TLS"):
             mail.init_app(mock_app)
 
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_init_unsupported_mail_type(self, mock_config):
         """
         Test mail initialization fails with unsupported mail type.
@@ -1120,7 +1120,7 @@ class TestResendIntegration:
     """
 
     @patch("builtins.__import__", side_effect=__import__)
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_init_resend_configuration(self, mock_config, mock_import):
         """
         Test mail extension initializes Resend client correctly.
@@ -1162,7 +1162,7 @@ class TestResendIntegration:
         assert mock_resend.api_key == "re_test_api_key"
 
     @patch("builtins.__import__", side_effect=__import__)
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_init_resend_with_custom_url(self, mock_config, mock_import):
         """
         Test mail extension initializes Resend with custom API URL.
@@ -1203,7 +1203,7 @@ class TestResendIntegration:
         assert mail.is_inited() is True
         assert mock_resend.api_url == "https://custom-resend.example.com"
 
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_init_resend_missing_api_key(self, mock_config):
         """
         Test mail initialization fails when Resend API key is missing.
@@ -1275,7 +1275,7 @@ class TestTemplateContextValidation:
         substitutions = {"user": {"name": "John Doe"}, "items": ["apple", "banana", "cherry"]}
 
         # Act
-        with patch.object(dify_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
+        with patch.object(nexusai_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
             result = _render_template_with_strategy(body, substitutions)
 
         # Assert
@@ -1295,7 +1295,7 @@ class TestTemplateContextValidation:
         body = "{% if is_premium %}Premium User{% else %}Free User{% endif %}"
 
         # Act - Test with premium user
-        with patch.object(dify_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
+        with patch.object(nexusai_config, "MAIL_TEMPLATING_MODE", TemplateMode.SANDBOX):
             result_premium = _render_template_with_strategy(body, {"is_premium": True})
             result_free = _render_template_with_strategy(body, {"is_premium": False})
 
@@ -1312,7 +1312,7 @@ class TestEmailValidation:
     validated before sending to prevent errors.
     """
 
-    @patch("extensions.ext_mail.dify_config")
+    @patch("extensions.ext_mail.nexusai_config")
     def test_mail_send_with_invalid_email_format(self, mock_config):
         """
         Test mail send with malformed email address.

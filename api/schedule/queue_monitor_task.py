@@ -6,21 +6,21 @@ from kombu.utils.url import parse_url  # type: ignore
 from redis import Redis
 
 import app
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_database import db
 from libs.email_i18n import EmailType, get_email_i18n_service
 
-redis_config = parse_url(dify_config.CELERY_BROKER_URL)
+redis_config = parse_url(nexusai_config.CELERY_BROKER_URL)
 celery_redis = Redis(
     host=redis_config.get("hostname") or "localhost",
     port=redis_config.get("port") or 6379,
     password=redis_config.get("password") or None,
     db=int(redis_config.get("virtual_host")) if redis_config.get("virtual_host") else 1,
-    ssl=bool(dify_config.BROKER_USE_SSL),
-    ssl_ca_certs=dify_config.REDIS_SSL_CA_CERTS if dify_config.BROKER_USE_SSL else None,
-    ssl_cert_reqs=getattr(dify_config, "REDIS_SSL_CERT_REQS", None) if dify_config.BROKER_USE_SSL else None,
-    ssl_certfile=getattr(dify_config, "REDIS_SSL_CERTFILE", None) if dify_config.BROKER_USE_SSL else None,
-    ssl_keyfile=getattr(dify_config, "REDIS_SSL_KEYFILE", None) if dify_config.BROKER_USE_SSL else None,
+    ssl=bool(nexusai_config.BROKER_USE_SSL),
+    ssl_ca_certs=nexusai_config.REDIS_SSL_CA_CERTS if nexusai_config.BROKER_USE_SSL else None,
+    ssl_cert_reqs=getattr(nexusai_config, "REDIS_SSL_CERT_REQS", None) if nexusai_config.BROKER_USE_SSL else None,
+    ssl_certfile=getattr(nexusai_config, "REDIS_SSL_CERTFILE", None) if nexusai_config.BROKER_USE_SSL else None,
+    ssl_keyfile=getattr(nexusai_config, "REDIS_SSL_KEYFILE", None) if nexusai_config.BROKER_USE_SSL else None,
     # Add conservative socket timeouts and health checks to avoid long-lived half-open sockets
     socket_timeout=5,
     socket_connect_timeout=5,
@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 @app.celery.task(queue="monitor")
 def queue_monitor_task():
     queue_name = "dataset"
-    threshold = dify_config.QUEUE_MONITOR_THRESHOLD
+    threshold = nexusai_config.QUEUE_MONITOR_THRESHOLD
 
     if threshold is None:
         logger.warning(click.style("QUEUE_MONITOR_THRESHOLD is not configured, skipping monitoring", fg="yellow"))
@@ -54,7 +54,7 @@ def queue_monitor_task():
         if queue_length >= threshold:
             warning_msg = f"Queue {queue_name} task count exceeded the limit.: {queue_length}/{threshold}"
             logging.warning(click.style(warning_msg, fg="red"))
-            alert_emails = dify_config.QUEUE_MONITOR_ALERT_EMAILS
+            alert_emails = nexusai_config.QUEUE_MONITOR_ALERT_EMAILS
             if alert_emails:
                 to_list = alert_emails.split(",")
                 email_service = get_email_i18n_service()

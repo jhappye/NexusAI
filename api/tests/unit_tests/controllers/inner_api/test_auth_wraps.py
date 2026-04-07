@@ -8,7 +8,7 @@ import pytest
 from flask import Flask
 from werkzeug.exceptions import HTTPException
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.inner_api.wraps import (
     billing_inner_api_only,
     enterprise_inner_api_only,
@@ -30,8 +30,8 @@ class TestBillingInnerApiOnly:
 
         # Act
         with app.test_request_context(headers={"X-Inner-Api-Key": "valid_key"}):
-            with patch.object(dify_config, "INNER_API", True):
-                with patch.object(dify_config, "INNER_API_KEY", "valid_key"):
+            with patch.object(nexusai_config, "INNER_API", True):
+                with patch.object(nexusai_config, "INNER_API_KEY", "valid_key"):
                     result = protected_view()
 
         # Assert
@@ -47,7 +47,7 @@ class TestBillingInnerApiOnly:
 
         # Act & Assert
         with app.test_request_context():
-            with patch.object(dify_config, "INNER_API", False):
+            with patch.object(nexusai_config, "INNER_API", False):
                 with pytest.raises(HTTPException) as exc_info:
                     protected_view()
                 assert exc_info.value.code == 404
@@ -62,8 +62,8 @@ class TestBillingInnerApiOnly:
 
         # Act & Assert
         with app.test_request_context(headers={}):
-            with patch.object(dify_config, "INNER_API", True):
-                with patch.object(dify_config, "INNER_API_KEY", "valid_key"):
+            with patch.object(nexusai_config, "INNER_API", True):
+                with patch.object(nexusai_config, "INNER_API_KEY", "valid_key"):
                     with pytest.raises(HTTPException) as exc_info:
                         protected_view()
                     assert exc_info.value.code == 401
@@ -78,8 +78,8 @@ class TestBillingInnerApiOnly:
 
         # Act & Assert
         with app.test_request_context(headers={"X-Inner-Api-Key": "invalid_key"}):
-            with patch.object(dify_config, "INNER_API", True):
-                with patch.object(dify_config, "INNER_API_KEY", "valid_key"):
+            with patch.object(nexusai_config, "INNER_API", True):
+                with patch.object(nexusai_config, "INNER_API_KEY", "valid_key"):
                     with pytest.raises(HTTPException) as exc_info:
                         protected_view()
                     assert exc_info.value.code == 401
@@ -98,8 +98,8 @@ class TestEnterpriseInnerApiOnly:
 
         # Act
         with app.test_request_context(headers={"X-Inner-Api-Key": "valid_key"}):
-            with patch.object(dify_config, "INNER_API", True):
-                with patch.object(dify_config, "INNER_API_KEY", "valid_key"):
+            with patch.object(nexusai_config, "INNER_API", True):
+                with patch.object(nexusai_config, "INNER_API_KEY", "valid_key"):
                     result = protected_view()
 
         # Assert
@@ -115,7 +115,7 @@ class TestEnterpriseInnerApiOnly:
 
         # Act & Assert
         with app.test_request_context():
-            with patch.object(dify_config, "INNER_API", False):
+            with patch.object(nexusai_config, "INNER_API", False):
                 with pytest.raises(HTTPException) as exc_info:
                     protected_view()
                 assert exc_info.value.code == 404
@@ -130,8 +130,8 @@ class TestEnterpriseInnerApiOnly:
 
         # Act & Assert
         with app.test_request_context(headers={}):
-            with patch.object(dify_config, "INNER_API", True):
-                with patch.object(dify_config, "INNER_API_KEY", "valid_key"):
+            with patch.object(nexusai_config, "INNER_API", True):
+                with patch.object(nexusai_config, "INNER_API_KEY", "valid_key"):
                     with pytest.raises(HTTPException) as exc_info:
                         protected_view()
                     assert exc_info.value.code == 401
@@ -146,8 +146,8 @@ class TestEnterpriseInnerApiOnly:
 
         # Act & Assert
         with app.test_request_context(headers={"X-Inner-Api-Key": "invalid_key"}):
-            with patch.object(dify_config, "INNER_API", True):
-                with patch.object(dify_config, "INNER_API_KEY", "valid_key"):
+            with patch.object(nexusai_config, "INNER_API", True):
+                with patch.object(nexusai_config, "INNER_API_KEY", "valid_key"):
                     with pytest.raises(HTTPException) as exc_info:
                         protected_view()
                     assert exc_info.value.code == 401
@@ -166,7 +166,7 @@ class TestEnterpriseInnerApiUserAuth:
 
         # Act
         with app.test_request_context():
-            with patch.object(dify_config, "INNER_API", False):
+            with patch.object(nexusai_config, "INNER_API", False):
                 result = protected_view()
 
         # Assert
@@ -182,7 +182,7 @@ class TestEnterpriseInnerApiUserAuth:
 
         # Act
         with app.test_request_context(headers={}):
-            with patch.object(dify_config, "INNER_API", True):
+            with patch.object(nexusai_config, "INNER_API", True):
                 result = protected_view()
 
         # Assert
@@ -198,7 +198,7 @@ class TestEnterpriseInnerApiUserAuth:
 
         # Act
         with app.test_request_context(headers={"Authorization": "invalid_format"}):
-            with patch.object(dify_config, "INNER_API", True):
+            with patch.object(nexusai_config, "INNER_API", True):
                 result = protected_view()
 
         # Assert
@@ -216,7 +216,7 @@ class TestEnterpriseInnerApiUserAuth:
         with app.test_request_context(
             headers={"Authorization": "Bearer user123:wrong_signature", "X-Inner-Api-Key": "valid_key"}
         ):
-            with patch.object(dify_config, "INNER_API", True):
+            with patch.object(nexusai_config, "INNER_API", True):
                 result = protected_view()
 
         # Assert
@@ -236,7 +236,7 @@ class TestEnterpriseInnerApiUserAuth:
         # Calculate valid HMAC signature
         user_id = "user123"
         inner_api_key = "valid_key"
-        data_to_sign = f"DIFY {user_id}"
+        data_to_sign = f"NEXUSAI {user_id}"
         signature = hmac_new(inner_api_key.encode("utf-8"), data_to_sign.encode("utf-8"), sha1)
         valid_signature = b64encode(signature.digest()).decode("utf-8")
 
@@ -248,7 +248,7 @@ class TestEnterpriseInnerApiUserAuth:
         with app.test_request_context(
             headers={"Authorization": f"Bearer {user_id}:{valid_signature}", "X-Inner-Api-Key": inner_api_key}
         ):
-            with patch.object(dify_config, "INNER_API", True):
+            with patch.object(nexusai_config, "INNER_API", True):
                 with patch("controllers.inner_api.wraps.db.session.get") as mock_get:
                     mock_get.return_value = mock_user
                     result = protected_view()
@@ -270,8 +270,8 @@ class TestPluginInnerApiOnly:
 
         # Act
         with app.test_request_context(headers={"X-Inner-Api-Key": "valid_plugin_key"}):
-            with patch.object(dify_config, "PLUGIN_DAEMON_KEY", "plugin_key"):
-                with patch.object(dify_config, "INNER_API_KEY_FOR_PLUGIN", "valid_plugin_key"):
+            with patch.object(nexusai_config, "PLUGIN_DAEMON_KEY", "plugin_key"):
+                with patch.object(nexusai_config, "INNER_API_KEY_FOR_PLUGIN", "valid_plugin_key"):
                     result = protected_view()
 
         # Assert
@@ -287,7 +287,7 @@ class TestPluginInnerApiOnly:
 
         # Act & Assert
         with app.test_request_context():
-            with patch.object(dify_config, "PLUGIN_DAEMON_KEY", ""):
+            with patch.object(nexusai_config, "PLUGIN_DAEMON_KEY", ""):
                 with pytest.raises(HTTPException) as exc_info:
                     protected_view()
                 assert exc_info.value.code == 404
@@ -302,8 +302,8 @@ class TestPluginInnerApiOnly:
 
         # Act & Assert
         with app.test_request_context(headers={"X-Inner-Api-Key": "invalid_key"}):
-            with patch.object(dify_config, "PLUGIN_DAEMON_KEY", "plugin_key"):
-                with patch.object(dify_config, "INNER_API_KEY_FOR_PLUGIN", "valid_plugin_key"):
+            with patch.object(nexusai_config, "PLUGIN_DAEMON_KEY", "plugin_key"):
+                with patch.object(nexusai_config, "INNER_API_KEY_FOR_PLUGIN", "valid_plugin_key"):
                     with pytest.raises(HTTPException) as exc_info:
                         protected_view()
                     assert exc_info.value.code == 404

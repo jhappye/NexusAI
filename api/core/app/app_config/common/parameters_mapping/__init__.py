@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 from typing import Any, TypedDict
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import DEFAULT_FILE_NUMBER_LIMITS
 
 
@@ -59,10 +59,10 @@ def get_parameters_from_feature_dict(
             },
         ),
         "system_parameters": {
-            "image_file_size_limit": dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT,
-            "video_file_size_limit": dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT,
-            "audio_file_size_limit": dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT,
-            "file_size_limit": dify_config.UPLOAD_FILE_SIZE_LIMIT,
-            "workflow_file_upload_limit": dify_config.WORKFLOW_FILE_UPLOAD_LIMIT,
+            "image_file_size_limit": nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT,
+            "video_file_size_limit": nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT,
+            "audio_file_size_limit": nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT,
+            "file_size_limit": nexusai_config.UPLOAD_FILE_SIZE_LIMIT,
+            "workflow_file_upload_limit": nexusai_config.WORKFLOW_FILE_UPLOAD_LIMIT,
         },
     }

@@ -309,7 +309,7 @@ def _prepare_schema_for_model(provider: str, model_schema: AIModelEntity, schema
     :return: Processed schema compatible with the current model
     """
 
-    # Deep copy to avoid modifying the original schema
+    # Deep copy to avoid monexusaiing the original schema
     processed_schema = dict(deepcopy(schema))
 
     # Convert boolean types to string types (common requirement)
@@ -331,7 +331,7 @@ def remove_additional_properties(schema: dict):
     Remove additionalProperties fields from JSON schema.
     Used for models like Gemini that don't support this property.
 
-    :param schema: JSON schema to modify in-place
+    :param schema: JSON schema to monexusai in-place
     """
     if not isinstance(schema, dict):
         return
@@ -353,7 +353,7 @@ def convert_boolean_to_string(schema: dict):
     """
     Convert boolean type specifications to string in JSON schema.
 
-    :param schema: JSON schema to modify in-place
+    :param schema: JSON schema to monexusai in-place
     """
     if not isinstance(schema, dict):
         return

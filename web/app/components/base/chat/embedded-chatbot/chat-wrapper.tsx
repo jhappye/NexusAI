@@ -28,7 +28,7 @@ import Chat from '../chat'
 import { useChat } from '../chat/hooks'
 import { getLastAnswer, isValidGeneratedAnswer } from '../utils'
 import { useEmbeddedChatbotContext } from './context'
-import { isDify } from './utils'
+import { isNexusAI } from './utils'
 
 const ChatWrapper = () => {
   const {
@@ -286,7 +286,7 @@ const ChatWrapper = () => {
     )
   }, [chatList, respondingState, currentConversationId, collapsed, inputsForms.length, allInputsHidden, appData?.site, isMobile])
 
-  const answerIcon = isDify()
+  const answerIcon = isNexusAI()
     ? <LogoAvatar className="relative shrink-0" />
     : (appData?.site && appData.site.use_icon_as_answer_icon)
         ? (

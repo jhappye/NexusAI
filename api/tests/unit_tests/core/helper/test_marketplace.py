@@ -22,7 +22,7 @@ def test_get_plugin_pkg_url_contains_unique_identifier() -> None:
 
 def test_download_plugin_pkg_delegates_with_configured_size(mocker: MockerFixture) -> None:
     mocked_download = mocker.patch("core.helper.marketplace.download_with_size_limit", return_value=b"pkg")
-    mocker.patch("core.helper.marketplace.dify_config.PLUGIN_MAX_PACKAGE_SIZE", 1234)
+    mocker.patch("core.helper.marketplace.nexusai_config.PLUGIN_MAX_PACKAGE_SIZE", 1234)
 
     result = download_plugin_pkg("plugin.a.b")
 

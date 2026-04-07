@@ -32,15 +32,15 @@ def _make_app(mode: AppMode) -> SimpleNamespace:
 
 def _patch_console_guards(monkeypatch: pytest.MonkeyPatch, account: Account, app_model: SimpleNamespace) -> None:
     # Skip setup and auth guardrails
-    monkeypatch.setattr("configs.dify_config.EDITION", "CLOUD")
-    monkeypatch.setattr(login_lib.dify_config, "LOGIN_DISABLED", True)
+    monkeypatch.setattr("configs.nexusai_config.EDITION", "CLOUD")
+    monkeypatch.setattr(login_lib.nexusai_config, "LOGIN_DISABLED", True)
     monkeypatch.setattr(login_lib, "current_user", account)
     monkeypatch.setattr(login_lib, "current_account_with_tenant", lambda: (account, account.current_tenant_id))
     monkeypatch.setattr(login_lib, "check_csrf_token", lambda *_, **__: None)
     monkeypatch.setattr(console_wraps, "current_account_with_tenant", lambda: (account, account.current_tenant_id))
     monkeypatch.setattr(app_wraps, "current_account_with_tenant", lambda: (account, account.current_tenant_id))
     monkeypatch.setattr(workflow_module, "current_account_with_tenant", lambda: (account, account.current_tenant_id))
-    monkeypatch.setattr(console_wraps.dify_config, "EDITION", "CLOUD")
+    monkeypatch.setattr(console_wraps.nexusai_config, "EDITION", "CLOUD")
     monkeypatch.delenv("INIT_PASSWORD", raising=False)
 
     # Avoid hitting the database when resolving the app model

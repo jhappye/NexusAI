@@ -25,7 +25,7 @@ from opentelemetry.semconv._incubating.attributes.host_attributes import (  # ty
 from opentelemetry.semconv.attributes import service_attributes
 from opentelemetry.trace import Link, SpanContext, TraceFlags
 
-from configs import dify_config
+from configs import nexusai_config
 from core.ops.aliyun_trace.entities.aliyun_trace_entity import SpanData
 from core.ops.aliyun_trace.entities.semconv import ACS_ARMS_SERVICE_FEATURE
 
@@ -52,8 +52,8 @@ class TraceClient:
         self.resource = Resource(
             attributes={
                 service_attributes.SERVICE_NAME: service_name,
-                service_attributes.SERVICE_VERSION: f"dify-{dify_config.project.version}-{dify_config.COMMIT_SHA}",
-                DEPLOYMENT_ENVIRONMENT: f"{dify_config.DEPLOY_ENV}-{dify_config.EDITION}",
+                service_attributes.SERVICE_VERSION: f"nexusai-{nexusai_config.project.version}-{nexusai_config.COMMIT_SHA}",
+                DEPLOYMENT_ENVIRONMENT: f"{nexusai_config.DEPLOY_ENV}-{nexusai_config.EDITION}",
                 HOST_NAME: socket.gethostname(),
                 ACS_ARMS_SERVICE_FEATURE: "genai_app",
             }

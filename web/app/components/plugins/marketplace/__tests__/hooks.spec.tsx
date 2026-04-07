@@ -62,11 +62,11 @@ vi.mock('@/config', () => ({
   API_PREFIX: '/api',
   APP_VERSION: '1.0.0',
   IS_MARKETPLACE: false,
-  MARKETPLACE_API_PREFIX: 'https://marketplace.dify.ai/api/v1',
+  MARKETPLACE_API_PREFIX: 'https://marketplace.nexusai.ai/api/v1',
 }))
 
 vi.mock('@/utils/var', () => ({
-  getMarketplaceUrl: (path: string) => `https://marketplace.dify.ai${path}`,
+  getMarketplaceUrl: (path: string) => `https://marketplace.nexusai.ai${path}`,
 }))
 
 vi.mock('@/service/client', () => ({

@@ -21,7 +21,7 @@ from graphon.model_runtime.utils.encoders import jsonable_encoder
 from pydantic import BaseModel
 from pydantic.functional_validators import AfterValidator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.features.rate_limiting.rate_limit import RateLimitGenerator
 from extensions.ext_redis import redis_client
 
@@ -252,12 +252,12 @@ def timezone(timezone_string):
 
 
 def convert_datetime_to_date(field, target_timezone: str = ":tz"):
-    if dify_config.DB_TYPE == "postgresql":
+    if nexusai_config.DB_TYPE == "postgresql":
         return f"DATE(DATE_TRUNC('day', {field} AT TIME ZONE 'UTC' AT TIME ZONE {target_timezone}))"
-    elif dify_config.DB_TYPE in ["mysql", "oceanbase", "seekdb"]:
+    elif nexusai_config.DB_TYPE in ["mysql", "oceanbase", "seekdb"]:
         return f"DATE(CONVERT_TZ({field}, 'UTC', {target_timezone}))"
     else:
-        raise NotImplementedError(f"Unsupported database type: {dify_config.DB_TYPE}")
+        raise NotImplementedError(f"Unsupported database type: {nexusai_config.DB_TYPE}")
 
 
 def generate_string(n):
@@ -333,7 +333,7 @@ def length_prefixed_response(
     This function is used to return a response with a length prefix.
     Magic number is a one byte number that indicates the type of the response.
 
-    For a compatibility with latest plugin daemon https://github.com/langgenius/dify-plugin-daemon/pull/341
+    For a compatibility with latest plugin daemon https://github.com/langgenius/nexusai-plugin-daemon/pull/341
     Avoid using line-based response, it leads a memory issue.
 
     We uses following format:
@@ -415,7 +415,7 @@ class TokenManager:
         if additional_data:
             token_data.update(additional_data)
 
-        expiry_minutes = dify_config.model_dump().get(f"{token_type.upper()}_TOKEN_EXPIRY_MINUTES")
+        expiry_minutes = nexusai_config.model_dump().get(f"{token_type.upper()}_TOKEN_EXPIRY_MINUTES")
         if expiry_minutes is None:
             raise ValueError(f"Expiry minutes for {token_type} token is not set")
         token_key = cls._get_token_key(token, token_type)

@@ -391,7 +391,7 @@ describe('unescape utility', () => {
       expect(unescape('Hello\\nWorld\\t!')).toBe('Hello\nWorld\t!')
     })
 
-    it('should not modify regular text', () => {
+    it('should not monexusai regular text', () => {
       expect(unescape('Hello World')).toBe('Hello World')
     })
   })

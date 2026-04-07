@@ -8,7 +8,7 @@ from graphon.nodes.code.limits import CodeNodeLimits
 from graphon.runtime import VariablePool
 from graphon.variables.variables import StringVariable
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper.code_executor.code_executor import CodeLanguage
 from core.workflow.system_variables import build_system_variables, default_system_variables
 from core.workflow.variable_prefixes import (
@@ -130,14 +130,14 @@ class TestWorkflowEntry:
         workflow = StubWorkflow()
         variable_pool = VariablePool(system_variables=default_system_variables(), user_inputs={})
         expected_limits = CodeNodeLimits(
-            max_string_length=dify_config.CODE_MAX_STRING_LENGTH,
-            max_number=dify_config.CODE_MAX_NUMBER,
-            min_number=dify_config.CODE_MIN_NUMBER,
-            max_precision=dify_config.CODE_MAX_PRECISION,
-            max_depth=dify_config.CODE_MAX_DEPTH,
-            max_number_array_length=dify_config.CODE_MAX_NUMBER_ARRAY_LENGTH,
-            max_string_array_length=dify_config.CODE_MAX_STRING_ARRAY_LENGTH,
-            max_object_array_length=dify_config.CODE_MAX_OBJECT_ARRAY_LENGTH,
+            max_string_length=nexusai_config.CODE_MAX_STRING_LENGTH,
+            max_number=nexusai_config.CODE_MAX_NUMBER,
+            min_number=nexusai_config.CODE_MIN_NUMBER,
+            max_precision=nexusai_config.CODE_MAX_PRECISION,
+            max_depth=nexusai_config.CODE_MAX_DEPTH,
+            max_number_array_length=nexusai_config.CODE_MAX_NUMBER_ARRAY_LENGTH,
+            max_string_array_length=nexusai_config.CODE_MAX_STRING_ARRAY_LENGTH,
+            max_object_array_length=nexusai_config.CODE_MAX_OBJECT_ARRAY_LENGTH,
         )
 
         # Act

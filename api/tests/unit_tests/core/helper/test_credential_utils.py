@@ -53,7 +53,7 @@ def test_check_credential_policy_compliance_calls_plugin_manager_with_request(
 
     check_call.assert_called_once()
     request_arg = check_call.call_args.args[0]
-    assert request_arg.dify_credential_id == "cred-1"
+    assert request_arg.nexusai_credential_id == "cred-1"
     assert request_arg.provider == "openai"
     assert request_arg.credential_type == PluginCredentialType.MODEL
 

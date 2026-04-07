@@ -35,8 +35,8 @@ class TestAppGenerateService:
                 "services.app_generate_service.MessageBasedAppGenerator", autospec=True
             ) as mock_message_based_generator,
             patch("services.account_service.FeatureService", autospec=True) as mock_account_feature_service,
-            patch("services.app_generate_service.dify_config", autospec=True) as mock_dify_config,
-            patch("configs.dify_config", autospec=True) as mock_global_dify_config,
+            patch("services.app_generate_service.nexusai_config", autospec=True) as mock_nexusai_config,
+            patch("configs.nexusai_config", autospec=True) as mock_global_nexusai_config,
         ):
             # Setup default mock returns for billing service
             mock_billing_service.update_tenant_feature_plan_usage.return_value = {
@@ -95,16 +95,16 @@ class TestAppGenerateService:
             # Setup default mock returns for account service
             mock_account_feature_service.get_system_features.return_value.is_allow_register = True
 
-            # Setup dify_config mock returns
-            mock_dify_config.BILLING_ENABLED = False
-            mock_dify_config.APP_MAX_ACTIVE_REQUESTS = 100
-            mock_dify_config.APP_DEFAULT_ACTIVE_REQUESTS = 100
-            mock_dify_config.APP_DAILY_RATE_LIMIT = 1000
+            # Setup nexusai_config mock returns
+            mock_nexusai_config.BILLING_ENABLED = False
+            mock_nexusai_config.APP_MAX_ACTIVE_REQUESTS = 100
+            mock_nexusai_config.APP_DEFAULT_ACTIVE_REQUESTS = 100
+            mock_nexusai_config.APP_DAILY_RATE_LIMIT = 1000
 
-            mock_global_dify_config.BILLING_ENABLED = False
-            mock_global_dify_config.APP_MAX_ACTIVE_REQUESTS = 100
-            mock_global_dify_config.APP_DAILY_RATE_LIMIT = 1000
-            mock_global_dify_config.HOSTED_POOL_CREDITS = 1000
+            mock_global_nexusai_config.BILLING_ENABLED = False
+            mock_global_nexusai_config.APP_MAX_ACTIVE_REQUESTS = 100
+            mock_global_nexusai_config.APP_DAILY_RATE_LIMIT = 1000
+            mock_global_nexusai_config.HOSTED_POOL_CREDITS = 1000
 
             yield {
                 "billing_service": mock_billing_service,
@@ -117,8 +117,8 @@ class TestAppGenerateService:
                 "workflow_generator": mock_workflow_generator,
                 "message_based_generator": mock_message_based_generator,
                 "account_feature_service": mock_account_feature_service,
-                "dify_config": mock_dify_config,
-                "global_dify_config": mock_global_dify_config,
+                "nexusai_config": mock_nexusai_config,
+                "global_nexusai_config": mock_global_nexusai_config,
             }
 
     def _create_test_app_and_account(
@@ -464,8 +464,8 @@ class TestAppGenerateService:
         )
 
         # Set BILLING_ENABLED to True for this test
-        mock_external_service_dependencies["dify_config"].BILLING_ENABLED = True
-        mock_external_service_dependencies["global_dify_config"].BILLING_ENABLED = True
+        mock_external_service_dependencies["nexusai_config"].BILLING_ENABLED = True
+        mock_external_service_dependencies["global_nexusai_config"].BILLING_ENABLED = True
 
         # Setup test arguments
         args = {"inputs": {"query": fake.text(max_nb_chars=50)}, "response_mode": "streaming"}
@@ -892,7 +892,7 @@ class TestAppGenerateService:
         result = AppGenerateService._get_max_active_requests(app)
 
         # Verify the result (should return config limit when app limit is 0)
-        assert result == 100  # dify_config.APP_MAX_ACTIVE_REQUESTS
+        assert result == 100  # nexusai_config.APP_MAX_ACTIVE_REQUESTS
 
     def test_generate_with_exception_cleanup(
         self, db_session_with_containers: Session, mock_external_service_dependencies

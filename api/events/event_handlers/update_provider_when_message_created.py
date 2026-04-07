@@ -8,7 +8,7 @@ from sqlalchemy import update
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.entities.app_invoke_entities import AgentChatAppGenerateEntity, ChatAppGenerateEntity
 from core.entities.provider_entities import ProviderQuotaType, QuotaUnit, SystemConfiguration
 from events.message_event import message_was_created
@@ -219,7 +219,7 @@ def _calculate_quota_usage(
             tokens = message.message_tokens + message.answer_tokens
             return tokens
         if quota_unit == QuotaUnit.CREDITS:
-            tokens = dify_config.get_model_credits(model_name)
+            tokens = nexusai_config.get_model_credits(model_name)
             return tokens
         elif quota_unit == QuotaUnit.TIMES:
             return 1

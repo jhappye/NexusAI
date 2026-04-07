@@ -5,7 +5,7 @@ import orjson
 from pydantic import BaseModel
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.keyword.jieba.jieba_keyword_table_handler import JiebaKeywordTableHandler
 from core.rag.datasource.keyword.keyword_base import BaseKeyword
 from core.rag.models.document import Document
@@ -156,7 +156,7 @@ class Jieba(BaseKeyword):
             if keyword_table_dict:
                 return dict(keyword_table_dict["__data__"]["table"])
         else:
-            keyword_data_source_type = dify_config.KEYWORD_DATA_SOURCE_TYPE
+            keyword_data_source_type = nexusai_config.KEYWORD_DATA_SOURCE_TYPE
             dataset_keyword_table = DatasetKeywordTable(
                 dataset_id=self.dataset.id,
                 keyword_table="",

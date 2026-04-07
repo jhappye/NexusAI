@@ -23,7 +23,7 @@ from core.ops.entities.trace_entity import (
     TraceTaskName,
     WorkflowTraceInfo,
 )
-from core.repositories import DifyCoreRepositoryFactory
+from core.repositories import NexusAICoreRepositoryFactory
 from extensions.ext_database import db
 from models import EndUser, MessageFile, WorkflowNodeExecutionTriggeredFrom
 
@@ -40,7 +40,7 @@ def wrap_dict(key_name, data):
 
 def wrap_metadata(metadata, **kwargs):
     """Add common metatada to all Traces and Spans"""
-    metadata["created_from"] = "dify"
+    metadata["created_from"] = "nexusai"
 
     metadata.update(kwargs)
 
@@ -50,7 +50,7 @@ def wrap_metadata(metadata, **kwargs):
 def _seed_to_uuid4(seed: str) -> str:
     """Derive a deterministic UUID4-formatted string from an arbitrary seed.
 
-    uuid4_to_uuid7 requires a valid UUID v4 string, but some Dify identifiers
+    uuid4_to_uuid7 requires a valid UUID v4 string, but some NexusAI identifiers
     are not UUIDs (e.g. a workflow_run_id with a "-root" suffix appended to
     distinguish the root span from the trace).  This helper hashes the seed
     with MD5 and patches the version/variant bits so the result satisfies the
@@ -64,7 +64,7 @@ def _seed_to_uuid4(seed: str) -> str:
 
 
 def prepare_opik_uuid(user_datetime: datetime | None, user_uuid: str | None):
-    """Opik needs UUIDv7 while Dify uses UUIDv4 for identifier of most
+    """Opik needs UUIDv7 while NexusAI uses UUIDv4 for identifier of most
     messages and objects. The type-hints of BaseTraceInfo indicates that
     objects start_time and message_id could be null which means we cannot map
     it to a UUIDv7. Given that we have no way to identify that object
@@ -117,17 +117,17 @@ class OpikDataTrace(BaseTraceInstance):
         )
 
         if trace_info.message_id:
-            dify_trace_id = trace_info.trace_id or trace_info.message_id
+            nexusai_trace_id = trace_info.trace_id or trace_info.message_id
             trace_name = TraceTaskName.MESSAGE_TRACE
             trace_tags = ["message", "workflow"]
             root_span_seed = trace_info.workflow_run_id
         else:
-            dify_trace_id = trace_info.trace_id or trace_info.workflow_run_id
+            nexusai_trace_id = trace_info.trace_id or trace_info.workflow_run_id
             trace_name = TraceTaskName.WORKFLOW_TRACE
             trace_tags = ["workflow"]
             root_span_seed = _seed_to_uuid4(trace_info.workflow_run_id + "-root")
 
-        opik_trace_id = prepare_opik_uuid(trace_info.start_time, dify_trace_id)
+        opik_trace_id = prepare_opik_uuid(trace_info.start_time, nexusai_trace_id)
 
         trace_data = {
             "id": opik_trace_id,
@@ -168,7 +168,7 @@ class OpikDataTrace(BaseTraceInstance):
 
         service_account = self.get_service_account_with_tenant(app_id)
 
-        workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+        workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
             session_factory=session_factory,
             user=service_account,
             app_id=app_id,
@@ -281,7 +281,7 @@ class OpikDataTrace(BaseTraceInstance):
             return
 
         metadata = trace_info.metadata
-        dify_trace_id = trace_info.trace_id or trace_info.message_id
+        nexusai_trace_id = trace_info.trace_id or trace_info.message_id
 
         user_id = message_data.from_account_id
         metadata["user_id"] = user_id
@@ -294,7 +294,7 @@ class OpikDataTrace(BaseTraceInstance):
                 metadata["end_user_id"] = end_user_id
 
         trace_data = {
-            "id": prepare_opik_uuid(trace_info.start_time, dify_trace_id),
+            "id": prepare_opik_uuid(trace_info.start_time, nexusai_trace_id),
             "name": TraceTaskName.MESSAGE_TRACE,
             "start_time": trace_info.start_time,
             "end_time": trace_info.end_time,

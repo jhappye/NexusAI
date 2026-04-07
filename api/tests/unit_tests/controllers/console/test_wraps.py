@@ -94,7 +94,7 @@ class TestEditionChecks:
             return "cloud_success"
 
         # Act
-        with patch("controllers.console.wraps.dify_config.EDITION", "CLOUD"):
+        with patch("controllers.console.wraps.nexusai_config.EDITION", "CLOUD"):
             result = cloud_view()
 
         # Assert
@@ -111,7 +111,7 @@ class TestEditionChecks:
 
         # Act & Assert
         with app.test_request_context():
-            with patch("controllers.console.wraps.dify_config.EDITION", "SELF_HOSTED"):
+            with patch("controllers.console.wraps.nexusai_config.EDITION", "SELF_HOSTED"):
                 with pytest.raises(Exception) as exc_info:
                     cloud_view()
                 assert exc_info.value.code == 404
@@ -125,7 +125,7 @@ class TestEditionChecks:
             return "enterprise_success"
 
         # Act
-        with patch("controllers.console.wraps.dify_config.ENTERPRISE_ENABLED", True):
+        with patch("controllers.console.wraps.nexusai_config.ENTERPRISE_ENABLED", True):
             result = enterprise_view()
 
         # Assert
@@ -140,7 +140,7 @@ class TestEditionChecks:
             return "self_hosted_success"
 
         # Act
-        with patch("controllers.console.wraps.dify_config.EDITION", "SELF_HOSTED"):
+        with patch("controllers.console.wraps.nexusai_config.EDITION", "SELF_HOSTED"):
             result = self_hosted_view()
 
         # Assert
@@ -317,7 +317,7 @@ class TestSystemSetup:
             return "admin_success"
 
         # Act
-        with patch("controllers.console.wraps.dify_config.EDITION", "SELF_HOSTED"):
+        with patch("controllers.console.wraps.nexusai_config.EDITION", "SELF_HOSTED"):
             result = admin_view()
 
         # Assert
@@ -336,7 +336,7 @@ class TestSystemSetup:
             return "admin_success"
 
         # Act & Assert
-        with patch("controllers.console.wraps.dify_config.EDITION", "SELF_HOSTED"):
+        with patch("controllers.console.wraps.nexusai_config.EDITION", "SELF_HOSTED"):
             with pytest.raises(NotInitValidateError):
                 admin_view()
 
@@ -353,7 +353,7 @@ class TestSystemSetup:
             return "admin_success"
 
         # Act & Assert
-        with patch("controllers.console.wraps.dify_config.EDITION", "SELF_HOSTED"):
+        with patch("controllers.console.wraps.nexusai_config.EDITION", "SELF_HOSTED"):
             with pytest.raises(NotSetupError):
                 admin_view()
 

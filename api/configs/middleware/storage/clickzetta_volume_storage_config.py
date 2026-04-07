@@ -39,7 +39,7 @@ class ClickZettaVolumeStorageConfig(BaseSettings):
 
     CLICKZETTA_VOLUME_SCHEMA: str = Field(
         description="ClickZetta schema name",
-        default="dify",
+        default="nexusai",
     )
 
     CLICKZETTA_VOLUME_TYPE: str = Field(
@@ -57,7 +57,7 @@ class ClickZettaVolumeStorageConfig(BaseSettings):
         default="dataset_",
     )
 
-    CLICKZETTA_VOLUME_DIFY_PREFIX: str = Field(
-        description="Directory prefix for User Volume to organize Dify files",
-        default="dify_km",
+    CLICKZETTA_VOLUME_NEXUSAI_PREFIX: str = Field(
+        description="Directory prefix for User Volume to organize NexusAI files",
+        default="nexusai_km",
     )

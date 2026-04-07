@@ -6,7 +6,7 @@ from typing import Any, cast
 import httpx
 from sqlalchemy import update
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.extractor.extractor_base import BaseExtractor
 from core.rag.models.document import Document
 from extensions.ext_database import db
@@ -59,7 +59,7 @@ class NotionExtractor(BaseExtractor):
                     ),
                     e,
                 )
-                integration_token = dify_config.NOTION_INTEGRATION_TOKEN
+                integration_token = nexusai_config.NOTION_INTEGRATION_TOKEN
                 if integration_token is None:
                     raise ValueError(
                         "Must specify `integration_token` or set environment variable `NOTION_INTEGRATION_TOKEN`."

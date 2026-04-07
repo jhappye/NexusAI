@@ -24,10 +24,10 @@ type ModelListItemProps = {
   provider: ModelProvider
   isConfigurable: boolean
   onChange?: (provider: string) => void
-  onModifyLoadBalancing?: (model: ModelItem) => void
+  onMonexusaiLoadBalancing?: (model: ModelItem) => void
 }
 
-const ModelListItem = ({ model, provider, isConfigurable, onChange, onModifyLoadBalancing }: ModelListItemProps) => {
+const ModelListItem = ({ model, provider, isConfigurable, onChange, onMonexusaiLoadBalancing }: ModelListItemProps) => {
   const { t } = useTranslation()
   const { plan } = useProviderContext()
   const modelLoadBalancingEnabled = useProviderContextSelector(state => state.modelLoadBalancingEnabled)
@@ -92,7 +92,7 @@ const ModelListItem = ({ model, provider, isConfigurable, onChange, onModifyLoad
         {
           (isCurrentWorkspaceManager && (modelLoadBalancingEnabled || plan.type === Plan.sandbox) && !model.deprecated && [ModelStatusEnum.active, ModelStatusEnum.disabled].includes(model.status)) && (
             <ConfigModel
-              onClick={() => onModifyLoadBalancing?.(model)}
+              onClick={() => onMonexusaiLoadBalancing?.(model)}
               loadBalancingEnabled={model.load_balancing_enabled}
               loadBalancingInvalid={model.has_invalid_load_balancing_configs}
               credentialRemoved={model.status === ModelStatusEnum.credentialRemoved}

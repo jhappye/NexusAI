@@ -10,7 +10,7 @@ from services.oauth_server import OAUTH_ACCESS_TOKEN_EXPIRES_IN
 from tests.test_containers_integration_tests.controllers.console.helpers import (
     authenticate_console_client,
     create_console_account_and_tenant,
-    ensure_dify_setup,
+    ensure_nexusai_setup,
 )
 
 
@@ -29,7 +29,7 @@ def test_oauth_provider_successful_post(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with patch(
         "controllers.console.auth.oauth_server.OAuthServerService.get_oauth_provider_app",
@@ -52,7 +52,7 @@ def test_oauth_provider_invalid_redirect_uri(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with patch(
         "controllers.console.auth.oauth_server.OAuthServerService.get_oauth_provider_app",
@@ -73,7 +73,7 @@ def test_oauth_provider_invalid_client_id(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     response = test_client_with_containers.post(
         "/console/api/oauth/provider",
@@ -117,7 +117,7 @@ def test_oauth_token_authorization_code_grant(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with (
         patch(
@@ -153,7 +153,7 @@ def test_oauth_token_authorization_code_grant_missing_code(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with patch(
         "controllers.console.auth.oauth_server.OAuthServerService.get_oauth_provider_app",
@@ -177,7 +177,7 @@ def test_oauth_token_authorization_code_grant_invalid_secret(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with patch(
         "controllers.console.auth.oauth_server.OAuthServerService.get_oauth_provider_app",
@@ -202,7 +202,7 @@ def test_oauth_token_authorization_code_grant_invalid_redirect_uri(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with patch(
         "controllers.console.auth.oauth_server.OAuthServerService.get_oauth_provider_app",
@@ -227,7 +227,7 @@ def test_oauth_token_refresh_token_grant(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with (
         patch(
@@ -257,7 +257,7 @@ def test_oauth_token_refresh_token_grant_missing_token(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with patch(
         "controllers.console.auth.oauth_server.OAuthServerService.get_oauth_provider_app",
@@ -276,7 +276,7 @@ def test_oauth_token_invalid_grant_type(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with patch(
         "controllers.console.auth.oauth_server.OAuthServerService.get_oauth_provider_app",
@@ -295,7 +295,7 @@ def test_oauth_account_successful_retrieval(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
     account, _tenant = create_console_account_and_tenant(db_session_with_containers)
     account.avatar = "avatar_url"
     db_session_with_containers.commit()
@@ -330,7 +330,7 @@ def test_oauth_account_missing_authorization_header(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with patch(
         "controllers.console.auth.oauth_server.OAuthServerService.get_oauth_provider_app",
@@ -349,7 +349,7 @@ def test_oauth_account_invalid_authorization_header_format(
     db_session_with_containers: Session,
     test_client_with_containers: FlaskClient,
 ) -> None:
-    ensure_dify_setup(db_session_with_containers)
+    ensure_nexusai_setup(db_session_with_containers)
 
     with patch(
         "controllers.console.auth.oauth_server.OAuthServerService.get_oauth_provider_app",

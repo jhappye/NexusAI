@@ -8,7 +8,7 @@ import pytest
 from graphon.runtime import VariablePool
 from sqlalchemy.engine import Engine
 
-from configs import dify_config
+from configs import nexusai_config
 from core.workflow.human_input_compat import (
     EmailDeliveryConfig,
     EmailDeliveryMethod,
@@ -41,15 +41,15 @@ def _make_valid_email_config():
 
 
 def test_build_form_link():
-    with patch.object(dify_config, "APP_WEB_URL", "http://example.com/"):
+    with patch.object(nexusai_config, "APP_WEB_URL", "http://example.com/"):
         assert _build_form_link("token123") == "http://example.com/form/token123"
 
-    with patch.object(dify_config, "APP_WEB_URL", "http://example.com"):
+    with patch.object(nexusai_config, "APP_WEB_URL", "http://example.com"):
         assert _build_form_link("token123") == "http://example.com/form/token123"
 
     assert _build_form_link(None) is None
 
-    with patch.object(dify_config, "APP_WEB_URL", None):
+    with patch.object(nexusai_config, "APP_WEB_URL", None):
         assert _build_form_link("token123") is None
 
 
@@ -322,7 +322,7 @@ class TestEmailDeliveryTestHandler:
             recipients=[DeliveryTestEmailRecipient(email="test@example.com", form_token="token123")],
         )
 
-        with patch.object(dify_config, "APP_WEB_URL", "http://example.com"):
+        with patch.object(nexusai_config, "APP_WEB_URL", "http://example.com"):
             subs = EmailDeliveryTestHandler._build_substitutions(context=context, recipient_email="test@example.com")
 
         assert subs["node_title"] == "title"

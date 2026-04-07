@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import ActionButton from '@/app/components/base/action-button'
 import ViewFormDropdown from '@/app/components/base/chat/embedded-chatbot/inputs-form/view-form-dropdown'
 import Divider from '@/app/components/base/divider'
-import DifyLogo from '@/app/components/base/logo/dify-logo'
+import NexusAILogo from '@/app/components/base/logo/nexusai-logo'
 import Tooltip from '@/app/components/base/tooltip'
 import { useGlobalPublicStore } from '@/context/global-public-context'
 import { cn } from '@/utils/classnames'
@@ -48,13 +48,13 @@ const Header: FC<IHeaderProps> = ({
 
   const handleMessageReceived = useCallback((event: MessageEvent) => {
     let currentParentOrigin = parentOrigin
-    if (!currentParentOrigin && event.data.type === 'dify-chatbot-config') {
+    if (!currentParentOrigin && event.data.type === 'nexusai-chatbot-config') {
       currentParentOrigin = event.origin
       setParentOrigin(event.origin)
     }
     if (event.origin !== currentParentOrigin)
       return
-    if (event.data.type === 'dify-chatbot-config')
+    if (event.data.type === 'nexusai-chatbot-config')
       setShowToggleExpandButton(event.data.payload.isToggledByButton && !event.data.payload.isDraggable)
   }, [parentOrigin])
 
@@ -67,7 +67,7 @@ const Header: FC<IHeaderProps> = ({
 
     // Security: Use document.referrer to get parent origin
     const targetOrigin = document.referrer ? new URL(document.referrer).origin : '*'
-    window.parent.postMessage({ type: 'dify-chatbot-iframe-ready' }, targetOrigin)
+    window.parent.postMessage({ type: 'nexusai-chatbot-iframe-ready' }, targetOrigin)
 
     return () => window.removeEventListener('message', listener)
   }, [isIframe, handleMessageReceived])
@@ -77,7 +77,7 @@ const Header: FC<IHeaderProps> = ({
       return
     setExpanded(!expanded)
     window.parent.postMessage({
-      type: 'dify-chatbot-expand-change',
+      type: 'nexusai-chatbot-expand-change',
     }, parentOrigin)
   }, [isIframe, parentOrigin, showToggleExpandButton, expanded])
 
@@ -100,7 +100,7 @@ const Header: FC<IHeaderProps> = ({
                     ? <img src={systemFeatures.branding.workspace_logo} alt="logo" className="block h-5 w-auto" />
                     : appData?.custom_config?.replace_webapp_logo
                       ? <img src={`${appData?.custom_config?.replace_webapp_logo}`} alt="logo" className="block h-5 w-auto" />
-                      : <DifyLogo size="small" />
+                      : <NexusAILogo size="small" />
                 }
               </div>
             )}

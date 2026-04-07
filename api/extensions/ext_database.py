@@ -4,7 +4,7 @@ import gevent
 from sqlalchemy import event
 from sqlalchemy.pool import Pool
 
-from dify_app import DifyApp
+from nexusai_app import NexusAIApp
 from models.engine import db
 
 logger = logging.getLogger(__name__)
@@ -50,7 +50,7 @@ def _setup_gevent_compatibility():
     _gevent_compatibility_setup = True
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     db.init_app(app)
     _setup_gevent_compatibility()
 

@@ -18,14 +18,14 @@ const InfoPanel = () => {
           </span>
           <span className="system-sm-regular text-text-tertiary">
             {t('connectDatasetIntro.content.front', { ns: 'dataset' })}
-            <a className="system-sm-regular ml-1 text-text-accent" href={docLink('/use-dify/knowledge/external-knowledge-api')} target="_blank" rel="noopener noreferrer">
+            <a className="system-sm-regular ml-1 text-text-accent" href={docLink('/use-nexusai/knowledge/external-knowledge-api')} target="_blank" rel="noopener noreferrer">
               {t('connectDatasetIntro.content.link', { ns: 'dataset' })}
             </a>
             {t('connectDatasetIntro.content.end', { ns: 'dataset' })}
           </span>
           <a
             className="system-sm-regular self-stretch text-text-accent"
-            href={docLink('/use-dify/knowledge/connect-external-knowledge-base')}
+            href={docLink('/use-nexusai/knowledge/connect-external-knowledge-base')}
             target="_blank"
             rel="noopener noreferrer"
           >

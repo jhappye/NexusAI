@@ -91,7 +91,7 @@ class TestNotionExtractorAuthentication:
             plugin_id="langgenius/notion_datasource",
         )
 
-    @patch("core.rag.extractor.notion_extractor.dify_config")
+    @patch("core.rag.extractor.notion_extractor.nexusai_config")
     @patch("core.rag.extractor.notion_extractor.NotionExtractor._get_access_token")
     def test_init_with_integration_token_fallback(self, mock_get_token, mock_config, mock_document_model):
         """Test NotionExtractor falls back to integration token when credential not found."""
@@ -112,7 +112,7 @@ class TestNotionExtractorAuthentication:
         # Assert
         assert extractor._notion_access_token == "integration-token-fallback"
 
-    @patch("core.rag.extractor.notion_extractor.dify_config")
+    @patch("core.rag.extractor.notion_extractor.nexusai_config")
     @patch("core.rag.extractor.notion_extractor.NotionExtractor._get_access_token")
     def test_init_missing_credentials_raises_error(self, mock_get_token, mock_config, mock_document_model):
         """Test NotionExtractor raises error when no credentials available."""

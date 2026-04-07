@@ -7,7 +7,7 @@ from graphon.model_runtime.utils.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 from werkzeug.exceptions import Forbidden, NotFound
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import register_schema_models
 from controllers.console import console_ns
 from controllers.console.wraps import account_initialization_required, edit_permission_required, setup_required
@@ -88,7 +88,7 @@ class DatasourcePluginOAuthAuthorizationUrl(Resource):
             credential_id=credential_id,
         )
         oauth_handler = OAuthHandler()
-        redirect_uri = f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider_id}/datasource/callback"
+        redirect_uri = f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider_id}/datasource/callback"
         authorization_url_response = oauth_handler.get_authorization_url(
             tenant_id=tenant_id,
             user_id=current_user.id,
@@ -131,7 +131,7 @@ class DatasourceOAuthCallback(Resource):
         )
         if not oauth_client_params:
             raise NotFound()
-        redirect_uri = f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider_id}/datasource/callback"
+        redirect_uri = f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider_id}/datasource/callback"
         oauth_handler = OAuthHandler()
         oauth_response = oauth_handler.get_credentials(
             tenant_id=tenant_id,
@@ -162,7 +162,7 @@ class DatasourceOAuthCallback(Resource):
                 expire_at=oauth_response.expires_at,
                 credentials=dict(oauth_response.credentials),
             )
-        return redirect(f"{dify_config.CONSOLE_WEB_URL}/oauth-callback")
+        return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/oauth-callback")
 
 
 @console_ns.route("/auth/plugin/datasource/<path:provider_id>")

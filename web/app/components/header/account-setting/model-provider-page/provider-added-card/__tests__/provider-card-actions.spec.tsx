@@ -206,7 +206,7 @@ describe('ProviderCardActions', () => {
         meta: {
           repo: 'langgenius/provider-plugin',
           version: '1.0.0',
-          package: 'provider-plugin.difypkg',
+          package: 'provider-plugin.nexusaipkg',
         },
       })}
       />,

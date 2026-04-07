@@ -28,7 +28,7 @@ class AsyncWorkflowServiceTestDataFactory:
             tenant_id=tenant_id,
             workflow_id=workflow_id,
             root_node_id=root_node_id,
-            inputs={"name": "dify"},
+            inputs={"name": "nexusai"},
             files=[],
             trigger_type=AppTriggerType.UNKNOWN,
             trigger_from=WorkflowRunTriggeredFrom.APP_RUN,

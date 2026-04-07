@@ -171,7 +171,7 @@ describe('Marketplace', () => {
         tags: 'tag-a,tag-b',
         theme: undefined,
       })
-      const marketplaceLink = screen.getByRole('link', { name: /plugin.marketplace.difyMarketplace/i })
+      const marketplaceLink = screen.getByRole('link', { name: /plugin.marketplace.nexusaiMarketplace/i })
       expect(marketplaceLink).toHaveAttribute('href', 'https://marketplace.test/market')
     })
   })

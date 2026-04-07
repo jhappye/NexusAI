@@ -299,12 +299,12 @@ def test_qdrant_factory_paths(qdrant_module, monkeypatch):
     )
     monkeypatch.setattr(qdrant_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
     monkeypatch.setattr(qdrant_module, "current_app", SimpleNamespace(config=SimpleNamespace(root_path="/root")))
-    monkeypatch.setattr(qdrant_module.dify_config, "QDRANT_URL", "http://localhost:6333")
-    monkeypatch.setattr(qdrant_module.dify_config, "QDRANT_API_KEY", "api-key")
-    monkeypatch.setattr(qdrant_module.dify_config, "QDRANT_CLIENT_TIMEOUT", 20)
-    monkeypatch.setattr(qdrant_module.dify_config, "QDRANT_GRPC_PORT", 6334)
-    monkeypatch.setattr(qdrant_module.dify_config, "QDRANT_GRPC_ENABLED", False)
-    monkeypatch.setattr(qdrant_module.dify_config, "QDRANT_REPLICATION_FACTOR", 1)
+    monkeypatch.setattr(qdrant_module.nexusai_config, "QDRANT_URL", "http://localhost:6333")
+    monkeypatch.setattr(qdrant_module.nexusai_config, "QDRANT_API_KEY", "api-key")
+    monkeypatch.setattr(qdrant_module.nexusai_config, "QDRANT_CLIENT_TIMEOUT", 20)
+    monkeypatch.setattr(qdrant_module.nexusai_config, "QDRANT_GRPC_PORT", 6334)
+    monkeypatch.setattr(qdrant_module.nexusai_config, "QDRANT_GRPC_ENABLED", False)
+    monkeypatch.setattr(qdrant_module.nexusai_config, "QDRANT_REPLICATION_FACTOR", 1)
 
     with patch.object(qdrant_module, "QdrantVector", return_value="vector") as vector_cls:
         result = factory.init_vector(dataset, attributes=[], embeddings=MagicMock())

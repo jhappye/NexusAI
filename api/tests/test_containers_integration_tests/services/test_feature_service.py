@@ -94,7 +94,7 @@ class TestFeatureService:
         # Arrange: Setup test data with proper config mocking
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.CAN_REPLACE_LOGO = True
@@ -169,7 +169,7 @@ class TestFeatureService:
         # Arrange: Setup sandbox plan mock with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = False
@@ -235,7 +235,7 @@ class TestFeatureService:
         # Arrange: Setup test data with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
 
             # Act: Execute the method under test
@@ -268,7 +268,7 @@ class TestFeatureService:
         # Arrange: Setup test data with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = True
             mock_config.ENABLE_EMAIL_CODE_LOGIN = True
@@ -340,7 +340,7 @@ class TestFeatureService:
         - The response structure adheres to the public schema for unauthenticated clients.
         """
         # Arrange: Setup test data with exact same config as success test
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = True
             mock_config.ENABLE_EMAIL_CODE_LOGIN = True
@@ -395,7 +395,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup basic config mock (no enterprise)
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = True
@@ -429,7 +429,7 @@ class TestFeatureService:
             # Verify marketplace configuration
             assert result.enable_marketplace is False
 
-            # Verify plugin package size (uses default value from dify_config)
+            # Verify plugin package size (uses default value from nexusai_config)
             assert result.max_plugin_package_size == 15728640
 
     def test_get_features_billing_disabled(self, db_session_with_containers, mock_external_service_dependencies):
@@ -443,7 +443,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup billing disabled mock
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = False
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True
@@ -499,7 +499,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup billing disabled mock
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = False
 
             tenant_id = self._create_test_tenant_id()
@@ -530,7 +530,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup enterprise only mock
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = False
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.CAN_REPLACE_LOGO = False
@@ -591,7 +591,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup enterprise disabled mock
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.MARKETPLACE_ENABLED = True
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -625,7 +625,7 @@ class TestFeatureService:
             # Verify marketplace configuration
             assert result.enable_marketplace is True
 
-            # Verify plugin package size (uses default value from dify_config)
+            # Verify plugin package size (uses default value from nexusai_config)
             assert result.max_plugin_package_size == 15728640
 
             # Verify default license status
@@ -647,7 +647,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup no tenant ID scenario
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True
@@ -695,7 +695,7 @@ class TestFeatureService:
         # Arrange: Setup partial billing info mock with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True
@@ -755,7 +755,7 @@ class TestFeatureService:
         # Arrange: Setup edge case vector space mock with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True
@@ -815,7 +815,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup edge case webapp auth mock with proper config
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -872,7 +872,7 @@ class TestFeatureService:
         # Arrange: Setup edge case members quota mock with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True
@@ -933,7 +933,7 @@ class TestFeatureService:
         """
 
         # Test case 1: Official only scope
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -956,7 +956,7 @@ class TestFeatureService:
             assert result.plugin_installation_permission.restrict_to_marketplace_only is True
 
         # Test case 2: All plugins scope
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -976,7 +976,7 @@ class TestFeatureService:
             assert result.plugin_installation_permission.restrict_to_marketplace_only is False
 
         # Test case 3: Specific partners scope
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -999,7 +999,7 @@ class TestFeatureService:
             assert result.plugin_installation_permission.restrict_to_marketplace_only is False
 
         # Test case 4: None scope
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -1036,7 +1036,7 @@ class TestFeatureService:
             # Missing WorkspaceMembers key
         }
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = False
             mock_config.ENTERPRISE_ENABLED = True
 
@@ -1071,7 +1071,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup inactive license mock with proper config
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -1125,7 +1125,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup partial enterprise info mock with proper config
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -1195,7 +1195,7 @@ class TestFeatureService:
         # Arrange: Setup edge case limits mock with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True
@@ -1252,7 +1252,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup edge case protocols mock with proper config
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -1315,7 +1315,7 @@ class TestFeatureService:
             "annotation_quota_limit": {"size": 200, "limit": 500},
         }
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.EDUCATION_ENABLED = True
 
             # Act: Execute the method under test
@@ -1407,7 +1407,7 @@ class TestFeatureService:
             "WorkspaceMembers": {"used": 0, "limit": 0, "enabled": False}
         }
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = False
             mock_config.ENTERPRISE_ENABLED = True
 
@@ -1440,7 +1440,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup expired license mock with proper config
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -1496,7 +1496,7 @@ class TestFeatureService:
         # Arrange: Setup edge case docs processing mock with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True
@@ -1552,7 +1552,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup edge case branding mock with proper config
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -1616,7 +1616,7 @@ class TestFeatureService:
         # Arrange: Setup edge case annotation quota mock with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True
@@ -1678,7 +1678,7 @@ class TestFeatureService:
         # Arrange: Setup edge case documents upload mock with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True
@@ -1741,7 +1741,7 @@ class TestFeatureService:
         - Return value correctness and structure
         """
         # Arrange: Setup lost license mock with proper config
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
             mock_config.MARKETPLACE_ENABLED = False
             mock_config.ENABLE_EMAIL_CODE_LOGIN = False
@@ -1794,7 +1794,7 @@ class TestFeatureService:
         # Arrange: Setup education disabled mock with proper config
         tenant_id = self._create_test_tenant_id()
 
-        with patch("services.feature_service.dify_config") as mock_config:
+        with patch("services.feature_service.nexusai_config") as mock_config:
             mock_config.BILLING_ENABLED = True
             mock_config.ENTERPRISE_ENABLED = False
             mock_config.CAN_REPLACE_LOGO = True

@@ -124,10 +124,10 @@ class ArchivedWorkflowRunDeletion:
         session: Session,
         runs: Sequence[WorkflowRun],
     ) -> tuple[int, int]:
-        from repositories.factory import DifyAPIRepositoryFactory
+        from repositories.factory import NexusAIAPIRepositoryFactory
 
         run_ids = [run.id for run in runs]
-        repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(
+        repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(
             session_maker=sessionmaker(bind=session.get_bind(), expire_on_commit=False)
         )
         return repo.delete_by_runs(session, run_ids)
@@ -136,9 +136,9 @@ class ArchivedWorkflowRunDeletion:
         if self.workflow_run_repo is not None:
             return self.workflow_run_repo
 
-        from repositories.factory import DifyAPIRepositoryFactory
+        from repositories.factory import NexusAIAPIRepositoryFactory
 
-        self.workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(
+        self.workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(
             sessionmaker(bind=db.engine, expire_on_commit=False)
         )
         return self.workflow_run_repo

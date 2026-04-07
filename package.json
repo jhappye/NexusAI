@@ -1,5 +1,5 @@
 {
-  "name": "dify",
+  "name": "nexusai",
   "private": true,
   "scripts": {
     "prepare": "vp config"

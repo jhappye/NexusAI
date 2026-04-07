@@ -11,7 +11,7 @@ from flask_restx import Resource, reqparse
 from sqlalchemy import select
 from werkzeug.exceptions import Forbidden
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.web import web_ns
 from controllers.web.error import NotFoundError, WebFormRateLimitExceededError
 from controllers.web.site import serialize_app_site_payload
@@ -25,13 +25,13 @@ logger = logging.getLogger(__name__)
 
 _FORM_SUBMIT_RATE_LIMITER = RateLimiter(
     prefix="web_form_submit_rate_limit",
-    max_attempts=dify_config.WEB_FORM_SUBMIT_RATE_LIMIT_MAX_ATTEMPTS,
-    time_window=dify_config.WEB_FORM_SUBMIT_RATE_LIMIT_WINDOW_SECONDS,
+    max_attempts=nexusai_config.WEB_FORM_SUBMIT_RATE_LIMIT_MAX_ATTEMPTS,
+    time_window=nexusai_config.WEB_FORM_SUBMIT_RATE_LIMIT_WINDOW_SECONDS,
 )
 _FORM_ACCESS_RATE_LIMITER = RateLimiter(
     prefix="web_form_access_rate_limit",
-    max_attempts=dify_config.WEB_FORM_SUBMIT_RATE_LIMIT_MAX_ATTEMPTS,
-    time_window=dify_config.WEB_FORM_SUBMIT_RATE_LIMIT_WINDOW_SECONDS,
+    max_attempts=nexusai_config.WEB_FORM_SUBMIT_RATE_LIMIT_MAX_ATTEMPTS,
+    time_window=nexusai_config.WEB_FORM_SUBMIT_RATE_LIMIT_WINDOW_SECONDS,
 )
 
 

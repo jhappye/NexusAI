@@ -7,7 +7,7 @@ from pydantic import TypeAdapter
 from sqlalchemy import delete, select
 from sqlalchemy.engine import CursorResult
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper import encrypter
 from core.plugin.entities.plugin_daemon import CredentialType
 from core.plugin.impl.plugin import PluginInstaller
@@ -43,7 +43,7 @@ def setup_system_tool_oauth_client(provider, client_params):
         click.echo(click.style("Client params validated successfully.", fg="green"))
 
         click.echo(click.style(f"Encrypting client params: {client_params}", fg="yellow"))
-        click.echo(click.style(f"Using SECRET_KEY: `{dify_config.SECRET_KEY}`", fg="yellow"))
+        click.echo(click.style(f"Using SECRET_KEY: `{nexusai_config.SECRET_KEY}`", fg="yellow"))
         oauth_client_params = encrypt_system_oauth_params(client_params_dict)
         click.echo(click.style("Client params encrypted successfully.", fg="green"))
     except Exception as e:
@@ -93,7 +93,7 @@ def setup_system_trigger_oauth_client(provider, client_params):
         click.echo(click.style("Client params validated successfully.", fg="green"))
 
         click.echo(click.style(f"Encrypting client params: {client_params}", fg="yellow"))
-        click.echo(click.style(f"Using SECRET_KEY: `{dify_config.SECRET_KEY}`", fg="yellow"))
+        click.echo(click.style(f"Using SECRET_KEY: `{nexusai_config.SECRET_KEY}`", fg="yellow"))
         oauth_client_params = encrypt_system_oauth_params(client_params_dict)
         click.echo(click.style("Client params encrypted successfully.", fg="green"))
     except Exception as e:

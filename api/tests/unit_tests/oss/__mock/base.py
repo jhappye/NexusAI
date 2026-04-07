@@ -6,17 +6,17 @@ from extensions.storage.base_storage import BaseStorage
 
 
 def get_example_folder() -> str:
-    return "~/dify"
+    return "~/nexusai"
 
 
 def get_example_bucket() -> str:
-    return "dify"
+    return "nexusai"
 
 
 def get_opendal_bucket() -> str:
     import os
 
-    return os.environ.get("OPENDAL_FS_ROOT", "/tmp/dify-storage")
+    return os.environ.get("OPENDAL_FS_ROOT", "/tmp/nexusai-storage")
 
 
 def get_example_filename() -> str:

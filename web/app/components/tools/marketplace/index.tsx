@@ -83,7 +83,7 @@ const Marketplace = ({
               className="system-sm-medium ml-1 flex items-center text-text-accent"
               target="_blank"
             >
-              {t('marketplace.difyMarketplace', { ns: 'plugin' })}
+              {t('marketplace.nexusaiMarketplace', { ns: 'plugin' })}
               <RiArrowRightUpLine className="h-4 w-4" />
             </a>
           </div>

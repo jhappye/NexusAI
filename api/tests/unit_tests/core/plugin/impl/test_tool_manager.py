@@ -18,7 +18,7 @@ class TestPluginToolManager:
     def test_fetch_tool_providers(self, mocker):
         manager = PluginToolManager()
         provider = _tool_provider("remote")
-        mocker.patch("core.plugin.impl.tool.resolve_dify_schema_refs", return_value={"resolved": True})
+        mocker.patch("core.plugin.impl.tool.resolve_nexusai_schema_refs", return_value={"resolved": True})
 
         def fake_request(method, path, type_, **kwargs):
             transformer = kwargs["transformer"]
@@ -47,7 +47,7 @@ class TestPluginToolManager:
     def test_fetch_tool_provider(self, mocker):
         manager = PluginToolManager()
         provider = _tool_provider("provider")
-        mocker.patch("core.plugin.impl.tool.resolve_dify_schema_refs", return_value={"resolved": True})
+        mocker.patch("core.plugin.impl.tool.resolve_nexusai_schema_refs", return_value={"resolved": True})
 
         def fake_request(method, path, type_, **kwargs):
             transformer = kwargs["transformer"]

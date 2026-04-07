@@ -92,7 +92,7 @@ const StartBlocks = ({
             <div className="system-xs-regular mb-1 mt-1 text-text-tertiary">
               {t('author', { ns: 'tools' })}
               {' '}
-              {t('difyTeam', { ns: 'workflow' })}
+              {t('nexusaiTeam', { ns: 'workflow' })}
             </div>
           )}
         </div>

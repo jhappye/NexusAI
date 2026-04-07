@@ -254,7 +254,7 @@ class Workflow(Base):  # bug
         # TODO(QuantumGhost): Consider caching `graph_dict` to avoid repeated JSON decoding.
         #
         # Using `functools.cached_property` could help, but some code in the codebase may
-        # modify the returned dict, which can cause issues elsewhere.
+        # monexusai the returned dict, which can cause issues elsewhere.
         #
         # For example, changing this property to a cached property led to errors like the
         # following when single stepping an `Iteration` node:
@@ -1253,10 +1253,10 @@ class WorkflowAppLog(TypeBase):
         if self.workflow_run_id:
             from sqlalchemy.orm import sessionmaker
 
-            from repositories.factory import DifyAPIRepositoryFactory
+            from repositories.factory import NexusAIAPIRepositoryFactory
 
             session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-            repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+            repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
             return repo.get_workflow_run_by_id_without_tenant(run_id=self.workflow_run_id)
 
         return None
@@ -1694,7 +1694,7 @@ class WorkflowDraftVariable(Base):
         This method caches the result, so repeated calls will return the same
         object instance without re-parsing the serialized data.
 
-        If you need to modify the returned `Segment`, use `value.model_copy()`
+        If you need to monexusai the returned `Segment`, use `value.model_copy()`
         to create a copy first to avoid affecting the cached instance.
 
         For more information about the caching mechanism, see the documentation

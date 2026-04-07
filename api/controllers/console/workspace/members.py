@@ -5,7 +5,7 @@ from flask_restx import Resource
 from pydantic import BaseModel, Field, TypeAdapter
 
 import services
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import register_enum_models, register_schema_models
 from controllers.console import console_ns
 from controllers.console.auth.error import (
@@ -119,7 +119,7 @@ class MemberInviteEmailApi(Resource):
         check_workspace_member_invite_permission(inviter.current_tenant.id)
 
         invitation_results = []
-        console_web_url = dify_config.CONSOLE_WEB_URL
+        console_web_url = nexusai_config.CONSOLE_WEB_URL
 
         workspace_members = FeatureService.get_features(tenant_id=inviter.current_tenant.id).workspace_members
 

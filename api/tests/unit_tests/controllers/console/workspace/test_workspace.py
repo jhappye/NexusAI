@@ -62,9 +62,9 @@ class TestTenantListApi:
                 "controllers.console.workspace.workspace.TenantService.get_join_tenants",
                 return_value=[tenant1, tenant2],
             ),
-            patch("controllers.console.workspace.workspace.dify_config.ENTERPRISE_ENABLED", False),
-            patch("controllers.console.workspace.workspace.dify_config.BILLING_ENABLED", True),
-            patch("controllers.console.workspace.workspace.dify_config.EDITION", "CLOUD"),
+            patch("controllers.console.workspace.workspace.nexusai_config.ENTERPRISE_ENABLED", False),
+            patch("controllers.console.workspace.workspace.nexusai_config.BILLING_ENABLED", True),
+            patch("controllers.console.workspace.workspace.nexusai_config.EDITION", "CLOUD"),
             patch(
                 "controllers.console.workspace.workspace.BillingService.get_plan_bulk",
                 return_value={
@@ -119,9 +119,9 @@ class TestTenantListApi:
                 "controllers.console.workspace.workspace.TenantService.get_join_tenants",
                 return_value=[tenant1, tenant2],
             ),
-            patch("controllers.console.workspace.workspace.dify_config.ENTERPRISE_ENABLED", False),
-            patch("controllers.console.workspace.workspace.dify_config.BILLING_ENABLED", True),
-            patch("controllers.console.workspace.workspace.dify_config.EDITION", "CLOUD"),
+            patch("controllers.console.workspace.workspace.nexusai_config.ENTERPRISE_ENABLED", False),
+            patch("controllers.console.workspace.workspace.nexusai_config.BILLING_ENABLED", True),
+            patch("controllers.console.workspace.workspace.nexusai_config.EDITION", "CLOUD"),
             patch(
                 "controllers.console.workspace.workspace.BillingService.get_plan_bulk",
                 return_value={"t1": {"plan": CloudPlan.TEAM, "expiration_date": 0}},
@@ -174,9 +174,9 @@ class TestTenantListApi:
                 "controllers.console.workspace.workspace.TenantService.get_join_tenants",
                 return_value=[tenant1, tenant2],
             ),
-            patch("controllers.console.workspace.workspace.dify_config.ENTERPRISE_ENABLED", False),
-            patch("controllers.console.workspace.workspace.dify_config.BILLING_ENABLED", True),
-            patch("controllers.console.workspace.workspace.dify_config.EDITION", "CLOUD"),
+            patch("controllers.console.workspace.workspace.nexusai_config.ENTERPRISE_ENABLED", False),
+            patch("controllers.console.workspace.workspace.nexusai_config.BILLING_ENABLED", True),
+            patch("controllers.console.workspace.workspace.nexusai_config.EDITION", "CLOUD"),
             patch(
                 "controllers.console.workspace.workspace.BillingService.get_plan_bulk",
                 return_value={},  # Simulates real failure: empty result for non-empty input
@@ -221,9 +221,9 @@ class TestTenantListApi:
                 "controllers.console.workspace.workspace.TenantService.get_join_tenants",
                 return_value=[tenant],
             ),
-            patch("controllers.console.workspace.workspace.dify_config.ENTERPRISE_ENABLED", False),
-            patch("controllers.console.workspace.workspace.dify_config.BILLING_ENABLED", False),
-            patch("controllers.console.workspace.workspace.dify_config.EDITION", "SELF_HOSTED"),
+            patch("controllers.console.workspace.workspace.nexusai_config.ENTERPRISE_ENABLED", False),
+            patch("controllers.console.workspace.workspace.nexusai_config.BILLING_ENABLED", False),
+            patch("controllers.console.workspace.workspace.nexusai_config.EDITION", "SELF_HOSTED"),
             patch(
                 "controllers.console.workspace.workspace.FeatureService.get_features",
                 return_value=features,
@@ -261,9 +261,9 @@ class TestTenantListApi:
                 "controllers.console.workspace.workspace.TenantService.get_join_tenants",
                 return_value=[tenant1, tenant2],
             ),
-            patch("controllers.console.workspace.workspace.dify_config.ENTERPRISE_ENABLED", True),
-            patch("controllers.console.workspace.workspace.dify_config.BILLING_ENABLED", False),
-            patch("controllers.console.workspace.workspace.dify_config.EDITION", "SELF_HOSTED"),
+            patch("controllers.console.workspace.workspace.nexusai_config.ENTERPRISE_ENABLED", True),
+            patch("controllers.console.workspace.workspace.nexusai_config.BILLING_ENABLED", False),
+            patch("controllers.console.workspace.workspace.nexusai_config.EDITION", "SELF_HOSTED"),
             patch("controllers.console.workspace.workspace.FeatureService.get_features") as get_features_mock,
         ):
             result, status = method(api)
@@ -288,9 +288,9 @@ class TestTenantListApi:
                 "controllers.console.workspace.workspace.TenantService.get_join_tenants",
                 return_value=[],
             ),
-            patch("controllers.console.workspace.workspace.dify_config.ENTERPRISE_ENABLED", True),
-            patch("controllers.console.workspace.workspace.dify_config.BILLING_ENABLED", False),
-            patch("controllers.console.workspace.workspace.dify_config.EDITION", "SELF_HOSTED"),
+            patch("controllers.console.workspace.workspace.nexusai_config.ENTERPRISE_ENABLED", True),
+            patch("controllers.console.workspace.workspace.nexusai_config.BILLING_ENABLED", False),
+            patch("controllers.console.workspace.workspace.nexusai_config.EDITION", "SELF_HOSTED"),
             patch("controllers.console.workspace.workspace.FeatureService.get_features") as get_features_mock,
         ):
             result, status = method(api)

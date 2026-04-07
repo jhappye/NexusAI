@@ -15,7 +15,7 @@ class HostedTrialProvider(StrEnum):
 
     @property
     def config_key(self) -> str:
-        """Return the config key used in dify_config (e.g., HOSTED_{config_key}_PAID_ENABLED)."""
+        """Return the config key used in nexusai_config (e.g., HOSTED_{config_key}_PAID_ENABLED)."""
         if self == HostedTrialProvider.X:
             return "XAI"
         return self.name

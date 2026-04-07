@@ -215,7 +215,7 @@ const NodePanel: FC<Props> = ({
                 <StatusContainer status="stopped">
                   {nodeInfo.error}
                   <a
-                    href={docLink('/use-dify/debug/error-type')}
+                    href={docLink('/use-nexusai/debug/error-type')}
                     target="_blank"
                     className="text-text-accent"
                   >

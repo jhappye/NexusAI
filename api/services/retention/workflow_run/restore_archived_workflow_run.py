@@ -51,7 +51,7 @@ from models.workflow import (
     WorkflowRun,
 )
 from repositories.api_workflow_run_repository import APIWorkflowRunRepository
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.retention.workflow_run.constants import ARCHIVE_BUNDLE_NAME
 
 logger = logging.getLogger(__name__)
@@ -246,7 +246,7 @@ class WorkflowRunRestore:
         if self.workflow_run_repo is not None:
             return self.workflow_run_repo
 
-        self.workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(
+        self.workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(
             sessionmaker(bind=db.engine, expire_on_commit=False)
         )
         return self.workflow_run_repo

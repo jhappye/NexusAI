@@ -176,7 +176,7 @@ def test_link_messages_with_file_populate_files_output(tool_node: ToolNode):
 def test_plain_link_messages_remain_links(tool_node: ToolNode):
     message = ToolRuntimeMessage(
         type=ToolRuntimeMessage.MessageType.LINK,
-        message=ToolRuntimeMessage.TextMessage(text="https://dify.ai"),
+        message=ToolRuntimeMessage.TextMessage(text="https://nexusai.ai"),
         meta=None,
     )
 
@@ -184,7 +184,7 @@ def test_plain_link_messages_remain_links(tool_node: ToolNode):
 
     chunk_events = [event for event in events if isinstance(event, StreamChunkEvent)]
     assert chunk_events
-    assert chunk_events[0].chunk == "Link: https://dify.ai\n"
+    assert chunk_events[0].chunk == "Link: https://nexusai.ai\n"
 
     completed_events = [event for event in events if isinstance(event, StreamCompletedEvent)]
     assert len(completed_events) == 1

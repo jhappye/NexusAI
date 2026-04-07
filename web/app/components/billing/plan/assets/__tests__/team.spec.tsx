@@ -37,7 +37,7 @@ describe('Team Icon Component', () => {
 
     it('should render elements with correct fill colors', () => {
       const { container } = render(<Team />)
-      const blueElements = container.querySelectorAll('[fill="var(--color-saas-dify-blue-inverted)"]')
+      const blueElements = container.querySelectorAll('[fill="var(--color-saas-nexusai-blue-inverted)"]')
       const quaternaryElements = container.querySelectorAll('[fill="var(--color-text-quaternary)"]')
 
       expect(blueElements.length).toBeGreaterThan(0)
@@ -152,7 +152,7 @@ describe('Team Icon Component', () => {
 
     it('should not have opacity on blue inverted elements', () => {
       const { container } = render(<Team />)
-      const blueRects = container.querySelectorAll('rect[fill="var(--color-saas-dify-blue-inverted)"]')
+      const blueRects = container.querySelectorAll('rect[fill="var(--color-saas-nexusai-blue-inverted)"]')
 
       blueRects.forEach((rect) => {
         expect(rect).not.toHaveAttribute('opacity')

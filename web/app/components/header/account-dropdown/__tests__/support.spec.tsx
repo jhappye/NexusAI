@@ -208,7 +208,7 @@ describe('Support', () => {
       // Assert
       const forumLink = screen.getByText('common.userProfile.forum').closest('a')
       const communityLink = screen.getByText('common.userProfile.community').closest('a')
-      expect(forumLink).toHaveAttribute('href', 'https://forum.dify.ai/')
+      expect(forumLink).toHaveAttribute('href', 'https://forum.nexusai.ai/')
       expect(communityLink).toHaveAttribute('href', 'https://discord.gg/5AEfbxcd9k')
     })
   })

@@ -111,6 +111,6 @@ describe('InstallFromMarketplace', () => {
 
   it('should render discovery link', () => {
     render(<InstallFromMarketplace providers={mockProviders} searchText="" />)
-    expect(screen.getByText('plugin.marketplace.difyMarketplace')).toHaveAttribute('href')
+    expect(screen.getByText('plugin.marketplace.nexusaiMarketplace')).toHaveAttribute('href')
   })
 })

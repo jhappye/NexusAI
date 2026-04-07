@@ -7,7 +7,7 @@ from graphon.enums import BuiltinNodeTypes, NodeType
 from graphon.nodes.code.entities import CodeLanguage
 from graphon.variables.segments import StringSegment
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, DifyRunContext, InvokeFrom, UserFrom
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, NexusAIRunContext, InvokeFrom, UserFrom
 from core.workflow import node_factory
 from core.workflow import template_rendering as workflow_template_rendering
 from core.workflow.nodes.knowledge_index import KNOWLEDGE_INDEX_NODE_TYPE
@@ -171,11 +171,11 @@ class TestCodeExecutorJinja2TemplateRenderer:
             renderer.render_template("{{ broken }}", {})
 
 
-class TestDifyNodeFactoryInit:
+class TestNexusAINodeFactoryInit:
     def test_init_builds_default_dependencies(self):
         graph_init_params = SimpleNamespace(run_context={"context": "value"})
         graph_runtime_state = sentinel.graph_runtime_state
-        dify_context = SimpleNamespace(tenant_id="tenant-id", app_id="app-id", user_id="user-id")
+        nexusai_context = SimpleNamespace(tenant_id="tenant-id", app_id="app-id", user_id="user-id")
         jinja2_template_renderer = sentinel.jinja2_template_renderer
         unstructured_api_config = sentinel.unstructured_api_config
         http_request_config = sentinel.http_request_config
@@ -190,10 +190,10 @@ class TestDifyNodeFactoryInit:
 
         with (
             patch.object(
-                node_factory.DifyNodeFactory,
-                "_resolve_dify_context",
-                return_value=dify_context,
-            ) as resolve_dify_context,
+                node_factory.NexusAINodeFactory,
+                "_resolve_nexusai_context",
+                return_value=nexusai_context,
+            ) as resolve_nexusai_context,
             patch.object(
                 node_factory,
                 "CodeExecutorJinja2TemplateRenderer",
@@ -211,51 +211,51 @@ class TestDifyNodeFactoryInit:
             ),
             patch.object(
                 node_factory,
-                "DifyFileReferenceFactory",
+                "NexusAIFileReferenceFactory",
                 return_value=file_reference_factory,
             ),
             patch.object(
                 node_factory,
-                "DifyPromptMessageSerializer",
+                "NexusAIPromptMessageSerializer",
                 return_value=prompt_message_serializer,
             ),
             patch.object(
                 node_factory,
-                "DifyRetrieverAttachmentLoader",
+                "NexusAIRetrieverAttachmentLoader",
                 return_value=retriever_attachment_loader,
             ),
             patch.object(
                 node_factory,
-                "build_dify_llm_file_saver",
+                "build_nexusai_llm_file_saver",
                 return_value=llm_file_saver,
             ),
             patch.object(
                 node_factory,
-                "DifyHumanInputNodeRuntime",
+                "NexusAIHumanInputNodeRuntime",
                 return_value=human_input_runtime,
             ),
             patch.object(
                 node_factory,
-                "DifyToolNodeRuntime",
+                "NexusAIToolNodeRuntime",
                 return_value=tool_runtime,
             ),
             patch.object(
                 node_factory,
-                "build_dify_model_access",
+                "build_nexusai_model_access",
                 return_value=(credentials_provider, model_factory),
-            ) as build_dify_model_access,
+            ) as build_nexusai_model_access,
         ):
-            factory = node_factory.DifyNodeFactory(
+            factory = node_factory.NexusAINodeFactory(
                 graph_init_params=graph_init_params,
                 graph_runtime_state=graph_runtime_state,
             )
 
-        resolve_dify_context.assert_called_once_with(graph_init_params.run_context)
-        build_dify_model_access.assert_called_once_with(dify_context)
+        resolve_nexusai_context.assert_called_once_with(graph_init_params.run_context)
+        build_nexusai_model_access.assert_called_once_with(nexusai_context)
         renderer_factory.assert_called_once_with()
         assert factory.graph_init_params is graph_init_params
         assert factory.graph_runtime_state is graph_runtime_state
-        assert factory._dify_context is dify_context
+        assert factory._nexusai_context is nexusai_context
         assert factory._jinja2_template_renderer is jinja2_template_renderer
         assert factory._document_extractor_unstructured_api_config is unstructured_api_config
         assert factory._http_request_config is http_request_config
@@ -269,13 +269,13 @@ class TestDifyNodeFactoryInit:
         assert factory._llm_model_factory is model_factory
 
 
-class TestDifyNodeFactoryResolveContext:
+class TestNexusAINodeFactoryResolveContext:
     def test_requires_reserved_context_key(self):
-        with pytest.raises(ValueError, match=DIFY_RUN_CONTEXT_KEY):
-            node_factory.DifyNodeFactory._resolve_dify_context({})
+        with pytest.raises(ValueError, match=NEXUSAI_RUN_CONTEXT_KEY):
+            node_factory.NexusAINodeFactory._resolve_nexusai_context({})
 
-    def test_returns_existing_dify_context(self):
-        dify_context = DifyRunContext(
+    def test_returns_existing_nexusai_context(self):
+        nexusai_context = NexusAIRunContext(
             tenant_id="tenant-id",
             app_id="app-id",
             user_id="user-id",
@@ -283,13 +283,13 @@ class TestDifyNodeFactoryResolveContext:
             invoke_from=InvokeFrom.DEBUGGER,
         )
 
-        result = node_factory.DifyNodeFactory._resolve_dify_context({DIFY_RUN_CONTEXT_KEY: dify_context})
+        result = node_factory.NexusAINodeFactory._resolve_nexusai_context({NEXUSAI_RUN_CONTEXT_KEY: nexusai_context})
 
-        assert result is dify_context
+        assert result is nexusai_context
 
     def test_validates_mapping_context(self):
         raw_context = {
-            DIFY_RUN_CONTEXT_KEY: {
+            NEXUSAI_RUN_CONTEXT_KEY: {
                 "tenant_id": "tenant-id",
                 "app_id": "app-id",
                 "user_id": "user-id",
@@ -298,19 +298,19 @@ class TestDifyNodeFactoryResolveContext:
             }
         }
 
-        result = node_factory.DifyNodeFactory._resolve_dify_context(raw_context)
+        result = node_factory.NexusAINodeFactory._resolve_nexusai_context(raw_context)
 
-        assert isinstance(result, DifyRunContext)
+        assert isinstance(result, NexusAIRunContext)
         assert result.tenant_id == "tenant-id"
 
 
-class TestDifyNodeFactoryCreateNode:
+class TestNexusAINodeFactoryCreateNode:
     @pytest.fixture
     def factory(self):
-        factory = object.__new__(node_factory.DifyNodeFactory)
+        factory = object.__new__(node_factory.NexusAINodeFactory)
         factory.graph_init_params = sentinel.graph_init_params
         factory.graph_runtime_state = SimpleNamespace(variable_pool=MagicMock())
-        factory._dify_context = SimpleNamespace(
+        factory._nexusai_context = SimpleNamespace(
             tenant_id="tenant-id",
             app_id="app-id",
             user_id="user-id",
@@ -543,10 +543,10 @@ class TestDifyNodeFactoryCreateNode:
             assert constructor_kwargs[key] is value
 
 
-class TestDifyNodeFactoryModelInstance:
+class TestNexusAINodeFactoryModelInstance:
     @pytest.fixture
     def factory(self):
-        factory = object.__new__(node_factory.DifyNodeFactory)
+        factory = object.__new__(node_factory.NexusAINodeFactory)
         factory._llm_credentials_provider = sentinel.credentials_provider
         factory._llm_model_factory = sentinel.model_factory
         return factory
@@ -588,11 +588,11 @@ class TestDifyNodeFactoryModelInstance:
             factory._build_model_instance_for_llm_node(SimpleNamespace(model=sentinel.node_data_model))
 
 
-class TestDifyNodeFactoryMemory:
+class TestNexusAINodeFactoryMemory:
     @pytest.fixture
     def factory(self):
-        factory = object.__new__(node_factory.DifyNodeFactory)
-        factory._dify_context = SimpleNamespace(app_id="app-id")
+        factory = object.__new__(node_factory.NexusAINodeFactory)
+        factory._nexusai_context = SimpleNamespace(app_id="app-id")
         factory.graph_runtime_state = SimpleNamespace(variable_pool=MagicMock())
         return factory
 

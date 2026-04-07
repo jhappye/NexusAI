@@ -286,11 +286,11 @@ def test_relyt_factory_existing_and_generated_collection(relyt_module, monkeypat
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(relyt_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(relyt_module.dify_config, "RELYT_HOST", "localhost")
-    monkeypatch.setattr(relyt_module.dify_config, "RELYT_PORT", 5432)
-    monkeypatch.setattr(relyt_module.dify_config, "RELYT_USER", "postgres")
-    monkeypatch.setattr(relyt_module.dify_config, "RELYT_PASSWORD", "secret")
-    monkeypatch.setattr(relyt_module.dify_config, "RELYT_DATABASE", "relyt")
+    monkeypatch.setattr(relyt_module.nexusai_config, "RELYT_HOST", "localhost")
+    monkeypatch.setattr(relyt_module.nexusai_config, "RELYT_PORT", 5432)
+    monkeypatch.setattr(relyt_module.nexusai_config, "RELYT_USER", "postgres")
+    monkeypatch.setattr(relyt_module.nexusai_config, "RELYT_PASSWORD", "secret")
+    monkeypatch.setattr(relyt_module.nexusai_config, "RELYT_DATABASE", "relyt")
 
     with patch.object(relyt_module, "RelytVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

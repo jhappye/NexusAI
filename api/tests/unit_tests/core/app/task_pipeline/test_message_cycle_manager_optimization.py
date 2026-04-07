@@ -361,13 +361,13 @@ class TestMessageCycleManagerOptimization:
             patch("core.app.task_pipeline.message_cycle_manager.db") as mock_db,
             patch("core.app.task_pipeline.message_cycle_manager.redis_client") as mock_redis,
             patch("core.app.task_pipeline.message_cycle_manager.LLMGenerator") as mock_llm_generator,
-            patch("core.app.task_pipeline.message_cycle_manager.dify_config") as mock_dify_config,
+            patch("core.app.task_pipeline.message_cycle_manager.nexusai_config") as mock_nexusai_config,
             patch("core.app.task_pipeline.message_cycle_manager.logger") as mock_logger,
         ):
             mock_db.session = db_session
             mock_redis.get.return_value = None
             mock_llm_generator.generate_conversation_name.side_effect = RuntimeError("generation failed")
-            mock_dify_config.DEBUG = True
+            mock_nexusai_config.DEBUG = True
 
             message_cycle_manager._generate_conversation_name_worker(flask_app, "conv-1", long_query)
 

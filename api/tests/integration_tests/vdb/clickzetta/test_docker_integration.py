@@ -21,7 +21,7 @@ def test_clickzetta_connection():
             service=os.getenv("CLICKZETTA_SERVICE", "api.clickzetta.com"),
             workspace=os.getenv("CLICKZETTA_WORKSPACE", "test_workspace"),
             vcluster=os.getenv("CLICKZETTA_VCLUSTER", "default"),
-            database=os.getenv("CLICKZETTA_SCHEMA", "dify"),
+            database=os.getenv("CLICKZETTA_SCHEMA", "nexusai"),
         )
 
         with conn.cursor() as cursor:
@@ -31,21 +31,21 @@ def test_clickzetta_connection():
             print(f"✓ Connection test: {result}")
 
             # Check if our test table exists
-            cursor.execute("SHOW TABLES IN dify")
+            cursor.execute("SHOW TABLES IN nexusai")
             tables = cursor.fetchall()
-            print(f"✓ Existing tables: {[t[1] for t in tables if t[0] == 'dify']}")
+            print(f"✓ Existing tables: {[t[1] for t in tables if t[0] == 'nexusai']}")
 
             # Check if test collection exists
             test_collection = "collection_test_dataset"
-            if test_collection in [t[1] for t in tables if t[0] == "dify"]:
-                cursor.execute(f"DESCRIBE dify.{test_collection}")
+            if test_collection in [t[1] for t in tables if t[0] == "nexusai"]:
+                cursor.execute(f"DESCRIBE nexusai.{test_collection}")
                 columns = cursor.fetchall()
                 print(f"✓ Table structure for {test_collection}:")
                 for col in columns:
                     print(f"  - {col[0]}: {col[1]}")
 
                 # Check for indexes
-                cursor.execute(f"SHOW INDEXES IN dify.{test_collection}")
+                cursor.execute(f"SHOW INDEXES IN nexusai.{test_collection}")
                 indexes = cursor.fetchall()
                 print(f"✓ Indexes on {test_collection}:")
                 for idx in indexes:
@@ -57,9 +57,9 @@ def test_clickzetta_connection():
         return False
 
 
-def test_dify_api():
-    """Test Dify API with Clickzetta backend"""
-    print("\n=== Testing Dify API ===")
+def test_nexusai_api():
+    """Test NexusAI API with Clickzetta backend"""
+    print("\n=== Testing NexusAI API ===")
     base_url = "http://localhost:5001"
 
     # Wait for API to be ready
@@ -68,18 +68,18 @@ def test_dify_api():
         try:
             response = httpx.get(f"{base_url}/console/api/health")
             if response.status_code == 200:
-                print("✓ Dify API is ready")
+                print("✓ NexusAI API is ready")
                 break
         except:
             if i == max_retries - 1:
-                print("✗ Dify API is not responding")
+                print("✗ NexusAI API is not responding")
                 return False
             time.sleep(2)
 
     # Check vector store configuration
     try:
         # This is a simplified check - in production, you'd use proper auth
-        print("✓ Dify is configured to use Clickzetta as vector store")
+        print("✓ NexusAI is configured to use Clickzetta as vector store")
         return True
     except Exception as e:
         print(f"✗ API test failed: {e}")
@@ -87,7 +87,7 @@ def test_dify_api():
 
 
 def verify_table_structure():
-    """Verify the table structure meets Dify requirements"""
+    """Verify the table structure meets NexusAI requirements"""
     print("\n=== Verifying Table Structure ===")
 
     expected_columns = {
@@ -118,11 +118,11 @@ def verify_table_structure():
 
 def main():
     """Run all tests"""
-    print("Starting Clickzetta integration tests for Dify Docker\n")
+    print("Starting Clickzetta integration tests for NexusAI Docker\n")
 
     tests = [
         ("Direct Clickzetta Connection", test_clickzetta_connection),
-        ("Dify API Status", test_dify_api),
+        ("NexusAI API Status", test_nexusai_api),
         ("Table Structure Verification", verify_table_structure),
     ]
 
@@ -150,10 +150,10 @@ def main():
     print(f"\nTotal: {passed}/{total} tests passed")
 
     if passed == total:
-        print("\n🎉 All tests passed! Clickzetta is ready for Dify Docker deployment.")
+        print("\n🎉 All tests passed! Clickzetta is ready for NexusAI Docker deployment.")
         print("\nNext steps:")
         print("1. Run: cd docker && docker-compose -f docker-compose.yaml -f docker-compose.clickzetta.yaml up -d")
-        print("2. Access Dify at http://localhost:3000")
+        print("2. Access NexusAI at http://localhost:3000")
         print("3. Create a dataset and test vector storage with Clickzetta")
         return 0
     else:

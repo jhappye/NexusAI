@@ -265,13 +265,13 @@ def test_vikingdb_factory_validates_config_and_builds_vector(vikingdb_module, mo
     monkeypatch.setattr(vikingdb_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
 
     with patch.object(vikingdb_module, "VikingDBVector", return_value="vector") as vector_cls:
-        monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_ACCESS_KEY", "ak")
-        monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_SECRET_KEY", "sk")
-        monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_HOST", "host")
-        monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_REGION", "region")
-        monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_SCHEME", "https")
-        monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_CONNECTION_TIMEOUT", 10)
-        monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_SOCKET_TIMEOUT", 20)
+        monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_ACCESS_KEY", "ak")
+        monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_SECRET_KEY", "sk")
+        monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_HOST", "host")
+        monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_REGION", "region")
+        monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_SCHEME", "https")
+        monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_CONNECTION_TIMEOUT", 10)
+        monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_SOCKET_TIMEOUT", 20)
 
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())
         result_2 = factory.init_vector(dataset_without_index, attributes=[], embeddings=MagicMock())
@@ -299,12 +299,12 @@ def test_vikingdb_factory_raises_when_required_config_missing(vikingdb_module, m
         id="dataset-1", index_struct_dict={"vector_store": {"class_prefix": "existing"}}, index_struct=None
     )
 
-    monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_ACCESS_KEY", "ak")
-    monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_SECRET_KEY", "sk")
-    monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_HOST", "host")
-    monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_REGION", "region")
-    monkeypatch.setattr(vikingdb_module.dify_config, "VIKINGDB_SCHEME", "https")
-    monkeypatch.setattr(vikingdb_module.dify_config, field, None)
+    monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_ACCESS_KEY", "ak")
+    monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_SECRET_KEY", "sk")
+    monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_HOST", "host")
+    monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_REGION", "region")
+    monkeypatch.setattr(vikingdb_module.nexusai_config, "VIKINGDB_SCHEME", "https")
+    monkeypatch.setattr(vikingdb_module.nexusai_config, field, None)
 
     with pytest.raises(ValueError, match=message):
         factory.init_vector(dataset, attributes=[], embeddings=MagicMock())

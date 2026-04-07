@@ -7,7 +7,7 @@ import psycopg2.extras
 import psycopg2.pool
 from pydantic import BaseModel, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
 from core.rag.datasource.vdb.vector_type import VectorType
@@ -232,12 +232,12 @@ class VastbaseVectorFactory(AbstractVectorFactory):
         return VastbaseVector(
             collection_name=collection_name,
             config=VastbaseVectorConfig(
-                host=dify_config.VASTBASE_HOST or "localhost",
-                port=dify_config.VASTBASE_PORT,
-                user=dify_config.VASTBASE_USER or "dify",
-                password=dify_config.VASTBASE_PASSWORD or "",
-                database=dify_config.VASTBASE_DATABASE or "dify",
-                min_connection=dify_config.VASTBASE_MIN_CONNECTION,
-                max_connection=dify_config.VASTBASE_MAX_CONNECTION,
+                host=nexusai_config.VASTBASE_HOST or "localhost",
+                port=nexusai_config.VASTBASE_PORT,
+                user=nexusai_config.VASTBASE_USER or "nexusai",
+                password=nexusai_config.VASTBASE_PASSWORD or "",
+                database=nexusai_config.VASTBASE_DATABASE or "nexusai",
+                min_connection=nexusai_config.VASTBASE_MIN_CONNECTION,
+                max_connection=nexusai_config.VASTBASE_MAX_CONNECTION,
             ),
         )

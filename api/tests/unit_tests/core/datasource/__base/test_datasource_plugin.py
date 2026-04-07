@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from configs import dify_config
+from configs import nexusai_config
 from core.datasource.__base.datasource_plugin import DatasourcePlugin
 from core.datasource.__base.datasource_runtime import DatasourceRuntime
 from core.datasource.entities.datasource_entities import DatasourceEntity, DatasourceProviderType
@@ -78,13 +78,13 @@ class TestDatasourcePlugin:
 
         plugin = ConcreteDatasourcePlugin(entity=entity, runtime=runtime, icon=icon)
 
-        # Mocking dify_config.CONSOLE_API_URL
-        with patch.object(dify_config, "CONSOLE_API_URL", "https://api.dify.ai"):
+        # Mocking nexusai_config.CONSOLE_API_URL
+        with patch.object(nexusai_config, "CONSOLE_API_URL", "https://api.nexusai.ai"):
             # Act
             icon_url = plugin.get_icon_url(tenant_id)
 
             # Assert
             expected_url = (
-                f"https://api.dify.ai/console/api/workspaces/current/plugin/icon?tenant_id={tenant_id}&filename={icon}"
+                f"https://api.nexusai.ai/console/api/workspaces/current/plugin/icon?tenant_id={tenant_id}&filename={icon}"
             )
             assert icon_url == expected_url

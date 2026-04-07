@@ -1,6 +1,6 @@
 """Workflow-layer adapters for legacy human-input payload keys.
 
-Stored workflow graphs and editor payloads may still use Dify-specific human
+Stored workflow graphs and editor payloads may still use NexusAI-specific human
 input recipient keys. Normalize them here before handing configs to
 `graphon` so graph-owned models only see graph-neutral field names.
 """

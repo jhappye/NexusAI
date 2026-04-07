@@ -12,7 +12,7 @@ from graphon.nodes.tool.exc import ToolRuntimeInvocationError
 from graphon.nodes.tool_runtime_entities import ToolRuntimeHandle, ToolRuntimeMessage
 from graphon.runtime import VariablePool
 
-from core.callback_handler.workflow_tool_callback_handler import DifyWorkflowCallbackHandler
+from core.callback_handler.workflow_tool_callback_handler import NexusAIWorkflowCallbackHandler
 from core.plugin.impl.exc import PluginDaemonClientSideError, PluginInvokeError
 from core.tools.entities.tool_entities import ToolInvokeMessage
 from core.tools.entities.tool_entities import ToolProviderType as CoreToolProviderType
@@ -20,13 +20,13 @@ from core.tools.errors import ToolInvokeError
 from core.tools.tool_engine import ToolEngine
 from core.tools.tool_manager import ToolManager
 from core.tools.utils.message_transformer import ToolFileMessageTransformer
-from core.workflow.node_runtime import DifyToolNodeRuntime
+from core.workflow.node_runtime import NexusAIToolNodeRuntime
 from core.workflow.system_variables import build_system_variables
 from tests.workflow_test_utils import build_test_graph_init_params, build_test_variable_pool
 
 
 @pytest.fixture
-def runtime(monkeypatch) -> DifyToolNodeRuntime:
+def runtime(monkeypatch) -> NexusAIToolNodeRuntime:
     module_name = "core.ops.ops_trace_manager"
     if module_name not in sys.modules:
         ops_stub = types.ModuleType(module_name)
@@ -44,7 +44,7 @@ def runtime(monkeypatch) -> DifyToolNodeRuntime:
         invoke_from="debugger",
         call_depth=0,
     )
-    return DifyToolNodeRuntime(init_params.run_context)
+    return NexusAIToolNodeRuntime(init_params.run_context)
 
 
 def _build_tool_node_data() -> ToolNodeData:
@@ -63,10 +63,10 @@ def _build_tool_node_data() -> ToolNodeData:
     )
 
 
-def test_invoke_creates_callback_and_converts_messages(runtime: DifyToolNodeRuntime) -> None:
+def test_invoke_creates_callback_and_converts_messages(runtime: NexusAIToolNodeRuntime) -> None:
     core_message = ToolInvokeMessage(
         type=ToolInvokeMessage.MessageType.LINK,
-        message=ToolInvokeMessage.TextMessage(text="https://dify.ai"),
+        message=ToolInvokeMessage.TextMessage(text="https://nexusai.ai"),
         meta=None,
     )
     variable_pool: VariablePool = build_test_variable_pool(
@@ -102,17 +102,17 @@ def test_invoke_creates_callback_and_converts_messages(runtime: DifyToolNodeRunt
     graph_message = messages[0]
     assert graph_message.type == ToolRuntimeMessage.MessageType.LINK
     assert isinstance(graph_message.message, ToolRuntimeMessage.TextMessage)
-    assert graph_message.message.text == "https://dify.ai"
+    assert graph_message.message.text == "https://nexusai.ai"
 
     callback = generic_invoke_mock.call_args.kwargs["workflow_tool_callback"]
-    assert isinstance(callback, DifyWorkflowCallbackHandler)
+    assert isinstance(callback, NexusAIWorkflowCallbackHandler)
     assert generic_invoke_mock.call_args.kwargs["conversation_id"] == "conversation-id"
 
     transform_kwargs = transform_tool_messages.call_args.kwargs
     assert transform_kwargs["conversation_id"] == "conversation-id"
 
 
-def test_invoke_maps_plugin_errors_to_graph_errors(runtime: DifyToolNodeRuntime) -> None:
+def test_invoke_maps_plugin_errors_to_graph_errors(runtime: NexusAIToolNodeRuntime) -> None:
     invoke_error = PluginInvokeError('{"error_type":"RateLimit","message":"too many"}')
 
     with patch.object(ToolEngine, "generic_invoke", side_effect=invoke_error):
@@ -125,7 +125,7 @@ def test_invoke_maps_plugin_errors_to_graph_errors(runtime: DifyToolNodeRuntime)
             )
 
 
-def test_get_usage_normalizes_dict_payload(runtime: DifyToolNodeRuntime) -> None:
+def test_get_usage_normalizes_dict_payload(runtime: NexusAIToolNodeRuntime) -> None:
     usage_payload = LLMUsage.empty_usage().model_dump()
     usage_payload["total_tokens"] = 42
 
@@ -136,7 +136,7 @@ def test_get_usage_normalizes_dict_payload(runtime: DifyToolNodeRuntime) -> None
     assert usage.total_tokens == 42
 
 
-def test_get_runtime_converts_graph_provider_type_for_tool_manager(runtime: DifyToolNodeRuntime) -> None:
+def test_get_runtime_converts_graph_provider_type_for_tool_manager(runtime: NexusAIToolNodeRuntime) -> None:
     node_data = _build_tool_node_data()
 
     with patch.object(ToolManager, "get_workflow_tool_runtime", return_value=MagicMock()) as runtime_mock:
@@ -147,7 +147,7 @@ def test_get_runtime_converts_graph_provider_type_for_tool_manager(runtime: Dify
     assert workflow_tool.provider_type == CoreToolProviderType.BUILT_IN
 
 
-def test_get_runtime_parameters_reads_required_flags(runtime: DifyToolNodeRuntime) -> None:
+def test_get_runtime_parameters_reads_required_flags(runtime: NexusAIToolNodeRuntime) -> None:
     tool_runtime = ToolRuntimeHandle(
         raw=SimpleNamespace(
             get_merged_runtime_parameters=MagicMock(
@@ -167,7 +167,7 @@ def test_get_runtime_parameters_reads_required_flags(runtime: DifyToolNodeRuntim
     ]
 
 
-def test_get_usage_returns_empty_usage_when_tool_has_no_usage(runtime: DifyToolNodeRuntime) -> None:
+def test_get_usage_returns_empty_usage_when_tool_has_no_usage(runtime: NexusAIToolNodeRuntime) -> None:
     usage = runtime.get_usage(tool_runtime=ToolRuntimeHandle(raw=SimpleNamespace(latest_usage=None)))
 
     assert usage == LLMUsage.empty_usage()
@@ -206,7 +206,7 @@ def test_get_usage_returns_empty_usage_when_tool_has_no_usage(runtime: DifyToolN
     ],
 )
 def test_convert_message_payload_supports_runtime_message_types(
-    runtime: DifyToolNodeRuntime,
+    runtime: NexusAIToolNodeRuntime,
     payload: object,
     expected_type: type[object],
 ) -> None:
@@ -215,12 +215,12 @@ def test_convert_message_payload_supports_runtime_message_types(
     assert isinstance(message, expected_type)
 
 
-def test_convert_message_payload_rejects_unknown_types(runtime: DifyToolNodeRuntime) -> None:
+def test_convert_message_payload_rejects_unknown_types(runtime: NexusAIToolNodeRuntime) -> None:
     with pytest.raises(TypeError, match="unsupported tool message payload"):
         runtime._convert_message_payload(object())
 
 
-def test_resolve_provider_icons_prefers_builtin_tool_icons(runtime: DifyToolNodeRuntime) -> None:
+def test_resolve_provider_icons_prefers_builtin_tool_icons(runtime: NexusAIToolNodeRuntime) -> None:
     plugin = SimpleNamespace(
         plugin_id="langgenius/tools",
         name="search",
@@ -244,7 +244,7 @@ def test_resolve_provider_icons_prefers_builtin_tool_icons(runtime: DifyToolNode
     assert icon_dark == {"builtin": "dark"}
 
 
-def test_resolve_provider_icons_returns_default_when_provider_is_unknown(runtime: DifyToolNodeRuntime) -> None:
+def test_resolve_provider_icons_returns_default_when_provider_is_unknown(runtime: NexusAIToolNodeRuntime) -> None:
     with (
         patch("core.workflow.node_runtime.PluginInstaller") as installer_cls,
         patch("core.workflow.node_runtime.BuiltinToolManageService.list_builtin_tools", return_value=[]),
@@ -266,7 +266,7 @@ def test_resolve_provider_icons_returns_default_when_provider_is_unknown(runtime
     ],
 )
 def test_map_invocation_exception_normalizes_runtime_errors(
-    runtime: DifyToolNodeRuntime,
+    runtime: NexusAIToolNodeRuntime,
     exc: Exception,
     message: str,
 ) -> None:

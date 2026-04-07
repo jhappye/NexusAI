@@ -1,6 +1,6 @@
 # Debugging with VS Code
 
-This `launch.json.template` file provides various debug configurations for the Dify project within VS Code / Cursor. To use these configurations, you should copy the contents of this file into a new file named `launch.json` in the same `.vscode` directory.
+This `launch.json.template` file provides various debug configurations for the NexusAI project within VS Code / Cursor. To use these configurations, you should copy the contents of this file into a new file named `launch.json` in the same `.vscode` directory.
 
 ## How to Use
 
@@ -11,4 +11,4 @@ This `launch.json.template` file provides various debug configurations for the D
 
 ## Tips
 
-- If you need to debug with Edge browser instead of Chrome, modify the `serverReadyAction` configuration in the "Next.js: debug full stack" section, change `"debugWithChrome"` to `"debugWithEdge"` to use Microsoft Edge for debugging.
+- If you need to debug with Edge browser instead of Chrome, monexusai the `serverReadyAction` configuration in the "Next.js: debug full stack" section, change `"debugWithChrome"` to `"debugWithEdge"` to use Microsoft Edge for debugging.

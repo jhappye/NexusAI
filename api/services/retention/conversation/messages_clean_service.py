@@ -10,7 +10,7 @@ from sqlalchemy import delete, select, tuple_
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_database import db
 from libs.datetime_utils import naive_utc_now
 from models.model import (
@@ -71,13 +71,13 @@ class MessagesCleanupMetrics:
         self._init_instruments()
 
     def _init_instruments(self) -> None:
-        if not dify_config.ENABLE_OTEL:
+        if not nexusai_config.ENABLE_OTEL:
             return
 
         try:
             from opentelemetry.metrics import get_meter
 
-            meter = get_meter("messages_cleanup", version=dify_config.project.version)
+            meter = get_meter("messages_cleanup", version=nexusai_config.project.version)
             self._job_runs_total = meter.create_counter(
                 "messages_cleanup_jobs_total",
                 description="Total number of expired message cleanup jobs by status.",
@@ -359,7 +359,7 @@ class MessagesCleanService:
             self._end_before,
         )
 
-        max_batch_interval_ms = dify_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_MAX_INTERVAL
+        max_batch_interval_ms = nexusai_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_MAX_INTERVAL
 
         while True:
             stats["batches"] += 1

@@ -68,7 +68,7 @@ describe('Inspect Vars Slice', () => {
       expect(node.isValueFetched).toBe(true)
     })
 
-    it('should not modify state when node is not found', () => {
+    it('should not monexusai state when node is not found', () => {
       const store = createStore()
       store.getState().setNodesWithInspectVars([makeNodeWithVar('n1', [makeVar()])])
 

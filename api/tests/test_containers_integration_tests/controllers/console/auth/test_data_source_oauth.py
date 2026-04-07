@@ -22,7 +22,7 @@ def test_get_oauth_url_successful(
 
     with (
         patch("controllers.console.auth.data_source_oauth.get_oauth_providers", return_value={"notion": provider}),
-        patch("controllers.console.auth.data_source_oauth.dify_config.NOTION_INTEGRATION_TYPE", None),
+        patch("controllers.console.auth.data_source_oauth.nexusai_config.NOTION_INTEGRATION_TYPE", None),
     ):
         response = test_client_with_containers.get(
             "/console/api/oauth/data-source/notion",

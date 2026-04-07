@@ -4,8 +4,8 @@ from typing import Literal, Union, overload
 
 from flask import Flask
 
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 from extensions.storage.base_storage import BaseStorage
 from extensions.storage.storage_type import StorageType
 
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class Storage:
     def init_app(self, app: Flask):
-        storage_factory = self.get_storage_factory(dify_config.STORAGE_TYPE)
+        storage_factory = self.get_storage_factory(nexusai_config.STORAGE_TYPE)
         with app.app_context():
             self.storage_runner = storage_factory()
 
@@ -28,11 +28,11 @@ class Storage:
             case StorageType.OPENDAL:
                 from extensions.storage.opendal_storage import OpenDALStorage
 
-                return lambda: OpenDALStorage(dify_config.OPENDAL_SCHEME)
+                return lambda: OpenDALStorage(nexusai_config.OPENDAL_SCHEME)
             case StorageType.LOCAL:
                 from extensions.storage.opendal_storage import OpenDALStorage
 
-                return lambda: OpenDALStorage(scheme="fs", root=dify_config.STORAGE_LOCAL_PATH)
+                return lambda: OpenDALStorage(scheme="fs", root=nexusai_config.STORAGE_LOCAL_PATH)
             case StorageType.AZURE_BLOB:
                 from extensions.storage.azure_blob_storage import AzureBlobStorage
 
@@ -126,8 +126,8 @@ class Storage:
 storage = Storage()
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     storage.init_app(app)
-    from core.app.workflow.file_runtime import bind_dify_workflow_file_runtime
+    from core.app.workflow.file_runtime import bind_nexusai_workflow_file_runtime
 
-    bind_dify_workflow_file_runtime()
+    bind_nexusai_workflow_file_runtime()

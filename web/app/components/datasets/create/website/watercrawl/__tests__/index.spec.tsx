@@ -25,7 +25,7 @@ vi.mock('@/context/modal-context', () => ({
 
 // Mock i18n context
 vi.mock('@/context/i18n', () => ({
-  useDocLink: () => (path?: string) => path ? `https://docs.dify.ai/en${path}` : 'https://docs.dify.ai/en/',
+  useDocLink: () => (path?: string) => path ? `https://docs.nexusai.ai/en${path}` : 'https://docs.nexusai.ai/en/',
 }))
 
 // Note: limit and max_depth are typed as `number | string` in CrawlOptions
@@ -94,7 +94,7 @@ describe('WaterCrawl', () => {
       render(<WaterCrawl {...props} />)
 
       // Assert - URL input has specific placeholder
-      expect(screen.getByPlaceholderText('https://docs.dify.ai/en/')).toBeInTheDocument()
+      expect(screen.getByPlaceholderText('https://docs.nexusai.ai/en/')).toBeInTheDocument()
     })
 
     it('should render run button', () => {
@@ -177,7 +177,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -195,7 +195,7 @@ describe('WaterCrawl', () => {
       render(<WaterCrawl {...props} />)
 
       // Assert - component renders with empty limit
-      expect(screen.getByPlaceholderText('https://docs.dify.ai/en/')).toBeInTheDocument()
+      expect(screen.getByPlaceholderText('https://docs.nexusai.ai/en/')).toBeInTheDocument()
     })
   })
 
@@ -210,7 +210,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const urlInput = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const urlInput = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(urlInput, 'https://example.com')
 
       const runButton = screen.getByRole('button', { name: /run/i })
@@ -240,7 +240,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -277,7 +277,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ onCheckedCrawlResultChange, onJobIdChange })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -309,7 +309,7 @@ describe('WaterCrawl', () => {
       // Options should be visible initially
       expect(screen.getByText('datasetCreation.stepOne.website.crawlSubPage')).toBeInTheDocument()
 
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -335,7 +335,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -355,7 +355,7 @@ describe('WaterCrawl', () => {
       // Initially options should be visible
       expect(screen.getByText('datasetCreation.stepOne.website.options')).toBeInTheDocument()
 
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -399,7 +399,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       const { rerender } = render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -411,7 +411,7 @@ describe('WaterCrawl', () => {
       rerender(<WaterCrawl {...props} />)
 
       // Assert - component should still work correctly
-      expect(screen.getByPlaceholderText('https://docs.dify.ai/en/')).toBeInTheDocument()
+      expect(screen.getByPlaceholderText('https://docs.nexusai.ai/en/')).toBeInTheDocument()
     })
   })
 
@@ -444,7 +444,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -472,7 +472,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ onPreview })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://preview.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -543,7 +543,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ crawlOptions })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://api-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -571,7 +571,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ crawlOptions })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -601,7 +601,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ onJobIdChange })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://poll-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -627,7 +627,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://fail-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -650,7 +650,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://error-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -679,7 +679,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://limit-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -701,7 +701,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://no-status-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -738,7 +738,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'invalid-url')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -751,7 +751,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -775,7 +775,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'http://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -790,7 +790,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -805,7 +805,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -820,7 +820,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://example.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -838,7 +838,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://exception-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -862,7 +862,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://empty-error-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -887,7 +887,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ onCheckedCrawlResultChange })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://empty-data-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -919,7 +919,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ onCheckedCrawlResultChange })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://null-data-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -944,7 +944,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ onCheckedCrawlResultChange })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://undefined-data-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -965,7 +965,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://zero-current-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -987,7 +987,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://zero-total-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1014,7 +1014,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ onCheckedCrawlResultChange })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://undefined-result-data-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1036,7 +1036,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://no-total-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1065,7 +1065,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://both-zero-test.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1093,7 +1093,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://limit.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1123,7 +1123,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://depth.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1153,7 +1153,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://nosub.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1183,7 +1183,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://sitemap.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1216,7 +1216,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://patterns.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1250,7 +1250,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://new.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1276,7 +1276,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://string-limit.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1302,7 +1302,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://main-content.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1330,7 +1330,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://progress.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1355,7 +1355,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://time.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1379,7 +1379,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://result.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1398,7 +1398,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps()
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://fail.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1444,7 +1444,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://multi-poll.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1504,7 +1504,7 @@ describe('WaterCrawl', () => {
       })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://full-workflow.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1544,7 +1544,7 @@ describe('WaterCrawl', () => {
       const props = createDefaultProps({ onCheckedCrawlResultChange })
 
       render(<WaterCrawl {...props} />)
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://single.com')
       await userEvent.click(screen.getByRole('button', { name: /run/i }))
 
@@ -1588,7 +1588,7 @@ describe('WaterCrawl', () => {
       render(<WaterCrawl {...props} />)
 
       // Step 1: Enter URL
-      const input = screen.getByPlaceholderText('https://docs.dify.ai/en/')
+      const input = screen.getByPlaceholderText('https://docs.nexusai.ai/en/')
       await userEvent.type(input, 'https://preview.com')
 
       // Step 2: Run crawl

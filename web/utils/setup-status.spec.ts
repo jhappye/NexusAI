@@ -27,7 +27,7 @@ describe('setup-status utilities', () => {
         expect(mockFetchSetupStatus).not.toHaveBeenCalled()
       })
 
-      it('should not modify localStorage when returning cached value', async () => {
+      it('should not monexusai localStorage when returning cached value', async () => {
         localStorage.setItem('setup_status', 'finished')
 
         await fetchSetupStatusWithCache()

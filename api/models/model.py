@@ -20,7 +20,7 @@ from graphon.file import helpers as file_helpers
 from sqlalchemy import BigInteger, Float, Index, PrimaryKeyConstraint, String, exists, func, select, text
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import DEFAULT_FILE_NUMBER_LIMITS
 from core.tools.signature import sign_tool_file
 from extensions.storage.storage_type import StorageType
@@ -317,7 +317,7 @@ class MessageFileInfo(TypedDict, total=False):
     extension: str | None
     mime_type: str | None
     size: int
-    dify_model_identity: str
+    nexusai_model_identity: str
     url: str | None
 
 
@@ -336,9 +336,9 @@ class TraceAppConfigDict(TypedDict):
     updated_at: str | None
 
 
-class DifySetup(TypeBase):
-    __tablename__ = "dify_setups"
-    __table_args__ = (sa.PrimaryKeyConstraint("version", name="dify_setup_pkey"),)
+class NexusAISetup(TypeBase):
+    __tablename__ = "nexusai_setups"
+    __table_args__ = (sa.PrimaryKeyConstraint("version", name="nexusai_setup_pkey"),)
 
     version: Mapped[str] = mapped_column(String(255), nullable=False)
     setup_at: Mapped[datetime] = mapped_column(
@@ -446,7 +446,7 @@ class App(Base):
 
     @property
     def api_base_url(self) -> str:
-        return (dify_config.SERVICE_API_URL or request.host_url.rstrip("/")) + "/v1"
+        return (nexusai_config.SERVICE_API_URL or request.host_url.rstrip("/")) + "/v1"
 
     @property
     def tenant(self) -> Tenant | None:
@@ -995,7 +995,7 @@ class ExporleBanner(TypeBase):
 class OAuthProviderApp(TypeBase):
     """
     Globally shared OAuth provider app information.
-    Only for Dify Cloud.
+    Only for NexusAI Cloud.
     """
 
     __tablename__ = "oauth_provider_apps"
@@ -1102,7 +1102,7 @@ class Conversation(Base):
         for key, value in inputs.items():
             if (
                 isinstance(value, dict)
-                and cast(dict[str, Any], value).get("dify_model_identity") == FILE_MODEL_IDENTITY
+                and cast(dict[str, Any], value).get("nexusai_model_identity") == FILE_MODEL_IDENTITY
             ):
                 value_dict = cast(dict[str, Any], value)
                 inputs[key] = build_file_from_input_mapping(
@@ -1113,7 +1113,7 @@ class Conversation(Base):
                 value_list = cast(list[Any], value)
                 if all(
                     isinstance(item, dict)
-                    and cast(dict[str, Any], item).get("dify_model_identity") == FILE_MODEL_IDENTITY
+                    and cast(dict[str, Any], item).get("nexusai_model_identity") == FILE_MODEL_IDENTITY
                     for item in value_list
                 ):
                     file_list: list[File] = []
@@ -1444,7 +1444,7 @@ class Message(Base):
         for key, value in inputs.items():
             if (
                 isinstance(value, dict)
-                and cast(dict[str, Any], value).get("dify_model_identity") == FILE_MODEL_IDENTITY
+                and cast(dict[str, Any], value).get("nexusai_model_identity") == FILE_MODEL_IDENTITY
             ):
                 value_dict = cast(dict[str, Any], value)
                 inputs[key] = build_file_from_input_mapping(
@@ -1455,7 +1455,7 @@ class Message(Base):
                 value_list = cast(list[Any], value)
                 if all(
                     isinstance(item, dict)
-                    and cast(dict[str, Any], item).get("dify_model_identity") == FILE_MODEL_IDENTITY
+                    and cast(dict[str, Any], item).get("nexusai_model_identity") == FILE_MODEL_IDENTITY
                     for item in value_list
                 ):
                     file_list: list[File] = []
@@ -1704,10 +1704,10 @@ class Message(Base):
         if self.workflow_run_id:
             from sqlalchemy.orm import sessionmaker
 
-            from repositories.factory import DifyAPIRepositoryFactory
+            from repositories.factory import NexusAIAPIRepositoryFactory
 
             session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-            repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+            repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
             return repo.get_workflow_run_by_id_without_tenant(run_id=self.workflow_run_id)
 
         return None
@@ -2124,7 +2124,7 @@ class Site(Base):
 
     @property
     def app_base_url(self):
-        return dify_config.APP_WEB_URL or request.url_root.rstrip("/")
+        return nexusai_config.APP_WEB_URL or request.url_root.rstrip("/")
 
 
 class ApiToken(Base):  # bug: this uses setattr so idk the field.

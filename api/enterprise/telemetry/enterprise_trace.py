@@ -8,7 +8,7 @@ Signal strategy:
 - **Metrics + structured logs**: all other event types.
 
 Token metric labels (unified structure):
-All token metrics (dify.tokens.input, dify.tokens.output, dify.tokens.total) use the
+All token metrics (nexusai.tokens.input, nexusai.tokens.output, nexusai.tokens.total) use the
 same label set for consistent filtering and aggregation:
 - tenant_id: Tenant identifier
 - app_id: Application identifier
@@ -104,13 +104,13 @@ class EnterpriseOtelTrace:
         metadata = self._metadata(trace_info)
         tenant_id, app_id, user_id = self._context_ids(trace_info, metadata)
         return {
-            "dify.trace_id": trace_info.resolved_trace_id,
-            "dify.tenant_id": tenant_id,
-            "dify.app_id": app_id,
-            "dify.app.name": metadata.get("app_name"),
-            "dify.workspace.name": metadata.get("workspace_name"),
+            "nexusai.trace_id": trace_info.resolved_trace_id,
+            "nexusai.tenant_id": tenant_id,
+            "nexusai.app_id": app_id,
+            "nexusai.app.name": metadata.get("app_name"),
+            "nexusai.workspace.name": metadata.get("workspace_name"),
             "gen_ai.user.id": user_id,
-            "dify.message.id": trace_info.message_id,
+            "nexusai.message.id": trace_info.message_id,
         }
 
     def _metadata(self, trace_info: BaseTraceInfo) -> dict[str, Any]:
@@ -165,18 +165,18 @@ class EnterpriseOtelTrace:
         tenant_id, app_id, user_id = self._context_ids(info, metadata)
         # -- Span attrs: identity + structure + status + timing + gen_ai scalars --
         span_attrs: dict[str, Any] = {
-            "dify.trace_id": info.resolved_trace_id,
-            "dify.tenant_id": tenant_id,
-            "dify.app_id": app_id,
-            "dify.workflow.id": info.workflow_id,
-            "dify.workflow.run_id": info.workflow_run_id,
-            "dify.workflow.status": info.workflow_run_status,
-            "dify.workflow.error": info.error,
-            "dify.workflow.elapsed_time": info.workflow_run_elapsed_time,
-            "dify.invoke_from": metadata.get("triggered_from"),
-            "dify.conversation.id": info.conversation_id,
-            "dify.message.id": info.message_id,
-            "dify.invoked_by": info.invoked_by,
+            "nexusai.trace_id": info.resolved_trace_id,
+            "nexusai.tenant_id": tenant_id,
+            "nexusai.app_id": app_id,
+            "nexusai.workflow.id": info.workflow_id,
+            "nexusai.workflow.run_id": info.workflow_run_id,
+            "nexusai.workflow.status": info.workflow_run_status,
+            "nexusai.workflow.error": info.error,
+            "nexusai.workflow.elapsed_time": info.workflow_run_elapsed_time,
+            "nexusai.invoke_from": metadata.get("triggered_from"),
+            "nexusai.conversation.id": info.conversation_id,
+            "nexusai.message.id": info.message_id,
+            "nexusai.invoked_by": info.invoked_by,
             "gen_ai.usage.total_tokens": info.total_tokens,
             "gen_ai.user.id": user_id,
         }
@@ -186,10 +186,10 @@ class EnterpriseOtelTrace:
         parent_ctx = metadata.get("parent_trace_context")
         if isinstance(parent_ctx, dict):
             parent_ctx_dict = cast(dict[str, Any], parent_ctx)
-            span_attrs["dify.parent.trace_id"] = parent_ctx_dict.get("trace_id")
-            span_attrs["dify.parent.node.execution_id"] = parent_ctx_dict.get("parent_node_execution_id")
-            span_attrs["dify.parent.workflow.run_id"] = parent_ctx_dict.get("parent_workflow_run_id")
-            span_attrs["dify.parent.app.id"] = parent_ctx_dict.get("parent_app_id")
+            span_attrs["nexusai.parent.trace_id"] = parent_ctx_dict.get("trace_id")
+            span_attrs["nexusai.parent.node.execution_id"] = parent_ctx_dict.get("parent_node_execution_id")
+            span_attrs["nexusai.parent.workflow.run_id"] = parent_ctx_dict.get("parent_workflow_run_id")
+            span_attrs["nexusai.parent.app.id"] = parent_ctx_dict.get("parent_app_id")
 
         self._exporter.export_span(
             EnterpriseTelemetrySpan.WORKFLOW_RUN,
@@ -206,18 +206,18 @@ class EnterpriseOtelTrace:
         log_attrs: dict[str, Any] = {**span_attrs}
         log_attrs.update(
             {
-                "dify.app.name": metadata.get("app_name"),
-                "dify.workspace.name": metadata.get("workspace_name"),
+                "nexusai.app.name": metadata.get("app_name"),
+                "nexusai.workspace.name": metadata.get("workspace_name"),
                 "gen_ai.user.id": user_id,
                 "gen_ai.usage.total_tokens": info.total_tokens,
-                "dify.workflow.version": info.workflow_run_version,
+                "nexusai.workflow.version": info.workflow_run_version,
             }
         )
 
         ref = f"ref:workflow_run_id={info.workflow_run_id}"
-        log_attrs["dify.workflow.inputs"] = self._content_or_ref(info.workflow_run_inputs, ref)
-        log_attrs["dify.workflow.outputs"] = self._content_or_ref(info.workflow_run_outputs, ref)
-        log_attrs["dify.workflow.query"] = self._content_or_ref(info.query, ref)
+        log_attrs["nexusai.workflow.inputs"] = self._content_or_ref(info.workflow_run_inputs, ref)
+        log_attrs["nexusai.workflow.outputs"] = self._content_or_ref(info.workflow_run_outputs, ref)
+        log_attrs["nexusai.workflow.query"] = self._content_or_ref(info.query, ref)
 
         emit_telemetry_log(
             event_name=EnterpriseTelemetryEvent.WORKFLOW_RUN,
@@ -312,26 +312,26 @@ class EnterpriseOtelTrace:
         tenant_id, app_id, user_id = self._context_ids(info, metadata)
         # -- Span attrs: identity + structure + status + timing + gen_ai scalars --
         span_attrs: dict[str, Any] = {
-            "dify.trace_id": info.resolved_trace_id,
-            "dify.tenant_id": tenant_id,
-            "dify.app_id": app_id,
-            "dify.workflow.id": info.workflow_id,
-            "dify.workflow.run_id": info.workflow_run_id,
-            "dify.message.id": info.message_id,
-            "dify.conversation.id": metadata.get("conversation_id"),
-            "dify.node.execution_id": info.node_execution_id,
-            "dify.node.id": info.node_id,
-            "dify.node.type": info.node_type,
-            "dify.node.title": info.title,
-            "dify.node.status": info.status,
-            "dify.node.error": info.error,
-            "dify.node.elapsed_time": info.elapsed_time,
-            "dify.node.index": info.index,
-            "dify.node.predecessor_node_id": info.predecessor_node_id,
-            "dify.node.iteration_id": info.iteration_id,
-            "dify.node.loop_id": info.loop_id,
-            "dify.node.parallel_id": info.parallel_id,
-            "dify.node.invoked_by": info.invoked_by,
+            "nexusai.trace_id": info.resolved_trace_id,
+            "nexusai.tenant_id": tenant_id,
+            "nexusai.app_id": app_id,
+            "nexusai.workflow.id": info.workflow_id,
+            "nexusai.workflow.run_id": info.workflow_run_id,
+            "nexusai.message.id": info.message_id,
+            "nexusai.conversation.id": metadata.get("conversation_id"),
+            "nexusai.node.execution_id": info.node_execution_id,
+            "nexusai.node.id": info.node_id,
+            "nexusai.node.type": info.node_type,
+            "nexusai.node.title": info.title,
+            "nexusai.node.status": info.status,
+            "nexusai.node.error": info.error,
+            "nexusai.node.elapsed_time": info.elapsed_time,
+            "nexusai.node.index": info.index,
+            "nexusai.node.predecessor_node_id": info.predecessor_node_id,
+            "nexusai.node.iteration_id": info.iteration_id,
+            "nexusai.node.loop_id": info.loop_id,
+            "nexusai.node.parallel_id": info.parallel_id,
+            "nexusai.node.invoked_by": info.invoked_by,
             "gen_ai.usage.input_tokens": info.prompt_tokens,
             "gen_ai.usage.output_tokens": info.completion_tokens,
             "gen_ai.usage.total_tokens": info.total_tokens,
@@ -358,30 +358,30 @@ class EnterpriseOtelTrace:
         log_attrs: dict[str, Any] = {**span_attrs}
         log_attrs.update(
             {
-                "dify.app.name": metadata.get("app_name"),
-                "dify.workspace.name": metadata.get("workspace_name"),
-                "dify.invoke_from": metadata.get("invoke_from"),
+                "nexusai.app.name": metadata.get("app_name"),
+                "nexusai.workspace.name": metadata.get("workspace_name"),
+                "nexusai.invoke_from": metadata.get("invoke_from"),
                 "gen_ai.user.id": user_id,
                 "gen_ai.usage.total_tokens": info.total_tokens,
-                "dify.node.total_price": info.total_price,
-                "dify.node.currency": info.currency,
+                "nexusai.node.total_price": info.total_price,
+                "nexusai.node.currency": info.currency,
                 "gen_ai.provider.name": info.model_provider,
                 "gen_ai.request.model": info.model_name,
                 "gen_ai.tool.name": info.tool_name,
-                "dify.node.iteration_index": info.iteration_index,
-                "dify.node.loop_index": info.loop_index,
-                "dify.plugin.name": metadata.get("plugin_name"),
-                "dify.credential.name": metadata.get("credential_name"),
-                "dify.credential.id": metadata.get("credential_id"),
-                "dify.dataset.ids": self._maybe_json(metadata.get("dataset_ids")),
-                "dify.dataset.names": self._maybe_json(metadata.get("dataset_names")),
+                "nexusai.node.iteration_index": info.iteration_index,
+                "nexusai.node.loop_index": info.loop_index,
+                "nexusai.plugin.name": metadata.get("plugin_name"),
+                "nexusai.credential.name": metadata.get("credential_name"),
+                "nexusai.credential.id": metadata.get("credential_id"),
+                "nexusai.dataset.ids": self._maybe_json(metadata.get("dataset_ids")),
+                "nexusai.dataset.names": self._maybe_json(metadata.get("dataset_names")),
             }
         )
 
         ref = f"ref:node_execution_id={info.node_execution_id}"
-        log_attrs["dify.node.inputs"] = self._content_or_ref(info.node_inputs, ref)
-        log_attrs["dify.node.outputs"] = self._content_or_ref(info.node_outputs, ref)
-        log_attrs["dify.node.process_data"] = self._content_or_ref(info.process_data, ref)
+        log_attrs["nexusai.node.inputs"] = self._content_or_ref(info.node_inputs, ref)
+        log_attrs["nexusai.node.outputs"] = self._content_or_ref(info.node_outputs, ref)
+        log_attrs["nexusai.node.process_data"] = self._content_or_ref(info.process_data, ref)
 
         emit_telemetry_log(
             event_name=span_name.value,
@@ -456,38 +456,38 @@ class EnterpriseOtelTrace:
         attrs = self._common_attrs(info)
         attrs.update(
             {
-                "dify.invoke_from": metadata.get("from_source"),
-                "dify.conversation.id": metadata.get("conversation_id"),
-                "dify.conversation.mode": info.conversation_mode,
+                "nexusai.invoke_from": metadata.get("from_source"),
+                "nexusai.conversation.id": metadata.get("conversation_id"),
+                "nexusai.conversation.mode": info.conversation_mode,
                 "gen_ai.provider.name": metadata.get("ls_provider"),
                 "gen_ai.request.model": metadata.get("ls_model_name"),
                 "gen_ai.usage.input_tokens": info.message_tokens,
                 "gen_ai.usage.output_tokens": info.answer_tokens,
                 "gen_ai.usage.total_tokens": info.total_tokens,
-                "dify.message.status": metadata.get("status"),
-                "dify.message.error": info.error,
-                "dify.message.from_source": metadata.get("from_source"),
-                "dify.message.from_end_user_id": metadata.get("from_end_user_id"),
-                "dify.message.from_account_id": metadata.get("from_account_id"),
-                "dify.streaming": info.is_streaming_request,
-                "dify.message.time_to_first_token": info.gen_ai_server_time_to_first_token,
-                "dify.message.streaming_duration": info.llm_streaming_time_to_generate,
-                "dify.workflow.run_id": metadata.get("workflow_run_id"),
+                "nexusai.message.status": metadata.get("status"),
+                "nexusai.message.error": info.error,
+                "nexusai.message.from_source": metadata.get("from_source"),
+                "nexusai.message.from_end_user_id": metadata.get("from_end_user_id"),
+                "nexusai.message.from_account_id": metadata.get("from_account_id"),
+                "nexusai.streaming": info.is_streaming_request,
+                "nexusai.message.time_to_first_token": info.gen_ai_server_time_to_first_token,
+                "nexusai.message.streaming_duration": info.llm_streaming_time_to_generate,
+                "nexusai.workflow.run_id": metadata.get("workflow_run_id"),
             }
         )
 
         if info.start_time and info.end_time:
-            attrs["dify.message.duration"] = (info.end_time - info.start_time).total_seconds()
+            attrs["nexusai.message.duration"] = (info.end_time - info.start_time).total_seconds()
 
         node_execution_id = metadata.get("node_execution_id")
         if node_execution_id:
-            attrs["dify.node.execution_id"] = node_execution_id
+            attrs["nexusai.node.execution_id"] = node_execution_id
 
         ref = f"ref:message_id={info.message_id}"
         inputs = self._safe_payload_value(info.inputs)
         outputs = self._safe_payload_value(info.outputs)
-        attrs["dify.message.inputs"] = self._content_or_ref(inputs, ref)
-        attrs["dify.message.outputs"] = self._content_or_ref(outputs, ref)
+        attrs["nexusai.message.inputs"] = self._content_or_ref(inputs, ref)
+        attrs["nexusai.message.outputs"] = self._content_or_ref(outputs, ref)
 
         emit_metric_only_event(
             event_name=EnterpriseTelemetryEvent.MESSAGE_RUN,
@@ -554,22 +554,22 @@ class EnterpriseOtelTrace:
         attrs = self._common_attrs(info)
         attrs.update(
             {
-                "dify.tool.name": info.tool_name,
-                "dify.tool.duration": float(info.time_cost),
-                "dify.tool.status": "failed" if info.error else "succeeded",
-                "dify.tool.error": info.error,
-                "dify.workflow.run_id": metadata.get("workflow_run_id"),
+                "nexusai.tool.name": info.tool_name,
+                "nexusai.tool.duration": float(info.time_cost),
+                "nexusai.tool.status": "failed" if info.error else "succeeded",
+                "nexusai.tool.error": info.error,
+                "nexusai.workflow.run_id": metadata.get("workflow_run_id"),
             }
         )
         node_execution_id = metadata.get("node_execution_id")
         if node_execution_id:
-            attrs["dify.node.execution_id"] = node_execution_id
+            attrs["nexusai.node.execution_id"] = node_execution_id
 
         ref = f"ref:message_id={info.message_id}"
-        attrs["dify.tool.inputs"] = self._content_or_ref(info.tool_inputs, ref)
-        attrs["dify.tool.outputs"] = self._content_or_ref(info.tool_outputs, ref)
-        attrs["dify.tool.parameters"] = self._content_or_ref(info.tool_parameters, ref)
-        attrs["dify.tool.config"] = self._content_or_ref(info.tool_config, ref)
+        attrs["nexusai.tool.inputs"] = self._content_or_ref(info.tool_inputs, ref)
+        attrs["nexusai.tool.outputs"] = self._content_or_ref(info.tool_outputs, ref)
+        attrs["nexusai.tool.parameters"] = self._content_or_ref(info.tool_parameters, ref)
+        attrs["nexusai.tool.config"] = self._content_or_ref(info.tool_config, ref)
 
         emit_metric_only_event(
             event_name=EnterpriseTelemetryEvent.TOOL_EXECUTION,
@@ -611,19 +611,19 @@ class EnterpriseOtelTrace:
         attrs = self._common_attrs(info)
         attrs.update(
             {
-                "dify.moderation.flagged": info.flagged,
-                "dify.moderation.action": info.action,
-                "dify.moderation.preset_response": info.preset_response,
-                "dify.moderation.type": metadata.get("moderation_type", "input"),
-                "dify.moderation.categories": self._maybe_json(metadata.get("moderation_categories", [])),
-                "dify.workflow.run_id": metadata.get("workflow_run_id"),
+                "nexusai.moderation.flagged": info.flagged,
+                "nexusai.moderation.action": info.action,
+                "nexusai.moderation.preset_response": info.preset_response,
+                "nexusai.moderation.type": metadata.get("moderation_type", "input"),
+                "nexusai.moderation.categories": self._maybe_json(metadata.get("moderation_categories", [])),
+                "nexusai.workflow.run_id": metadata.get("workflow_run_id"),
             }
         )
         node_execution_id = metadata.get("node_execution_id")
         if node_execution_id:
-            attrs["dify.node.execution_id"] = node_execution_id
+            attrs["nexusai.node.execution_id"] = node_execution_id
 
-        attrs["dify.moderation.query"] = self._content_or_ref(
+        attrs["nexusai.moderation.query"] = self._content_or_ref(
             info.query,
             f"ref:message_id={info.message_id}",
         )
@@ -662,20 +662,20 @@ class EnterpriseOtelTrace:
         attrs.update(
             {
                 "gen_ai.usage.total_tokens": info.total_tokens,
-                "dify.suggested_question.status": status,
-                "dify.suggested_question.error": error,
-                "dify.suggested_question.duration": duration,
+                "nexusai.suggested_question.status": status,
+                "nexusai.suggested_question.error": error,
+                "nexusai.suggested_question.duration": duration,
                 "gen_ai.provider.name": info.model_provider,
                 "gen_ai.request.model": info.model_id,
-                "dify.suggested_question.count": len(info.suggested_question),
-                "dify.workflow.run_id": metadata.get("workflow_run_id"),
+                "nexusai.suggested_question.count": len(info.suggested_question),
+                "nexusai.workflow.run_id": metadata.get("workflow_run_id"),
             }
         )
         node_execution_id = metadata.get("node_execution_id")
         if node_execution_id:
-            attrs["dify.node.execution_id"] = node_execution_id
+            attrs["nexusai.node.execution_id"] = node_execution_id
 
-        attrs["dify.suggested_question.questions"] = self._content_or_ref(
+        attrs["nexusai.suggested_question.questions"] = self._content_or_ref(
             info.suggested_question,
             f"ref:message_id={info.message_id}",
         )
@@ -708,14 +708,14 @@ class EnterpriseOtelTrace:
         metadata = self._metadata(info)
         tenant_id, app_id, user_id = self._context_ids(info, metadata)
         attrs = self._common_attrs(info)
-        attrs["dify.retrieval.error"] = info.error
-        attrs["dify.retrieval.status"] = "failed" if info.error else "succeeded"
+        attrs["nexusai.retrieval.error"] = info.error
+        attrs["nexusai.retrieval.status"] = "failed" if info.error else "succeeded"
         if info.start_time and info.end_time:
-            attrs["dify.retrieval.duration"] = (info.end_time - info.start_time).total_seconds()
-        attrs["dify.workflow.run_id"] = metadata.get("workflow_run_id")
+            attrs["nexusai.retrieval.duration"] = (info.end_time - info.start_time).total_seconds()
+        attrs["nexusai.workflow.run_id"] = metadata.get("workflow_run_id")
         node_execution_id = metadata.get("node_execution_id")
         if node_execution_id:
-            attrs["dify.node.execution_id"] = node_execution_id
+            attrs["nexusai.node.execution_id"] = node_execution_id
 
         docs: list[dict[str, Any]] = []
         documents_any: Any = info.documents
@@ -745,9 +745,9 @@ class EnterpriseOtelTrace:
                 }
             )
 
-        attrs["dify.dataset.id"] = self._maybe_json(dataset_ids)
-        attrs["dify.dataset.name"] = self._maybe_json(dataset_names)
-        attrs["dify.retrieval.document_count"] = len(docs)
+        attrs["nexusai.dataset.id"] = self._maybe_json(dataset_ids)
+        attrs["nexusai.dataset.name"] = self._maybe_json(dataset_names)
+        attrs["nexusai.retrieval.document_count"] = len(docs)
 
         embedding_models_raw: Any = metadata.get("embedding_models")
         embedding_models: dict[str, Any] = (
@@ -765,20 +765,20 @@ class EnterpriseOtelTrace:
                         providers.append(p)
                     if m and m not in models:
                         models.append(m)
-            attrs["dify.dataset.embedding_providers"] = self._maybe_json(providers)
-            attrs["dify.dataset.embedding_models"] = self._maybe_json(models)
+            attrs["nexusai.dataset.embedding_providers"] = self._maybe_json(providers)
+            attrs["nexusai.dataset.embedding_models"] = self._maybe_json(models)
 
         # Add rerank model to logs
         rerank_provider = metadata.get("rerank_model_provider", "")
         rerank_model = metadata.get("rerank_model_name", "")
         if rerank_provider or rerank_model:
-            attrs["dify.retrieval.rerank_provider"] = rerank_provider
-            attrs["dify.retrieval.rerank_model"] = rerank_model
+            attrs["nexusai.retrieval.rerank_provider"] = rerank_provider
+            attrs["nexusai.retrieval.rerank_model"] = rerank_model
 
         ref = f"ref:message_id={info.message_id}"
         retrieval_inputs = self._safe_payload_value(info.inputs)
-        attrs["dify.retrieval.query"] = self._content_or_ref(retrieval_inputs, ref)
-        attrs["dify.dataset.documents"] = self._content_or_ref(structured_docs, ref)
+        attrs["nexusai.retrieval.query"] = self._content_or_ref(retrieval_inputs, ref)
+        attrs["nexusai.dataset.documents"] = self._content_or_ref(structured_docs, ref)
 
         emit_metric_only_event(
             event_name=EnterpriseTelemetryEvent.DATASET_RETRIEVAL,
@@ -829,25 +829,25 @@ class EnterpriseOtelTrace:
         metadata = self._metadata(info)
         tenant_id, app_id, user_id = self._context_ids(info, metadata)
         attrs = self._common_attrs(info)
-        attrs["dify.conversation.id"] = info.conversation_id
+        attrs["nexusai.conversation.id"] = info.conversation_id
         node_execution_id = metadata.get("node_execution_id")
         if node_execution_id:
-            attrs["dify.node.execution_id"] = node_execution_id
+            attrs["nexusai.node.execution_id"] = node_execution_id
 
         duration: float | None = None
         if info.start_time is not None and info.end_time is not None:
             duration = (info.end_time - info.start_time).total_seconds()
         error: str | None = metadata.get("error") if metadata else None
         status = "failed" if error else "succeeded"
-        attrs["dify.generate_name.duration"] = duration
-        attrs["dify.generate_name.status"] = status
-        attrs["dify.generate_name.error"] = error
+        attrs["nexusai.generate_name.duration"] = duration
+        attrs["nexusai.generate_name.status"] = status
+        attrs["nexusai.generate_name.error"] = error
 
         ref = f"ref:conversation_id={info.conversation_id}"
         inputs = self._safe_payload_value(info.inputs)
         outputs = self._safe_payload_value(info.outputs)
-        attrs["dify.generate_name.inputs"] = self._content_or_ref(inputs, ref)
-        attrs["dify.generate_name.outputs"] = self._content_or_ref(outputs, ref)
+        attrs["nexusai.generate_name.inputs"] = self._content_or_ref(inputs, ref)
+        attrs["nexusai.generate_name.outputs"] = self._content_or_ref(outputs, ref)
 
         emit_metric_only_event(
             event_name=EnterpriseTelemetryEvent.GENERATE_NAME_EXECUTION,
@@ -875,34 +875,34 @@ class EnterpriseOtelTrace:
         metadata = self._metadata(info)
         tenant_id, app_id, user_id = self._context_ids(info, metadata)
         attrs = {
-            "dify.trace_id": info.resolved_trace_id,
-            "dify.tenant_id": tenant_id,
+            "nexusai.trace_id": info.resolved_trace_id,
+            "nexusai.tenant_id": tenant_id,
             "gen_ai.user.id": user_id,
-            "dify.app_id": app_id or "",
-            "dify.app.name": metadata.get("app_name"),
-            "dify.workspace.name": metadata.get("workspace_name"),
-            "dify.prompt_generation.operation_type": info.operation_type,
+            "nexusai.app_id": app_id or "",
+            "nexusai.app.name": metadata.get("app_name"),
+            "nexusai.workspace.name": metadata.get("workspace_name"),
+            "nexusai.prompt_generation.operation_type": info.operation_type,
             "gen_ai.provider.name": info.model_provider,
             "gen_ai.request.model": info.model_name,
             "gen_ai.usage.input_tokens": info.prompt_tokens,
             "gen_ai.usage.output_tokens": info.completion_tokens,
             "gen_ai.usage.total_tokens": info.total_tokens,
-            "dify.prompt_generation.duration": info.latency,
-            "dify.prompt_generation.status": "failed" if info.error else "succeeded",
-            "dify.prompt_generation.error": info.error,
+            "nexusai.prompt_generation.duration": info.latency,
+            "nexusai.prompt_generation.status": "failed" if info.error else "succeeded",
+            "nexusai.prompt_generation.error": info.error,
         }
         node_execution_id = metadata.get("node_execution_id")
         if node_execution_id:
-            attrs["dify.node.execution_id"] = node_execution_id
+            attrs["nexusai.node.execution_id"] = node_execution_id
 
         if info.total_price is not None:
-            attrs["dify.prompt_generation.total_price"] = info.total_price
-            attrs["dify.prompt_generation.currency"] = info.currency
+            attrs["nexusai.prompt_generation.total_price"] = info.total_price
+            attrs["nexusai.prompt_generation.currency"] = info.currency
 
         ref = f"ref:trace_id={info.trace_id}"
         outputs = self._safe_payload_value(info.outputs)
-        attrs["dify.prompt_generation.instruction"] = self._content_or_ref(info.instruction, ref)
-        attrs["dify.prompt_generation.output"] = self._content_or_ref(outputs, ref)
+        attrs["nexusai.prompt_generation.instruction"] = self._content_or_ref(info.instruction, ref)
+        attrs["nexusai.prompt_generation.output"] = self._content_or_ref(outputs, ref)
 
         emit_metric_only_event(
             event_name=EnterpriseTelemetryEvent.PROMPT_GENERATION_EXECUTION,

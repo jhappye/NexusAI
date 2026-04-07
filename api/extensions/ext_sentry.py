@@ -1,9 +1,9 @@
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 
 
-def init_app(app: DifyApp):
-    if dify_config.SENTRY_DSN:
+def init_app(app: NexusAIApp):
+    if nexusai_config.SENTRY_DSN:
         import sentry_sdk
         from graphon.model_runtime.errors.invoke import InvokeRateLimitError
         from sentry_sdk.integrations.celery import CeleryIntegration
@@ -29,7 +29,7 @@ def init_app(app: DifyApp):
             return event
 
         sentry_sdk.init(
-            dsn=dify_config.SENTRY_DSN,
+            dsn=nexusai_config.SENTRY_DSN,
             integrations=[FlaskIntegration(), CeleryIntegration()],
             ignore_errors=[
                 HTTPException,
@@ -38,9 +38,9 @@ def init_app(app: DifyApp):
                 InvokeRateLimitError,
                 _langfuse_error_response,
             ],
-            traces_sample_rate=dify_config.SENTRY_TRACES_SAMPLE_RATE,
-            profiles_sample_rate=dify_config.SENTRY_PROFILES_SAMPLE_RATE,
-            environment=dify_config.DEPLOY_ENV,
-            release=f"dify-{dify_config.project.version}-{dify_config.COMMIT_SHA}",
+            traces_sample_rate=nexusai_config.SENTRY_TRACES_SAMPLE_RATE,
+            profiles_sample_rate=nexusai_config.SENTRY_PROFILES_SAMPLE_RATE,
+            environment=nexusai_config.DEPLOY_ENV,
+            release=f"nexusai-{nexusai_config.project.version}-{nexusai_config.COMMIT_SHA}",
             before_send=before_send,
         )

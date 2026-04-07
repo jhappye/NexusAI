@@ -14,7 +14,7 @@ from models.tools import ToolFile
 class TestDatasourceFileManager:
     @patch("core.datasource.datasource_file_manager.time.time")
     @patch("core.datasource.datasource_file_manager.os.urandom")
-    @patch("core.datasource.datasource_file_manager.dify_config")
+    @patch("core.datasource.datasource_file_manager.nexusai_config")
     def test_sign_file(self, mock_config, mock_urandom, mock_time):
         # Setup
         mock_config.FILES_URL = "http://localhost:5001"
@@ -36,7 +36,7 @@ class TestDatasourceFileManager:
 
     @patch("core.datasource.datasource_file_manager.time.time")
     @patch("core.datasource.datasource_file_manager.os.urandom")
-    @patch("core.datasource.datasource_file_manager.dify_config")
+    @patch("core.datasource.datasource_file_manager.nexusai_config")
     def test_sign_file_empty_secret(self, mock_config, mock_urandom, mock_time):
         # Setup
         mock_config.FILES_URL = "http://localhost:5001"
@@ -49,7 +49,7 @@ class TestDatasourceFileManager:
         assert "sign=" in signed_url
 
     @patch("core.datasource.datasource_file_manager.time.time")
-    @patch("core.datasource.datasource_file_manager.dify_config")
+    @patch("core.datasource.datasource_file_manager.nexusai_config")
     def test_verify_file(self, mock_config, mock_time):
         # Setup
         mock_config.SECRET_KEY = "test_secret"
@@ -77,7 +77,7 @@ class TestDatasourceFileManager:
         assert DatasourceFileManager.verify_file(datasource_file_id, timestamp, nonce, encoded_sign) is False
 
     @patch("core.datasource.datasource_file_manager.time.time")
-    @patch("core.datasource.datasource_file_manager.dify_config")
+    @patch("core.datasource.datasource_file_manager.nexusai_config")
     def test_verify_file_empty_secret(self, mock_config, mock_time):
         # Setup
         mock_config.SECRET_KEY = ""  # Empty string secret
@@ -98,7 +98,7 @@ class TestDatasourceFileManager:
     @patch("core.datasource.datasource_file_manager.db")
     @patch("core.datasource.datasource_file_manager.storage")
     @patch("core.datasource.datasource_file_manager.uuid4")
-    @patch("core.datasource.datasource_file_manager.dify_config")
+    @patch("core.datasource.datasource_file_manager.nexusai_config")
     def test_create_file_by_raw(self, mock_config, mock_uuid, mock_storage, mock_db):
         # Setup
         mock_uuid.return_value = MagicMock(hex="unique_hex")
@@ -133,7 +133,7 @@ class TestDatasourceFileManager:
     @patch("core.datasource.datasource_file_manager.db")
     @patch("core.datasource.datasource_file_manager.storage")
     @patch("core.datasource.datasource_file_manager.uuid4")
-    @patch("core.datasource.datasource_file_manager.dify_config")
+    @patch("core.datasource.datasource_file_manager.nexusai_config")
     def test_create_file_by_raw_filename_no_extension(self, mock_config, mock_uuid, mock_storage, mock_db):
         # Setup
         mock_uuid.return_value = MagicMock(hex="unique_hex")
@@ -160,7 +160,7 @@ class TestDatasourceFileManager:
     @patch("core.datasource.datasource_file_manager.db")
     @patch("core.datasource.datasource_file_manager.storage")
     @patch("core.datasource.datasource_file_manager.uuid4")
-    @patch("core.datasource.datasource_file_manager.dify_config")
+    @patch("core.datasource.datasource_file_manager.nexusai_config")
     @patch("core.datasource.datasource_file_manager.guess_extension")
     def test_create_file_by_raw_unknown_extension(self, mock_guess_ext, mock_config, mock_uuid, mock_storage, mock_db):
         # Setup
@@ -184,7 +184,7 @@ class TestDatasourceFileManager:
     @patch("core.datasource.datasource_file_manager.db")
     @patch("core.datasource.datasource_file_manager.storage")
     @patch("core.datasource.datasource_file_manager.uuid4")
-    @patch("core.datasource.datasource_file_manager.dify_config")
+    @patch("core.datasource.datasource_file_manager.nexusai_config")
     def test_create_file_by_raw_no_filename(self, mock_config, mock_uuid, mock_storage, mock_db):
         # Setup
         mock_uuid.return_value = MagicMock(hex="unique_hex")

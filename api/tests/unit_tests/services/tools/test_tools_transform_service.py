@@ -456,15 +456,15 @@ class TestWorkflowProviderToUserProvider:
 
 class TestGetToolProviderIconUrl:
     def test_builtin_provider_returns_console_url(self):
-        with patch(f"{MODULE}.dify_config") as cfg:
-            cfg.CONSOLE_API_URL = "https://app.dify.ai"
+        with patch(f"{MODULE}.nexusai_config") as cfg:
+            cfg.CONSOLE_API_URL = "https://app.nexusai.ai"
             url = ToolTransformService.get_tool_provider_icon_url("builtin", "google", "icon.png")
 
         assert "/builtin/google/icon" in url
-        assert url.startswith("https://app.dify.ai/console/api/workspaces/current/tool-provider")
+        assert url.startswith("https://app.nexusai.ai/console/api/workspaces/current/tool-provider")
 
     def test_builtin_provider_with_no_console_url(self):
-        with patch(f"{MODULE}.dify_config") as cfg:
+        with patch(f"{MODULE}.nexusai_config") as cfg:
             cfg.CONSOLE_API_URL = None
             url = ToolTransformService.get_tool_provider_icon_url("builtin", "slack", "icon.png")
 

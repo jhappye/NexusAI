@@ -11,9 +11,9 @@ from flask.testing import FlaskClient
 from sqlalchemy.orm import Session
 
 from app_factory import create_app
-from configs.app_config import DifyConfig
+from configs.app_config import NexusAIConfig
 from extensions.ext_database import db
-from models import Account, DifySetup, Tenant, TenantAccountJoin
+from models import Account, NexusAISetup, Tenant, TenantAccountJoin
 from services.account_service import AccountService, RegisterService
 
 _DEFUALT_TEST_ENV = ".env"
@@ -27,8 +27,8 @@ def _load_env():
     current_file_path = pathlib.Path(__file__).absolute()
     # Items later in the list have higher precedence.
     env_file_paths = [
-        os.getenv("DIFY_TEST_ENV_FILE", str(current_file_path.parent / _DEFUALT_TEST_ENV)),
-        os.getenv("DIFY_VDB_TEST_ENV_FILE", str(current_file_path.parent / _DEFAULT_VDB_TEST_ENV)),
+        os.getenv("NEXUSAI_TEST_ENV_FILE", str(current_file_path.parent / _DEFUALT_TEST_ENV)),
+        os.getenv("NEXUSAI_VDB_TEST_ENV_FILE", str(current_file_path.parent / _DEFAULT_VDB_TEST_ENV)),
     ]
 
     for env_path_str in env_file_paths:
@@ -43,7 +43,7 @@ def _load_env():
 
 _load_env()
 # Override storage root to tmp to avoid polluting repo during local runs
-os.environ["OPENDAL_FS_ROOT"] = "/tmp/dify-storage"
+os.environ["OPENDAL_FS_ROOT"] = "/tmp/nexusai-storage"
 os.environ.setdefault("STORAGE_TYPE", "opendal")
 os.environ.setdefault("OPENDAL_SCHEME", "fs")
 
@@ -51,8 +51,8 @@ _CACHED_APP = create_app()
 
 
 @pytest.fixture(scope="session")
-def dify_config() -> DifyConfig:
-    config = DifyConfig()  # type: ignore
+def nexusai_config() -> NexusAIConfig:
+    config = NexusAIConfig()  # type: ignore
     return config
 
 
@@ -63,11 +63,11 @@ def flask_app() -> Flask:
 
 @pytest.fixture(scope="session")
 def setup_account(request) -> Generator[Account, None, None]:
-    """`dify_setup` completes the setup process for the Dify application.
+    """`nexusai_setup` completes the setup process for the NexusAI application.
 
-    It creates `Account` and `Tenant`, and inserts a `DifySetup` record into the database.
+    It creates `Account` and `Tenant`, and inserts a `NexusAISetup` record into the database.
 
-    Most tests in the `controllers` package may require dify has been successfully setup.
+    Most tests in the `controllers` package may require nexusai has been successfully setup.
     """
     with _CACHED_APP.test_request_context():
         rand_suffix = random.randint(int(1e6), int(1e7))  # noqa
@@ -88,7 +88,7 @@ def setup_account(request) -> Generator[Account, None, None]:
     yield account
 
     with _CACHED_APP.test_request_context():
-        db.session.query(DifySetup).delete()
+        db.session.query(NexusAISetup).delete()
         db.session.query(TenantAccountJoin).delete()
         db.session.query(Account).delete()
         db.session.query(Tenant).delete()

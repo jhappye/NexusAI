@@ -322,12 +322,12 @@ def test_process_tenant_processes_all_batches(monkeypatch: pytest.MonkeyPatch) -
 
     monkeypatch.setattr(service_module, "sessionmaker", lambda **_kwargs: object())
     monkeypatch.setattr(
-        service_module.DifyAPIRepositoryFactory,
+        service_module.NexusAIAPIRepositoryFactory,
         "create_api_workflow_node_execution_repository",
         lambda _sm: node_repo,
     )
     monkeypatch.setattr(
-        service_module.DifyAPIRepositoryFactory,
+        service_module.NexusAIAPIRepositoryFactory,
         "create_api_workflow_run_repository",
         lambda _sm: run_repo,
     )
@@ -361,7 +361,7 @@ def test_process_with_tenant_ids_filters_by_plan_and_logs_errors(monkeypatch: py
     echo_mock = MagicMock()
     monkeypatch.setattr(service_module.click, "echo", echo_mock)
 
-    monkeypatch.setattr(service_module.dify_config, "BILLING_ENABLED", True)
+    monkeypatch.setattr(service_module.nexusai_config, "BILLING_ENABLED", True)
 
     def fake_get_info(tenant_id: str):
         if tenant_id == "t_sandbox":
@@ -387,7 +387,7 @@ def test_process_with_tenant_ids_filters_by_plan_and_logs_errors(monkeypatch: py
 
 def test_process_without_tenant_ids_batches_and_scales_interval(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(service_module, "db", SimpleNamespace(engine=object()))
-    monkeypatch.setattr(service_module.dify_config, "BILLING_ENABLED", False)
+    monkeypatch.setattr(service_module.nexusai_config, "BILLING_ENABLED", False)
 
     started_at = datetime.datetime(2023, 4, 3, 8, 59, 24)
     fixed_now = started_at + datetime.timedelta(hours=2)
@@ -461,7 +461,7 @@ def test_process_with_tenant_ids_emits_progress_every_100(monkeypatch: pytest.Mo
 
     flask_app = service_module.Flask("test-app")
     monkeypatch.setattr(service_module, "current_app", SimpleNamespace(_get_current_object=lambda: flask_app))
-    monkeypatch.setattr(service_module.dify_config, "BILLING_ENABLED", False)
+    monkeypatch.setattr(service_module.nexusai_config, "BILLING_ENABLED", False)
 
     executor = _ImmediateExecutor()
     monkeypatch.setattr(service_module, "ThreadPoolExecutor", lambda **_kwargs: executor)
@@ -480,7 +480,7 @@ def test_process_with_tenant_ids_emits_progress_every_100(monkeypatch: pytest.Mo
 
 def test_process_without_tenant_ids_all_intervals_too_many_uses_min_interval(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(service_module, "db", SimpleNamespace(engine=object()))
-    monkeypatch.setattr(service_module.dify_config, "BILLING_ENABLED", False)
+    monkeypatch.setattr(service_module.nexusai_config, "BILLING_ENABLED", False)
 
     started_at = datetime.datetime(2023, 4, 3, 8, 59, 24)
     # Keep the total range smaller than the minimum interval (1 hour) so the loop runs once.
@@ -595,12 +595,12 @@ def test_process_tenant_repo_loops_break_on_empty_second_batch(monkeypatch: pyte
 
     monkeypatch.setattr(service_module, "sessionmaker", lambda **_kwargs: object())
     monkeypatch.setattr(
-        service_module.DifyAPIRepositoryFactory,
+        service_module.NexusAIAPIRepositoryFactory,
         "create_api_workflow_node_execution_repository",
         lambda _sm: node_repo,
     )
     monkeypatch.setattr(
-        service_module.DifyAPIRepositoryFactory,
+        service_module.NexusAIAPIRepositoryFactory,
         "create_api_workflow_run_repository",
         lambda _sm: run_repo,
     )

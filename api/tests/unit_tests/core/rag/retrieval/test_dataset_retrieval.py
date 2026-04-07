@@ -47,7 +47,7 @@ def create_mock_document(
     content: str,
     doc_id: str,
     score: float = 0.8,
-    provider: str = "dify",
+    provider: str = "nexusai",
     additional_metadata: dict | None = None,
 ) -> Document:
     """
@@ -60,7 +60,7 @@ def create_mock_document(
         content: The text content of the document
         doc_id: Unique identifier for the document chunk
         score: Relevance score (0.0 to 1.0)
-        provider: Document provider ("dify" or "external")
+        provider: Document provider ("nexusai" or "external")
         additional_metadata: Optional extra metadata fields
 
     Returns:
@@ -93,7 +93,7 @@ def create_side_effect_for_search(documents: list[Document]):
     Create a side effect function for mocking search methods.
 
     This helper creates a function that simulates how RetrievalService
-    search methods work - they modify the all_documents list in-place
+    search methods work - they monexusai the all_documents list in-place
     rather than returning values directly.
 
     Args:
@@ -107,7 +107,7 @@ def create_side_effect_for_search(documents: list[Document]):
 
     Note:
         The RetrievalService uses ThreadPoolExecutor which submits tasks that
-        modify a shared all_documents list. This pattern simulates that behavior.
+        monexusai a shared all_documents list. This pattern simulates that behavior.
     """
 
     def side_effect(flask_app, dataset_id, query, top_k, *args, all_documents, exceptions, **kwargs):
@@ -272,7 +272,7 @@ class TestRetrievalService:
                     "dataset_id": str(uuid4()),
                     "score": 0.95,
                 },
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="JavaScript is widely used for web development.",
@@ -282,7 +282,7 @@ class TestRetrievalService:
                     "dataset_id": str(uuid4()),
                     "score": 0.85,
                 },
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="Machine learning is a subset of artificial intelligence.",
@@ -292,7 +292,7 @@ class TestRetrievalService:
                     "dataset_id": str(uuid4()),
                     "score": 0.75,
                 },
-                provider="dify",
+                provider="nexusai",
             ),
         ]
 
@@ -326,13 +326,13 @@ class TestRetrievalService:
         -------------
         1. Intercepts ThreadPoolExecutor creation
         2. Replaces submit() to execute functions immediately (synchronously)
-        3. Functions modify shared all_documents list in-place
+        3. Functions monexusai shared all_documents list in-place
         4. Mocks concurrent.futures.wait() since tasks are already done
 
         Why this approach:
         ------------------
         - RetrievalService.retrieve() creates a ThreadPoolExecutor context
-        - It submits search tasks that modify all_documents list
+        - It submits search tasks that monexusai all_documents list
         - concurrent.futures.wait() waits for all tasks to complete
         - By executing synchronously, we avoid threading complexity in tests
 
@@ -803,7 +803,7 @@ class TestRetrievalService:
                 "score": 0.9,  # Higher score - should be kept
                 "document_id": str(uuid4()),
             },
-            provider="dify",
+            provider="nexusai",
         )
         doc1_low = Document(
             page_content="Content 1",
@@ -812,7 +812,7 @@ class TestRetrievalService:
                 "score": 0.6,  # Lower score - should be discarded
                 "document_id": str(uuid4()),
             },
-            provider="dify",
+            provider="nexusai",
         )
         doc2 = Document(
             page_content="Content 2",
@@ -821,7 +821,7 @@ class TestRetrievalService:
                 "score": 0.8,
                 "document_id": str(uuid4()),
             },
-            provider="dify",
+            provider="nexusai",
         )
 
         # Simulate vector search returning high-score duplicate + unique doc
@@ -1039,17 +1039,17 @@ class TestRetrievalService:
         doc1 = Document(
             page_content="Content 1",
             metadata={"doc_id": "doc1", "score": 0.8},
-            provider="dify",
+            provider="nexusai",
         )
         doc2 = Document(
             page_content="Content 2",
             metadata={"doc_id": "doc2", "score": 0.7},
-            provider="dify",
+            provider="nexusai",
         )
         doc1_duplicate = Document(
             page_content="Content 1 duplicate",
             metadata={"doc_id": "doc1", "score": 0.6},
-            provider="dify",
+            provider="nexusai",
         )
 
         documents = [doc1, doc2, doc1_duplicate]
@@ -1074,12 +1074,12 @@ class TestRetrievalService:
         doc_low = Document(
             page_content="Content",
             metadata={"doc_id": "doc1", "score": 0.5},
-            provider="dify",
+            provider="nexusai",
         )
         doc_high = Document(
             page_content="Content",
             metadata={"doc_id": "doc1", "score": 0.9},
-            provider="dify",
+            provider="nexusai",
         )
 
         # Low score first
@@ -1106,9 +1106,9 @@ class TestRetrievalService:
         # Assert
         assert result == []
 
-    def test_deduplicate_documents_non_dify_provider(self):
+    def test_deduplicate_documents_non_nexusai_provider(self):
         """
-        Test deduplication with non-dify provider documents.
+        Test deduplication with non-nexusai provider documents.
 
         Verifies:
         - External provider documents use content-based deduplication
@@ -1299,7 +1299,7 @@ class TestRetrievalService:
         high_score_doc = Document(
             page_content="High relevance content",
             metadata={"doc_id": "doc1", "score": 0.85},
-            provider="dify",
+            provider="nexusai",
         )
 
         def side_effect_retrieve(
@@ -1357,7 +1357,7 @@ class TestRetrievalService:
             Document(
                 page_content=f"Content {i}",
                 metadata={"doc_id": f"doc{i}", "score": 0.9 - i * 0.1},
-                provider="dify",
+                provider="nexusai",
             )
             for i in range(10)
         ]
@@ -1510,12 +1510,12 @@ class TestRetrievalService:
         doc1 = Document(
             page_content="Test content 1",
             metadata={"doc_id": "doc1", "score": 0.9, "document_id": str(uuid4()), "dataset_id": mock_dataset.id},
-            provider="dify",
+            provider="nexusai",
         )
         doc2 = Document(
             page_content="Test content 2",
             metadata={"doc_id": "doc2", "score": 0.8, "document_id": str(uuid4()), "dataset_id": mock_dataset.id},
-            provider="dify",
+            provider="nexusai",
         )
 
         # Mock _retriever to return documents
@@ -1585,12 +1585,12 @@ class TestRetrievalService:
         doc1 = Document(
             page_content="Test content 1",
             metadata={"doc_id": "doc1", "score": 0.7, "document_id": str(uuid4()), "dataset_id": mock_dataset.id},
-            provider="dify",
+            provider="nexusai",
         )
         doc2 = Document(
             page_content="Test content 2",
             metadata={"doc_id": "doc2", "score": 0.6, "document_id": str(uuid4()), "dataset_id": mock_dataset.id},
-            provider="dify",
+            provider="nexusai",
         )
 
         # Mock _retriever to return documents
@@ -1611,12 +1611,12 @@ class TestRetrievalService:
             Document(
                 page_content="Test content 2",
                 metadata={"doc_id": "doc2", "score": 0.95, "document_id": str(uuid4()), "dataset_id": mock_dataset.id},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="Test content 1",
                 metadata={"doc_id": "doc1", "score": 0.85, "document_id": str(uuid4()), "dataset_id": mock_dataset.id},
-                provider="dify",
+                provider="nexusai",
             ),
         ]
         mock_processor_instance.invoke.return_value = reranked_docs
@@ -1628,7 +1628,7 @@ class TestRetrievalService:
         mock_dataset2 = Mock(spec=Dataset)
         mock_dataset2.id = str(uuid4())
         mock_dataset2.indexing_technique = "high_quality"
-        mock_dataset2.provider = "dify"
+        mock_dataset2.provider = "nexusai"
 
         # Act - Call with dataset_count = 2
         dataset_retrieval._multiple_retrieve_thread(
@@ -1695,12 +1695,12 @@ class TestRetrievalService:
         doc1 = Document(
             page_content="Test content 1",
             metadata={"doc_id": "doc1", "score": 0.9, "document_id": str(uuid4()), "dataset_id": mock_dataset.id},
-            provider="dify",
+            provider="nexusai",
         )
         doc2 = Document(
             page_content="Test content 2",
             metadata={"doc_id": "doc2", "score": 0.8, "document_id": str(uuid4()), "dataset_id": mock_dataset.id},
-            provider="dify",
+            provider="nexusai",
         )
 
         # Mock _retriever to return documents
@@ -1719,7 +1719,7 @@ class TestRetrievalService:
             Document(
                 page_content="Test content 1",
                 metadata={"doc_id": "doc1", "score": 0.95, "document_id": str(uuid4()), "dataset_id": mock_dataset.id},
-                provider="dify",
+                provider="nexusai",
             ),
         ]
         mock_calculate_vector_score.return_value = scored_docs
@@ -1856,7 +1856,7 @@ class TestDocumentModel:
       - dataset_id: Dataset this document belongs to
       - score: Relevance score from search (0.0 to 1.0)
       - Custom fields: category, tags, timestamps, etc.
-    - **provider** (str): Source of the document ("dify" or "external")
+    - **provider** (str): Source of the document ("nexusai" or "external")
     - **vector** (list[float] | None): Embedding vector for semantic search
     - **children** (list[ChildDocument] | None): Sub-chunks for hierarchical docs
 
@@ -1913,7 +1913,7 @@ class TestDocumentModel:
 
         assert doc.page_content == "Test content"
         assert doc.metadata == {}  # Empty dict by default
-        assert doc.provider == "dify"  # Default provider
+        assert doc.provider == "nexusai"  # Default provider
         assert doc.vector is None  # No embedding by default
         assert doc.children is None  # No child documents by default
 
@@ -1984,7 +1984,7 @@ class TestDocumentModel:
 def create_mock_dataset_methods(
     dataset_id: str | None = None,
     tenant_id: str | None = None,
-    provider: str = "dify",
+    provider: str = "nexusai",
     indexing_technique: str = "high_quality",
     available_document_count: int = 10,
 ) -> Mock:
@@ -1994,7 +1994,7 @@ def create_mock_dataset_methods(
     Args:
         dataset_id: Unique identifier for the dataset
         tenant_id: Tenant ID for the dataset
-        provider: Provider type ("dify" or "external")
+        provider: Provider type ("nexusai" or "external")
         indexing_technique: Indexing technique ("high_quality" or "economy")
         available_document_count: Number of available documents
 
@@ -2023,7 +2023,7 @@ def create_mock_document_methods(
     content: str,
     doc_id: str,
     score: float = 0.8,
-    provider: str = "dify",
+    provider: str = "nexusai",
     additional_metadata: dict | None = None,
 ) -> Document:
     """
@@ -2033,7 +2033,7 @@ def create_mock_document_methods(
         content: The text content of the document
         doc_id: Unique identifier for the document chunk
         score: Relevance score (0.0 to 1.0)
-        provider: Document provider ("dify" or "external")
+        provider: Document provider ("nexusai" or "external")
         additional_metadata: Optional extra metadata fields
 
     Returns:
@@ -2281,7 +2281,7 @@ class TestDatasetRetrievalKnowledgeRetrieval:
     4. Metadata filtering automatic
     5. Metadata filtering manual
     6. External documents handling
-    7. Dify documents handling
+    7. NexusAI documents handling
     8. Empty results handling
     9. Rate limit exceeded
     10. No available datasets
@@ -2488,7 +2488,7 @@ class TestDatasetRetrievalKnowledgeRetrieval:
         Test knowledge_retrieval with external documents.
 
         External documents come from external knowledge bases and should
-        be formatted differently than Dify documents.
+        be formatted differently than NexusAI documents.
 
         Verifies:
         - External documents are handled correctly
@@ -3525,7 +3525,7 @@ class TestKnowledgeRetrievalRegression:
         dataset.tenant_id = str(uuid4())
         dataset.name = "test_dataset"
         dataset.indexing_technique = "high_quality"
-        dataset.provider = "dify"
+        dataset.provider = "nexusai"
         return dataset
 
     def test_multiple_retrieve_reranking_with_app_context(self, mock_dataset):
@@ -3542,7 +3542,7 @@ class TestKnowledgeRetrievalRegression:
         # second dataset to ensure dataset_count > 1 reranking branch
         secondary_dataset = Mock(spec=Dataset)
         secondary_dataset.id = str(uuid4())
-        secondary_dataset.provider = "dify"
+        secondary_dataset.provider = "nexusai"
         secondary_dataset.indexing_technique = "high_quality"
 
         # retriever returns 1 doc into internal list (all_documents_item)
@@ -3554,7 +3554,7 @@ class TestKnowledgeRetrievalRegression:
                 "document_id": str(uuid4()),
                 "dataset_id": mock_dataset.id,
             },
-            provider="dify",
+            provider="nexusai",
         )
 
         def fake_retriever(
@@ -3683,9 +3683,9 @@ class TestDatasetRetrievalAdditionalHelpers:
         assert len(filters) == 1
 
     def test_calculate_vector_score(self, retrieval: DatasetRetrieval) -> None:
-        doc_high = Document(page_content="a", metadata={"score": 0.9}, provider="dify")
-        doc_low = Document(page_content="b", metadata={"score": 0.2}, provider="dify")
-        doc_no_meta = Document(page_content="c", metadata={}, provider="dify")
+        doc_high = Document(page_content="a", metadata={"score": 0.9}, provider="nexusai")
+        doc_low = Document(page_content="b", metadata={"score": 0.2}, provider="nexusai")
+        doc_no_meta = Document(page_content="c", metadata={}, provider="nexusai")
 
         filtered = retrieval.calculate_vector_score([doc_low, doc_high, doc_no_meta], top_k=1, score_threshold=0.5)
         assert len(filtered) == 1
@@ -3695,8 +3695,8 @@ class TestDatasetRetrievalAdditionalHelpers:
 
     def test_calculate_keyword_score(self, retrieval: DatasetRetrieval) -> None:
         documents = [
-            Document(page_content="python language", metadata={"doc_id": "1"}, provider="dify"),
-            Document(page_content="java language", metadata={"doc_id": "2"}, provider="dify"),
+            Document(page_content="python language", metadata={"doc_id": "1"}, provider="nexusai"),
+            Document(page_content="java language", metadata={"doc_id": "2"}, provider="nexusai"),
         ]
         keyword_handler = Mock()
         keyword_handler.extract_keywords.side_effect = [
@@ -3715,7 +3715,7 @@ class TestDatasetRetrievalAdditionalHelpers:
     def test_send_trace_task(self, retrieval: DatasetRetrieval) -> None:
         trace_manager = Mock()
         retrieval.application_generate_entity = SimpleNamespace(trace_manager=trace_manager)
-        docs = [Document(page_content="d", metadata={}, provider="dify")]
+        docs = [Document(page_content="d", metadata={}, provider="nexusai")]
 
         retrieval._send_trace_task("m1", docs, {"cost": 1})
         trace_manager.add_trace_task.assert_called_once()
@@ -4100,7 +4100,7 @@ class TestDatasetRetrievalAdditionalHelpers:
 
 
 def _doc(
-    provider: str = "dify",
+    provider: str = "nexusai",
     content: str = "content",
     score: float = 0.9,
     dataset_id: str = "dataset-1",
@@ -4432,9 +4432,9 @@ class TestRetrieveCoverage:
             doc_id="ext-node",
             extra={"title": "External Title", "dataset_name": "External DS"},
         )
-        dify_doc = _doc(
-            provider="dify",
-            content="dify body",
+        nexusai_doc = _doc(
+            provider="nexusai",
+            content="nexusai body",
             score=0.9,
             dataset_id="d1",
             document_id="doc-1",
@@ -4483,7 +4483,7 @@ class TestRetrieveCoverage:
             patch("core.rag.retrieval.dataset_retrieval.ModelManager.for_tenant") as mock_model_manager,
             patch.object(retrieval, "_get_available_datasets", return_value=[SimpleNamespace(id="d1")]),
             patch.object(retrieval, "get_metadata_filter_condition", return_value=(None, None)),
-            patch.object(retrieval, "multiple_retrieve", return_value=[external_doc, dify_doc]),
+            patch.object(retrieval, "multiple_retrieve", return_value=[external_doc, nexusai_doc]),
             patch(
                 "core.rag.retrieval.dataset_retrieval.RetrievalService.format_retrieval_documents",
                 return_value=[record],
@@ -4570,12 +4570,12 @@ class TestSingleAndMultipleRetrieveCoverage:
         mock_end.assert_called_once()
         assert retrieval.llm_usage.total_tokens == 2
 
-    def test_single_retrieve_dify_path_and_filters(self, retrieval: DatasetRetrieval) -> None:
+    def test_single_retrieve_nexusai_path_and_filters(self, retrieval: DatasetRetrieval) -> None:
         dataset = SimpleNamespace(
             id="ds-1",
             name="Internal DS",
             description="dataset desc",
-            provider="dify",
+            provider="nexusai",
             tenant_id="tenant-1",
             indexing_technique="high_quality",
             retrieval_model={
@@ -4591,7 +4591,7 @@ class TestSingleAndMultipleRetrieveCoverage:
         )
         app = Flask(__name__)
         usage = LLMUsage.from_metadata({"prompt_tokens": 1, "completion_tokens": 0, "total_tokens": 1})
-        result_doc = _doc(provider="dify", score=0.7, dataset_id="ds-1", document_id="doc-1", doc_id="node-1")
+        result_doc = _doc(provider="nexusai", score=0.7, dataset_id="ds-1", document_id="doc-1", doc_id="node-1")
         with app.app_context():
             with (
                 patch("core.rag.retrieval.dataset_retrieval.FunctionCallMultiDatasetRouter") as mock_router_cls,
@@ -4645,7 +4645,7 @@ class TestSingleAndMultipleRetrieveCoverage:
             id="ds-1",
             name="Internal DS",
             description="desc",
-            provider="dify",
+            provider="nexusai",
             tenant_id="tenant-1",
             indexing_technique="high_quality",
             retrieval_model={"top_k": 2, "search_method": "semantic_search", "reranking_enable": False},
@@ -4761,8 +4761,8 @@ class TestSingleAndMultipleRetrieveCoverage:
                 embedding_model_provider="provider-a",
             ),
         ]
-        doc_a = _doc(provider="dify", score=0.8, dataset_id="d1", document_id="doc-1", doc_id="dup")
-        doc_b = _doc(provider="dify", score=0.7, dataset_id="d2", document_id="doc-2", doc_id="dup")
+        doc_a = _doc(provider="nexusai", score=0.8, dataset_id="d1", document_id="doc-1", doc_id="dup")
+        doc_b = _doc(provider="nexusai", score=0.7, dataset_id="d2", document_id="doc-2", doc_id="dup")
         doc_external = _doc(
             provider="external",
             score=0.9,
@@ -4853,7 +4853,7 @@ class TestInternalHooksCoverage:
     def retrieval(self) -> DatasetRetrieval:
         return DatasetRetrieval()
 
-    def test_on_retrieval_end_without_dify_documents(self, retrieval: DatasetRetrieval) -> None:
+    def test_on_retrieval_end_without_nexusai_documents(self, retrieval: DatasetRetrieval) -> None:
         app = Flask(__name__)
         with patch.object(retrieval, "_send_trace_task") as mock_trace:
             retrieval._on_retrieval_end(
@@ -4864,9 +4864,9 @@ class TestInternalHooksCoverage:
             )
         mock_trace.assert_called_once()
 
-    def test_on_retrieval_end_dify_without_document_ids(self, retrieval: DatasetRetrieval) -> None:
+    def test_on_retrieval_end_nexusai_without_document_ids(self, retrieval: DatasetRetrieval) -> None:
         app = Flask(__name__)
-        doc = Document(page_content="x", metadata={"doc_id": "n1"}, provider="dify")
+        doc = Document(page_content="x", metadata={"doc_id": "n1"}, provider="nexusai")
         with (
             patch("core.rag.retrieval.dataset_retrieval.db", SimpleNamespace(engine=Mock())),
             patch.object(retrieval, "_send_trace_task") as mock_trace,
@@ -4877,10 +4877,10 @@ class TestInternalHooksCoverage:
     def test_on_retrieval_end_updates_segments_for_text_and_image(self, retrieval: DatasetRetrieval) -> None:
         app = Flask(__name__)
         docs = [
-            _doc(provider="dify", document_id="doc-a", doc_id="idx-a", extra={"doc_type": "text"}),
-            _doc(provider="dify", document_id="doc-b", doc_id="att-b", extra={"doc_type": DocType.IMAGE}),
-            _doc(provider="dify", document_id="doc-c", doc_id="idx-c", extra={"doc_type": "text"}),
-            _doc(provider="dify", document_id="doc-d", doc_id="att-d", extra={"doc_type": DocType.IMAGE}),
+            _doc(provider="nexusai", document_id="doc-a", doc_id="idx-a", extra={"doc_type": "text"}),
+            _doc(provider="nexusai", document_id="doc-b", doc_id="att-b", extra={"doc_type": DocType.IMAGE}),
+            _doc(provider="nexusai", document_id="doc-c", doc_id="idx-c", extra={"doc_type": "text"}),
+            _doc(provider="nexusai", document_id="doc-d", doc_id="att-d", extra={"doc_type": DocType.IMAGE}),
         ]
         dataset_docs = [
             SimpleNamespace(id="doc-a", doc_form=IndexStructureType.PARENT_CHILD_INDEX),
@@ -4963,13 +4963,13 @@ class TestInternalHooksCoverage:
 
         economy_dataset = SimpleNamespace(
             id="eco-ds",
-            provider="dify",
+            provider="nexusai",
             retrieval_model={"top_k": 1},
             indexing_technique="economy",
         )
         high_dataset = SimpleNamespace(
             id="hq-ds",
-            provider="dify",
+            provider="nexusai",
             retrieval_model={
                 "search_method": "semantic_search",
                 "top_k": 4,
@@ -4987,7 +4987,7 @@ class TestInternalHooksCoverage:
                 "core.rag.retrieval.dataset_retrieval.db.session.scalar", side_effect=[economy_dataset, high_dataset]
             ),
             patch(
-                "core.rag.retrieval.dataset_retrieval.RetrievalService.retrieve", return_value=[_doc(provider="dify")]
+                "core.rag.retrieval.dataset_retrieval.RetrievalService.retrieve", return_value=[_doc(provider="nexusai")]
             ) as mock_retrieve,
         ):
             retrieval._retriever(
@@ -5009,10 +5009,10 @@ class TestInternalHooksCoverage:
         assert len(all_documents) >= 3
 
     def test_to_dataset_retriever_tool_paths(self, retrieval: DatasetRetrieval) -> None:
-        dataset_skip_zero = SimpleNamespace(id="d1", provider="dify", available_document_count=0)
+        dataset_skip_zero = SimpleNamespace(id="d1", provider="nexusai", available_document_count=0)
         dataset_ok_single = SimpleNamespace(
             id="d2",
-            provider="dify",
+            provider="nexusai",
             available_document_count=2,
             retrieval_model={"top_k": 2, "score_threshold_enabled": True, "score_threshold": 0.1},
         )
@@ -5092,7 +5092,7 @@ class TestInternalHooksCoverage:
     def test_additional_small_branches(self, retrieval: DatasetRetrieval) -> None:
         keyword_handler = Mock()
         keyword_handler.extract_keywords.side_effect = [[], []]
-        doc = Document(page_content="doc", metadata={"doc_id": "1"}, provider="dify")
+        doc = Document(page_content="doc", metadata={"doc_id": "1"}, provider="nexusai")
         with patch("core.rag.retrieval.dataset_retrieval.JiebaKeywordTableHandler", return_value=keyword_handler):
             ranked = retrieval.calculate_keyword_score("query", [doc], top_k=1)
         assert len(ranked) == 1

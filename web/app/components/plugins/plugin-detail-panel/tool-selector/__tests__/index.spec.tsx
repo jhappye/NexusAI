@@ -24,7 +24,7 @@ import ToolSelector from '../index'
 
 // ==================== Mock Setup ====================
 
-// Mock service hooks - use let so we can modify in tests
+// Mock service hooks - use let so we can monexusai in tests
 // Allow undefined for testing fallback behavior
 let mockBuildInTools: ToolWithProvider[] | undefined = []
 let mockCustomTools: ToolWithProvider[] | undefined = []
@@ -2160,7 +2160,7 @@ describe('Additional Coverage Tests', () => {
         ],
       })
 
-      // Temporarily modify mock data
+      // Temporarily monexusai mock data
       mockBuildInTools!.push(mockProvider)
 
       const onSelect = vi.fn()

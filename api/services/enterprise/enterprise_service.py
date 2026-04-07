@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_redis import redis_client
 from services.enterprise.base import EnterpriseRequest
 
@@ -76,7 +76,7 @@ def try_join_default_workspace(account_id: str) -> None:
     This is a best-effort integration. Failures must not block user registration.
     """
 
-    if not dify_config.ENTERPRISE_ENABLED:
+    if not nexusai_config.ENTERPRISE_ENABLED:
         return
 
     try:
@@ -246,7 +246,7 @@ class EnterpriseService:
         Returns:
             LicenseStatus enum value, or None if enterprise is disabled / unreachable.
         """
-        if not dify_config.ENTERPRISE_ENABLED:
+        if not nexusai_config.ENTERPRISE_ENABLED:
             return None
 
         cached = cls._read_cached_license_status()

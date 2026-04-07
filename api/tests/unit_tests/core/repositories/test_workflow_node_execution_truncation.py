@@ -18,7 +18,7 @@ from graphon.entities.workflow_node_execution import (
 from graphon.enums import BuiltinNodeTypes
 from sqlalchemy import Engine
 
-from configs import dify_config
+from configs import nexusai_config
 from core.repositories.sqlalchemy_workflow_node_execution_repository import (
     SQLAlchemyWorkflowNodeExecutionRepository,
 )
@@ -42,7 +42,7 @@ class TruncationTestCase:
 def create_test_cases() -> list[TruncationTestCase]:
     """Create test cases for different truncation scenarios."""
     # Create large data that will definitely exceed the threshold (10KB)
-    large_data = {"data": "x" * (dify_config.WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE + 1000)}
+    large_data = {"data": "x" * (nexusai_config.WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE + 1000)}
     small_data = {"data": "small"}
 
     return [

@@ -3,7 +3,7 @@ app:
   icon: 🤖
   icon_background: '#FFEAD5'
   mode: advanced-chat
-  name: search_dify_from_2023_to_2025
+  name: search_nexusai_from_2023_to_2025
   use_icon_as_answer_icon: false
 dependencies:
 - current_identifier: null
@@ -676,7 +676,7 @@ workflow:
         tool_parameters:
           query:
             type: mixed
-            value: Dify.AI {{#1754979524910.year#}}
+            value: NexusAI.AI {{#1754979524910.year#}}
         type: tool
       height: 376
       id: '1754979561786'

@@ -3,8 +3,8 @@ from types import SimpleNamespace
 import pytest
 from graphon.enums import BuiltinNodeTypes
 
-from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_dify_run_context
-from core.workflow.node_factory import DifyNodeFactory
+from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_nexusai_run_context
+from core.workflow.node_factory import NexusAINodeFactory
 
 
 class DummyNode:
@@ -38,7 +38,7 @@ class DummyDocumentExtractorNode(DummyNode):
     pass
 
 
-class TestDifyNodeFactory:
+class TestNexusAINodeFactory:
     @staticmethod
     def _stub_node_resolution(monkeypatch, node_class):
         monkeypatch.setattr(
@@ -47,19 +47,19 @@ class TestDifyNodeFactory:
         )
 
     def _factory(self, monkeypatch):
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.CODE_MAX_STRING_LENGTH", 10)
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.CODE_MAX_NUMBER", 10)
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.CODE_MIN_NUMBER", -10)
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.CODE_MAX_PRECISION", 4)
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.CODE_MAX_DEPTH", 2)
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.CODE_MAX_NUMBER_ARRAY_LENGTH", 2)
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.CODE_MAX_STRING_ARRAY_LENGTH", 2)
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.CODE_MAX_OBJECT_ARRAY_LENGTH", 2)
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.TEMPLATE_TRANSFORM_MAX_LENGTH", 100)
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.UNSTRUCTURED_API_URL", "http://u")
-        monkeypatch.setattr("core.workflow.node_factory.dify_config.UNSTRUCTURED_API_KEY", "key")
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.CODE_MAX_STRING_LENGTH", 10)
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.CODE_MAX_NUMBER", 10)
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.CODE_MIN_NUMBER", -10)
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.CODE_MAX_PRECISION", 4)
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.CODE_MAX_DEPTH", 2)
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.CODE_MAX_NUMBER_ARRAY_LENGTH", 2)
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.CODE_MAX_STRING_ARRAY_LENGTH", 2)
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.CODE_MAX_OBJECT_ARRAY_LENGTH", 2)
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.TEMPLATE_TRANSFORM_MAX_LENGTH", 100)
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.UNSTRUCTURED_API_URL", "http://u")
+        monkeypatch.setattr("core.workflow.node_factory.nexusai_config.UNSTRUCTURED_API_KEY", "key")
 
-        run_context = build_dify_run_context(
+        run_context = build_nexusai_run_context(
             tenant_id="tenant",
             app_id="app",
             user_id="user",
@@ -67,7 +67,7 @@ class TestDifyNodeFactory:
             invoke_from=InvokeFrom.WEB_APP,
         )
 
-        return DifyNodeFactory(
+        return NexusAINodeFactory(
             graph_init_params=SimpleNamespace(run_context=run_context),
             graph_runtime_state=SimpleNamespace(),
         )

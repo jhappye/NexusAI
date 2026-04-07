@@ -21,7 +21,7 @@ def _config_values() -> dict:
         "account_password": "password",
         "min_connection": 1,
         "max_connection": 2,
-        "namespace": "dify",
+        "namespace": "nexusai",
     }
 
 
@@ -121,7 +121,7 @@ def test_get_cursor_context_manager_handles_connection_lifecycle():
 
 def test_add_texts_inserts_only_documents_with_metadata(monkeypatch):
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
 
     cursor = MagicMock()
 
@@ -147,7 +147,7 @@ def test_add_texts_inserts_only_documents_with_metadata(monkeypatch):
 
 def test_text_exists_returns_true_and_false_based_on_query_result():
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
     cursor = MagicMock()
 
     @contextmanager
@@ -165,7 +165,7 @@ def test_text_exists_returns_true_and_false_based_on_query_result():
 
 def test_delete_by_ids_handles_empty_input_and_missing_table_error():
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
     cursor = MagicMock()
 
     @contextmanager
@@ -182,7 +182,7 @@ def test_delete_by_ids_handles_empty_input_and_missing_table_error():
 
 def test_delete_by_metadata_field_handles_missing_table_error():
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
     cursor = MagicMock()
 
     @contextmanager
@@ -197,7 +197,7 @@ def test_delete_by_metadata_field_handles_missing_table_error():
 @pytest.mark.parametrize("invalid_top_k", [0, "x", -1])
 def test_search_by_vector_validates_top_k(invalid_top_k):
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
 
     with pytest.raises(ValueError, match="top_k must be a positive integer"):
         vector.search_by_vector([0.1, 0.2], top_k=invalid_top_k)
@@ -205,7 +205,7 @@ def test_search_by_vector_validates_top_k(invalid_top_k):
 
 def test_search_by_vector_returns_documents_above_threshold():
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
     cursor = MagicMock()
     cursor.__iter__.return_value = iter(
         [
@@ -230,7 +230,7 @@ def test_search_by_vector_returns_documents_above_threshold():
 @pytest.mark.parametrize("invalid_top_k", [0, "x", -1])
 def test_search_by_full_text_validates_top_k(invalid_top_k):
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
 
     with pytest.raises(ValueError, match="top_k must be a positive integer"):
         vector.search_by_full_text("query", top_k=invalid_top_k)
@@ -238,7 +238,7 @@ def test_search_by_full_text_validates_top_k(invalid_top_k):
 
 def test_search_by_full_text_returns_documents():
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
     cursor = MagicMock()
     cursor.__iter__.return_value = iter(
         [
@@ -260,7 +260,7 @@ def test_search_by_full_text_returns_documents():
 
 def test_delete_drops_table():
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
     cursor = MagicMock()
 
     @contextmanager
@@ -283,7 +283,7 @@ def test_init_normalizes_collection_name_and_creates_pool_when_missing(monkeypat
     vector = AnalyticdbVectorBySql("My_Collection", config)
 
     assert vector._collection_name == "my_collection"
-    assert vector.table_name == "dify.my_collection"
+    assert vector.table_name == "nexusai.my_collection"
     assert vector.databaseName == "knowledgebase"
     assert vector.pool is created_pool
 
@@ -323,7 +323,7 @@ def test_initialize_vector_database_handles_existing_database_and_search_config(
         "CREATE OR REPLACE FUNCTION public.to_tsquery_from_text" in call.args[0]
         for call in worker_cursor.execute.call_args_list
     )
-    assert any("CREATE SCHEMA IF NOT EXISTS dify" in call.args[0] for call in worker_cursor.execute.call_args_list)
+    assert any("CREATE SCHEMA IF NOT EXISTS nexusai" in call.args[0] for call in worker_cursor.execute.call_args_list)
 
 
 def test_initialize_vector_database_raises_runtime_error_when_zhparser_fails(monkeypatch):
@@ -357,7 +357,7 @@ def test_create_collection_if_not_exists_creates_table_indexes_and_cache(monkeyp
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
     vector.config = AnalyticdbVectorBySqlConfig(**_config_values())
     vector._collection_name = "collection"
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
 
     lock = MagicMock()
     lock.__enter__.return_value = None
@@ -376,7 +376,7 @@ def test_create_collection_if_not_exists_creates_table_indexes_and_cache(monkeyp
 
     vector._create_collection_if_not_exists(embedding_dimension=3)
 
-    assert any("CREATE TABLE IF NOT EXISTS dify.collection" in call.args[0] for call in cursor.execute.call_args_list)
+    assert any("CREATE TABLE IF NOT EXISTS nexusai.collection" in call.args[0] for call in cursor.execute.call_args_list)
     assert any("CREATE INDEX collection_embedding_idx" in call.args[0] for call in cursor.execute.call_args_list)
     sql_module.redis_client.set.assert_called_once()
 
@@ -385,7 +385,7 @@ def test_create_collection_if_not_exists_raises_for_non_existing_error(monkeypat
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
     vector.config = AnalyticdbVectorBySqlConfig(**_config_values())
     vector._collection_name = "collection"
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
 
     lock = MagicMock()
     lock.__enter__.return_value = None
@@ -409,7 +409,7 @@ def test_create_collection_if_not_exists_raises_for_non_existing_error(monkeypat
 
 def test_delete_methods_raise_when_error_is_not_missing_table():
     vector = AnalyticdbVectorBySql.__new__(AnalyticdbVectorBySql)
-    vector.table_name = "dify.collection"
+    vector.table_name = "nexusai.collection"
     cursor = MagicMock()
 
     @contextmanager

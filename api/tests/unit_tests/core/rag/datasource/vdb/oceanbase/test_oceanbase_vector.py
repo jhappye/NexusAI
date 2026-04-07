@@ -241,7 +241,7 @@ def test_create_collection_happy_path_with_hybrid_and_index(oceanbase_module, mo
     monkeypatch.setattr(oceanbase_module.redis_client, "lock", MagicMock(return_value=lock))
     monkeypatch.setattr(oceanbase_module.redis_client, "get", MagicMock(return_value=None))
     monkeypatch.setattr(oceanbase_module.redis_client, "set", MagicMock())
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_FULLTEXT_PARSER", "ik")
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_FULLTEXT_PARSER", "ik")
     monkeypatch.setattr(oceanbase_module, "Column", lambda *args, **kwargs: SimpleNamespace(args=args, kwargs=kwargs))
     monkeypatch.setattr(oceanbase_module, "VECTOR", lambda dim: SimpleNamespace(dim=dim))
 
@@ -303,7 +303,7 @@ def test_create_collection_error_paths(oceanbase_module, monkeypatch):
         vector._create_collection()
 
     vector._client.perform_raw_text_sql.side_effect = [[[None, None, None, None, None, None, "30"]]]
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_FULLTEXT_PARSER", "not-valid")
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_FULLTEXT_PARSER", "not-valid")
     with pytest.raises(ValueError, match="Invalid OceanBase full-text parser"):
         vector._create_collection()
 
@@ -315,7 +315,7 @@ def test_create_collection_fulltext_and_metadata_index_exceptions(oceanbase_modu
     monkeypatch.setattr(oceanbase_module.redis_client, "lock", MagicMock(return_value=lock))
     monkeypatch.setattr(oceanbase_module.redis_client, "get", MagicMock(return_value=None))
     monkeypatch.setattr(oceanbase_module.redis_client, "set", MagicMock())
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_FULLTEXT_PARSER", "ik")
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_FULLTEXT_PARSER", "ik")
     monkeypatch.setattr(oceanbase_module, "Column", lambda *args, **kwargs: SimpleNamespace(args=args, kwargs=kwargs))
     monkeypatch.setattr(oceanbase_module, "VECTOR", lambda dim: SimpleNamespace(dim=dim))
 
@@ -527,20 +527,20 @@ def test_oceanbase_factory_uses_existing_or_generated_collection(oceanbase_modul
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(oceanbase_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_VECTOR_HOST", "127.0.0.1")
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_VECTOR_PORT", 2881)
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_VECTOR_USER", "root")
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_VECTOR_PASSWORD", "password")
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_VECTOR_DATABASE", "test")
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_ENABLE_HYBRID_SEARCH", True)
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_VECTOR_BATCH_SIZE", 10)
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_VECTOR_METRIC_TYPE", "cosine")
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_HNSW_M", 16)
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_HNSW_EF_CONSTRUCTION", 64)
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_HNSW_EF_SEARCH", -1)
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_VECTOR_POOL_SIZE", 5)
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_VECTOR_MAX_OVERFLOW", 10)
-    monkeypatch.setattr(oceanbase_module.dify_config, "OCEANBASE_HNSW_REFRESH_THRESHOLD", 1000)
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_VECTOR_HOST", "127.0.0.1")
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_VECTOR_PORT", 2881)
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_VECTOR_USER", "root")
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_VECTOR_PASSWORD", "password")
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_VECTOR_DATABASE", "test")
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_ENABLE_HYBRID_SEARCH", True)
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_VECTOR_BATCH_SIZE", 10)
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_VECTOR_METRIC_TYPE", "cosine")
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_HNSW_M", 16)
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_HNSW_EF_CONSTRUCTION", 64)
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_HNSW_EF_SEARCH", -1)
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_VECTOR_POOL_SIZE", 5)
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_VECTOR_MAX_OVERFLOW", 10)
+    monkeypatch.setattr(oceanbase_module.nexusai_config, "OCEANBASE_HNSW_REFRESH_THRESHOLD", 1000)
 
     with patch.object(oceanbase_module, "OceanBaseVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

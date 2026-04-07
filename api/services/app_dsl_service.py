@@ -23,7 +23,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper import ssrf_proxy
 from core.plugin.entities.plugin import PluginDependency
 from core.trigger.constants import (
@@ -810,7 +810,7 @@ class AppDslService:
     @classmethod
     def encrypt_dataset_id(cls, dataset_id: str, tenant_id: str) -> str:
         """Encrypt dataset_id using AES-CBC mode or return plain text based on configuration"""
-        if not dify_config.DSL_EXPORT_ENCRYPT_DATASET_ID:
+        if not nexusai_config.DSL_EXPORT_ENCRYPT_DATASET_ID:
             return dataset_id
 
         key = cls._generate_aes_key(tenant_id)

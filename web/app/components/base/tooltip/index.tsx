@@ -2,7 +2,7 @@
 /**
  * @deprecated Use `@/app/components/base/ui/tooltip` instead.
  * This component will be removed after migration is complete.
- * See: https://github.com/langgenius/dify/issues/32767
+ * See: https://github.com/langgenius/nexusai/issues/32767
  */
 import type { OffsetOptions, Placement } from '@floating-ui/react'
 import type { FC } from 'react'

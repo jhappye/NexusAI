@@ -88,7 +88,7 @@ class RerankModelRunner(BaseRerankRunner):
         unique_documents = []
         for document in documents:
             if (
-                document.provider == "dify"
+                document.provider == "nexusai"
                 and document.metadata is not None
                 and document.metadata["doc_id"] not in doc_ids
             ):
@@ -128,7 +128,7 @@ class RerankModelRunner(BaseRerankRunner):
         unique_documents = []
         for document in documents:
             if (
-                document.provider == "dify"
+                document.provider == "nexusai"
                 and document.metadata is not None
                 and document.metadata["doc_id"] not in doc_ids
             ):

@@ -4,7 +4,7 @@ import httpx
 from packaging import version
 from pydantic import BaseModel, Field
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.fastopenapi import console_router
 
 logger = logging.getLogger(__name__)
@@ -34,16 +34,16 @@ class VersionResponse(BaseModel):
 )
 def check_version_update(query: VersionQuery) -> VersionResponse:
     """Check for application version updates."""
-    check_update_url = dify_config.CHECK_UPDATE_URL
+    check_update_url = nexusai_config.CHECK_UPDATE_URL
 
     result = VersionResponse(
-        version=dify_config.project.version,
+        version=nexusai_config.project.version,
         release_date="",
         release_notes="",
         can_auto_update=False,
         features=VersionFeatures(
-            can_replace_logo=dify_config.CAN_REPLACE_LOGO,
-            model_load_balancing_enabled=dify_config.MODEL_LB_ENABLED,
+            can_replace_logo=nexusai_config.CAN_REPLACE_LOGO,
+            model_load_balancing_enabled=nexusai_config.MODEL_LB_ENABLED,
         ),
     )
 

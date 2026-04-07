@@ -297,11 +297,11 @@ def test_factory_uses_existing_or_generated_collection(pgvecto_module, monkeypat
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(module.dify_config, "PGVECTO_RS_HOST", "localhost")
-    monkeypatch.setattr(module.dify_config, "PGVECTO_RS_PORT", 5432)
-    monkeypatch.setattr(module.dify_config, "PGVECTO_RS_USER", "postgres")
-    monkeypatch.setattr(module.dify_config, "PGVECTO_RS_PASSWORD", "secret")
-    monkeypatch.setattr(module.dify_config, "PGVECTO_RS_DATABASE", "postgres")
+    monkeypatch.setattr(module.nexusai_config, "PGVECTO_RS_HOST", "localhost")
+    monkeypatch.setattr(module.nexusai_config, "PGVECTO_RS_PORT", 5432)
+    monkeypatch.setattr(module.nexusai_config, "PGVECTO_RS_USER", "postgres")
+    monkeypatch.setattr(module.nexusai_config, "PGVECTO_RS_PASSWORD", "secret")
+    monkeypatch.setattr(module.nexusai_config, "PGVECTO_RS_DATABASE", "postgres")
 
     embeddings = MagicMock()
     embeddings.embed_query.return_value = [0.1, 0.2, 0.3]

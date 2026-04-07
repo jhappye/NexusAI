@@ -1,7 +1,7 @@
 from collections.abc import Generator
 from typing import Any
 
-from core.callback_handler.workflow_tool_callback_handler import DifyWorkflowCallbackHandler
+from core.callback_handler.workflow_tool_callback_handler import NexusAIWorkflowCallbackHandler
 from core.plugin.backwards_invocation.base import BaseBackwardsInvocation
 from core.tools.entities.tool_entities import ToolInvokeMessage, ToolProviderType
 from core.tools.tool_engine import ToolEngine
@@ -40,7 +40,7 @@ class PluginToolBackwardsInvocation(BaseBackwardsInvocation):
                 credential_id=credential_id,
             )
             response = ToolEngine.generic_invoke(
-                tool_runtime, tool_parameters, user_id, DifyWorkflowCallbackHandler(), workflow_call_depth=1
+                tool_runtime, tool_parameters, user_id, NexusAIWorkflowCallbackHandler(), workflow_call_depth=1
             )
 
             response = ToolFileMessageTransformer.transform_tool_invoke_messages(

@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from models.workflow import WorkflowNodeExecutionModel, WorkflowNodeExecutionOffload
 from repositories.api_workflow_node_execution_repository import (
-    DifyAPIWorkflowNodeExecutionRepository,
+    NexusAIAPIWorkflowNodeExecutionRepository,
     WorkflowNodeExecutionSnapshot,
 )
 
@@ -36,12 +36,12 @@ class _WorkflowNodeExecutionSnapshotRow(Protocol):
     execution_metadata: str | None
 
 
-class DifyAPISQLAlchemyWorkflowNodeExecutionRepository(DifyAPIWorkflowNodeExecutionRepository):
+class NexusAIAPISQLAlchemyWorkflowNodeExecutionRepository(NexusAIAPIWorkflowNodeExecutionRepository):
     """
-    SQLAlchemy implementation of DifyAPIWorkflowNodeExecutionRepository.
+    SQLAlchemy implementation of NexusAIAPIWorkflowNodeExecutionRepository.
 
     This repository provides service-layer database operations for WorkflowNodeExecutionModel
-    using SQLAlchemy 2.0 style queries. It implements the DifyAPIWorkflowNodeExecutionRepository
+    using SQLAlchemy 2.0 style queries. It implements the NexusAIAPIWorkflowNodeExecutionRepository
     protocol with the following features:
 
     - Multi-tenancy data isolation through tenant_id filtering

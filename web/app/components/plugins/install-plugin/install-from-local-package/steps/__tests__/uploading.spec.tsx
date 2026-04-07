@@ -38,7 +38,7 @@ const createMockDependencies = (): Dependency[] => [
   },
 ]
 
-const createMockFile = (name: string = 'test-plugin.difypkg'): File => {
+const createMockFile = (name: string = 'test-plugin.nexusaipkg'): File => {
   return new File(['test content'], name, { type: 'application/octet-stream' })
 }
 
@@ -102,11 +102,11 @@ describe('Uploading', () => {
     })
 
     it('should render card with file name', () => {
-      const file = createMockFile('my-plugin.difypkg')
+      const file = createMockFile('my-plugin.nexusaipkg')
       render(<Uploading {...defaultProps} file={file} />)
 
-      expect(screen.getByTestId('card-name')).toHaveTextContent('my-plugin.difypkg')
-      expect(screen.getByTestId('card-loading-filename')).toHaveTextContent('my-plugin.difypkg')
+      expect(screen.getByTestId('card-name')).toHaveTextContent('my-plugin.nexusaipkg')
+      expect(screen.getByTestId('card-loading-filename')).toHaveTextContent('my-plugin.nexusaipkg')
     })
 
     it('should render cancel button', () => {
@@ -234,25 +234,25 @@ describe('Uploading', () => {
   // ================================
   describe('File Name Display', () => {
     it('should display correct file name for package file', () => {
-      const file = createMockFile('custom-plugin.difypkg')
+      const file = createMockFile('custom-plugin.nexusaipkg')
       render(<Uploading {...defaultProps} file={file} />)
 
-      expect(screen.getByTestId('card-name')).toHaveTextContent('custom-plugin.difypkg')
+      expect(screen.getByTestId('card-name')).toHaveTextContent('custom-plugin.nexusaipkg')
     })
 
     it('should display correct file name for bundle file', () => {
-      const file = createMockFile('custom-bundle.difybndl')
+      const file = createMockFile('custom-bundle.nexusaibndl')
       render(<Uploading {...defaultProps} file={file} isBundle />)
 
-      expect(screen.getByTestId('card-name')).toHaveTextContent('custom-bundle.difybndl')
+      expect(screen.getByTestId('card-name')).toHaveTextContent('custom-bundle.nexusaibndl')
     })
 
     it('should display file name in uploading message', () => {
-      const file = createMockFile('special-plugin.difypkg')
+      const file = createMockFile('special-plugin.nexusaipkg')
       render(<Uploading {...defaultProps} file={file} />)
 
       // The message includes the file name as a parameter
-      expect(screen.getByText(/plugin\.installModal\.uploadingPackage/)).toHaveTextContent('special-plugin.difypkg')
+      expect(screen.getByText(/plugin\.installModal\.uploadingPackage/)).toHaveTextContent('special-plugin.nexusaipkg')
     })
   })
 
@@ -293,10 +293,10 @@ describe('Uploading', () => {
     })
 
     it('should handle file with special characters in name', () => {
-      const file = createMockFile('my plugin (v1.0).difypkg')
+      const file = createMockFile('my plugin (v1.0).nexusaipkg')
       render(<Uploading {...defaultProps} file={file} />)
 
-      expect(screen.getByTestId('card-name')).toHaveTextContent('my plugin (v1.0).difypkg')
+      expect(screen.getByTestId('card-name')).toHaveTextContent('my plugin (v1.0).nexusaipkg')
     })
   })
 
@@ -306,9 +306,9 @@ describe('Uploading', () => {
   describe('Props Variations', () => {
     it('should work with different file types', () => {
       const files = [
-        createMockFile('plugin-a.difypkg'),
+        createMockFile('plugin-a.nexusaipkg'),
         createMockFile('plugin-b.zip'),
-        createMockFile('bundle.difybndl'),
+        createMockFile('bundle.nexusaibndl'),
       ]
 
       files.forEach((file) => {

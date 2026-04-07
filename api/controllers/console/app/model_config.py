@@ -51,7 +51,7 @@ class ModelConfigResource(Resource):
     @account_initialization_required
     @get_app_model(mode=[AppMode.AGENT_CHAT, AppMode.CHAT, AppMode.COMPLETION])
     def post(self, app_model):
-        """Modify app model config"""
+        """Monexusai app model config"""
         current_user, current_tenant_id = current_account_with_tenant()
         # validate config
         model_configuration = AppModelConfigService.validate_configuration(

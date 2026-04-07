@@ -10,7 +10,7 @@ from graphon.model_runtime.utils.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from enums.cloud_plan import CloudPlan
 from extensions.ext_database import db
 from extensions.ext_storage import storage
@@ -28,7 +28,7 @@ from models.model import (
 )
 from models.web import SavedMessage
 from models.workflow import WorkflowAppLog
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.billing_service import BillingService
 
 logger = logging.getLogger(__name__)
@@ -201,7 +201,7 @@ class ClearFreePlanTenantExpiredLogs:
 
             # Process expired workflow node executions with backup
             session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-            node_execution_repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(session_maker)
+            node_execution_repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(session_maker)
             before_date = datetime.datetime.now() - datetime.timedelta(days=days)
             total_deleted = 0
 
@@ -248,7 +248,7 @@ class ClearFreePlanTenantExpiredLogs:
 
             # Process expired workflow runs with backup
             session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-            workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+            workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
             before_date = datetime.datetime.now() - datetime.timedelta(days=days)
             total_deleted = 0
 
@@ -358,7 +358,7 @@ class ClearFreePlanTenantExpiredLogs:
         def process_tenant(flask_app: Flask, tenant_id: str):
             try:
                 if (
-                    not dify_config.BILLING_ENABLED
+                    not nexusai_config.BILLING_ENABLED
                     or BillingService.get_info(tenant_id)["subscription"]["plan"] == CloudPlan.SANDBOX
                 ):
                     # only process sandbox tenant

@@ -19,7 +19,7 @@ try:
 except ImportError:
     from sqlalchemy.ext.declarative import declarative_base
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.models.document import Document
 from extensions.ext_redis import redis_client
@@ -305,11 +305,11 @@ class RelytVectorFactory(AbstractVectorFactory):
         return RelytVector(
             collection_name=collection_name,
             config=RelytConfig(
-                host=dify_config.RELYT_HOST or "localhost",
-                port=dify_config.RELYT_PORT,
-                user=dify_config.RELYT_USER or "",
-                password=dify_config.RELYT_PASSWORD or "",
-                database=dify_config.RELYT_DATABASE or "default",
+                host=nexusai_config.RELYT_HOST or "localhost",
+                port=nexusai_config.RELYT_PORT,
+                user=nexusai_config.RELYT_USER or "",
+                password=nexusai_config.RELYT_PASSWORD or "",
+                database=nexusai_config.RELYT_DATABASE or "default",
             ),
             group_id=dataset.id,
         )

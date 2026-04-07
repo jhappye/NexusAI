@@ -3,7 +3,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from configs import dify_config
+from configs import nexusai_config
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class SMTPClient:
 
     def send(self, mail: dict):
         smtp: smtplib.SMTP | None = None
-        local_host = dify_config.SMTP_LOCAL_HOSTNAME
+        local_host = nexusai_config.SMTP_LOCAL_HOSTNAME
         try:
             if self.use_tls and not self.opportunistic_tls:
                 # SMTP with SSL (implicit TLS)

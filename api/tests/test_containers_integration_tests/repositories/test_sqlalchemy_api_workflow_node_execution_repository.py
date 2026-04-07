@@ -1,4 +1,4 @@
-"""Integration tests for DifyAPISQLAlchemyWorkflowNodeExecutionRepository using testcontainers."""
+"""Integration tests for NexusAIAPISQLAlchemyWorkflowNodeExecutionRepository using testcontainers."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from libs.datetime_utils import naive_utc_now
 from models.enums import CreatorUserRole
 from models.workflow import WorkflowNodeExecutionModel
 from repositories.sqlalchemy_api_workflow_node_execution_repository import (
-    DifyAPISQLAlchemyWorkflowNodeExecutionRepository,
+    NexusAIAPISQLAlchemyWorkflowNodeExecutionRepository,
 )
 
 
@@ -60,7 +60,7 @@ def _create_node_execution(
     return node_execution
 
 
-class TestDifyAPISQLAlchemyWorkflowNodeExecutionRepository:
+class TestNexusAIAPISQLAlchemyWorkflowNodeExecutionRepository:
     def test_get_executions_by_workflow_run_keeps_paused_records(self, db_session_with_containers: Session) -> None:
         tenant_id = str(uuid4())
         app_id = str(uuid4())
@@ -119,7 +119,7 @@ class TestDifyAPISQLAlchemyWorkflowNodeExecutionRepository:
 
         engine = db_session_with_containers.get_bind()
         assert isinstance(engine, Engine)
-        repository = DifyAPISQLAlchemyWorkflowNodeExecutionRepository(sessionmaker(bind=engine, expire_on_commit=False))
+        repository = NexusAIAPISQLAlchemyWorkflowNodeExecutionRepository(sessionmaker(bind=engine, expire_on_commit=False))
 
         try:
             results = repository.get_executions_by_workflow_run(

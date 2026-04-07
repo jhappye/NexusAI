@@ -48,7 +48,7 @@ class TestRerankModelRunner:
 
     Tests cover:
     - Cross-encoder model invocation and scoring
-    - Document deduplication for dify and external providers
+    - Document deduplication for nexusai and external providers
     - Score threshold filtering
     - Top-k selection with proper sorting
     - Metadata preservation and score injection
@@ -78,17 +78,17 @@ class TestRerankModelRunner:
             Document(
                 page_content="Python is a high-level programming language.",
                 metadata={"doc_id": "doc1", "source": "wiki"},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="JavaScript is widely used for web development.",
                 metadata={"doc_id": "doc2", "source": "wiki"},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="Java is an object-oriented programming language.",
                 metadata={"doc_id": "doc3", "source": "wiki"},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="C++ is known for its performance.",
@@ -191,8 +191,8 @@ class TestRerankModelRunner:
         assert result[0].metadata["score"] == 0.95
         assert result[1].metadata["score"] == 0.85
 
-    def test_document_deduplication_dify_provider(self, rerank_runner, mock_model_instance):
-        """Test document deduplication for dify provider.
+    def test_document_deduplication_nexusai_provider(self, rerank_runner, mock_model_instance):
+        """Test document deduplication for nexusai provider.
 
         Verifies:
         - Duplicate documents (same doc_id) are removed
@@ -204,17 +204,17 @@ class TestRerankModelRunner:
             Document(
                 page_content="Python programming",
                 metadata={"doc_id": "doc1", "source": "wiki"},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="Python programming duplicate",
                 metadata={"doc_id": "doc1", "source": "wiki"},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="Java programming",
                 metadata={"doc_id": "doc2", "source": "wiki"},
-                provider="dify",
+                provider="nexusai",
             ),
         ]
 
@@ -332,7 +332,7 @@ class TestRerankModelRunner:
         assert result[0].metadata["doc_id"] == "doc1"
         assert result[0].metadata["source"] == "wiki"
         assert result[0].metadata["score"] == 0.90
-        assert result[0].provider == "dify"
+        assert result[0].provider == "nexusai"
 
     def test_empty_documents_list(self, rerank_runner, mock_model_instance):
         """Test handling of empty documents list.
@@ -423,7 +423,7 @@ class TestRerankModelRunnerMultimodal:
         self, rerank_runner, mock_model_instance
     ):
         documents = [
-            Document(page_content="doc", metadata={"doc_id": "doc1"}, provider="dify"),
+            Document(page_content="doc", metadata={"doc_id": "doc1"}, provider="nexusai"),
         ]
 
         with patch("core.rag.rerank.rerank_model.ModelManager.for_tenant") as mock_mm:
@@ -435,7 +435,7 @@ class TestRerankModelRunnerMultimodal:
 
     def test_run_uses_multimodal_path_when_vision_support_is_enabled(self, rerank_runner):
         documents = [
-            Document(page_content="doc", metadata={"doc_id": "doc1", "source": "wiki"}, provider="dify"),
+            Document(page_content="doc", metadata={"doc_id": "doc1", "source": "wiki"}, provider="nexusai"),
         ]
         rerank_result = RerankResult(
             model="rerank-model",
@@ -461,12 +461,12 @@ class TestRerankModelRunnerMultimodal:
         image_doc = Document(
             page_content="image-content",
             metadata={"doc_id": "img-1", "doc_type": DocType.IMAGE},
-            provider="dify",
+            provider="nexusai",
         )
         text_doc = Document(
             page_content="text-content",
             metadata={"doc_id": "txt-1", "doc_type": DocType.TEXT},
-            provider="dify",
+            provider="nexusai",
         )
         external_doc = Document(
             page_content="external-content",
@@ -500,7 +500,7 @@ class TestRerankModelRunnerMultimodal:
         image_doc = Document(
             page_content="image-content",
             metadata={"doc_id": "img-missing", "doc_type": DocType.IMAGE},
-            provider="dify",
+            provider="nexusai",
         )
         rerank_result = RerankResult(model="rerank-model", docs=[])
 
@@ -527,7 +527,7 @@ class TestRerankModelRunnerMultimodal:
         text_doc = Document(
             page_content="text-content",
             metadata={"doc_id": "txt-1", "doc_type": DocType.TEXT},
-            provider="dify",
+            provider="nexusai",
         )
         rerank_result = RerankResult(
             model="rerank-model",
@@ -623,19 +623,19 @@ class TestWeightRerankRunner:
             Document(
                 page_content="Python is a programming language",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
                 vector=[0.1, 0.2, 0.3, 0.4],
             ),
             Document(
                 page_content="JavaScript for web development",
                 metadata={"doc_id": "doc2"},
-                provider="dify",
+                provider="nexusai",
                 vector=[0.2, 0.3, 0.4, 0.5],
             ),
             Document(
                 page_content="Java object-oriented programming",
                 metadata={"doc_id": "doc3"},
-                provider="dify",
+                provider="nexusai",
                 vector=[0.3, 0.4, 0.5, 0.6],
             ),
         ]
@@ -874,7 +874,7 @@ class TestWeightRerankRunner:
         """Test document deduplication in weighted reranking.
 
         Verifies:
-        - Duplicate dify documents by doc_id are deduplicated
+        - Duplicate nexusai documents by doc_id are deduplicated
         - External provider documents are deduplicated by object equality
         - Unique documents are processed correctly
         """
@@ -890,13 +890,13 @@ class TestWeightRerankRunner:
             Document(
                 page_content="Content 1",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
                 vector=[0.1, 0.2],
             ),
             Document(
                 page_content="Content 1 duplicate",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
                 vector=[0.1, 0.2],
             ),
             doc_external_1,  # First occurrence
@@ -906,8 +906,8 @@ class TestWeightRerankRunner:
         runner = WeightRerankRunner(tenant_id="tenant123", weights=weights_config)
 
         # Mock keyword extraction
-        # After deduplication: doc1 (first dify with doc_id="doc1") and doc_external_1
-        # Note: The duplicate dify doc with same doc_id goes to else branch but is added as different object
+        # After deduplication: doc1 (first nexusai with doc_id="doc1") and doc_external_1
+        # Note: The duplicate nexusai doc with same doc_id goes to else branch but is added as different object
         # So we actually have 3 unique documents after deduplication
         mock_handler_instance = MagicMock()
         mock_handler_instance.extract_keywords.side_effect = [
@@ -929,7 +929,7 @@ class TestWeightRerankRunner:
         result = runner.run(query="test", documents=documents)
 
         # Assert: External duplicate is removed (same object)
-        # Note: dify duplicates with same doc_id but different objects are NOT removed by current logic
+        # Note: nexusai duplicates with same doc_id but different objects are NOT removed by current logic
         # This tests the actual behavior, not ideal behavior
         assert len(result) >= 2  # At least unique doc_id and external
         # Verify external document appears only once
@@ -1003,7 +1003,7 @@ class TestWeightRerankRunner:
             Document(
                 page_content="Content with existing score",
                 metadata={"doc_id": "doc1", "score": 0.95},
-                provider="dify",
+                provider="nexusai",
                 vector=[0.1, 0.2],
             ),
         ]
@@ -1167,17 +1167,17 @@ class TestRerankIntegration:
             Document(
                 page_content="Python programming",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="Java development",
                 metadata={"doc_id": "doc2"},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="JavaScript coding",
                 metadata={"doc_id": "doc3"},
-                provider="dify",
+                provider="nexusai",
             ),
         ]
 
@@ -1220,9 +1220,9 @@ class TestRerankIntegration:
         mock_model_instance.invoke_rerank.return_value = mock_rerank_result
 
         documents = [
-            Document(page_content="High relevance", metadata={"doc_id": "doc1"}, provider="dify"),
-            Document(page_content="Medium relevance", metadata={"doc_id": "doc2"}, provider="dify"),
-            Document(page_content="Low relevance", metadata={"doc_id": "doc3"}, provider="dify"),
+            Document(page_content="High relevance", metadata={"doc_id": "doc1"}, provider="nexusai"),
+            Document(page_content="Medium relevance", metadata={"doc_id": "doc2"}, provider="nexusai"),
+            Document(page_content="Low relevance", metadata={"doc_id": "doc3"}, provider="nexusai"),
         ]
 
         runner = RerankModelRunner(rerank_model_instance=mock_model_instance)
@@ -1278,7 +1278,7 @@ class TestRerankEdgeCases:
             Document(
                 page_content="Content with metadata",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="Content with empty metadata",
@@ -1322,9 +1322,9 @@ class TestRerankEdgeCases:
         mock_model_instance.invoke_rerank.return_value = mock_rerank_result
 
         documents = [
-            Document(page_content="Positive score", metadata={"doc_id": "doc1"}, provider="dify"),
-            Document(page_content="Zero score", metadata={"doc_id": "doc2"}, provider="dify"),
-            Document(page_content="Negative score", metadata={"doc_id": "doc3"}, provider="dify"),
+            Document(page_content="Positive score", metadata={"doc_id": "doc1"}, provider="nexusai"),
+            Document(page_content="Zero score", metadata={"doc_id": "doc2"}, provider="nexusai"),
+            Document(page_content="Negative score", metadata={"doc_id": "doc3"}, provider="nexusai"),
         ]
 
         runner = RerankModelRunner(rerank_model_instance=mock_model_instance)
@@ -1358,9 +1358,9 @@ class TestRerankEdgeCases:
         mock_model_instance.invoke_rerank.return_value = mock_rerank_result
 
         documents = [
-            Document(page_content="Perfect 1", metadata={"doc_id": "doc1"}, provider="dify"),
-            Document(page_content="Perfect 2", metadata={"doc_id": "doc2"}, provider="dify"),
-            Document(page_content="Perfect 3", metadata={"doc_id": "doc3"}, provider="dify"),
+            Document(page_content="Perfect 1", metadata={"doc_id": "doc1"}, provider="nexusai"),
+            Document(page_content="Perfect 2", metadata={"doc_id": "doc2"}, provider="nexusai"),
+            Document(page_content="Perfect 3", metadata={"doc_id": "doc3"}, provider="nexusai"),
         ]
 
         runner = RerankModelRunner(rerank_model_instance=mock_model_instance)
@@ -1395,12 +1395,12 @@ class TestRerankEdgeCases:
             Document(
                 page_content="Hello 世界 🌍",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
             ),
             Document(
                 page_content="Café ☕ résumé",
                 metadata={"doc_id": "doc2"},
-                provider="dify",
+                provider="nexusai",
             ),
         ]
 
@@ -1438,7 +1438,7 @@ class TestRerankEdgeCases:
             Document(
                 page_content=long_content,
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
             ),
         ]
 
@@ -1473,7 +1473,7 @@ class TestRerankEdgeCases:
             Document(
                 page_content=f"Document {i}",
                 metadata={"doc_id": f"doc{i}"},
-                provider="dify",
+                provider="nexusai",
             )
             for i in range(num_docs)
         ]
@@ -1511,7 +1511,7 @@ class TestRerankEdgeCases:
             Document(
                 page_content="Test content",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
                 vector=[0.1, 0.2, 0.3],
             ),
         ]
@@ -1564,7 +1564,7 @@ class TestRerankEdgeCases:
             Document(
                 page_content="Document 1",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
             ),
         ]
 
@@ -1616,7 +1616,7 @@ class TestRerankPerformance:
             Document(
                 page_content=f"Doc {i}",
                 metadata={"doc_id": f"doc{i}"},
-                provider="dify",
+                provider="nexusai",
             )
             for i in range(5)
         ]
@@ -1652,13 +1652,13 @@ class TestRerankPerformance:
             Document(
                 page_content="Document 1",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
                 vector=[0.1, 0.2],
             ),
             Document(
                 page_content="Document 2",
                 metadata={"doc_id": "doc2"},
-                provider="dify",
+                provider="nexusai",
                 vector=[0.3, 0.4],
             ),
         ]
@@ -1729,7 +1729,7 @@ class TestRerankErrorHandling:
             Document(
                 page_content="Test content",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
             ),
         ]
 
@@ -1762,7 +1762,7 @@ class TestRerankErrorHandling:
             Document(
                 page_content="Valid doc",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
             ),
         ]
 
@@ -1809,7 +1809,7 @@ class TestRerankErrorHandling:
             Document(
                 page_content="Document without vector",
                 metadata={"doc_id": "doc1"},
-                provider="dify",
+                provider="nexusai",
                 vector=None,  # No vector
             ),
         ]

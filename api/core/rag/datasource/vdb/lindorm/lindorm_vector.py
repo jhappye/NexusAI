@@ -8,7 +8,7 @@ from opensearchpy.helpers import BulkIndexError
 from pydantic import BaseModel, model_validator
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import Field
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -349,10 +349,10 @@ class LindormVectorStore(BaseVector):
                                 "method": {
                                     "name": index_params.get("index_type", "hnsw")
                                     if index_params
-                                    else dify_config.LINDORM_INDEX_TYPE,
+                                    else nexusai_config.LINDORM_INDEX_TYPE,
                                     "space_type": index_params.get("space_type", "l2")
                                     if index_params
-                                    else dify_config.LINDORM_DISTANCE_TYPE,
+                                    else nexusai_config.LINDORM_DISTANCE_TYPE,
                                     "engine": "lvector",
                                 },
                             },
@@ -367,13 +367,13 @@ class LindormVectorStore(BaseVector):
 class LindormVectorStoreFactory(AbstractVectorFactory):
     def init_vector(self, dataset: Dataset, attributes: list, embeddings: Embeddings) -> LindormVectorStore:
         lindorm_config = LindormVectorStoreConfig(
-            hosts=dify_config.LINDORM_URL,
-            username=dify_config.LINDORM_USERNAME,
-            password=dify_config.LINDORM_PASSWORD,
-            using_ugc=dify_config.LINDORM_USING_UGC,
-            request_timeout=dify_config.LINDORM_QUERY_TIMEOUT,
+            hosts=nexusai_config.LINDORM_URL,
+            username=nexusai_config.LINDORM_USERNAME,
+            password=nexusai_config.LINDORM_PASSWORD,
+            using_ugc=nexusai_config.LINDORM_USING_UGC,
+            request_timeout=nexusai_config.LINDORM_QUERY_TIMEOUT,
         )
-        using_ugc = dify_config.LINDORM_USING_UGC
+        using_ugc = nexusai_config.LINDORM_USING_UGC
         if using_ugc is None:
             raise ValueError("LINDORM_USING_UGC is not set")
         routing_value = None
@@ -397,15 +397,15 @@ class LindormVectorStoreFactory(AbstractVectorFactory):
             index_struct_dict = {
                 "type": VectorType.LINDORM,
                 "vector_store": {"class_prefix": class_prefix},
-                "index_type": dify_config.LINDORM_INDEX_TYPE,
+                "index_type": nexusai_config.LINDORM_INDEX_TYPE,
                 "dimension": dimension,
-                "distance_type": dify_config.LINDORM_DISTANCE_TYPE,
+                "distance_type": nexusai_config.LINDORM_DISTANCE_TYPE,
                 "using_ugc": using_ugc,
             }
             dataset.index_struct = json.dumps(index_struct_dict)
             if using_ugc:
-                index_type = dify_config.LINDORM_INDEX_TYPE
-                distance_type = dify_config.LINDORM_DISTANCE_TYPE
+                index_type = nexusai_config.LINDORM_INDEX_TYPE
+                distance_type = nexusai_config.LINDORM_DISTANCE_TYPE
                 index_name = f"{UGC_INDEX_PREFIX}_{dimension}_{index_type}_{distance_type}".lower()
                 routing_value = class_prefix.lower()
             else:

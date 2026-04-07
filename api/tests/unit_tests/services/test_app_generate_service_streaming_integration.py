@@ -103,7 +103,7 @@ def _patch_get_channel_streams(monkeypatch):
     # Ensure AppGenerateService sees streams mode
     import services.app_generate_service as ags
 
-    monkeypatch.setattr(ags.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams", raising=False)
+    monkeypatch.setattr(ags.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "streams", raising=False)
 
 
 @pytest.fixture
@@ -123,7 +123,7 @@ def _patch_get_channel_pubsub(monkeypatch):
     # Ensure AppGenerateService sees pubsub mode
     import services.app_generate_service as ags
 
-    monkeypatch.setattr(ags.dify_config, "PUBSUB_REDIS_CHANNEL_TYPE", "pubsub", raising=False)
+    monkeypatch.setattr(ags.nexusai_config, "PUBSUB_REDIS_CHANNEL_TYPE", "pubsub", raising=False)
 
 
 def _publish_events(app_mode: AppMode, run_id: str, events: list[dict]):

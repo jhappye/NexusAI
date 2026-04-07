@@ -5,7 +5,7 @@ from collections.abc import Sequence
 import httpx
 from httpx import DigestAuth
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper.http_client_pooling import get_pooled_http_client
 from extensions.ext_database import db
 from extensions.ext_redis import redis_client
@@ -45,7 +45,7 @@ class TidbService:
         }
 
         spending_limit = {
-            "monthly": dify_config.TIDB_SPEND_LIMIT,
+            "monthly": nexusai_config.TIDB_SPEND_LIMIT,
         }
         password = str(uuid.uuid4()).replace("-", "")[:16]
         display_name = str(uuid.uuid4()).replace("-", "")[:16]
@@ -218,7 +218,7 @@ class TidbService:
             }
 
             spending_limit = {
-                "monthly": dify_config.TIDB_SPEND_LIMIT,
+                "monthly": nexusai_config.TIDB_SPEND_LIMIT,
             }
             password = str(uuid.uuid4()).replace("-", "")[:16]
             display_name = str(uuid.uuid4()).replace("-", "")

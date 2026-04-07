@@ -19,13 +19,13 @@ export const logoSizeMap: Record<LogoSize, string> = {
   small: 'w-9 h-4',
 }
 
-type DifyLogoProps = {
+type NexusAILogoProps = {
   style?: LogoStyle
   size?: LogoSize
   className?: string
 }
 
-const DifyLogo: FC<DifyLogoProps> = ({
+const NexusAILogo: FC<NexusAILogoProps> = ({
   style = 'default',
   size = 'medium',
   className,
@@ -42,4 +42,4 @@ const DifyLogo: FC<DifyLogoProps> = ({
   )
 }
 
-export default DifyLogo
+export default NexusAILogo

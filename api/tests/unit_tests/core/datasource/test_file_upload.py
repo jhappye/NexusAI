@@ -1,6 +1,6 @@
 """Comprehensive unit tests for file upload functionality.
 
-This test module provides extensive coverage of the file upload system in Dify,
+This test module provides extensive coverage of the file upload system in NexusAI,
 ensuring robust validation, security, and proper handling of various file types.
 
 TEST COVERAGE OVERVIEW:
@@ -126,7 +126,7 @@ from unittest.mock import Mock  # For mocking dependencies
 import pytest  # Testing framework
 
 # Application imports
-from configs import dify_config  # Configuration settings for file upload limits
+from configs import nexusai_config  # Configuration settings for file upload limits
 from constants import AUDIO_EXTENSIONS, DOCUMENT_EXTENSIONS, IMAGE_EXTENSIONS, VIDEO_EXTENSIONS  # Supported file types
 from models.enums import CreatorUserRole  # User role enumeration for file attribution
 
@@ -232,7 +232,7 @@ class TestFileSizeLimiting:
         image_ext = "jpg"
         size_within_limit = 5 * 1024 * 1024  # 5MB - well under the 10MB limit
         size_exceeds_limit = 15 * 1024 * 1024  # 15MB - exceeds the 10MB limit
-        size_at_limit = dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
+        size_at_limit = nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024  # Exactly at limit
 
         # Act - Replicate the logic from FileService.is_file_size_within_limit
         # This function determines the appropriate size limit based on file extension
@@ -248,14 +248,14 @@ class TestFileSizeLimiting:
             """
             # Determine size limit based on file category
             if extension in IMAGE_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024  # Convert MB to bytes
+                file_size_limit = nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024  # Convert MB to bytes
             elif extension in VIDEO_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
             elif extension in AUDIO_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
             else:
                 # Default limit for general files (documents, etc.)
-                file_size_limit = dify_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
 
             # Return True if file size is within or equal to limit
             return file_size <= file_size_limit
@@ -271,18 +271,18 @@ class TestFileSizeLimiting:
         video_ext = "mp4"
         size_within_limit = 50 * 1024 * 1024  # 50MB
         size_exceeds_limit = 150 * 1024 * 1024  # 150MB
-        size_at_limit = dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
+        size_at_limit = nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
 
         # Act - Replicate the logic from FileService.is_file_size_within_limit
         def check_size(extension: str, file_size: int) -> bool:
             if extension in IMAGE_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
             elif extension in VIDEO_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
             elif extension in AUDIO_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
             else:
-                file_size_limit = dify_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
             return file_size <= file_size_limit
 
         # Assert
@@ -296,18 +296,18 @@ class TestFileSizeLimiting:
         audio_ext = "mp3"
         size_within_limit = 30 * 1024 * 1024  # 30MB
         size_exceeds_limit = 60 * 1024 * 1024  # 60MB
-        size_at_limit = dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
+        size_at_limit = nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
 
         # Act - Replicate the logic from FileService.is_file_size_within_limit
         def check_size(extension: str, file_size: int) -> bool:
             if extension in IMAGE_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
             elif extension in VIDEO_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
             elif extension in AUDIO_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
             else:
-                file_size_limit = dify_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
             return file_size <= file_size_limit
 
         # Assert
@@ -321,18 +321,18 @@ class TestFileSizeLimiting:
         general_ext = "pdf"
         size_within_limit = 10 * 1024 * 1024  # 10MB
         size_exceeds_limit = 20 * 1024 * 1024  # 20MB
-        size_at_limit = dify_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
+        size_at_limit = nexusai_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
 
         # Act - Replicate the logic from FileService.is_file_size_within_limit
         def check_size(extension: str, file_size: int) -> bool:
             if extension in IMAGE_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
             elif extension in VIDEO_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT * 1024 * 1024
             elif extension in AUDIO_EXTENSIONS:
-                file_size_limit = dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT * 1024 * 1024
             else:
-                file_size_limit = dify_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
+                file_size_limit = nexusai_config.UPLOAD_FILE_SIZE_LIMIT * 1024 * 1024
             return file_size <= file_size_limit
 
         # Assert
@@ -657,7 +657,7 @@ class TestBlacklistedExtensions:
     def test_blacklist_configuration(self):
         """Test that blacklist configuration is accessible."""
         # Act
-        blacklist = dify_config.UPLOAD_FILE_EXTENSION_BLACKLIST
+        blacklist = nexusai_config.UPLOAD_FILE_EXTENSION_BLACKLIST
 
         # Assert
         assert isinstance(blacklist, set)
@@ -1190,10 +1190,10 @@ class TestConfigurationValidation:
     def test_upload_size_limits_are_positive(self):
         """Test that all upload size limits are positive values."""
         # Act & Assert - All size limits should be positive
-        assert dify_config.UPLOAD_FILE_SIZE_LIMIT > 0
-        assert dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT > 0
-        assert dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT > 0
-        assert dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT > 0
+        assert nexusai_config.UPLOAD_FILE_SIZE_LIMIT > 0
+        assert nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT > 0
+        assert nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT > 0
+        assert nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT > 0
 
     def test_upload_size_limits_reasonable_values(self):
         """Test that upload size limits are within reasonable ranges.
@@ -1204,10 +1204,10 @@ class TestConfigurationValidation:
         min_size = 1  # 1 MB
         max_size = 1024  # 1 GB
 
-        assert min_size <= dify_config.UPLOAD_FILE_SIZE_LIMIT <= max_size
-        assert min_size <= dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT <= max_size
-        assert min_size <= dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT <= max_size
-        assert min_size <= dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT <= max_size
+        assert min_size <= nexusai_config.UPLOAD_FILE_SIZE_LIMIT <= max_size
+        assert min_size <= nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT <= max_size
+        assert min_size <= nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT <= max_size
+        assert min_size <= nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT <= max_size
 
     def test_video_size_limit_larger_than_image(self):
         """Test that video size limit is typically larger than image limit.
@@ -1215,12 +1215,12 @@ class TestConfigurationValidation:
         This reflects the expected configuration where videos are larger files.
         """
         # Assert - Video limit should generally be >= image limit
-        assert dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT >= dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT
+        assert nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT >= nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT
 
     def test_blacklist_is_set_type(self):
         """Test that file extension blacklist is a set for efficient lookup."""
         # Act
-        blacklist = dify_config.UPLOAD_FILE_EXTENSION_BLACKLIST
+        blacklist = nexusai_config.UPLOAD_FILE_EXTENSION_BLACKLIST
 
         # Assert - Should be a set for O(1) lookup
         assert isinstance(blacklist, set)
@@ -1231,7 +1231,7 @@ class TestConfigurationValidation:
         This ensures case-insensitive comparison works correctly.
         """
         # Act
-        blacklist = dify_config.UPLOAD_FILE_EXTENSION_BLACKLIST
+        blacklist = nexusai_config.UPLOAD_FILE_EXTENSION_BLACKLIST
 
         # Assert - All extensions should be lowercase
         for ext in blacklist:

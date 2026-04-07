@@ -10,7 +10,7 @@ const BUTTON_CLASSNAME = {
     btnDisabledClassname: 'bg-components-button-tertiary-bg-disabled hover:bg-components-button-tertiary-bg-disabled text-text-disabled',
   },
   [Plan.professional]: {
-    btnClassname: 'bg-saas-dify-blue-static hover:bg-saas-dify-blue-static-hover text-text-primary-on-surface',
+    btnClassname: 'bg-saas-nexusai-blue-static hover:bg-saas-nexusai-blue-static-hover text-text-primary-on-surface',
     btnDisabledClassname: 'bg-components-button-tertiary-bg-disabled hover:bg-components-button-tertiary-bg-disabled text-text-disabled',
   },
   [Plan.team]: {

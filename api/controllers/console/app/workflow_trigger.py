@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 from werkzeug.exceptions import NotFound
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import get_or_create_model
 from extensions.ext_database import db
 from fields.workflow_trigger_fields import trigger_fields, triggers_list_fields, webhook_trigger_fields
@@ -111,7 +111,7 @@ class AppTriggersApi(Resource):
             )
 
         # Add computed icon field for each trigger
-        url_prefix = dify_config.CONSOLE_API_URL + "/console/api/workspaces/current/tool-provider/builtin/"
+        url_prefix = nexusai_config.CONSOLE_API_URL + "/console/api/workspaces/current/tool-provider/builtin/"
         for trigger in triggers:
             if trigger.trigger_type == "trigger-plugin":
                 trigger.icon = url_prefix + trigger.provider_name + "/icon"  # type: ignore
@@ -154,7 +154,7 @@ class AppTriggerEnableApi(Resource):
             trigger.status = AppTriggerStatus.ENABLED if args.enable_trigger else AppTriggerStatus.DISABLED
 
         # Add computed icon field
-        url_prefix = dify_config.CONSOLE_API_URL + "/console/api/workspaces/current/tool-provider/builtin/"
+        url_prefix = nexusai_config.CONSOLE_API_URL + "/console/api/workspaces/current/tool-provider/builtin/"
         if trigger.trigger_type == "trigger-plugin":
             trigger.icon = url_prefix + trigger.provider_name + "/icon"  # type: ignore
         else:

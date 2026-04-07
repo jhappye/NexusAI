@@ -11,8 +11,8 @@ from opentelemetry.propagators.b3 import B3MultiFormat
 from opentelemetry.propagators.composite import CompositePropagator
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
-from configs import dify_config
-from extensions.otel.semconv import DifySpanAttributes, GenAIAttributes
+from configs import nexusai_config
+from extensions.otel.semconv import NexusAISpanAttributes, GenAIAttributes
 from libs.helper import extract_tenant_id
 from models import Account, EndUser
 
@@ -63,7 +63,7 @@ def is_celery_worker():
 @user_logged_in.connect
 @user_loaded_from_request.connect
 def on_user_loaded(_sender, user: Union["Account", "EndUser"]):
-    if dify_config.ENABLE_OTEL:
+    if nexusai_config.ENABLE_OTEL:
         from opentelemetry.trace import get_current_span
 
         if user:
@@ -73,7 +73,7 @@ def on_user_loaded(_sender, user: Union["Account", "EndUser"]):
                 if not tenant_id:
                     return
                 if current_span:
-                    current_span.set_attribute(DifySpanAttributes.TENANT_ID, tenant_id)
+                    current_span.set_attribute(NexusAISpanAttributes.TENANT_ID, tenant_id)
                     current_span.set_attribute(GenAIAttributes.USER_ID, user.id)
             except Exception:
                 logger.exception("Error setting tenant and user attributes")
@@ -82,7 +82,7 @@ def on_user_loaded(_sender, user: Union["Account", "EndUser"]):
 
 @worker_init.connect(weak=False)
 def init_celery_worker(*args, **kwargs):
-    if dify_config.ENABLE_OTEL:
+    if nexusai_config.ENABLE_OTEL:
         from opentelemetry.instrumentation.celery import CeleryInstrumentor
         from opentelemetry.metrics import get_meter_provider
         from opentelemetry.trace import get_tracer_provider
@@ -91,7 +91,7 @@ def init_celery_worker(*args, **kwargs):
 
         tracer_provider = get_tracer_provider()
         metric_provider = get_meter_provider()
-        if dify_config.DEBUG:
+        if nexusai_config.DEBUG:
             logger.info("Initializing OpenTelemetry for Celery worker")
         CeleryInstrumentor(tracer_provider=tracer_provider, meter_provider=metric_provider).instrument()
         setup_celery_sqlcommenter()
@@ -102,6 +102,6 @@ def is_instrument_flag_enabled() -> bool:
     Check if external instrumentation is enabled via environment variable.
 
     Third-party non-invasive instrumentation agents set this flag to coordinate
-    with Dify's manual OpenTelemetry instrumentation.
+    with NexusAI's manual OpenTelemetry instrumentation.
     """
     return os.getenv("ENABLE_OTEL_FOR_INSTRUMENT", "").strip().lower() == "true"

@@ -3,7 +3,7 @@ import logging
 
 from pydantic import BaseModel
 
-from configs import dify_config
+from configs import nexusai_config
 from services.enterprise.base import EnterprisePluginManagerRequest
 from services.errors.base import BaseServiceError
 
@@ -19,7 +19,7 @@ class PluginCredentialType(enum.Enum):
 
 
 class CheckCredentialPolicyComplianceRequest(BaseModel):
-    dify_credential_id: str
+    nexusai_credential_id: str
     provider: str
     credential_type: PluginCredentialType
 
@@ -58,7 +58,7 @@ class PluginManagerService:
         logging.debug(
             "Credential policy compliance checked for %s with credential %s, result: %s",
             body.provider,
-            body.dify_credential_id,
+            body.nexusai_credential_id,
             ret.get("result", False),
         )
 
@@ -70,7 +70,7 @@ class PluginManagerService:
                 "POST",
                 "/pre-uninstall-plugin",
                 json=body.model_dump(),
-                timeout=dify_config.ENTERPRISE_REQUEST_TIMEOUT,
+                timeout=nexusai_config.ENTERPRISE_REQUEST_TIMEOUT,
             )
         except Exception:
             logger.exception(

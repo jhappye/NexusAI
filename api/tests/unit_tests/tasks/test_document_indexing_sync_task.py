@@ -203,7 +203,7 @@ class TestDocumentIndexingSyncTaskCollaboratorParams:
 class TestDataSourceInfoSerialization:
     """Regression test: data_source_info must be written as a JSON string, not a raw dict.
 
-    See https://github.com/langgenius/dify/issues/32705
+    See https://github.com/langgenius/nexusai/issues/32705
     psycopg2 raises ``ProgrammingError: can't adapt type 'dict'`` when a Python
     dict is passed directly to a text/LongText column.
     """

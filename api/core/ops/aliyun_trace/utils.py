@@ -21,7 +21,7 @@ from models import EndUser
 
 # Constants
 DEFAULT_JSON_ENSURE_ASCII = False
-DEFAULT_FRAMEWORK_NAME = "dify"
+DEFAULT_FRAMEWORK_NAME = "nexusai"
 
 
 def get_user_id_from_message_data(message_data) -> str:

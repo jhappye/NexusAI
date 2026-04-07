@@ -30,7 +30,7 @@ from graphon.nodes.human_input.human_input_node import HumanInputNode
 from graphon.runtime import GraphRuntimeState, VariablePool
 from pydantic import ValidationError
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY
 from core.repositories.human_input_repository import (
     FormCreateParams,
     HumanInputFormEntity,
@@ -48,7 +48,7 @@ from core.workflow.human_input_compat import (
     WebAppDeliveryMethod,
     _WebAppDeliveryConfig,
 )
-from core.workflow.node_runtime import DifyHumanInputNodeRuntime
+from core.workflow.node_runtime import NexusAIHumanInputNodeRuntime
 from core.workflow.system_variables import build_system_variables
 from libs.datetime_utils import naive_utc_now
 
@@ -102,7 +102,7 @@ class _InMemoryFormEntity(HumanInputFormEntity):
 
 
 class InMemoryHumanInputFormRepository(HumanInputFormRepository):
-    """Minimal in-memory repository for Dify-owned HumanInputNode behavior tests."""
+    """Minimal in-memory repository for NexusAI-owned HumanInputNode behavior tests."""
 
     def __init__(self) -> None:
         self._form_counter = 0
@@ -423,7 +423,7 @@ class TestHumanInputNodeVariableResolution:
             workflow_id="workflow",
             graph_config={"nodes": [], "edges": []},
             run_context={
-                DIFY_RUN_CONTEXT_KEY: {
+                NEXUSAI_RUN_CONTEXT_KEY: {
                     "tenant_id": "tenant",
                     "app_id": "app",
                     "user_id": "user",
@@ -463,7 +463,7 @@ class TestHumanInputNodeVariableResolution:
             submitted=False,
         )
 
-        runtime = DifyHumanInputNodeRuntime(graph_init_params.run_context)
+        runtime = NexusAIHumanInputNodeRuntime(graph_init_params.run_context)
         runtime._build_form_repository = MagicMock(return_value=mock_repo)  # type: ignore[attr-defined]
         node = HumanInputNode(
             id=config["id"],
@@ -499,7 +499,7 @@ class TestHumanInputNodeVariableResolution:
             workflow_id="workflow",
             graph_config={"nodes": [], "edges": []},
             run_context={
-                DIFY_RUN_CONTEXT_KEY: {
+                NEXUSAI_RUN_CONTEXT_KEY: {
                     "tenant_id": "tenant",
                     "app_id": "app",
                     "user_id": "user",
@@ -528,7 +528,7 @@ class TestHumanInputNodeVariableResolution:
             submitted=False,
         )
 
-        runtime = DifyHumanInputNodeRuntime(graph_init_params.run_context)
+        runtime = NexusAIHumanInputNodeRuntime(graph_init_params.run_context)
         runtime._build_form_repository = MagicMock(return_value=mock_repo)  # type: ignore[attr-defined]
         node = HumanInputNode(
             id=config["id"],
@@ -560,7 +560,7 @@ class TestHumanInputNodeVariableResolution:
             workflow_id="workflow",
             graph_config={"nodes": [], "edges": []},
             run_context={
-                DIFY_RUN_CONTEXT_KEY: {
+                NEXUSAI_RUN_CONTEXT_KEY: {
                     "tenant_id": "tenant",
                     "app_id": "app",
                     "user_id": "end-user-1",
@@ -593,7 +593,7 @@ class TestHumanInputNodeVariableResolution:
             submitted=False,
         )
 
-        runtime = DifyHumanInputNodeRuntime(graph_init_params.run_context)
+        runtime = NexusAIHumanInputNodeRuntime(graph_init_params.run_context)
         runtime._build_form_repository = MagicMock(return_value=mock_repo)  # type: ignore[attr-defined]
         node = HumanInputNode(
             id=config["id"],
@@ -626,7 +626,7 @@ class TestHumanInputNodeVariableResolution:
             workflow_id="workflow",
             graph_config={"nodes": [], "edges": []},
             run_context={
-                DIFY_RUN_CONTEXT_KEY: {
+                NEXUSAI_RUN_CONTEXT_KEY: {
                     "tenant_id": "tenant",
                     "app_id": "app",
                     "user_id": "user-123",
@@ -669,7 +669,7 @@ class TestHumanInputNodeVariableResolution:
             submitted=False,
         )
 
-        runtime = DifyHumanInputNodeRuntime(graph_init_params.run_context)
+        runtime = NexusAIHumanInputNodeRuntime(graph_init_params.run_context)
         runtime._build_form_repository = MagicMock(return_value=mock_repo)  # type: ignore[attr-defined]
         node = HumanInputNode(
             id=config["id"],
@@ -743,7 +743,7 @@ class TestHumanInputNodeRenderedContent:
             workflow_id="workflow",
             graph_config={"nodes": [], "edges": []},
             run_context={
-                DIFY_RUN_CONTEXT_KEY: {
+                NEXUSAI_RUN_CONTEXT_KEY: {
                     "tenant_id": "tenant",
                     "app_id": "app",
                     "user_id": "user",
@@ -768,7 +768,7 @@ class TestHumanInputNodeRenderedContent:
         config = {"id": "human", "data": node_data.model_dump()}
 
         form_repository = InMemoryHumanInputFormRepository()
-        runtime = DifyHumanInputNodeRuntime(graph_init_params.run_context)
+        runtime = NexusAIHumanInputNodeRuntime(graph_init_params.run_context)
         runtime._build_form_repository = MagicMock(return_value=form_repository)  # type: ignore[attr-defined]
         node = HumanInputNode(
             id=config["id"],

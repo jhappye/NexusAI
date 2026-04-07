@@ -23,13 +23,13 @@ def app():
 @pytest.fixture(autouse=True)
 def _patch_wraps():
     wraps_features = SimpleNamespace(enable_email_password_login=True)
-    console_dify = SimpleNamespace(ENTERPRISE_ENABLED=True, EDITION="CLOUD")
-    web_dify = SimpleNamespace(ENTERPRISE_ENABLED=True)
+    console_nexusai = SimpleNamespace(ENTERPRISE_ENABLED=True, EDITION="CLOUD")
+    web_nexusai = SimpleNamespace(ENTERPRISE_ENABLED=True)
     with (
         patch("controllers.console.wraps.db") as mock_db,
-        patch("controllers.console.wraps.dify_config", console_dify),
+        patch("controllers.console.wraps.nexusai_config", console_nexusai),
         patch("controllers.console.wraps.FeatureService.get_system_features", return_value=wraps_features),
-        patch("controllers.web.login.dify_config", web_dify),
+        patch("controllers.web.login.nexusai_config", web_nexusai),
     ):
         mock_db.session.query.return_value.first.return_value = MagicMock()
         yield

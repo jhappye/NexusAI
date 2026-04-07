@@ -21,14 +21,14 @@ from core.app.entities.app_invoke_entities import (
     WorkflowAppGenerateEntity,
 )
 from core.app.layers.pause_state_persist_layer import PauseStateLayerConfig, WorkflowResumptionContext
-from core.repositories import DifyCoreRepositoryFactory
+from core.repositories import NexusAICoreRepositoryFactory
 from extensions.ext_database import db
 from libs.flask_utils import set_login_user
 from models.account import Account
 from models.enums import CreatorUserRole, WorkflowRunTriggeredFrom
 from models.model import App, AppMode, Conversation, EndUser, Message
 from models.workflow import Workflow, WorkflowNodeExecutionTriggeredFrom, WorkflowRun
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 
 logger = logging.getLogger(__name__)
 
@@ -273,7 +273,7 @@ def _resume_app_execution(payload: dict[str, Any]) -> None:
     workflow_run_id = payload["workflow_run_id"]
 
     session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
-    workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker=session_factory)
+    workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker=session_factory)
 
     pause_entity = workflow_run_repo.get_workflow_pause(workflow_run_id)
     if pause_entity is None:
@@ -404,13 +404,13 @@ def _resume_advanced_chat(
     except ValueError:
         triggered_from = WorkflowRunTriggeredFrom.APP_RUN
 
-    workflow_execution_repository = DifyCoreRepositoryFactory.create_workflow_execution_repository(
+    workflow_execution_repository = NexusAICoreRepositoryFactory.create_workflow_execution_repository(
         session_factory=session_factory,
         user=user,
         app_id=app_model.id,
         triggered_from=triggered_from,
     )
-    workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+    workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
         session_factory=session_factory,
         user=user,
         app_id=app_model.id,
@@ -460,13 +460,13 @@ def _resume_workflow(
     except ValueError:
         triggered_from = WorkflowRunTriggeredFrom.APP_RUN
 
-    workflow_execution_repository = DifyCoreRepositoryFactory.create_workflow_execution_repository(
+    workflow_execution_repository = NexusAICoreRepositoryFactory.create_workflow_execution_repository(
         session_factory=session_factory,
         user=user,
         app_id=app_model.id,
         triggered_from=triggered_from,
     )
-    workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+    workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
         session_factory=session_factory,
         user=user,
         app_id=app_model.id,

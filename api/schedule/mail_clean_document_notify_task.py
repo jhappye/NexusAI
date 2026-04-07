@@ -6,7 +6,7 @@ import click
 from sqlalchemy import select
 
 import app
-from configs import dify_config
+from configs import nexusai_config
 from enums.cloud_plan import CloudPlan
 from extensions.ext_database import db
 from extensions.ext_mail import mail
@@ -42,7 +42,7 @@ def mail_clean_document_notify_task():
             if dataset_auto_disable_log.tenant_id not in dataset_auto_disable_logs_map:
                 dataset_auto_disable_logs_map[dataset_auto_disable_log.tenant_id] = []
             dataset_auto_disable_logs_map[dataset_auto_disable_log.tenant_id].append(dataset_auto_disable_log)
-        url = f"{dify_config.CONSOLE_WEB_URL}/datasets"
+        url = f"{nexusai_config.CONSOLE_WEB_URL}/datasets"
         for tenant_id, tenant_dataset_auto_disable_logs in dataset_auto_disable_logs_map.items():
             features = FeatureService.get_features(tenant_id)
             plan = features.billing.subscription.plan

@@ -19,17 +19,17 @@ class TestWorkspaceService:
         with (
             patch("services.workspace_service.FeatureService") as mock_feature_service,
             patch("services.workspace_service.TenantService") as mock_tenant_service,
-            patch("services.workspace_service.dify_config") as mock_dify_config,
+            patch("services.workspace_service.nexusai_config") as mock_nexusai_config,
         ):
             # Setup default mock returns
             mock_feature_service.get_features.return_value.can_replace_logo = True
             mock_tenant_service.has_roles.return_value = True
-            mock_dify_config.FILES_URL = "https://example.com/files"
+            mock_nexusai_config.FILES_URL = "https://example.com/files"
 
             yield {
                 "feature_service": mock_feature_service,
                 "tenant_service": mock_tenant_service,
-                "dify_config": mock_dify_config,
+                "nexusai_config": mock_nexusai_config,
             }
 
     def _create_test_account_and_tenant(self, db_session_with_containers: Session, mock_external_service_dependencies):
@@ -256,7 +256,7 @@ class TestWorkspaceService:
         # Setup mocks for feature service and tenant service
         mock_external_service_dependencies["feature_service"].get_features.return_value.can_replace_logo = True
         mock_external_service_dependencies["tenant_service"].has_roles.return_value = True
-        mock_external_service_dependencies["dify_config"].FILES_URL = "https://cdn.example.com"
+        mock_external_service_dependencies["nexusai_config"].FILES_URL = "https://cdn.example.com"
 
         # Mock current_user for flask_login
         with patch("services.workspace_service.current_user", account):
@@ -336,7 +336,7 @@ class TestWorkspaceService:
             # Setup mocks
             mock_external_service_dependencies["feature_service"].get_features.return_value.can_replace_logo = True
             mock_external_service_dependencies["tenant_service"].has_roles.return_value = True
-            mock_external_service_dependencies["dify_config"].FILES_URL = "https://files.example.com"
+            mock_external_service_dependencies["nexusai_config"].FILES_URL = "https://files.example.com"
 
             # Mock current_user for flask_login
             with patch("services.workspace_service.current_user", account):
@@ -393,7 +393,7 @@ class TestWorkspaceService:
         mock_external_service_dependencies["feature_service"].get_features.return_value.can_replace_logo = True
         # Editor role should not have admin/owner permissions
         mock_external_service_dependencies["tenant_service"].has_roles.return_value = False
-        mock_external_service_dependencies["dify_config"].FILES_URL = "https://cdn.example.com"
+        mock_external_service_dependencies["nexusai_config"].FILES_URL = "https://cdn.example.com"
 
         # Mock current_user for flask_login
         with patch("services.workspace_service.current_user", account):
@@ -443,7 +443,7 @@ class TestWorkspaceService:
         mock_external_service_dependencies["feature_service"].get_features.return_value.can_replace_logo = True
         # Dataset operator should not have admin/owner permissions
         mock_external_service_dependencies["tenant_service"].has_roles.return_value = False
-        mock_external_service_dependencies["dify_config"].FILES_URL = "https://cdn.example.com"
+        mock_external_service_dependencies["nexusai_config"].FILES_URL = "https://cdn.example.com"
 
         # Mock current_user for flask_login
         with patch("services.workspace_service.current_user", account):
@@ -508,7 +508,7 @@ class TestWorkspaceService:
             # Setup mocks
             mock_external_service_dependencies["feature_service"].get_features.return_value.can_replace_logo = True
             mock_external_service_dependencies["tenant_service"].has_roles.return_value = True
-            mock_external_service_dependencies["dify_config"].FILES_URL = "https://files.example.com"
+            mock_external_service_dependencies["nexusai_config"].FILES_URL = "https://files.example.com"
 
             # Mock current_user for flask_login
             with patch("services.workspace_service.current_user", account):
@@ -580,7 +580,7 @@ class TestWorkspaceService:
     def test_get_tenant_info_should_use_files_url_for_logo_url(
         self, db_session_with_containers: Session, mock_external_service_dependencies
     ):
-        """The logo URL should use dify_config.FILES_URL as the base."""
+        """The logo URL should use nexusai_config.FILES_URL as the base."""
         import json
 
         fake = Faker()
@@ -591,7 +591,7 @@ class TestWorkspaceService:
         db_session_with_containers.commit()
 
         custom_base = "https://cdn.mycompany.io"
-        mock_external_service_dependencies["dify_config"].FILES_URL = custom_base
+        mock_external_service_dependencies["nexusai_config"].FILES_URL = custom_base
         mock_external_service_dependencies["feature_service"].get_features.return_value.can_replace_logo = True
         mock_external_service_dependencies["tenant_service"].has_roles.return_value = True
 
@@ -610,7 +610,7 @@ class TestWorkspaceService:
             db_session_with_containers, mock_external_service_dependencies
         )
 
-        mock_external_service_dependencies["dify_config"].EDITION = "SELF_HOSTED"
+        mock_external_service_dependencies["nexusai_config"].EDITION = "SELF_HOSTED"
         mock_external_service_dependencies["feature_service"].get_features.return_value.can_replace_logo = False
         mock_external_service_dependencies["tenant_service"].has_roles.return_value = False
 
@@ -631,7 +631,7 @@ class TestWorkspaceService:
             db_session_with_containers, mock_external_service_dependencies
         )
 
-        mock_external_service_dependencies["dify_config"].EDITION = "CLOUD"
+        mock_external_service_dependencies["nexusai_config"].EDITION = "CLOUD"
         feature = mock_external_service_dependencies["feature_service"].get_features.return_value
         feature.can_replace_logo = False
         feature.next_credit_reset_date = "2025-02-01"
@@ -656,7 +656,7 @@ class TestWorkspaceService:
             db_session_with_containers, mock_external_service_dependencies
         )
 
-        mock_external_service_dependencies["dify_config"].EDITION = "CLOUD"
+        mock_external_service_dependencies["nexusai_config"].EDITION = "CLOUD"
         feature = mock_external_service_dependencies["feature_service"].get_features.return_value
         feature.can_replace_logo = False
         feature.next_credit_reset_date = "2025-02-01"
@@ -684,7 +684,7 @@ class TestWorkspaceService:
             db_session_with_containers, mock_external_service_dependencies
         )
 
-        mock_external_service_dependencies["dify_config"].EDITION = "CLOUD"
+        mock_external_service_dependencies["nexusai_config"].EDITION = "CLOUD"
         feature = mock_external_service_dependencies["feature_service"].get_features.return_value
         feature.can_replace_logo = False
         feature.next_credit_reset_date = "2025-02-01"
@@ -712,7 +712,7 @@ class TestWorkspaceService:
             db_session_with_containers, mock_external_service_dependencies
         )
 
-        mock_external_service_dependencies["dify_config"].EDITION = "CLOUD"
+        mock_external_service_dependencies["nexusai_config"].EDITION = "CLOUD"
         feature = mock_external_service_dependencies["feature_service"].get_features.return_value
         feature.can_replace_logo = False
         feature.next_credit_reset_date = "2025-02-01"
@@ -741,7 +741,7 @@ class TestWorkspaceService:
             db_session_with_containers, mock_external_service_dependencies
         )
 
-        mock_external_service_dependencies["dify_config"].EDITION = "CLOUD"
+        mock_external_service_dependencies["nexusai_config"].EDITION = "CLOUD"
         feature = mock_external_service_dependencies["feature_service"].get_features.return_value
         feature.can_replace_logo = False
         feature.next_credit_reset_date = "2025-02-01"
@@ -771,7 +771,7 @@ class TestWorkspaceService:
             db_session_with_containers, mock_external_service_dependencies
         )
 
-        mock_external_service_dependencies["dify_config"].EDITION = "CLOUD"
+        mock_external_service_dependencies["nexusai_config"].EDITION = "CLOUD"
         feature = mock_external_service_dependencies["feature_service"].get_features.return_value
         feature.can_replace_logo = False
         feature.next_credit_reset_date = "2025-02-01"
@@ -800,7 +800,7 @@ class TestWorkspaceService:
             db_session_with_containers, mock_external_service_dependencies
         )
 
-        mock_external_service_dependencies["dify_config"].EDITION = "CLOUD"
+        mock_external_service_dependencies["nexusai_config"].EDITION = "CLOUD"
         feature = mock_external_service_dependencies["feature_service"].get_features.return_value
         feature.can_replace_logo = False
         feature.next_credit_reset_date = "2025-02-01"

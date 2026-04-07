@@ -8,7 +8,7 @@ from graphon.runtime import VariablePool
 from sqlalchemy import Engine, select
 from sqlalchemy.orm import sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.workflow.human_input_compat import (
     DeliveryChannelConfig,
     EmailDeliveryConfig,
@@ -64,7 +64,7 @@ class DeliveryTestUnsupportedError(DeliveryTestError):
 def _build_form_link(token: str | None) -> str | None:
     if not token:
         return None
-    base_url = dify_config.APP_WEB_URL
+    base_url = nexusai_config.APP_WEB_URL
     if not base_url:
         return None
     return f"{base_url.rstrip('/')}/form/{token}"

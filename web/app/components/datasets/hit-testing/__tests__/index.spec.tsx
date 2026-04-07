@@ -296,7 +296,7 @@ const _createMockRetrievalConfig = (overrides = {}): RetrievalConfig => ({
 // HitTestingPage Component Tests
 // NOTE: Child component unit tests (Score, Mask, EmptyRecords, ResultItemMeta,
 // ResultItemFooter, ChildChunksItem, ResultItem, ResultItemExternal, Textarea,
-// Records, QueryInput, ModifyExternalRetrievalModal, ModifyRetrievalModal,
+// Records, QueryInput, MonexusaiExternalRetrievalModal, MonexusaiRetrievalModal,
 // ChunkDetailModal, extensionToFileType) have been moved to their own dedicated
 // spec files under the ./components/ and ./utils/ directories.
 // This file now focuses exclusively on HitTestingPage integration tests.
@@ -805,7 +805,7 @@ describe('Drawer and Modal Interactions', () => {
     } as unknown as ReturnType<typeof useExternalKnowledgeBaseHitTesting>)
   })
 
-  it('should save retrieval config when ModifyRetrievalModal onSave is called', async () => {
+  it('should save retrieval config when MonexusaiRetrievalModal onSave is called', async () => {
     const { container } = renderWithProviders(<HitTestingPage datasetId="dataset-1" />)
 
     // Find and click the retrieval method selector to open the drawer
@@ -935,7 +935,7 @@ describe('renderHitResults Coverage', () => {
 
 // Drawer onSave Coverage Tests
 
-describe('ModifyRetrievalModal onSave Coverage', () => {
+describe('MonexusaiRetrievalModal onSave Coverage', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
@@ -1045,7 +1045,7 @@ describe('HitTestingPage Internal Functions Coverage', () => {
     expect(mockHitTestingMutateAsync).toHaveBeenCalled()
   })
 
-  it('should handle retrieval config update via ModifyRetrievalModal', async () => {
+  it('should handle retrieval config update via MonexusaiRetrievalModal', async () => {
     const { container } = renderWithProviders(<HitTestingPage datasetId="dataset-1" />)
 
     // Find and click retrieval method to open drawer

@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from enterprise.telemetry.entities import EnterpriseTelemetryEvent
 
-logger = logging.getLogger("dify.telemetry")
+logger = logging.getLogger("nexusai.telemetry")
 
 
 @lru_cache(maxsize=4096)
@@ -64,7 +64,7 @@ def emit_telemetry_log(
     Parameters
     ----------
     event_name:
-        Canonical event name, e.g. ``"dify.workflow.run"``.
+        Canonical event name, e.g. ``"nexusai.workflow.run"``.
     attributes:
         All event-specific attributes (already built by the caller).
     signal:
@@ -81,8 +81,8 @@ def emit_telemetry_log(
     if not logger.isEnabledFor(logging.INFO):
         return
     attrs = {
-        "dify.event.name": event_name,
-        "dify.event.signal": signal,
+        "nexusai.event.name": event_name,
+        "nexusai.event.signal": signal,
         **attributes,
     }
 

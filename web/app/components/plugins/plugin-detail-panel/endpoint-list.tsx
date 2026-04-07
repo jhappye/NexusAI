@@ -77,7 +77,7 @@ const EndpointList = ({ detail }: Props) => {
                 </div>
                 <div className="text-text-tertiary system-xs-regular">{t('detailPanel.endpointsTip', { ns: 'plugin' })}</div>
                 <a
-                  href={docLink('/develop-plugin/getting-started/getting-started-dify-plugin')}
+                  href={docLink('/develop-plugin/getting-started/getting-started-nexusai-plugin')}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

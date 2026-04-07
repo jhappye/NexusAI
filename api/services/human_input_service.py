@@ -12,7 +12,7 @@ from graphon.nodes.human_input.enums import HumanInputFormKind, HumanInputFormSt
 from sqlalchemy import Engine, select
 from sqlalchemy.orm import Session, sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.repositories.human_input_repository import (
     HumanInputFormRecord,
     HumanInputFormSubmissionRepository,
@@ -21,7 +21,7 @@ from libs.datetime_utils import ensure_naive_utc, naive_utc_now
 from libs.exception import BaseHTTPException
 from models.human_input import RecipientType
 from models.model import App, AppMode
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from tasks.app_generate.workflow_execute_task import resume_app_execution
 
 
@@ -211,7 +211,7 @@ class HumanInputService:
             raise InvalidFormDataError(str(exc)) from exc
 
     def enqueue_resume(self, workflow_run_id: str) -> None:
-        workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(self._session_factory)
+        workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(self._session_factory)
         workflow_run = workflow_run_repo.get_workflow_run_by_id_without_tenant(workflow_run_id)
 
         if workflow_run is None:
@@ -238,7 +238,7 @@ class HumanInputService:
         logger.warning("App mode %s does not support resume for workflow run %s", app.mode, workflow_run_id)
 
     def _is_globally_expired(self, form: Form, *, now: datetime | None = None) -> bool:
-        global_timeout_seconds = dify_config.HUMAN_INPUT_GLOBAL_TIMEOUT_SECONDS
+        global_timeout_seconds = nexusai_config.HUMAN_INPUT_GLOBAL_TIMEOUT_SECONDS
         if global_timeout_seconds <= 0:
             return False
         if form.workflow_run_id is None:

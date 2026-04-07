@@ -62,7 +62,7 @@ export type EndpointListItem = {
 
 export type PluginDeclarationMeta = {
   version: string
-  minimum_dify_version?: string
+  minimum_nexusai_version?: string
 }
 
 // Plugin manifest
@@ -571,7 +571,7 @@ export type StrategyDeclaration = {
 }
 
 export type PluginMeta = {
-  version: string // the version of dify sdk
+  version: string // the version of nexusai sdk
 }
 
 export type StrategyPluginDetail = {

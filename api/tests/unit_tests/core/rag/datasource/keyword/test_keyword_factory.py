@@ -31,7 +31,7 @@ def test_keyword_initialization_uses_configured_factory(monkeypatch):
     dataset = SimpleNamespace(id="dataset-1")
     fake_processor = MagicMock()
 
-    monkeypatch.setattr("core.rag.datasource.keyword.keyword_factory.dify_config.KEYWORD_STORE", KeyWordType.JIEBA)
+    monkeypatch.setattr("core.rag.datasource.keyword.keyword_factory.nexusai_config.KEYWORD_STORE", KeyWordType.JIEBA)
     monkeypatch.setattr(Keyword, "get_keyword_factory", staticmethod(lambda keyword_type: lambda _: fake_processor))
 
     keyword = Keyword(dataset)

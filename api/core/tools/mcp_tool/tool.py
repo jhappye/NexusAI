@@ -66,7 +66,7 @@ class MCPTool(Tool):
         # Extract usage metadata from MCP protocol's _meta field
         self._latest_usage = self._derive_usage_from_result(result)
 
-        # handle dify tool output
+        # handle nexusai tool output
         for content in result.content:
             if isinstance(content, TextContent):
                 yield from self._process_text_content(content)

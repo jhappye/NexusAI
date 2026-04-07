@@ -4,7 +4,7 @@ import time
 import click
 from celery import shared_task
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_mail import mail
 from libs.email_i18n import EmailType, get_email_i18n_service
 
@@ -64,7 +64,7 @@ def send_reset_password_mail_task_when_account_not_exist(language: str, to: str,
 
     try:
         if is_allow_register:
-            sign_up_url = f"{dify_config.CONSOLE_WEB_URL}/signup"
+            sign_up_url = f"{nexusai_config.CONSOLE_WEB_URL}/signup"
             email_service = get_email_i18n_service()
             email_service.send_email(
                 email_type=EmailType.RESET_PASSWORD_WHEN_ACCOUNT_NOT_EXIST,

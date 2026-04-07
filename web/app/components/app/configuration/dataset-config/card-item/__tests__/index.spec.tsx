@@ -91,7 +91,7 @@ const createDataset = (overrides: Partial<DataSet> = {}): DataSet => {
     total_document_count: 0,
     total_available_documents: 0,
     word_count: 0,
-    provider: 'dify',
+    provider: 'nexusai',
     embedding_model: 'text-embedding',
     embedding_model_provider: 'openai',
     embedding_available: true,

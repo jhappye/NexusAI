@@ -52,7 +52,7 @@ class ApolloClient:
         self._no_key: dict[str, str] = {}
         self._hash: dict[str, str] = {}
         self._pull_timeout = 75
-        self._cache_file_path = os.path.expanduser("~") + "/.dify/config/remote-settings/apollo/cache/"
+        self._cache_file_path = os.path.expanduser("~") + "/.nexusai/config/remote-settings/apollo/cache/"
         self._long_poll_thread: threading.Thread | None = None
         self._change_listener = change_listener  # "add" "delete" "update"
         if _notification_map is None:

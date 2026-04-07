@@ -16,7 +16,7 @@ from graphon.model_runtime.model_providers.__base.speech2text_model import Speec
 from graphon.model_runtime.model_providers.__base.text_embedding_model import TextEmbeddingModel
 from graphon.model_runtime.model_providers.__base.tts_model import TTSModel
 
-from configs import dify_config
+from configs import nexusai_config
 from core.entities.embedding_type import EmbeddingInputType
 from core.entities.provider_configuration import ProviderConfiguration, ProviderModelBundle
 from core.entities.provider_entities import ModelLoadBalancingConfiguration
@@ -637,7 +637,7 @@ class LBModelManager:
                     return None
                 continue
 
-            if dify_config.DEBUG:
+            if nexusai_config.DEBUG:
                 logger.info(
                     """Model LB
 id: %s

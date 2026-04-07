@@ -1,28 +1,28 @@
-"""Dify-specific semantic convention definitions."""
+"""NexusAI-specific semantic convention definitions."""
 
 
-class DifySpanAttributes:
-    """Attribute names for Dify-specific spans."""
+class NexusAISpanAttributes:
+    """Attribute names for NexusAI-specific spans."""
 
-    APP_ID = "dify.app_id"
+    APP_ID = "nexusai.app_id"
     """Application identifier."""
 
-    TENANT_ID = "dify.tenant_id"
+    TENANT_ID = "nexusai.tenant_id"
     """Tenant identifier."""
 
-    USER_TYPE = "dify.user_type"
+    USER_TYPE = "nexusai.user_type"
     """User type, e.g. Account, EndUser."""
 
-    STREAMING = "dify.streaming"
+    STREAMING = "nexusai.streaming"
     """Whether streaming response is enabled."""
 
-    WORKFLOW_ID = "dify.workflow_id"
+    WORKFLOW_ID = "nexusai.workflow_id"
     """Workflow identifier."""
 
-    INVOKE_FROM = "dify.invoke_from"
+    INVOKE_FROM = "nexusai.invoke_from"
     """Invocation source, e.g. SERVICE_API, WEB_APP, DEBUGGER."""
 
-    INVOKED_BY = "dify.invoked_by"
+    INVOKED_BY = "nexusai.invoked_by"
     """Invoked by, e.g. end_user, account, user."""
 
     USAGE_INPUT_TOKENS = "gen_ai.usage.input_tokens"

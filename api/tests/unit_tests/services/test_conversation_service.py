@@ -717,7 +717,7 @@ class TestConversationServiceConversationalVariable:
 
     @patch("services.conversation_service.session_factory")
     @patch("services.conversation_service.ConversationService.get_conversation")
-    @patch("services.conversation_service.dify_config")
+    @patch("services.conversation_service.nexusai_config")
     def test_get_conversational_variable_with_name_filter_mysql(
         self, mock_config, mock_get_conversation, mock_session_factory
     ):
@@ -754,7 +754,7 @@ class TestConversationServiceConversationalVariable:
 
     @patch("services.conversation_service.session_factory")
     @patch("services.conversation_service.ConversationService.get_conversation")
-    @patch("services.conversation_service.dify_config")
+    @patch("services.conversation_service.nexusai_config")
     def test_get_conversational_variable_with_name_filter_postgresql(
         self, mock_config, mock_get_conversation, mock_session_factory
     ):

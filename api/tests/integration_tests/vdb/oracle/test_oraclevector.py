@@ -14,8 +14,8 @@ class OracleVectorTest(AbstractVectorTest):
         self.vector = OracleVector(
             collection_name=self.collection_name,
             config=OracleVectorConfig(
-                user="dify",
-                password="dify",
+                user="nexusai",
+                password="nexusai",
                 dsn="localhost:1521/FREEPDB1",
             ),
         )

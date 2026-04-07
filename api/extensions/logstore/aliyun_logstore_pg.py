@@ -9,7 +9,7 @@ from typing import Any
 import psycopg2
 from sqlalchemy import create_engine
 
-from configs import dify_config
+from configs import nexusai_config
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ class AliyunLogStorePG:
                 pool_timeout=30,
                 connect_args={
                     "connect_timeout": 5,
-                    "application_name": f"Dify-{dify_config.project.version}-fixautocommit",
+                    "application_name": f"NexusAI-{nexusai_config.project.version}-fixautocommit",
                     "keepalives": 1,
                     "keepalives_idle": 60,
                     "keepalives_interval": 10,

@@ -8,7 +8,7 @@ from graphon.model_runtime.entities.model_entities import ModelPropertyKey, Mode
 from graphon.model_runtime.model_providers.__base.large_language_model import LargeLanguageModel
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from constants.model_template import default_app_templates
 from core.agent.entities import AgentToolEntity
 from core.errors.error import LLMBadRequestError, ProviderTokenNotInitError
@@ -175,7 +175,7 @@ class AppService:
             # update web app setting as private
             EnterpriseService.WebAppAuth.update_app_access_mode(app.id, "private")
 
-        if dify_config.BILLING_ENABLED:
+        if nexusai_config.BILLING_ENABLED:
             BillingService.clean_billing_info_cache(app.tenant_id)
 
         return app
@@ -375,7 +375,7 @@ class AppService:
         if FeatureService.get_system_features().webapp_auth.enabled:
             EnterpriseService.WebAppAuth.cleanup_webapp(app.id)
 
-        if dify_config.BILLING_ENABLED:
+        if nexusai_config.BILLING_ENABLED:
             BillingService.clean_billing_info_cache(app.tenant_id)
 
         # Trigger asynchronous deletion of app and related data
@@ -421,7 +421,7 @@ class AppService:
             # get all tools
             tools = cast(list[dict[str, Any]], agent_config.get("tools", []))
 
-        url_prefix = dify_config.CONSOLE_API_URL + "/console/api/workspaces/current/tool-provider/builtin/"
+        url_prefix = nexusai_config.CONSOLE_API_URL + "/console/api/workspaces/current/tool-provider/builtin/"
 
         for tool in tools:
             keys = list(tool.keys())

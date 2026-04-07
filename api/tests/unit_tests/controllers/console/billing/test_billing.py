@@ -42,8 +42,8 @@ class TestPartnerTenants:
         """Mock decorators to avoid database access."""
         with (
             patch("controllers.console.wraps.db") as mock_db,
-            patch("controllers.console.wraps.dify_config.EDITION", "CLOUD"),
-            patch("libs.login.dify_config.LOGIN_DISABLED", False),
+            patch("controllers.console.wraps.nexusai_config.EDITION", "CLOUD"),
+            patch("libs.login.nexusai_config.LOGIN_DISABLED", False),
             patch("libs.login.check_csrf_token") as mock_csrf,
         ):
             mock_db.session.query.return_value.first.return_value = MagicMock()  # Mock setup exists

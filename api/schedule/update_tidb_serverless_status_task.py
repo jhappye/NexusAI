@@ -5,7 +5,7 @@ import click
 from sqlalchemy import select
 
 import app
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.tidb_on_qdrant.tidb_service import TidbService
 from extensions.ext_database import db
 from models.dataset import TidbAuthBinding
@@ -44,11 +44,11 @@ def update_clusters(tidb_serverless_list: Sequence[TidbAuthBinding]):
             # TODO: maybe we can set the default value for the following parameters in the config file
             TidbService.batch_update_tidb_serverless_cluster_status(
                 tidb_serverless_list=items,
-                project_id=dify_config.TIDB_PROJECT_ID or "",
-                api_url=dify_config.TIDB_API_URL or "",
-                iam_url=dify_config.TIDB_IAM_API_URL or "",
-                public_key=dify_config.TIDB_PUBLIC_KEY or "",
-                private_key=dify_config.TIDB_PRIVATE_KEY or "",
+                project_id=nexusai_config.TIDB_PROJECT_ID or "",
+                api_url=nexusai_config.TIDB_API_URL or "",
+                iam_url=nexusai_config.TIDB_IAM_API_URL or "",
+                public_key=nexusai_config.TIDB_PUBLIC_KEY or "",
+                private_key=nexusai_config.TIDB_PRIVATE_KEY or "",
             )
     except Exception as e:
         click.echo(click.style(f"Error: {e}", fg="red"))

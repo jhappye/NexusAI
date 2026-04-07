@@ -1,5 +1,5 @@
 """
-Weaviate vector database implementation for Dify's RAG system.
+Weaviate vector database implementation for NexusAI's RAG system.
 
 This module provides integration with Weaviate vector database for storing and retrieving
 document embeddings used in retrieval-augmented generation workflows.
@@ -22,7 +22,7 @@ from weaviate.classes.init import Auth
 from weaviate.classes.query import Filter, MetadataQuery
 from weaviate.exceptions import UnexpectedStatusCodeError
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import Field
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -210,8 +210,8 @@ class WeaviateVector(BaseVector):
             try:
                 if not self._client.collections.exists(self._collection_name):
                     tokenization = (
-                        wc.Tokenization(dify_config.WEAVIATE_TOKENIZATION)
-                        if dify_config.WEAVIATE_TOKENIZATION
+                        wc.Tokenization(nexusai_config.WEAVIATE_TOKENIZATION)
+                        if nexusai_config.WEAVIATE_TOKENIZATION
                         else wc.Tokenization.WORD
                     )
                     self._client.collections.create(
@@ -490,10 +490,10 @@ class WeaviateVectorFactory(AbstractVectorFactory):
         return WeaviateVector(
             collection_name=collection_name,
             config=WeaviateConfig(
-                endpoint=dify_config.WEAVIATE_ENDPOINT or "",
-                grpc_endpoint=dify_config.WEAVIATE_GRPC_ENDPOINT or "",
-                api_key=dify_config.WEAVIATE_API_KEY,
-                batch_size=dify_config.WEAVIATE_BATCH_SIZE,
+                endpoint=nexusai_config.WEAVIATE_ENDPOINT or "",
+                grpc_endpoint=nexusai_config.WEAVIATE_GRPC_ENDPOINT or "",
+                api_key=nexusai_config.WEAVIATE_API_KEY,
+                batch_size=nexusai_config.WEAVIATE_BATCH_SIZE,
             ),
             attributes=attributes,
         )

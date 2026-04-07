@@ -18,11 +18,11 @@ from core.app.entities.app_invoke_entities import (
     InvokeFrom,
     RagPipelineGenerateEntity,
     UserFrom,
-    build_dify_run_context,
+    build_nexusai_run_context,
 )
 from core.app.workflow.layers.persistence import PersistenceWorkflowInfo, WorkflowPersistenceLayer
 from core.repositories.factory import WorkflowExecutionRepository, WorkflowNodeExecutionRepository
-from core.workflow.node_factory import DifyNodeFactory, get_default_root_node_id
+from core.workflow.node_factory import NexusAINodeFactory, get_default_root_node_id
 from core.workflow.system_variables import build_bootstrap_variables, build_system_variables
 from core.workflow.variable_pool_initializer import add_node_inputs_to_pool, add_variables_to_pool
 from core.workflow.workflow_entry import WorkflowEntry
@@ -269,7 +269,7 @@ class PipelineRunner(WorkflowBasedAppRunner):
         graph_init_params = GraphInitParams(
             workflow_id=workflow.id,
             graph_config=graph_config,
-            run_context=build_dify_run_context(
+            run_context=build_nexusai_run_context(
                 tenant_id=workflow.tenant_id,
                 app_id=self._app_id,
                 user_id=self.application_generate_entity.user_id,
@@ -279,7 +279,7 @@ class PipelineRunner(WorkflowBasedAppRunner):
             call_depth=0,
         )
 
-        node_factory = DifyNodeFactory(
+        node_factory = NexusAINodeFactory(
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
         )

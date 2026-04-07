@@ -20,7 +20,7 @@ class ChromaVectorTest(AbstractVectorTest):
                 tenant=chromadb.DEFAULT_TENANT,
                 database=chromadb.DEFAULT_DATABASE,
                 auth_provider="chromadb.auth.token_authn.TokenAuthClientProvider",
-                auth_credentials="difyai123456",
+                auth_credentials="nexusaiai123456",
             ),
         )
 

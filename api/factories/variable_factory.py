@@ -31,7 +31,7 @@ from graphon.variables.variables import (
     VariableBase,
 )
 
-from configs import dify_config
+from configs import nexusai_config
 from core.workflow.variable_prefixes import (
     CONVERSATION_VARIABLE_NODE_ID,
     ENVIRONMENT_VARIABLE_NODE_ID,
@@ -107,8 +107,8 @@ def _build_variable_from_mapping(*, mapping: Mapping[str, Any], selector: Sequen
             result = ArrayBooleanVariable.model_validate(mapping)
         case _:
             raise VariableError(f"not supported value type {value_type}")
-    if result.size > dify_config.MAX_VARIABLE_SIZE:
-        raise VariableError(f"variable size {result.size} exceeds limit {dify_config.MAX_VARIABLE_SIZE}")
+    if result.size > nexusai_config.MAX_VARIABLE_SIZE:
+        raise VariableError(f"variable size {result.size} exceeds limit {nexusai_config.MAX_VARIABLE_SIZE}")
     if not result.selector:
         result = result.model_copy(update={"selector": selector})
     return cast(VariableBase, result)

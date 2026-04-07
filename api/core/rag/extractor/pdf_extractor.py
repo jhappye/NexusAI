@@ -9,7 +9,7 @@ from collections.abc import Iterator
 import pypdfium2
 import pypdfium2.raw as pdfium_c
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.extractor.blob.blob import Blob
 from core.rag.extractor.extractor_base import BaseExtractor
 from core.rag.models.document import Document
@@ -115,7 +115,7 @@ class PdfExtractor(BaseExtractor):
         """
         image_content = []
         upload_files = []
-        base_url = dify_config.INTERNAL_FILES_URL or dify_config.FILES_URL
+        base_url = nexusai_config.INTERNAL_FILES_URL or nexusai_config.FILES_URL
 
         try:
             image_objects = page.get_objects(filter=(pdfium_c.FPDF_PAGEOBJ_IMAGE,))
@@ -151,7 +151,7 @@ class PdfExtractor(BaseExtractor):
                     # save file to db
                     upload_file = UploadFile(
                         tenant_id=self._tenant_id,
-                        storage_type=StorageType(dify_config.STORAGE_TYPE),
+                        storage_type=StorageType(nexusai_config.STORAGE_TYPE),
                         key=file_key,
                         name=file_key,
                         size=len(img_bytes),

@@ -8,12 +8,12 @@ vi.mock('@/config', () => ({
   API_PREFIX: '/api',
   APP_VERSION: '1.0.0',
   IS_MARKETPLACE: false,
-  MARKETPLACE_API_PREFIX: 'https://marketplace.dify.ai/api/v1',
+  MARKETPLACE_API_PREFIX: 'https://marketplace.nexusai.ai/api/v1',
 }))
 
 // Mock var utils
 vi.mock('@/utils/var', () => ({
-  getMarketplaceUrl: (path: string) => `https://marketplace.dify.ai${path}`,
+  getMarketplaceUrl: (path: string) => `https://marketplace.nexusai.ai${path}`,
 }))
 
 // Mock marketplace client
@@ -60,14 +60,14 @@ describe('getPluginIconInMarketplace', () => {
     const { getPluginIconInMarketplace } = await import('../utils')
     const plugin = createMockPlugin({ org: 'test-org', name: 'test-plugin', type: 'plugin' })
     const iconUrl = getPluginIconInMarketplace(plugin)
-    expect(iconUrl).toBe('https://marketplace.dify.ai/api/v1/plugins/test-org/test-plugin/icon')
+    expect(iconUrl).toBe('https://marketplace.nexusai.ai/api/v1/plugins/test-org/test-plugin/icon')
   })
 
   it('should return correct icon URL for bundle', async () => {
     const { getPluginIconInMarketplace } = await import('../utils')
     const bundle = createMockPlugin({ org: 'test-org', name: 'test-bundle', type: 'bundle' })
     const iconUrl = getPluginIconInMarketplace(bundle)
-    expect(iconUrl).toBe('https://marketplace.dify.ai/api/v1/bundles/test-org/test-bundle/icon')
+    expect(iconUrl).toBe('https://marketplace.nexusai.ai/api/v1/bundles/test-org/test-bundle/icon')
   })
 })
 
@@ -82,7 +82,7 @@ describe('getFormattedPlugin', () => {
     } as unknown as Plugin
 
     const formatted = getFormattedPlugin(rawPlugin)
-    expect(formatted.icon).toBe('https://marketplace.dify.ai/api/v1/plugins/test-org/test-plugin/icon')
+    expect(formatted.icon).toBe('https://marketplace.nexusai.ai/api/v1/plugins/test-org/test-plugin/icon')
   })
 
   it('should format bundle with additional properties', async () => {
@@ -96,7 +96,7 @@ describe('getFormattedPlugin', () => {
     } as unknown as Plugin
 
     const formatted = getFormattedPlugin(rawBundle)
-    expect(formatted.icon).toBe('https://marketplace.dify.ai/api/v1/bundles/test-org/test-bundle/icon')
+    expect(formatted.icon).toBe('https://marketplace.nexusai.ai/api/v1/bundles/test-org/test-bundle/icon')
     expect(formatted.brief).toBe('Bundle description')
     expect(formatted.label).toEqual({ 'en-US': 'Test Bundle' })
   })
@@ -107,14 +107,14 @@ describe('getPluginLinkInMarketplace', () => {
     const { getPluginLinkInMarketplace } = await import('../utils')
     const plugin = createMockPlugin({ org: 'test-org', name: 'test-plugin', type: 'plugin' })
     const link = getPluginLinkInMarketplace(plugin)
-    expect(link).toBe('https://marketplace.dify.ai/plugins/test-org/test-plugin')
+    expect(link).toBe('https://marketplace.nexusai.ai/plugins/test-org/test-plugin')
   })
 
   it('should return correct link for bundle', async () => {
     const { getPluginLinkInMarketplace } = await import('../utils')
     const bundle = createMockPlugin({ org: 'test-org', name: 'test-bundle', type: 'bundle' })
     const link = getPluginLinkInMarketplace(bundle)
-    expect(link).toBe('https://marketplace.dify.ai/bundles/test-org/test-bundle')
+    expect(link).toBe('https://marketplace.nexusai.ai/bundles/test-org/test-bundle')
   })
 })
 

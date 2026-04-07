@@ -395,13 +395,13 @@ def test_factory_initializes_milvus_vector(milvus_module, monkeypatch):
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(milvus_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(milvus_module.dify_config, "MILVUS_URI", "http://localhost:19530")
-    monkeypatch.setattr(milvus_module.dify_config, "MILVUS_TOKEN", "")
-    monkeypatch.setattr(milvus_module.dify_config, "MILVUS_USER", "root")
-    monkeypatch.setattr(milvus_module.dify_config, "MILVUS_PASSWORD", "Milvus")
-    monkeypatch.setattr(milvus_module.dify_config, "MILVUS_DATABASE", "default")
-    monkeypatch.setattr(milvus_module.dify_config, "MILVUS_ENABLE_HYBRID_SEARCH", True)
-    monkeypatch.setattr(milvus_module.dify_config, "MILVUS_ANALYZER_PARAMS", '{"tokenizer":"standard"}')
+    monkeypatch.setattr(milvus_module.nexusai_config, "MILVUS_URI", "http://localhost:19530")
+    monkeypatch.setattr(milvus_module.nexusai_config, "MILVUS_TOKEN", "")
+    monkeypatch.setattr(milvus_module.nexusai_config, "MILVUS_USER", "root")
+    monkeypatch.setattr(milvus_module.nexusai_config, "MILVUS_PASSWORD", "Milvus")
+    monkeypatch.setattr(milvus_module.nexusai_config, "MILVUS_DATABASE", "default")
+    monkeypatch.setattr(milvus_module.nexusai_config, "MILVUS_ENABLE_HYBRID_SEARCH", True)
+    monkeypatch.setattr(milvus_module.nexusai_config, "MILVUS_ANALYZER_PARAMS", '{"tokenizer":"standard"}')
 
     with patch.object(milvus_module, "MilvusVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

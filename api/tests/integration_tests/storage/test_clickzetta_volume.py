@@ -25,7 +25,7 @@ class TestClickZettaVolumeStorage(unittest.TestCase):
             service=os.getenv("CLICKZETTA_SERVICE", "uat-api.clickzetta.com"),
             workspace=os.getenv("CLICKZETTA_WORKSPACE", "quick_start"),
             vcluster=os.getenv("CLICKZETTA_VCLUSTER", "default_ap"),
-            schema_name=os.getenv("CLICKZETTA_SCHEMA", "dify"),
+            schema_name=os.getenv("CLICKZETTA_SCHEMA", "nexusai"),
             volume_type="table",
             table_prefix="test_dataset_",
         )

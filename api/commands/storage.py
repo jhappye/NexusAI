@@ -6,7 +6,7 @@ import sqlalchemy as sa
 from sqlalchemy import update
 from sqlalchemy.engine import CursorResult
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_database import db
 from extensions.ext_storage import storage
 from extensions.storage.opendal_storage import OpenDALStorage
@@ -606,7 +606,7 @@ def migrate_oss(
     Expected usage: set STORAGE_TYPE (and its credentials) to your target backend.
     """
     # Ensure target storage is not local/opendal
-    if dify_config.STORAGE_TYPE in (StorageType.LOCAL, StorageType.OPENDAL):
+    if nexusai_config.STORAGE_TYPE in (StorageType.LOCAL, StorageType.OPENDAL):
         click.echo(
             click.style(
                 "Target STORAGE_TYPE must be a cloud OSS (not 'local' or 'opendal').\n"
@@ -623,12 +623,12 @@ def migrate_oss(
     is_source_local = source.lower() == "local"
 
     click.echo(click.style("Preparing migration to target storage.", fg="yellow"))
-    click.echo(click.style(f"Target storage type: {dify_config.STORAGE_TYPE}", fg="white"))
+    click.echo(click.style(f"Target storage type: {nexusai_config.STORAGE_TYPE}", fg="white"))
     if is_source_local:
-        src_root = dify_config.STORAGE_LOCAL_PATH
+        src_root = nexusai_config.STORAGE_LOCAL_PATH
         click.echo(click.style(f"Source: local fs, root: {src_root}", fg="white"))
     else:
-        click.echo(click.style(f"Source: opendal scheme={dify_config.OPENDAL_SCHEME}", fg="white"))
+        click.echo(click.style(f"Source: opendal scheme={nexusai_config.OPENDAL_SCHEME}", fg="white"))
     click.echo(click.style(f"Paths to migrate: {', '.join(path_list)}", fg="white"))
     click.echo("")
 
@@ -638,10 +638,10 @@ def migrate_oss(
     # Instantiate source storage
     try:
         if is_source_local:
-            src_root = dify_config.STORAGE_LOCAL_PATH
+            src_root = nexusai_config.STORAGE_LOCAL_PATH
             source_storage = OpenDALStorage(scheme="fs", root=src_root)
         else:
-            source_storage = OpenDALStorage(scheme=dify_config.OPENDAL_SCHEME)
+            source_storage = OpenDALStorage(scheme=nexusai_config.OPENDAL_SCHEME)
     except Exception as e:
         click.echo(click.style(f"Failed to initialize source storage: {str(e)}", fg="red"))
         return
@@ -751,7 +751,7 @@ def migrate_oss(
                             UploadFile.storage_type == source_storage_type,
                             UploadFile.key.in_(copied_upload_file_keys),
                         )
-                        .values(storage_type=dify_config.STORAGE_TYPE)
+                        .values(storage_type=nexusai_config.STORAGE_TYPE)
                     ),
                 ).rowcount
                 db.session.commit()

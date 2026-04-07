@@ -356,13 +356,13 @@ def test_oracle_factory_init_vector_uses_existing_or_generated_collection(oracle
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(oracle_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(oracle_module.dify_config, "ORACLE_USER", "system")
-    monkeypatch.setattr(oracle_module.dify_config, "ORACLE_PASSWORD", "oracle")
-    monkeypatch.setattr(oracle_module.dify_config, "ORACLE_DSN", "oracle:1521/freepdb1")
-    monkeypatch.setattr(oracle_module.dify_config, "ORACLE_CONFIG_DIR", None)
-    monkeypatch.setattr(oracle_module.dify_config, "ORACLE_WALLET_LOCATION", None)
-    monkeypatch.setattr(oracle_module.dify_config, "ORACLE_WALLET_PASSWORD", None)
-    monkeypatch.setattr(oracle_module.dify_config, "ORACLE_IS_AUTONOMOUS", False)
+    monkeypatch.setattr(oracle_module.nexusai_config, "ORACLE_USER", "system")
+    monkeypatch.setattr(oracle_module.nexusai_config, "ORACLE_PASSWORD", "oracle")
+    monkeypatch.setattr(oracle_module.nexusai_config, "ORACLE_DSN", "oracle:1521/freepdb1")
+    monkeypatch.setattr(oracle_module.nexusai_config, "ORACLE_CONFIG_DIR", None)
+    monkeypatch.setattr(oracle_module.nexusai_config, "ORACLE_WALLET_LOCATION", None)
+    monkeypatch.setattr(oracle_module.nexusai_config, "ORACLE_WALLET_PASSWORD", None)
+    monkeypatch.setattr(oracle_module.nexusai_config, "ORACLE_IS_AUTONOMOUS", False)
 
     with patch.object(oracle_module, "OracleVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

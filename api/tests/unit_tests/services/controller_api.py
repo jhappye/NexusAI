@@ -24,7 +24,7 @@ These tests verify that:
 ARCHITECTURE OVERVIEW
 ================================================================================
 
-The controller layer in Dify uses Flask-RESTX to provide RESTful API endpoints.
+The controller layer in NexusAI uses Flask-RESTX to provide RESTful API endpoints.
 Controllers act as a thin layer between HTTP requests and service methods,
 handling:
 
@@ -1075,7 +1075,7 @@ class TestExternalDatasetApi:
 #
 # 4. Maintainability:
 #    - Tests should be easy to understand
-#    - Tests should be easy to modify
+#    - Tests should be easy to monexusai
 #    - Use descriptive names and comments
 #    - Follow consistent patterns
 #

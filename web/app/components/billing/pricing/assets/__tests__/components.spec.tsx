@@ -56,7 +56,7 @@ describe('Cloud', () => {
 
   it('should use accent color when active', () => {
     const { container } = render(<Cloud isActive={true} />)
-    const rects = container.querySelectorAll('rect[fill="var(--color-saas-dify-blue-accessible)"]')
+    const rects = container.querySelectorAll('rect[fill="var(--color-saas-nexusai-blue-accessible)"]')
     expect(rects.length).toBeGreaterThan(0)
   })
 })
@@ -75,7 +75,7 @@ describe('SelfHosted', () => {
 
   it('should use accent color when active', () => {
     const { container } = render(<SelfHosted isActive={true} />)
-    const rects = container.querySelectorAll('rect[fill="var(--color-saas-dify-blue-accessible)"]')
+    const rects = container.querySelectorAll('rect[fill="var(--color-saas-nexusai-blue-accessible)"]')
     expect(rects.length).toBeGreaterThan(0)
   })
 })

@@ -13,7 +13,7 @@ from urllib.parse import unquote, urlparse
 import httpx
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from core.entities.knowledge_entities import PreviewDetail
 from core.helper import ssrf_proxy
 from core.rag.data_post_processor.data_post_processor import RerankingModelDict
@@ -125,7 +125,7 @@ class BaseIndexProcessor(ABC):
         character_splitter: TextSplitter
         if processing_rule_mode in ["custom", "hierarchical"]:
             # The user-defined segmentation rule
-            max_segmentation_tokens_length = dify_config.INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH
+            max_segmentation_tokens_length = nexusai_config.INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH
             if max_tokens < 50 or max_tokens > max_segmentation_tokens_length:
                 raise ValueError(f"Custom segment length should be between 50 and {max_segmentation_tokens_length}.")
 
@@ -238,8 +238,8 @@ class BaseIndexProcessor(ABC):
         """
         from services.file_service import FileService
 
-        MAX_IMAGE_SIZE = dify_config.ATTACHMENT_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
-        DOWNLOAD_TIMEOUT = dify_config.ATTACHMENT_IMAGE_DOWNLOAD_TIMEOUT
+        MAX_IMAGE_SIZE = nexusai_config.ATTACHMENT_IMAGE_FILE_SIZE_LIMIT * 1024 * 1024
+        DOWNLOAD_TIMEOUT = nexusai_config.ATTACHMENT_IMAGE_DOWNLOAD_TIMEOUT
 
         try:
             # Download with timeout

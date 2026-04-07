@@ -24,9 +24,9 @@ class TestWorkflowResponseConverterFetchFilesFromVariableValue:
         )
 
     def create_file_dict(self, file_id: str = "test_file_dict"):
-        """Create a file dictionary with correct dify_model_identity"""
+        """Create a file dictionary with correct nexusai_model_identity"""
         return {
-            "dify_model_identity": FILE_MODEL_IDENTITY,
+            "nexusai_model_identity": FILE_MODEL_IDENTITY,
             "id": file_id,
             "tenant_id": "test_tenant",
             "type": "document",
@@ -66,7 +66,7 @@ class TestWorkflowResponseConverterFetchFilesFromVariableValue:
         assert len(result) == 1
         assert isinstance(result[0], dict)
         assert result[0]["id"] == "segment_file"
-        assert result[0]["dify_model_identity"] == FILE_MODEL_IDENTITY
+        assert result[0]["nexusai_model_identity"] == FILE_MODEL_IDENTITY
 
     def test_fetch_files_from_variable_value_with_array_file_segment_single(self):
         """Test with ArrayFileSegment containing single file"""
@@ -146,15 +146,15 @@ class TestWorkflowResponseConverterFetchFilesFromVariableValue:
         assert result == []
 
     def test_fetch_files_from_variable_value_with_dict_incorrect_identity(self):
-        """Test with dictionary having incorrect dify_model_identity"""
-        invalid_dict = {"dify_model_identity": "wrong_identity", "id": "invalid_file", "filename": "test.txt"}
+        """Test with dictionary having incorrect nexusai_model_identity"""
+        invalid_dict = {"nexusai_model_identity": "wrong_identity", "id": "invalid_file", "filename": "test.txt"}
 
         result = WorkflowResponseConverter._fetch_files_from_variable_value(invalid_dict)
 
         assert result == []
 
     def test_fetch_files_from_variable_value_with_dict_missing_identity(self):
-        """Test with dictionary missing dify_model_identity"""
+        """Test with dictionary missing nexusai_model_identity"""
         invalid_dict = {"id": "no_identity_file", "filename": "test.txt"}
 
         result = WorkflowResponseConverter._fetch_files_from_variable_value(invalid_dict)
@@ -173,7 +173,7 @@ class TestWorkflowResponseConverterFetchFilesFromVariableValue:
 
     def test_fetch_files_from_variable_value_with_mixed_data_types(self):
         """Test with various mixed data types"""
-        mixed_data = {"string": "text", "number": 42, "boolean": True, "null": None, "dify_model_identity": "wrong"}
+        mixed_data = {"string": "text", "number": 42, "boolean": True, "null": None, "nexusai_model_identity": "wrong"}
 
         result = WorkflowResponseConverter._fetch_files_from_variable_value(mixed_data)
 

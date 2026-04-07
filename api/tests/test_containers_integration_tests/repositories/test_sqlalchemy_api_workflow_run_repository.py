@@ -1,4 +1,4 @@
-"""Integration tests for DifyAPISQLAlchemyWorkflowRunRepository using testcontainers."""
+"""Integration tests for NexusAIAPISQLAlchemyWorkflowRunRepository using testcontainers."""
 
 from __future__ import annotations
 
@@ -27,14 +27,14 @@ from models.human_input import (
 from models.workflow import WorkflowAppLog, WorkflowAppLogCreatedFrom, WorkflowPause, WorkflowPauseReason, WorkflowRun
 from repositories.entities.workflow_pause import WorkflowPauseEntity
 from repositories.sqlalchemy_api_workflow_run_repository import (
-    DifyAPISQLAlchemyWorkflowRunRepository,
+    NexusAIAPISQLAlchemyWorkflowRunRepository,
     _build_human_input_required_reason,
     _PrivateWorkflowPauseEntity,
     _WorkflowRunError,
 )
 
 
-class _TestWorkflowRunRepository(DifyAPISQLAlchemyWorkflowRunRepository):
+class _TestWorkflowRunRepository(NexusAIAPISQLAlchemyWorkflowRunRepository):
     """Concrete repository for tests where save() is not under test."""
 
     def save(self, execution: WorkflowExecution) -> None:
@@ -122,7 +122,7 @@ def _cleanup_scope_data(session: Session, scope: _TestScope) -> None:
 
 
 @pytest.fixture
-def repository(db_session_with_containers: Session) -> DifyAPISQLAlchemyWorkflowRunRepository:
+def repository(db_session_with_containers: Session) -> NexusAIAPISQLAlchemyWorkflowRunRepository:
     """Build a repository backed by the testcontainers database engine."""
 
     engine = db_session_with_containers.get_bind()
@@ -144,7 +144,7 @@ class TestGetRunsBatchByTimeRange:
 
     def test_get_runs_batch_by_time_range_filters_terminal_statuses(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -199,7 +199,7 @@ class TestDeleteRunsWithRelated:
 
     def test_uses_trigger_log_repository(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -259,7 +259,7 @@ class TestCountRunsWithRelated:
 
     def test_uses_trigger_log_repository(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -317,7 +317,7 @@ class TestCreateWorkflowPause:
 
     def test_create_workflow_pause_success(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -350,7 +350,7 @@ class TestCreateWorkflowPause:
 
     def test_create_workflow_pause_not_found(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         test_scope: _TestScope,
     ) -> None:
         """Raise ValueError when the workflow run does not exist."""
@@ -365,7 +365,7 @@ class TestCreateWorkflowPause:
 
     def test_create_workflow_pause_invalid_status(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -391,7 +391,7 @@ class TestResumeWorkflowPause:
 
     def test_resume_workflow_pause_success(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -427,7 +427,7 @@ class TestResumeWorkflowPause:
 
     def test_resume_workflow_pause_not_paused(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -449,7 +449,7 @@ class TestResumeWorkflowPause:
 
     def test_resume_workflow_pause_id_mismatch(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -486,7 +486,7 @@ class TestDeleteWorkflowPause:
 
     def test_delete_workflow_pause_success(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
         db_session_with_containers: Session,
         test_scope: _TestScope,
     ) -> None:
@@ -517,7 +517,7 @@ class TestDeleteWorkflowPause:
 
     def test_delete_workflow_pause_not_found(
         self,
-        repository: DifyAPISQLAlchemyWorkflowRunRepository,
+        repository: NexusAIAPISQLAlchemyWorkflowRunRepository,
     ) -> None:
         """Raise _WorkflowRunError when deleting a non-existent pause."""
 

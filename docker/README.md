@@ -1,6 +1,6 @@
 ## README for docker Deployment
 
-Welcome to the new `docker` directory for deploying Dify using Docker Compose. This README outlines the updates, deployment instructions, and migration details for existing users.
+Welcome to the new `docker` directory for deploying NexusAI using Docker Compose. This README outlines the updates, deployment instructions, and migration details for existing users.
 
 ### What's Updated
 
@@ -16,7 +16,7 @@ Welcome to the new `docker` directory for deploying Dify using Docker Compose. T
 
 - **Mandatory .env File**: A `.env` file is now required to run `docker compose up`. This file is crucial for configuring your deployment and for any custom settings to persist through upgrades.
 
-### How to Deploy Dify with `docker-compose.yaml`
+### How to Deploy NexusAI with `docker-compose.yaml`
 
 1. **Prerequisites**: Ensure Docker and Docker Compose are installed on your system.
 1. **Environment Setup**:
@@ -25,7 +25,7 @@ Welcome to the new `docker` directory for deploying Dify using Docker Compose. T
    - Customize the `.env` file as needed. Refer to the `.env.example` file for detailed configuration options.
    - **Optional (Recommended for upgrades)**:
      You may use the environment synchronization tool to help keep your `.env` file aligned with the latest `.env.example` updates, while preserving your custom settings.
-     This is especially useful when upgrading Dify or managing a large, customized `.env` file.
+     This is especially useful when upgrading NexusAI or managing a large, customized `.env` file.
      See the [Environment Variables Synchronization](#environment-variables-synchronization) section below.
 1. **Running the Services**:
    - Execute `docker compose up` from the `docker` directory to start the services.
@@ -36,7 +36,7 @@ Welcome to the new `docker` directory for deploying Dify using Docker Compose. T
    - Change `ENABLE_OTEL` to `true` in `.env`.
    - Configure `OTLP_BASE_ENDPOINT` properly.
 
-### How to Deploy Middleware for Developing Dify
+### How to Deploy Middleware for Developing NexusAI
 
 1. **Middleware Setup**:
    - Use the `docker-compose.middleware.yaml` for setting up essential middleware services like databases and caches.
@@ -44,7 +44,7 @@ Welcome to the new `docker` directory for deploying Dify using Docker Compose. T
    - Ensure the `middleware.env` file is created by running `cp middleware.env.example middleware.env` (refer to the `middleware.env.example` file).
 1. **Running Middleware Services**:
    - Navigate to the `docker` directory.
-   - Execute `docker compose --env-file middleware.env -f docker-compose.middleware.yaml -p dify up -d` to start PostgreSQL/MySQL (per `DB_TYPE`) plus the bundled Weaviate instance.
+   - Execute `docker compose --env-file middleware.env -f docker-compose.middleware.yaml -p nexusai up -d` to start PostgreSQL/MySQL (per `DB_TYPE`) plus the bundled Weaviate instance.
 
 > Compose automatically loads `COMPOSE_PROFILES=${DB_TYPE:-postgresql},weaviate` from `middleware.env`, so no extra `--profile` flags are needed. Adjust variables in `middleware.env` if you want a different combination of services.
 
@@ -117,14 +117,14 @@ The `.env.example` file provided in the Docker setup is extensive and covers a w
 
 ### Environment Variables Synchronization
 
-When upgrading Dify or pulling the latest changes, new environment variables may be introduced in `.env.example`.
+When upgrading NexusAI or pulling the latest changes, new environment variables may be introduced in `.env.example`.
 
 To help keep your existing `.env` file up to date **without losing your custom values**, an optional environment variables synchronization tool is provided.
 
 > This tool performs a **one-way synchronization** from `.env.example` to `.env`.
 > Existing values in `.env` are never overwritten automatically.
 
-#### `dify-env-sync.sh` (Optional)
+#### `nexusai-env-sync.sh` (Optional)
 
 This script compares your current `.env` file with the latest `.env.example` template and helps safely apply new or updated environment variables.
 
@@ -142,7 +142,7 @@ Before synchronization, the current `.env` file is saved to the `env-backup/` di
 
 **When to use**
 
-- After upgrading Dify to a newer version
+- After upgrading NexusAI to a newer version
 - When `.env.example` has been updated with new environment variables
 - When managing a large or heavily customized `.env` file
 
@@ -150,10 +150,10 @@ Before synchronization, the current `.env` file is saved to the `env-backup/` di
 
 ```bash
 # Grant execution permission (first time only)
-chmod +x dify-env-sync.sh
+chmod +x nexusai-env-sync.sh
 
 # Run the synchronization
-./dify-env-sync.sh
+./nexusai-env-sync.sh
 ```
 
 ### Additional Information

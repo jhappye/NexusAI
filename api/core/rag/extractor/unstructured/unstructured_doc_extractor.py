@@ -1,7 +1,7 @@
 import logging
 import os
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.extractor.extractor_base import BaseExtractor
 from core.rag.models.document import Document
 
@@ -50,7 +50,7 @@ class UnstructuredWordExtractor(BaseExtractor):
 
         from unstructured.chunking.title import chunk_by_title
 
-        max_characters = dify_config.INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH
+        max_characters = nexusai_config.INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH
         chunks = chunk_by_title(elements, max_characters=max_characters, combine_text_under_n_chars=max_characters)
         documents = []
         for chunk in chunks:

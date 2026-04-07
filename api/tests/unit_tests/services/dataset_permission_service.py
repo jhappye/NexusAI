@@ -16,7 +16,7 @@ The DatasetService provides permission checking methods:
 - check_dataset_operator_permission - validates operator permissions
 
 These operations are critical for dataset access control and security, ensuring
-that users can only access datasets they have permission to view or modify.
+that users can only access datasets they have permission to view or monexusai.
 
 This test suite ensures:
 - Correct retrieval of partial member lists
@@ -31,7 +31,7 @@ ARCHITECTURE OVERVIEW
 ================================================================================
 
 The Dataset permission system is a multi-layered access control mechanism
-that provides fine-grained control over who can access and modify datasets.
+that provides fine-grained control over who can access and monexusai datasets.
 
 1. Permission Levels:
    - only_me: Only the dataset creator can access
@@ -268,14 +268,14 @@ class TestDatasetPermissionServiceCheckPermission:
     Comprehensive unit tests for DatasetPermissionService.check_permission method.
 
     This test class covers the permission validation logic that ensures
-    users have the appropriate permissions to modify dataset permissions.
+    users have the appropriate permissions to monexusai dataset permissions.
 
     The check_permission method:
     1. Validates user is a dataset editor
     2. Checks if dataset operator is trying to change permissions
     3. Validates partial member list when setting to partial_members
     4. Ensures dataset operators cannot change permission levels
-    5. Ensures dataset operators cannot modify partial member lists
+    5. Ensures dataset operators cannot monexusai partial member lists
 
     Test scenarios include:
     - Valid permission changes by dataset editors
@@ -393,15 +393,15 @@ class TestDatasetPermissionServiceCheckPermission:
                 user, dataset, requested_permission, requested_partial_member_list
             )
 
-    def test_check_permission_operator_cannot_modify_partial_list_error(self, mock_get_partial_member_list):
+    def test_check_permission_operator_cannot_monexusai_partial_list_error(self, mock_get_partial_member_list):
         """
-        Test error when operator tries to modify partial member list.
+        Test error when operator tries to monexusai partial member list.
 
         Verifies that when a dataset operator tries to change the partial
         member list, a ValueError is raised.
 
         This test ensures:
-        - Dataset operators cannot modify partial member lists
+        - Dataset operators cannot monexusai partial member lists
         - Error message is clear
         - Current member list is preserved
         """

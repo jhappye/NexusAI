@@ -30,11 +30,11 @@ class ClickZettaVolumeConfig(BaseModel):
     service: str = "api.clickzetta.com"
     workspace: str = "quick_start"
     vcluster: str = "default_ap"
-    schema_name: str = "dify"
+    schema_name: str = "nexusai"
     volume_type: str = "table"  # table|user|external
     volume_name: str | None = None  # For external volumes
     table_prefix: str = "dataset_"  # Prefix for table volume names
-    dify_prefix: str = "dify_km"  # Directory prefix for User Volume
+    nexusai_prefix: str = "nexusai_km"  # Directory prefix for User Volume
     permission_check: bool = True  # Enable/disable permission checking
 
     @model_validator(mode="before")
@@ -78,13 +78,13 @@ class ClickZettaVolumeConfig(BaseModel):
         values.setdefault(
             "vcluster", get_env_with_fallback("CLICKZETTA_VOLUME_VCLUSTER", "CLICKZETTA_VCLUSTER", "default_ap")
         )
-        values.setdefault("schema_name", get_env_with_fallback("CLICKZETTA_VOLUME_SCHEMA", "CLICKZETTA_SCHEMA", "dify"))
+        values.setdefault("schema_name", get_env_with_fallback("CLICKZETTA_VOLUME_SCHEMA", "CLICKZETTA_SCHEMA", "nexusai"))
 
         # Volume-specific configurations (no fallback to vector DB config)
         values.setdefault("volume_type", os.getenv("CLICKZETTA_VOLUME_TYPE", "table"))
         values.setdefault("volume_name", os.getenv("CLICKZETTA_VOLUME_NAME"))
         values.setdefault("table_prefix", os.getenv("CLICKZETTA_VOLUME_TABLE_PREFIX", "dataset_"))
-        values.setdefault("dify_prefix", os.getenv("CLICKZETTA_VOLUME_DIFY_PREFIX", "dify_km"))
+        values.setdefault("nexusai_prefix", os.getenv("CLICKZETTA_VOLUME_NEXUSAI_PREFIX", "nexusai_km"))
         # Temporarily disable permission check feature, set directly to false
         values.setdefault("permission_check", False)
 
@@ -155,13 +155,13 @@ class ClickZettaVolumeStorage(BaseStorage):
     def _get_volume_path(self, filename: str, dataset_id: str | None = None) -> str:
         """Get the appropriate volume path based on volume type."""
         if self._config.volume_type == "user":
-            # Add dify prefix for User Volume to organize files
-            return f"{self._config.dify_prefix}/{filename}"
+            # Add nexusai prefix for User Volume to organize files
+            return f"{self._config.nexusai_prefix}/{filename}"
         elif self._config.volume_type == "table":
             # Check if this should use User Volume (special directories)
             if dataset_id in ["upload_files", "temp", "cache", "tools", "website_files", "privkeys"]:
-                # Use User Volume with dify prefix for special directories
-                return f"{self._config.dify_prefix}/{filename}"
+                # Use User Volume with nexusai prefix for special directories
+                return f"{self._config.nexusai_prefix}/{filename}"
 
             if dataset_id:
                 return f"{self._config.table_prefix}{dataset_id}/{filename}"
@@ -182,7 +182,7 @@ class ClickZettaVolumeStorage(BaseStorage):
         if self._config.volume_type == "user":
             return "USER VOLUME"
         elif self._config.volume_type == "table":
-            # For Dify's current file storage pattern, most files are stored in
+            # For NexusAI's current file storage pattern, most files are stored in
             # paths like "upload_files/tenant_id/uuid.ext", "tools/tenant_id/uuid.ext"
             # These should use USER VOLUME for better compatibility
             if dataset_id in ["upload_files", "temp", "cache", "tools", "website_files", "privkeys"]:
@@ -288,10 +288,10 @@ class ClickZettaVolumeStorage(BaseStorage):
             # Upload to volume
             volume_prefix = self._get_volume_sql_prefix(dataset_id)
 
-            # Get the actual volume path (may include dify_km prefix)
+            # Get the actual volume path (may include nexusai_km prefix)
             volume_path = self._get_volume_path(filename, dataset_id)
 
-            # For User Volume, use the full path with dify_km prefix
+            # For User Volume, use the full path with nexusai_km prefix
             if volume_prefix == "USER VOLUME":
                 sql = f"PUT '{temp_file_path}' TO {volume_prefix} FILE '{volume_path}'"
             else:
@@ -334,10 +334,10 @@ class ClickZettaVolumeStorage(BaseStorage):
         with tempfile.TemporaryDirectory() as temp_dir:
             volume_prefix = self._get_volume_sql_prefix(dataset_id)
 
-            # Get the actual volume path (may include dify_km prefix)
+            # Get the actual volume path (may include nexusai_km prefix)
             volume_path = self._get_volume_path(filename, dataset_id)
 
-            # For User Volume, use the full path with dify_km prefix
+            # For User Volume, use the full path with nexusai_km prefix
             if volume_prefix == "USER VOLUME":
                 sql = f"GET {volume_prefix} FILE '{volume_path}' TO '{temp_dir}'"
             else:
@@ -417,10 +417,10 @@ class ClickZettaVolumeStorage(BaseStorage):
 
             volume_prefix = self._get_volume_sql_prefix(dataset_id)
 
-            # Get the actual volume path (may include dify_km prefix)
+            # Get the actual volume path (may include nexusai_km prefix)
             volume_path = self._get_volume_path(filename, dataset_id)
 
-            # For User Volume, use the full path with dify_km prefix
+            # For User Volume, use the full path with nexusai_km prefix
             if volume_prefix == "USER VOLUME":
                 sql = f"LIST {volume_prefix} REGEXP = '^{volume_path}$'"
             else:
@@ -458,10 +458,10 @@ class ClickZettaVolumeStorage(BaseStorage):
 
         volume_prefix = self._get_volume_sql_prefix(dataset_id)
 
-        # Get the actual volume path (may include dify_km prefix)
+        # Get the actual volume path (may include nexusai_km prefix)
         volume_path = self._get_volume_path(filename, dataset_id)
 
-        # For User Volume, use the full path with dify_km prefix
+        # For User Volume, use the full path with nexusai_km prefix
         if volume_prefix == "USER VOLUME":
             sql = f"REMOVE {volume_prefix} FILE '{volume_path}'"
         else:
@@ -491,13 +491,13 @@ class ClickZettaVolumeStorage(BaseStorage):
 
             volume_prefix = self._get_volume_sql_prefix(dataset_id)
 
-            # For User Volume, add dify prefix to path
+            # For User Volume, add nexusai prefix to path
             if volume_prefix == "USER VOLUME":
                 if path:
-                    scan_path = f"{self._config.dify_prefix}/{path}"
+                    scan_path = f"{self._config.nexusai_prefix}/{path}"
                     sql = f"LIST {volume_prefix} SUBDIRECTORY '{scan_path}'"
                 else:
-                    sql = f"LIST {volume_prefix} SUBDIRECTORY '{self._config.dify_prefix}'"
+                    sql = f"LIST {volume_prefix} SUBDIRECTORY '{self._config.nexusai_prefix}'"
             else:
                 if path:
                     sql = f"LIST {volume_prefix} SUBDIRECTORY '{path}'"
@@ -511,10 +511,10 @@ class ClickZettaVolumeStorage(BaseStorage):
                 for row in rows:
                     file_path = row[0]  # relative_path column
 
-                    # For User Volume, remove dify prefix from results
-                    dify_prefix_with_slash = f"{self._config.dify_prefix}/"
-                    if volume_prefix == "USER VOLUME" and file_path.startswith(dify_prefix_with_slash):
-                        file_path = file_path[len(dify_prefix_with_slash) :]  # Remove prefix
+                    # For User Volume, remove nexusai prefix from results
+                    nexusai_prefix_with_slash = f"{self._config.nexusai_prefix}/"
+                    if volume_prefix == "USER VOLUME" and file_path.startswith(nexusai_prefix_with_slash):
+                        file_path = file_path[len(nexusai_prefix_with_slash) :]  # Remove prefix
 
                     if files and not file_path.endswith("/") or directories and file_path.endswith("/"):
                         result.append(file_path)

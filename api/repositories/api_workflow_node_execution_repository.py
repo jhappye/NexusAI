@@ -41,7 +41,7 @@ class WorkflowNodeExecutionSnapshot:
     loop_id: str | None = None  # Loop id from execution metadata, if any.
 
 
-class DifyAPIWorkflowNodeExecutionRepository(WorkflowNodeExecutionRepository, Protocol):
+class NexusAIAPIWorkflowNodeExecutionRepository(WorkflowNodeExecutionRepository, Protocol):
     """
     Protocol for service-layer operations on WorkflowNodeExecutionModel.
 

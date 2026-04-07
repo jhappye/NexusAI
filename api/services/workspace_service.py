@@ -1,7 +1,7 @@
 from flask_login import current_user
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from enums.cloud_plan import CloudPlan
 from extensions.ext_database import db
 from models.account import Tenant, TenantAccountJoin, TenantAccountRole
@@ -37,7 +37,7 @@ class WorkspaceService:
         can_replace_logo = feature.can_replace_logo
 
         if can_replace_logo and TenantService.has_roles(tenant, [TenantAccountRole.OWNER, TenantAccountRole.ADMIN]):
-            base_url = dify_config.FILES_URL
+            base_url = nexusai_config.FILES_URL
             replace_webapp_logo = (
                 f"{base_url}/files/workspaces/{tenant.id}/webapp-logo"
                 if tenant.custom_config_dict.get("replace_webapp_logo")
@@ -49,7 +49,7 @@ class WorkspaceService:
                 "remove_webapp_brand": remove_webapp_brand,
                 "replace_webapp_logo": replace_webapp_logo,
             }
-        if dify_config.EDITION == "CLOUD":
+        if nexusai_config.EDITION == "CLOUD":
             tenant_info["next_credit_reset_date"] = feature.next_credit_reset_date
 
             from services.credit_pool_service import CreditPoolService

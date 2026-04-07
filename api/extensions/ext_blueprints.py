@@ -1,6 +1,6 @@
-from configs import dify_config
+from configs import nexusai_config
 from constants import HEADER_NAME_APP_CODE, HEADER_NAME_CSRF_TOKEN, HEADER_NAME_PASSPORT
-from dify_app import DifyApp
+from nexusai_app import NexusAIApp
 
 BASE_CORS_HEADERS: tuple[str, ...] = ("Content-Type", HEADER_NAME_APP_CODE, HEADER_NAME_PASSPORT)
 SERVICE_API_HEADERS: tuple[str, ...] = (*BASE_CORS_HEADERS, "Authorization")
@@ -13,16 +13,16 @@ EXPOSED_HEADERS: tuple[str, ...] = ("X-Version", "X-Env", "X-Trace-Id")
 def _apply_cors_once(bp, /, **cors_kwargs):
     """Make CORS idempotent so blueprints can be reused across multiple app instances."""
 
-    if getattr(bp, "_dify_cors_applied", False):
+    if getattr(bp, "_nexusai_cors_applied", False):
         return
 
     from flask_cors import CORS
 
     CORS(bp, **cors_kwargs)
-    bp._dify_cors_applied = True
+    bp._nexusai_cors_applied = True
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     # register blueprint routers
 
     from controllers.console import bp as console_app_bp
@@ -46,20 +46,20 @@ def init_app(app: DifyApp):
         resources={
             # Embedded bot endpoints (unauthenticated, cross-origin safe)
             r"^/chat-messages$": {
-                "origins": dify_config.WEB_API_CORS_ALLOW_ORIGINS,
+                "origins": nexusai_config.WEB_API_CORS_ALLOW_ORIGINS,
                 "supports_credentials": False,
                 "allow_headers": list(EMBED_HEADERS),
                 "methods": ["GET", "POST", "OPTIONS"],
             },
             r"^/chat-messages/.*": {
-                "origins": dify_config.WEB_API_CORS_ALLOW_ORIGINS,
+                "origins": nexusai_config.WEB_API_CORS_ALLOW_ORIGINS,
                 "supports_credentials": False,
                 "allow_headers": list(EMBED_HEADERS),
                 "methods": ["GET", "POST", "OPTIONS"],
             },
             # Default web application endpoints (authenticated)
             r"/*": {
-                "origins": dify_config.WEB_API_CORS_ALLOW_ORIGINS,
+                "origins": nexusai_config.WEB_API_CORS_ALLOW_ORIGINS,
                 "supports_credentials": True,
                 "allow_headers": list(AUTHENTICATED_HEADERS),
                 "methods": ["GET", "PUT", "POST", "DELETE", "OPTIONS", "PATCH"],
@@ -71,7 +71,7 @@ def init_app(app: DifyApp):
 
     _apply_cors_once(
         console_app_bp,
-        resources={r"/*": {"origins": dify_config.CONSOLE_CORS_ALLOW_ORIGINS}},
+        resources={r"/*": {"origins": nexusai_config.CONSOLE_CORS_ALLOW_ORIGINS}},
         supports_credentials=True,
         allow_headers=list(AUTHENTICATED_HEADERS),
         methods=["GET", "PUT", "POST", "DELETE", "OPTIONS", "PATCH"],

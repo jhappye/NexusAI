@@ -2,7 +2,7 @@ from graphon.model_runtime.entities.llm_entities import LLMUsage
 from sqlalchemy import update
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from core.entities.model_entities import ModelStatus
 from core.entities.provider_entities import ProviderQuotaType, QuotaUnit
 from core.errors.error import QuotaExceededError
@@ -52,7 +52,7 @@ def deduct_llm_quota(*, tenant_id: str, model_instance: ModelInstance, usage: LL
         if quota_unit == QuotaUnit.TOKENS:
             used_quota = usage.total_tokens
         elif quota_unit == QuotaUnit.CREDITS:
-            used_quota = dify_config.get_model_credits(model_instance.model_name)
+            used_quota = nexusai_config.get_model_credits(model_instance.model_name)
         else:
             used_quota = 1
 

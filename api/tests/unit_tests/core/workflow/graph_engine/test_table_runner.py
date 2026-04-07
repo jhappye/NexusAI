@@ -39,9 +39,9 @@ from graphon.variables import (
     StringVariable,
 )
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
 from core.tools.utils.yaml_utils import _load_yaml_file
-from core.workflow.node_factory import DifyNodeFactory, get_default_root_node_id
+from core.workflow.node_factory import NexusAINodeFactory, get_default_root_node_id
 from core.workflow.system_variables import build_bootstrap_variables, build_system_variables
 from core.workflow.variable_pool_initializer import add_node_inputs_to_pool, add_variables_to_pool
 
@@ -77,7 +77,7 @@ class _TableTestChildEngineBuilder:
                 mock_config=self._mock_config,
             )
         else:
-            node_factory = DifyNodeFactory(
+            node_factory = NexusAINodeFactory(
                 graph_init_params=graph_init_params,
                 graph_runtime_state=child_graph_runtime_state,
             )
@@ -202,7 +202,7 @@ class WorkflowRunner:
             workflow_id="test_workflow",
             graph_config=graph_config,
             run_context={
-                DIFY_RUN_CONTEXT_KEY: {
+                NEXUSAI_RUN_CONTEXT_KEY: {
                     "tenant_id": "test_tenant",
                     "app_id": "test_app",
                     "user_id": "test_user",
@@ -268,7 +268,7 @@ class WorkflowRunner:
                 graph_init_params=graph_init_params, graph_runtime_state=graph_runtime_state, mock_config=mock_config
             )
         else:
-            node_factory = DifyNodeFactory(graph_init_params=graph_init_params, graph_runtime_state=graph_runtime_state)
+            node_factory = NexusAINodeFactory(graph_init_params=graph_init_params, graph_runtime_state=graph_runtime_state)
 
         graph = Graph.init(
             graph_config=graph_config,

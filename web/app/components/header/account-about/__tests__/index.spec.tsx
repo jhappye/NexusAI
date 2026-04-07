@@ -22,7 +22,7 @@ describe('AccountAbout', () => {
   const mockVersionInfo: LangGeniusVersionResponse = {
     current_version: '0.6.0',
     latest_version: '0.6.0',
-    release_notes: 'https://github.com/langgenius/dify/releases/tag/0.6.0',
+    release_notes: 'https://github.com/langgenius/nexusai/releases/tag/0.6.0',
     version: '0.6.0',
     release_date: '2024-01-01',
     can_auto_update: false,

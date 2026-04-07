@@ -58,7 +58,7 @@ const createRetrievalConfig = (overrides = {}): RetrievalConfig => ({
 
 const createHitTestingResponse = (numResults: number): HitTestingResponse => ({
   query: {
-    content: 'What is Dify?',
+    content: 'What is NexusAI?',
     tsne_position: { x: 0, y: 0 },
   },
   records: Array.from({ length: numResults }, (_, i) => ({
@@ -75,7 +75,7 @@ const createHitTestingResponse = (numResults: number): HitTestingResponse => ({
       position: i + 1,
       word_count: 100 + i * 50,
       tokens: 50 + i * 25,
-      keywords: ['test', 'dify'],
+      keywords: ['test', 'nexusai'],
       hit_count: i * 5,
       index_node_hash: `hash-${i}`,
       answer: '',
@@ -93,7 +93,7 @@ const createHitTestingResponse = (numResults: number): HitTestingResponse => ({
       position: i + 1,
       word_count: 100 + i * 50,
       tokens: 50 + i * 25,
-      keywords: ['test', 'dify'],
+      keywords: ['test', 'nexusai'],
       hit_count: i * 5,
       index_node_hash: `hash-${i}`,
       answer: '',

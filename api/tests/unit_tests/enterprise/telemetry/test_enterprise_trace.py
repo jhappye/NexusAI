@@ -458,10 +458,10 @@ class TestWorkflowTrace:
         span_call = mock_exporter.export_span.call_args
         assert span_call[0][0] == EnterpriseTelemetrySpan.WORKFLOW_RUN
         attrs = span_call[0][1]
-        assert attrs["dify.workflow.run_id"] == "run-001"
-        assert attrs["dify.workflow.id"] == "wf-001"
-        assert attrs["dify.tenant_id"] == "tenant-abc"
-        assert attrs["dify.workflow.status"] == "succeeded"
+        assert attrs["nexusai.workflow.run_id"] == "run-001"
+        assert attrs["nexusai.workflow.id"] == "wf-001"
+        assert attrs["nexusai.tenant_id"] == "tenant-abc"
+        assert attrs["nexusai.workflow.status"] == "succeeded"
         assert attrs["gen_ai.usage.total_tokens"] == 100
 
     def test_span_timing_passed_correctly(self, trace_handler, mock_exporter):
@@ -487,8 +487,8 @@ class TestWorkflowTrace:
             trace_handler._workflow_trace(make_workflow_info())
 
         log_attrs = mock_log.call_args[1]["attributes"]
-        assert log_attrs["dify.workflow.inputs"] == json.dumps({"query": "hello"})
-        assert log_attrs["dify.workflow.outputs"] == json.dumps({"answer": "world"})
+        assert log_attrs["nexusai.workflow.inputs"] == json.dumps({"query": "hello"})
+        assert log_attrs["nexusai.workflow.outputs"] == json.dumps({"answer": "world"})
 
     def test_companion_log_uses_ref_when_content_disabled(self, trace_handler, mock_exporter):
         mock_exporter.include_content = False
@@ -496,8 +496,8 @@ class TestWorkflowTrace:
             trace_handler._workflow_trace(make_workflow_info())
 
         log_attrs = mock_log.call_args[1]["attributes"]
-        assert log_attrs["dify.workflow.inputs"].startswith("ref:workflow_run_id=")
-        assert log_attrs["dify.workflow.outputs"].startswith("ref:workflow_run_id=")
+        assert log_attrs["nexusai.workflow.inputs"].startswith("ref:workflow_run_id=")
+        assert log_attrs["nexusai.workflow.outputs"].startswith("ref:workflow_run_id=")
 
     def test_increments_token_counter(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_telemetry_log"):
@@ -588,10 +588,10 @@ class TestWorkflowTrace:
             trace_handler._workflow_trace(info)
 
         attrs = mock_exporter.export_span.call_args[0][1]
-        assert attrs["dify.parent.trace_id"] == "outer-trace"
-        assert attrs["dify.parent.node.execution_id"] == "outer-ne-001"
-        assert attrs["dify.parent.workflow.run_id"] == "outer-run-001"
-        assert attrs["dify.parent.app.id"] == "outer-app-001"
+        assert attrs["nexusai.parent.trace_id"] == "outer-trace"
+        assert attrs["nexusai.parent.node.execution_id"] == "outer-ne-001"
+        assert attrs["nexusai.parent.workflow.run_id"] == "outer-run-001"
+        assert attrs["nexusai.parent.app.id"] == "outer-app-001"
 
 
 # ---------------------------------------------------------------------------
@@ -612,10 +612,10 @@ class TestNodeExecutionTrace:
             trace_handler._node_execution_trace(make_node_info())
 
         attrs = mock_exporter.export_span.call_args[0][1]
-        assert attrs["dify.node.execution_id"] == "ne-001"
-        assert attrs["dify.node.id"] == "node-001"
-        assert attrs["dify.node.type"] == "llm"
-        assert attrs["dify.node.status"] == "succeeded"
+        assert attrs["nexusai.node.execution_id"] == "ne-001"
+        assert attrs["nexusai.node.id"] == "node-001"
+        assert attrs["nexusai.node.type"] == "llm"
+        assert attrs["nexusai.node.status"] == "succeeded"
         assert attrs["gen_ai.request.model"] == "gpt-4"
         assert attrs["gen_ai.provider.name"] == "openai"
 
@@ -700,8 +700,8 @@ class TestNodeExecutionTrace:
             )
 
         log_attrs = mock_log.call_args[1]["attributes"]
-        assert log_attrs["dify.node.inputs"].startswith("ref:node_execution_id=")
-        assert log_attrs["dify.node.outputs"].startswith("ref:node_execution_id=")
+        assert log_attrs["nexusai.node.inputs"].startswith("ref:node_execution_id=")
+        assert log_attrs["nexusai.node.outputs"].startswith("ref:node_execution_id=")
 
 
 # ---------------------------------------------------------------------------
@@ -764,14 +764,14 @@ class TestMessageTrace:
             trace_handler._message_trace(make_message_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.message.duration"] == pytest.approx(5.0)
+        assert attrs["nexusai.message.duration"] == pytest.approx(5.0)
 
     def test_no_duration_when_timestamps_missing(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._message_trace(make_message_info(start_time=None, end_time=None))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert "dify.message.duration" not in attrs
+        assert "nexusai.message.duration" not in attrs
 
     def test_records_duration_histogram_when_timestamps_present(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):
@@ -835,8 +835,8 @@ class TestMessageTrace:
             trace_handler._message_trace(make_message_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.message.inputs"].startswith("ref:message_id=")
-        assert attrs["dify.message.outputs"].startswith("ref:message_id=")
+        assert attrs["nexusai.message.inputs"].startswith("ref:message_id=")
+        assert attrs["nexusai.message.outputs"].startswith("ref:message_id=")
 
 
 # ---------------------------------------------------------------------------
@@ -856,14 +856,14 @@ class TestToolTrace:
             trace_handler._tool_trace(make_tool_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.tool.status"] == "succeeded"
+        assert attrs["nexusai.tool.status"] == "succeeded"
 
     def test_status_is_failed_on_error(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._tool_trace(make_tool_info(error="Tool error"))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.tool.status"] == "failed"
+        assert attrs["nexusai.tool.status"] == "failed"
 
     def test_records_tool_duration_histogram(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):
@@ -888,8 +888,8 @@ class TestToolTrace:
             trace_handler._tool_trace(make_tool_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.tool.inputs"].startswith("ref:message_id=")
-        assert attrs["dify.tool.outputs"].startswith("ref:message_id=")
+        assert attrs["nexusai.tool.inputs"].startswith("ref:message_id=")
+        assert attrs["nexusai.tool.outputs"].startswith("ref:message_id=")
 
     def test_inputs_present_when_include_content_true(self, trace_handler, mock_exporter):
         mock_exporter.include_content = True
@@ -897,8 +897,8 @@ class TestToolTrace:
             trace_handler._tool_trace(make_tool_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.tool.inputs"] == json.dumps({"query": "test"})
-        assert attrs["dify.tool.outputs"] == "search results"
+        assert attrs["nexusai.tool.inputs"] == json.dumps({"query": "test"})
+        assert attrs["nexusai.tool.outputs"] == "search results"
 
     def test_increments_requests_counter(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):
@@ -928,14 +928,14 @@ class TestModerationTrace:
             trace_handler._moderation_trace(make_moderation_info(flagged=True))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.moderation.flagged"] is True
+        assert attrs["nexusai.moderation.flagged"] is True
 
     def test_flagged_false_sets_attribute(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._moderation_trace(make_moderation_info(flagged=False))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.moderation.flagged"] is False
+        assert attrs["nexusai.moderation.flagged"] is False
 
     def test_query_gated_by_include_content(self, trace_handler, mock_exporter):
         mock_exporter.include_content = False
@@ -943,7 +943,7 @@ class TestModerationTrace:
             trace_handler._moderation_trace(make_moderation_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.moderation.query"].startswith("ref:message_id=")
+        assert attrs["nexusai.moderation.query"].startswith("ref:message_id=")
 
     def test_query_present_when_include_content_true(self, trace_handler, mock_exporter):
         mock_exporter.include_content = True
@@ -951,7 +951,7 @@ class TestModerationTrace:
             trace_handler._moderation_trace(make_moderation_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.moderation.query"] == "is this ok?"
+        assert attrs["nexusai.moderation.query"] == "is this ok?"
 
     def test_increments_requests_counter(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):
@@ -981,35 +981,35 @@ class TestSuggestedQuestionTrace:
             trace_handler._suggested_question_trace(make_suggested_question_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.suggested_question.duration"] == pytest.approx(5.0)
+        assert attrs["nexusai.suggested_question.duration"] == pytest.approx(5.0)
 
     def test_duration_is_none_when_timestamps_missing(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._suggested_question_trace(make_suggested_question_info(start_time=None, end_time=None))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.suggested_question.duration"] is None
+        assert attrs["nexusai.suggested_question.duration"] is None
 
     def test_status_is_failed_when_error_present(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._suggested_question_trace(make_suggested_question_info(error="Generation failed"))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.suggested_question.status"] == "failed"
+        assert attrs["nexusai.suggested_question.status"] == "failed"
 
     def test_status_falls_back_to_succeeded_when_no_error(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._suggested_question_trace(make_suggested_question_info(status=None, error=None))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.suggested_question.status"] == "succeeded"
+        assert attrs["nexusai.suggested_question.status"] == "succeeded"
 
     def test_question_count_attribute(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._suggested_question_trace(make_suggested_question_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.suggested_question.count"] == 2
+        assert attrs["nexusai.suggested_question.count"] == 2
 
     def test_questions_gated_by_include_content(self, trace_handler, mock_exporter):
         mock_exporter.include_content = False
@@ -1017,7 +1017,7 @@ class TestSuggestedQuestionTrace:
             trace_handler._suggested_question_trace(make_suggested_question_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.suggested_question.questions"].startswith("ref:message_id=")
+        assert attrs["nexusai.suggested_question.questions"].startswith("ref:message_id=")
 
     def test_increments_requests_counter(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):
@@ -1047,43 +1047,43 @@ class TestDatasetRetrievalTrace:
             trace_handler._dataset_retrieval_trace(make_dataset_retrieval_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.retrieval.document_count"] == 1
+        assert attrs["nexusai.retrieval.document_count"] == 1
 
     def test_dataset_ids_extracted(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._dataset_retrieval_trace(make_dataset_retrieval_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert "ds-001" in attrs["dify.dataset.id"]
+        assert "ds-001" in attrs["nexusai.dataset.id"]
 
     def test_empty_documents_has_zero_count(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._dataset_retrieval_trace(make_dataset_retrieval_info(documents=[]))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.retrieval.document_count"] == 0
+        assert attrs["nexusai.retrieval.document_count"] == 0
 
     def test_status_succeeded_when_no_error(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._dataset_retrieval_trace(make_dataset_retrieval_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.retrieval.status"] == "succeeded"
+        assert attrs["nexusai.retrieval.status"] == "succeeded"
 
     def test_status_failed_when_error_present(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._dataset_retrieval_trace(make_dataset_retrieval_info(error="DB error"))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.retrieval.status"] == "failed"
+        assert attrs["nexusai.retrieval.status"] == "failed"
 
     def test_embedding_model_attributes_set_when_present(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._dataset_retrieval_trace(make_dataset_retrieval_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert "dify.dataset.embedding_providers" in attrs
-        assert "dify.dataset.embedding_models" in attrs
+        assert "nexusai.dataset.embedding_providers" in attrs
+        assert "nexusai.dataset.embedding_models" in attrs
 
     def test_no_embedding_model_attributes_when_not_provided(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
@@ -1092,8 +1092,8 @@ class TestDatasetRetrievalTrace:
             )
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert "dify.dataset.embedding_providers" not in attrs
-        assert "dify.dataset.embedding_models" not in attrs
+        assert "nexusai.dataset.embedding_providers" not in attrs
+        assert "nexusai.dataset.embedding_models" not in attrs
 
     def test_rerank_attributes_set_when_present(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
@@ -1109,8 +1109,8 @@ class TestDatasetRetrievalTrace:
             )
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.retrieval.rerank_provider"] == "cohere"
-        assert attrs["dify.retrieval.rerank_model"] == "rerank-english"
+        assert attrs["nexusai.retrieval.rerank_provider"] == "cohere"
+        assert attrs["nexusai.retrieval.rerank_model"] == "rerank-english"
 
     def test_no_rerank_attributes_when_not_present(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
@@ -1119,8 +1119,8 @@ class TestDatasetRetrievalTrace:
             )
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert "dify.retrieval.rerank_provider" not in attrs
-        assert "dify.retrieval.rerank_model" not in attrs
+        assert "nexusai.retrieval.rerank_provider" not in attrs
+        assert "nexusai.retrieval.rerank_model" not in attrs
 
     def test_dataset_retrieval_counter_incremented_per_dataset(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):
@@ -1151,7 +1151,7 @@ class TestDatasetRetrievalTrace:
             trace_handler._dataset_retrieval_trace(make_dataset_retrieval_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.retrieval.query"].startswith("ref:message_id=")
+        assert attrs["nexusai.retrieval.query"].startswith("ref:message_id=")
 
 
 # ---------------------------------------------------------------------------
@@ -1171,21 +1171,21 @@ class TestGenerateNameTrace:
             trace_handler._generate_name_trace(make_generate_name_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.generate_name.duration"] == pytest.approx(5.0)
+        assert attrs["nexusai.generate_name.duration"] == pytest.approx(5.0)
 
     def test_no_duration_when_timestamps_missing(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._generate_name_trace(make_generate_name_info(start_time=None, end_time=None))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.generate_name.duration"] is None
+        assert attrs["nexusai.generate_name.duration"] is None
 
     def test_status_succeeded_on_success(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._generate_name_trace(make_generate_name_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.generate_name.status"] == "succeeded"
+        assert attrs["nexusai.generate_name.status"] == "succeeded"
 
     def test_status_failed_when_metadata_has_error(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
@@ -1200,7 +1200,7 @@ class TestGenerateNameTrace:
             )
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.generate_name.status"] == "failed"
+        assert attrs["nexusai.generate_name.status"] == "failed"
 
     def test_inputs_and_outputs_gated_by_include_content(self, trace_handler, mock_exporter):
         mock_exporter.include_content = False
@@ -1208,8 +1208,8 @@ class TestGenerateNameTrace:
             trace_handler._generate_name_trace(make_generate_name_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.generate_name.inputs"].startswith("ref:conversation_id=")
-        assert attrs["dify.generate_name.outputs"].startswith("ref:conversation_id=")
+        assert attrs["nexusai.generate_name.inputs"].startswith("ref:conversation_id=")
+        assert attrs["nexusai.generate_name.outputs"].startswith("ref:conversation_id=")
 
     def test_increments_requests_counter(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):
@@ -1239,14 +1239,14 @@ class TestPromptGenerationTrace:
             trace_handler._prompt_generation_trace(make_prompt_generation_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.prompt_generation.status"] == "succeeded"
+        assert attrs["nexusai.prompt_generation.status"] == "succeeded"
 
     def test_status_failed_when_error_present(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._prompt_generation_trace(make_prompt_generation_info(error="Generation error"))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.prompt_generation.status"] == "failed"
+        assert attrs["nexusai.prompt_generation.status"] == "failed"
 
     def test_token_counters_incremented(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):
@@ -1274,15 +1274,15 @@ class TestPromptGenerationTrace:
             trace_handler._prompt_generation_trace(make_prompt_generation_info(total_price=0.05, currency="USD"))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.prompt_generation.total_price"] == pytest.approx(0.05)
-        assert attrs["dify.prompt_generation.currency"] == "USD"
+        assert attrs["nexusai.prompt_generation.total_price"] == pytest.approx(0.05)
+        assert attrs["nexusai.prompt_generation.currency"] == "USD"
 
     def test_no_total_price_attribute_when_none(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event") as mock_emit:
             trace_handler._prompt_generation_trace(make_prompt_generation_info(total_price=None))
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert "dify.prompt_generation.total_price" not in attrs
+        assert "nexusai.prompt_generation.total_price" not in attrs
 
     def test_error_increments_error_counter(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):
@@ -1308,7 +1308,7 @@ class TestPromptGenerationTrace:
             trace_handler._prompt_generation_trace(make_prompt_generation_info())
 
         attrs = mock_emit.call_args[1]["attributes"]
-        assert attrs["dify.prompt_generation.instruction"].startswith("ref:trace_id=")
+        assert attrs["nexusai.prompt_generation.instruction"].startswith("ref:trace_id=")
 
     def test_operation_type_label_used_in_token_counters(self, trace_handler, mock_exporter):
         with patch("enterprise.telemetry.enterprise_trace.emit_metric_only_event"):

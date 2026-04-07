@@ -13,7 +13,7 @@ from graphon.file import FileTransferMethod
 from graphon.file.protocols import HttpResponseProtocol, WorkflowFileRuntimeProtocol
 from graphon.file.runtime import set_workflow_file_runtime
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.file_access import DatabaseFileAccessController, FileAccessControllerProtocol
 from core.db.session_factory import session_factory
 from core.helper.ssrf_proxy import ssrf_proxy
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from graphon.file import File
 
 
-class DifyWorkflowFileRuntime(WorkflowFileRuntimeProtocol):
+class NexusAIWorkflowFileRuntime(WorkflowFileRuntimeProtocol):
     """Production runtime wiring for ``graphon.file``.
 
     Opaque file references are resolved back to canonical database records before
@@ -41,7 +41,7 @@ class DifyWorkflowFileRuntime(WorkflowFileRuntimeProtocol):
 
     @property
     def multimodal_send_format(self) -> str:
-        return dify_config.MULTIMODAL_SEND_FORMAT
+        return nexusai_config.MULTIMODAL_SEND_FORMAT
 
     def http_get(self, url: str, *, follow_redirects: bool = True) -> HttpResponseProtocol:
         return ssrf_proxy.get(url, follow_redirects=follow_redirects)
@@ -118,17 +118,17 @@ class DifyWorkflowFileRuntime(WorkflowFileRuntimeProtocol):
         recalculated = hmac.new(self._secret_key(), payload.encode(), hashlib.sha256).digest()
         if sign != base64.urlsafe_b64encode(recalculated).decode():
             return False
-        return int(time.time()) - int(timestamp) <= dify_config.FILES_ACCESS_TIMEOUT
+        return int(time.time()) - int(timestamp) <= nexusai_config.FILES_ACCESS_TIMEOUT
 
     @staticmethod
     def _base_url(*, for_external: bool) -> str:
         if for_external:
-            return dify_config.FILES_URL
-        return dify_config.INTERNAL_FILES_URL or dify_config.FILES_URL
+            return nexusai_config.FILES_URL
+        return nexusai_config.INTERNAL_FILES_URL or nexusai_config.FILES_URL
 
     @staticmethod
     def _secret_key() -> bytes:
-        return dify_config.SECRET_KEY.encode() if dify_config.SECRET_KEY else b""
+        return nexusai_config.SECRET_KEY.encode() if nexusai_config.SECRET_KEY else b""
 
     def _sign_query(self, *, payload: str) -> dict[str, str]:
         timestamp = str(int(time.time()))
@@ -181,5 +181,5 @@ class DifyWorkflowFileRuntime(WorkflowFileRuntimeProtocol):
                 raise ValueError(f"Tool file {tool_file_id} not found")
 
 
-def bind_dify_workflow_file_runtime() -> None:
-    set_workflow_file_runtime(DifyWorkflowFileRuntime(file_access_controller=DatabaseFileAccessController()))
+def bind_nexusai_workflow_file_runtime() -> None:
+    set_workflow_file_runtime(NexusAIWorkflowFileRuntime(file_access_controller=DatabaseFileAccessController()))

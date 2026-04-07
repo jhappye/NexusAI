@@ -1,11 +1,11 @@
 # Workflow Graph Engine Smoke Tests
 
-This directory now keeps only a small Dify-owned smoke layer around the external
+This directory now keeps only a small NexusAI-owned smoke layer around the external
 `graphon` package.
 
 Retained coverage focuses on:
 
-1. Dify workflow layers:
+1. NexusAI workflow layers:
    - `layers/test_llm_quota.py`
    - `layers/test_observability.py`
 2. Human-input resume integration:

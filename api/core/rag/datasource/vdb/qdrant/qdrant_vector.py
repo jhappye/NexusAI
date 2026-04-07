@@ -20,7 +20,7 @@ from qdrant_client.http.models import (
 from qdrant_client.local.qdrant_local import QdrantLocal
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import Field
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -508,12 +508,12 @@ class QdrantVectorFactory(AbstractVectorFactory):
             collection_name=collection_name,
             group_id=dataset.id,
             config=QdrantConfig(
-                endpoint=dify_config.QDRANT_URL or "",
-                api_key=dify_config.QDRANT_API_KEY,
+                endpoint=nexusai_config.QDRANT_URL or "",
+                api_key=nexusai_config.QDRANT_API_KEY,
                 root_path=str(current_app.config.root_path),
-                timeout=dify_config.QDRANT_CLIENT_TIMEOUT,
-                grpc_port=dify_config.QDRANT_GRPC_PORT,
-                prefer_grpc=dify_config.QDRANT_GRPC_ENABLED,
-                replication_factor=dify_config.QDRANT_REPLICATION_FACTOR,
+                timeout=nexusai_config.QDRANT_CLIENT_TIMEOUT,
+                grpc_port=nexusai_config.QDRANT_GRPC_PORT,
+                prefer_grpc=nexusai_config.QDRANT_GRPC_ENABLED,
+                replication_factor=nexusai_config.QDRANT_REPLICATION_FACTOR,
             ),
         )

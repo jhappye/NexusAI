@@ -7,7 +7,7 @@ from flask_restx import Api
 from werkzeug.exceptions import HTTPException
 from werkzeug.http import HTTP_STATUS_CODES
 
-from configs import dify_config
+from configs import nexusai_config
 from core.errors.error import AppInvokeQuotaExceededError
 from libs.token import build_force_logout_cookie_headers
 
@@ -129,8 +129,8 @@ class ExternalApi(Api):
     def __init__(self, app: Blueprint | Flask, *args, **kwargs):
         kwargs.setdefault("authorizations", self._authorizations)
         kwargs.setdefault("security", "Bearer")
-        kwargs["add_specs"] = dify_config.SWAGGER_UI_ENABLED
-        kwargs["doc"] = dify_config.SWAGGER_UI_PATH if dify_config.SWAGGER_UI_ENABLED else False
+        kwargs["add_specs"] = nexusai_config.SWAGGER_UI_ENABLED
+        kwargs["doc"] = nexusai_config.SWAGGER_UI_PATH if nexusai_config.SWAGGER_UI_ENABLED else False
 
         # manual separate call on construction and init_app to ensure configs in kwargs effective
         super().__init__(app=None, *args, **kwargs)

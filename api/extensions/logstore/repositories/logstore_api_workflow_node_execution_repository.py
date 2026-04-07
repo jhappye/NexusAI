@@ -1,5 +1,5 @@
 """
-LogStore implementation of DifyAPIWorkflowNodeExecutionRepository.
+LogStore implementation of NexusAIAPIWorkflowNodeExecutionRepository.
 
 This module provides the LogStore-based implementation for service-layer
 WorkflowNodeExecutionModel operations using Aliyun SLS LogStore.
@@ -19,7 +19,7 @@ from extensions.logstore.repositories import safe_float, safe_int
 from extensions.logstore.sql_escape import escape_identifier, escape_logstore_query_value
 from models.enums import CreatorUserRole
 from models.workflow import WorkflowNodeExecutionModel, WorkflowNodeExecutionTriggeredFrom
-from repositories.api_workflow_node_execution_repository import DifyAPIWorkflowNodeExecutionRepository
+from repositories.api_workflow_node_execution_repository import NexusAIAPIWorkflowNodeExecutionRepository
 
 logger = logging.getLogger(__name__)
 
@@ -110,9 +110,9 @@ def _dict_to_workflow_node_execution_model(data: dict[str, Any]) -> WorkflowNode
     return model
 
 
-class LogstoreAPIWorkflowNodeExecutionRepository(DifyAPIWorkflowNodeExecutionRepository):
+class LogstoreAPIWorkflowNodeExecutionRepository(NexusAIAPIWorkflowNodeExecutionRepository):
     """
-    LogStore implementation of DifyAPIWorkflowNodeExecutionRepository.
+    LogStore implementation of NexusAIAPIWorkflowNodeExecutionRepository.
 
     Provides service-layer database operations for WorkflowNodeExecutionModel
     using LogStore SQL queries with optimized deduplication strategies.

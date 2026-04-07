@@ -223,7 +223,7 @@ class TestWorkflowRunRestoreInit:
 class TestGetWorkflowRunRepo:
     """Tests for WorkflowRunRestore._get_workflow_run_repo method."""
 
-    @patch("services.retention.workflow_run.restore_archived_workflow_run.DifyAPIRepositoryFactory")
+    @patch("services.retention.workflow_run.restore_archived_workflow_run.NexusAIAPIRepositoryFactory")
     @patch("services.retention.workflow_run.restore_archived_workflow_run.sessionmaker")
     @patch("services.retention.workflow_run.restore_archived_workflow_run.db")
     def test_first_call_creates_repo(self, mock_db, mock_sessionmaker, mock_factory):

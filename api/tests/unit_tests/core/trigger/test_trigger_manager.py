@@ -31,7 +31,7 @@ PID_STR = str(PID)
 
 
 class TestGetTriggerPluginIcon:
-    @patch("core.trigger.trigger_manager.dify_config")
+    @patch("core.trigger.trigger_manager.nexusai_config")
     @patch("core.trigger.trigger_manager.PluginTriggerClient")
     def test_builds_correct_url(self, mock_client, mock_config):
         mock_config.CONSOLE_API_URL = "https://console.example.com"

@@ -154,11 +154,11 @@ class TestWorkflowAppGeneratorGenerate:
             DummyTraceQueueManager,
         )
         monkeypatch.setattr(
-            "core.app.apps.workflow.app_generator.DifyCoreRepositoryFactory.create_workflow_execution_repository",
+            "core.app.apps.workflow.app_generator.NexusAICoreRepositoryFactory.create_workflow_execution_repository",
             lambda **kwargs: SimpleNamespace(),
         )
         monkeypatch.setattr(
-            "core.app.apps.workflow.app_generator.DifyCoreRepositoryFactory.create_workflow_node_execution_repository",
+            "core.app.apps.workflow.app_generator.NexusAICoreRepositoryFactory.create_workflow_node_execution_repository",
             lambda **kwargs: SimpleNamespace(),
         )
         monkeypatch.setattr(

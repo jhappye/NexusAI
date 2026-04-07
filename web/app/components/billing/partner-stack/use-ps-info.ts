@@ -23,7 +23,7 @@ const usePSInfo = () => {
     setTrue: setBind,
   }] = useBoolean(false)
   const { mutateAsync } = useBindPartnerStackInfo()
-  // Save to top domain. cloud.dify.ai => .dify.ai
+  // Save to top domain. cloud.nexusai.ai => .nexusai.ai
   const domain = globalThis.location?.hostname.replace('cloud', '')
 
   const saveOrUpdate = useCallback(() => {

@@ -26,7 +26,7 @@ from core.app.layers.pause_state_persist_layer import (
 )
 from core.workflow.system_variables import SystemVariableKey
 from models.model import AppMode
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 
 
 class TestDataFactory:
@@ -235,7 +235,7 @@ class TestPauseStatePersistenceLayer:
 
         mock_repo = Mock()
         mock_factory = Mock(return_value=mock_repo)
-        monkeypatch.setattr(DifyAPIRepositoryFactory, "create_api_workflow_run_repository", mock_factory)
+        monkeypatch.setattr(NexusAIAPIRepositoryFactory, "create_api_workflow_run_repository", mock_factory)
 
         graph_runtime_state = MockReadOnlyGraphRuntimeState(
             outputs={"result": "test_output"},
@@ -273,7 +273,7 @@ class TestPauseStatePersistenceLayer:
 
         mock_repo = Mock()
         mock_factory = Mock(return_value=mock_repo)
-        monkeypatch.setattr(DifyAPIRepositoryFactory, "create_api_workflow_run_repository", mock_factory)
+        monkeypatch.setattr(NexusAIAPIRepositoryFactory, "create_api_workflow_run_repository", mock_factory)
 
         graph_runtime_state = MockReadOnlyGraphRuntimeState()
         command_channel = MockCommandChannel()
@@ -314,7 +314,7 @@ class TestPauseStatePersistenceLayer:
 
         mock_repo = Mock()
         mock_factory = Mock(return_value=mock_repo)
-        monkeypatch.setattr(DifyAPIRepositoryFactory, "create_api_workflow_run_repository", mock_factory)
+        monkeypatch.setattr(NexusAIAPIRepositoryFactory, "create_api_workflow_run_repository", mock_factory)
 
         graph_runtime_state = MockReadOnlyGraphRuntimeState(workflow_execution_id=None)
         command_channel = MockCommandChannel()

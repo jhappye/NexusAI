@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.vector_factory import Vector
 from core.rag.datasource.vdb.vector_type import VectorType
 from core.rag.index_processor.constant.built_in_field import BuiltInField
@@ -146,7 +146,7 @@ def migrate_knowledge_vector_database():
     create_count = 0
     skipped_count = 0
     total_count = 0
-    vector_type = dify_config.VECTOR_STORE
+    vector_type = nexusai_config.VECTOR_STORE
     upper_collection_vector_types = {
         VectorType.MILVUS,
         VectorType.PGVECTOR,
@@ -347,15 +347,15 @@ def add_qdrant_index(field: str):
         from core.rag.datasource.vdb.qdrant.qdrant_vector import PathQdrantParams, QdrantConfig
 
         for binding in bindings:
-            if dify_config.QDRANT_URL is None:
+            if nexusai_config.QDRANT_URL is None:
                 raise ValueError("Qdrant URL is required.")
             qdrant_config = QdrantConfig(
-                endpoint=dify_config.QDRANT_URL,
-                api_key=dify_config.QDRANT_API_KEY,
+                endpoint=nexusai_config.QDRANT_URL,
+                api_key=nexusai_config.QDRANT_API_KEY,
                 root_path=current_app.root_path,
-                timeout=dify_config.QDRANT_CLIENT_TIMEOUT,
-                grpc_port=dify_config.QDRANT_GRPC_PORT,
-                prefer_grpc=dify_config.QDRANT_GRPC_ENABLED,
+                timeout=nexusai_config.QDRANT_CLIENT_TIMEOUT,
+                grpc_port=nexusai_config.QDRANT_GRPC_PORT,
+                prefer_grpc=nexusai_config.QDRANT_GRPC_ENABLED,
             )
             try:
                 params = qdrant_config.to_qdrant_params()

@@ -31,7 +31,7 @@ from core.ops.entities.trace_entity import (
     WorkflowTraceInfo,
 )
 from core.ops.weave_trace.entities.weave_trace_entity import WeaveTraceModel
-from core.repositories import DifyCoreRepositoryFactory
+from core.repositories import NexusAICoreRepositoryFactory
 from extensions.ext_database import db
 from models import EndUser, MessageFile, WorkflowNodeExecutionTriggeredFrom
 
@@ -129,7 +129,7 @@ class WeaveDataTrace(BaseTraceInstance):
         workflow_attributes["trace_id"] = trace_id
         workflow_attributes["start_time"] = trace_info.start_time
         workflow_attributes["end_time"] = trace_info.end_time
-        workflow_attributes["tags"] = ["dify_workflow"]
+        workflow_attributes["tags"] = ["nexusai_workflow"]
 
         workflow_run = WeaveTraceModel(
             file_list=trace_info.file_list,
@@ -153,7 +153,7 @@ class WeaveDataTrace(BaseTraceInstance):
 
         service_account = self.get_service_account_with_tenant(app_id)
 
-        workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+        workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
             session_factory=session_factory,
             user=service_account,
             app_id=app_id,

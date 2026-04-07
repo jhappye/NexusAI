@@ -17,14 +17,14 @@ from graphon.nodes.base.node import Node
 from graphon.runtime import ChildGraphNotFoundError, GraphRuntimeState, VariablePool
 from graphon.variable_loader import DUMMY_VARIABLE_LOADER, VariableLoader, load_into_variable_pool
 
-from configs import dify_config
+from configs import nexusai_config
 from context import capture_current_context
 from core.app.apps.exc import GenerateTaskStoppedError
-from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_dify_run_context
+from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_nexusai_run_context
 from core.app.file_access import DatabaseFileAccessController
 from core.app.workflow.layers.llm_quota import LLMQuotaLayer
 from core.app.workflow.layers.observability import ObservabilityLayer
-from core.workflow.node_factory import DifyNodeFactory, is_start_node_type, resolve_workflow_node_class
+from core.workflow.node_factory import NexusAINodeFactory, is_start_node_type, resolve_workflow_node_class
 from core.workflow.system_variables import (
     default_system_variables,
     get_node_creation_preload_selectors,
@@ -77,7 +77,7 @@ class _WorkflowChildEngineBuilder:
             start_at=time.perf_counter(),
             execution_context=parent_graph_runtime_state.execution_context,
         )
-        node_factory = DifyNodeFactory(
+        node_factory = NexusAINodeFactory(
             graph_init_params=graph_init_params,
             graph_runtime_state=child_graph_runtime_state,
         )
@@ -141,7 +141,7 @@ class WorkflowEntry:
         :param thread_pool_id: thread pool id
         """
         # check call depth
-        workflow_call_max_depth = dify_config.WORKFLOW_CALL_MAX_DEPTH
+        workflow_call_max_depth = nexusai_config.WORKFLOW_CALL_MAX_DEPTH
         if call_depth > workflow_call_max_depth:
             raise ValueError(f"Max workflow call depth {workflow_call_max_depth} reached.")
 
@@ -159,16 +159,16 @@ class WorkflowEntry:
             graph_runtime_state=graph_runtime_state,
             command_channel=command_channel,
             config=GraphEngineConfig(
-                min_workers=dify_config.GRAPH_ENGINE_MIN_WORKERS,
-                max_workers=dify_config.GRAPH_ENGINE_MAX_WORKERS,
-                scale_up_threshold=dify_config.GRAPH_ENGINE_SCALE_UP_THRESHOLD,
-                scale_down_idle_time=dify_config.GRAPH_ENGINE_SCALE_DOWN_IDLE_TIME,
+                min_workers=nexusai_config.GRAPH_ENGINE_MIN_WORKERS,
+                max_workers=nexusai_config.GRAPH_ENGINE_MAX_WORKERS,
+                scale_up_threshold=nexusai_config.GRAPH_ENGINE_SCALE_UP_THRESHOLD,
+                scale_down_idle_time=nexusai_config.GRAPH_ENGINE_SCALE_DOWN_IDLE_TIME,
             ),
             child_engine_builder=self._child_engine_builder,
         )
 
         # Add debug logging layer when in debug mode
-        if dify_config.DEBUG:
+        if nexusai_config.DEBUG:
             logger.info("Debug mode enabled - adding DebugLoggingLayer to GraphEngine")
             debug_layer = DebugLoggingLayer(
                 level="DEBUG",
@@ -181,13 +181,13 @@ class WorkflowEntry:
 
         # Add execution limits layer
         limits_layer = ExecutionLimitsLayer(
-            max_steps=dify_config.WORKFLOW_MAX_EXECUTION_STEPS, max_time=dify_config.WORKFLOW_MAX_EXECUTION_TIME
+            max_steps=nexusai_config.WORKFLOW_MAX_EXECUTION_STEPS, max_time=nexusai_config.WORKFLOW_MAX_EXECUTION_TIME
         )
         self.graph_engine.layer(limits_layer)
         self.graph_engine.layer(LLMQuotaLayer())
 
         # Add observability layer when OTel is enabled
-        if dify_config.ENABLE_OTEL or is_instrument_flag_enabled():
+        if nexusai_config.ENABLE_OTEL or is_instrument_flag_enabled():
             self.graph_engine.layer(ObservabilityLayer())
 
     def run(self) -> Generator[GraphEngineEvent, None, None]:
@@ -235,7 +235,7 @@ class WorkflowEntry:
         graph_init_params = GraphInitParams(
             workflow_id=workflow.id,
             graph_config=workflow.graph_dict,
-            run_context=build_dify_run_context(
+            run_context=build_nexusai_run_context(
                 tenant_id=workflow.tenant_id,
                 app_id=workflow.app_id,
                 user_id=user_id,
@@ -293,7 +293,7 @@ class WorkflowEntry:
             )
 
         # init workflow run state
-        node_factory = DifyNodeFactory(
+        node_factory = NexusAINodeFactory(
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
         )
@@ -393,7 +393,7 @@ class WorkflowEntry:
         graph_init_params = GraphInitParams(
             workflow_id="",
             graph_config=graph_dict,
-            run_context=build_dify_run_context(
+            run_context=build_nexusai_run_context(
                 tenant_id=tenant_id,
                 app_id="",
                 user_id=user_id,
@@ -410,7 +410,7 @@ class WorkflowEntry:
 
         # init workflow run state
         node_config = NodeConfigDictAdapter.validate_python({"id": node_id, "data": node_data})
-        node_factory = DifyNodeFactory(
+        node_factory = NexusAINodeFactory(
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
         )
@@ -492,7 +492,7 @@ class WorkflowEntry:
 
         # WARNING(QuantumGhost): The semantics of this method are not clearly defined,
         # and multiple parts of the codebase depend on its current behavior.
-        # Modify with caution.
+        # Monexusai with caution.
         for node_variable, variable_selector in variable_mapping.items():
             # fetch node id and variable key from node_variable
             node_variable_list = node_variable.split(".")

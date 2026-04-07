@@ -11,7 +11,7 @@ export CLICKZETTA_INSTANCE=your_instance
 export CLICKZETTA_SERVICE=api.clickzetta.com
 export CLICKZETTA_WORKSPACE=your_workspace
 export CLICKZETTA_VCLUSTER=your_vcluster
-export CLICKZETTA_SCHEMA=dify
+export CLICKZETTA_SCHEMA=nexusai
 ```
 
 Then run the tests:

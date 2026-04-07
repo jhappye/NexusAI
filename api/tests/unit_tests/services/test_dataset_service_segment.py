@@ -352,7 +352,7 @@ class TestSegmentServiceValidation:
         document = _make_document(doc_form=IndexStructureType.PARAGRAPH_INDEX)
         args = {"content": "hello", "attachment_ids": ["a-1", "a-2"]}
 
-        with patch("services.dataset_service.dify_config.SINGLE_CHUNK_ATTACHMENT_LIMIT", 1):
+        with patch("services.dataset_service.nexusai_config.SINGLE_CHUNK_ATTACHMENT_LIMIT", 1):
             with pytest.raises(ValueError, match="Exceeded maximum attachment limit of 1"):
                 SegmentService.segment_create_args_validate(args, document)
 

@@ -778,7 +778,7 @@ def test_extract_webhook_data_should_raise_for_request_too_large(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     # Arrange
-    monkeypatch.setattr(service_module.dify_config, "WEBHOOK_REQUEST_BODY_MAX_SIZE", 1)
+    monkeypatch.setattr(service_module.nexusai_config, "WEBHOOK_REQUEST_BODY_MAX_SIZE", 1)
 
     # Act / Assert
     with flask_app.test_request_context("/webhook", method="POST", data="ab"):

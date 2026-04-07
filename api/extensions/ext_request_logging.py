@@ -7,7 +7,7 @@ import werkzeug.http
 from flask import Flask, g
 from flask.signals import request_finished, request_started
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper.trace_id_helper import get_trace_id_from_otel_context
 
 logger = logging.getLogger(__name__)
@@ -103,7 +103,7 @@ def _log_request_finished(_sender, response, **_extra):
 
 def init_app(app: Flask):
     """Initialize the request logging extension."""
-    if not dify_config.ENABLE_REQUEST_LOGGING:
+    if not nexusai_config.ENABLE_REQUEST_LOGGING:
         return
     request_started.connect(_log_request_started, app)
     request_finished.connect(_log_request_finished, app)

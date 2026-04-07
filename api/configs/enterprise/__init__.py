@@ -5,12 +5,12 @@ from pydantic_settings import BaseSettings
 class EnterpriseFeatureConfig(BaseSettings):
     """
     Configuration for enterprise-level features.
-    **Before using, please contact business@dify.ai by email to inquire about licensing matters.**
+    **Before using, please contact business@nexusai.ai by email to inquire about licensing matters.**
     """
 
     ENTERPRISE_ENABLED: bool = Field(
         description="Enable or disable enterprise-level features."
-        "Before using, please contact business@dify.ai by email to inquire about licensing matters.",
+        "Before using, please contact business@nexusai.ai by email to inquire about licensing matters.",
         default=False,
     )
 
@@ -62,7 +62,7 @@ class EnterpriseTelemetryConfig(BaseSettings):
 
     ENTERPRISE_SERVICE_NAME: str = Field(
         description="Service name for OTEL resource.",
-        default="dify",
+        default="nexusai",
     )
 
     ENTERPRISE_OTEL_SAMPLING_RATE: float = Field(

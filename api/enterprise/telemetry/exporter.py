@@ -34,7 +34,7 @@ from opentelemetry.semconv.attributes import service_attributes
 from opentelemetry.trace import SpanContext, TraceFlags
 from opentelemetry.util.types import Attributes, AttributeValue
 
-from configs import dify_config
+from configs import nexusai_config
 from enterprise.telemetry.entities import EnterpriseTelemetryCounter, EnterpriseTelemetryHistogram
 from enterprise.telemetry.id_generator import (
     CorrelationIdGenerator,
@@ -47,7 +47,7 @@ logger = logging.getLogger(__name__)
 
 
 def is_enterprise_telemetry_enabled() -> bool:
-    return bool(dify_config.ENTERPRISE_ENABLED and dify_config.ENTERPRISE_TELEMETRY_ENABLED)
+    return bool(nexusai_config.ENTERPRISE_ENABLED and nexusai_config.ENTERPRISE_TELEMETRY_ENABLED)
 
 
 def _parse_otlp_headers(raw: str) -> dict[str, str]:
@@ -107,7 +107,7 @@ class EnterpriseExporter:
         endpoint: str = getattr(config, "ENTERPRISE_OTLP_ENDPOINT", "")
         headers_raw: str = getattr(config, "ENTERPRISE_OTLP_HEADERS", "")
         protocol: str = (getattr(config, "ENTERPRISE_OTLP_PROTOCOL", "http") or "http").lower()
-        service_name: str = getattr(config, "ENTERPRISE_SERVICE_NAME", "dify")
+        service_name: str = getattr(config, "ENTERPRISE_SERVICE_NAME", "nexusai")
         sampling_rate: float = getattr(config, "ENTERPRISE_OTEL_SAMPLING_RATE", 1.0)
         self.include_content: bool = getattr(config, "ENTERPRISE_INCLUDE_CONTENT", True)
         api_key: str = getattr(config, "ENTERPRISE_OTLP_API_KEY", "")
@@ -137,38 +137,38 @@ class EnterpriseExporter:
 
         trace_exporter = factory.create_trace_exporter()
         self._tracer_provider.add_span_processor(BatchSpanProcessor(trace_exporter))
-        self._tracer = self._tracer_provider.get_tracer("dify.enterprise")
+        self._tracer = self._tracer_provider.get_tracer("nexusai.enterprise")
 
         metric_exporter = factory.create_metric_exporter()
         self._meter_provider = MeterProvider(
             resource=resource,
             metric_readers=[PeriodicExportingMetricReader(metric_exporter)],
         )
-        meter = self._meter_provider.get_meter("dify.enterprise")
+        meter = self._meter_provider.get_meter("nexusai.enterprise")
         self._counters = {
-            EnterpriseTelemetryCounter.TOKENS: meter.create_counter("dify.tokens.total", unit="{token}"),
-            EnterpriseTelemetryCounter.INPUT_TOKENS: meter.create_counter("dify.tokens.input", unit="{token}"),
-            EnterpriseTelemetryCounter.OUTPUT_TOKENS: meter.create_counter("dify.tokens.output", unit="{token}"),
-            EnterpriseTelemetryCounter.REQUESTS: meter.create_counter("dify.requests.total", unit="{request}"),
-            EnterpriseTelemetryCounter.ERRORS: meter.create_counter("dify.errors.total", unit="{error}"),
-            EnterpriseTelemetryCounter.FEEDBACK: meter.create_counter("dify.feedback.total", unit="{feedback}"),
+            EnterpriseTelemetryCounter.TOKENS: meter.create_counter("nexusai.tokens.total", unit="{token}"),
+            EnterpriseTelemetryCounter.INPUT_TOKENS: meter.create_counter("nexusai.tokens.input", unit="{token}"),
+            EnterpriseTelemetryCounter.OUTPUT_TOKENS: meter.create_counter("nexusai.tokens.output", unit="{token}"),
+            EnterpriseTelemetryCounter.REQUESTS: meter.create_counter("nexusai.requests.total", unit="{request}"),
+            EnterpriseTelemetryCounter.ERRORS: meter.create_counter("nexusai.errors.total", unit="{error}"),
+            EnterpriseTelemetryCounter.FEEDBACK: meter.create_counter("nexusai.feedback.total", unit="{feedback}"),
             EnterpriseTelemetryCounter.DATASET_RETRIEVALS: meter.create_counter(
-                "dify.dataset.retrievals.total", unit="{retrieval}"
+                "nexusai.dataset.retrievals.total", unit="{retrieval}"
             ),
-            EnterpriseTelemetryCounter.APP_CREATED: meter.create_counter("dify.app.created.total", unit="{app}"),
-            EnterpriseTelemetryCounter.APP_UPDATED: meter.create_counter("dify.app.updated.total", unit="{app}"),
-            EnterpriseTelemetryCounter.APP_DELETED: meter.create_counter("dify.app.deleted.total", unit="{app}"),
+            EnterpriseTelemetryCounter.APP_CREATED: meter.create_counter("nexusai.app.created.total", unit="{app}"),
+            EnterpriseTelemetryCounter.APP_UPDATED: meter.create_counter("nexusai.app.updated.total", unit="{app}"),
+            EnterpriseTelemetryCounter.APP_DELETED: meter.create_counter("nexusai.app.deleted.total", unit="{app}"),
         }
         self._histograms = {
-            EnterpriseTelemetryHistogram.WORKFLOW_DURATION: meter.create_histogram("dify.workflow.duration", unit="s"),
-            EnterpriseTelemetryHistogram.NODE_DURATION: meter.create_histogram("dify.node.duration", unit="s"),
-            EnterpriseTelemetryHistogram.MESSAGE_DURATION: meter.create_histogram("dify.message.duration", unit="s"),
+            EnterpriseTelemetryHistogram.WORKFLOW_DURATION: meter.create_histogram("nexusai.workflow.duration", unit="s"),
+            EnterpriseTelemetryHistogram.NODE_DURATION: meter.create_histogram("nexusai.node.duration", unit="s"),
+            EnterpriseTelemetryHistogram.MESSAGE_DURATION: meter.create_histogram("nexusai.message.duration", unit="s"),
             EnterpriseTelemetryHistogram.MESSAGE_TTFT: meter.create_histogram(
-                "dify.message.time_to_first_token", unit="s"
+                "nexusai.message.time_to_first_token", unit="s"
             ),
-            EnterpriseTelemetryHistogram.TOOL_DURATION: meter.create_histogram("dify.tool.duration", unit="s"),
+            EnterpriseTelemetryHistogram.TOOL_DURATION: meter.create_histogram("nexusai.tool.duration", unit="s"),
             EnterpriseTelemetryHistogram.PROMPT_GENERATION_DURATION: meter.create_histogram(
-                "dify.prompt_generation.duration", unit="s"
+                "nexusai.prompt_generation.duration", unit="s"
             ),
         }
 

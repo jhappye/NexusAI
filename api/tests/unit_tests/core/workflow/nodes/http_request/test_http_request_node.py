@@ -12,7 +12,7 @@ from graphon.runtime import GraphRuntimeState, VariablePool
 from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom
 from core.helper.ssrf_proxy import ssrf_proxy
 from core.tools.tool_file_manager import ToolFileManager
-from core.workflow.node_runtime import DifyFileReferenceFactory
+from core.workflow.node_runtime import NexusAIFileReferenceFactory
 from core.workflow.system_variables import build_system_variables
 from tests.workflow_test_utils import build_test_graph_init_params
 
@@ -122,7 +122,7 @@ def _build_http_node(
         http_client=ssrf_proxy,
         tool_file_manager_factory=ToolFileManager,
         file_manager=file_manager,
-        file_reference_factory=DifyFileReferenceFactory(graph_init_params.run_context),
+        file_reference_factory=NexusAIFileReferenceFactory(graph_init_params.run_context),
     )
 
 

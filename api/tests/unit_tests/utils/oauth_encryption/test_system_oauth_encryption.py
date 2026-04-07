@@ -29,7 +29,7 @@ class TestSystemOAuthEncrypter:
 
     def test_init_with_none_secret_key(self):
         """Test initialization with None secret key falls back to config"""
-        with patch("core.tools.utils.system_oauth_encryption.dify_config") as mock_config:
+        with patch("core.tools.utils.system_oauth_encryption.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = "config_secret"
             encrypter = SystemOAuthEncrypter(secret_key=None)
             expected_key = hashlib.sha256(b"config_secret").digest()
@@ -43,7 +43,7 @@ class TestSystemOAuthEncrypter:
 
     def test_init_without_secret_key_uses_config(self):
         """Test initialization without secret key uses config"""
-        with patch("core.tools.utils.system_oauth_encryption.dify_config") as mock_config:
+        with patch("core.tools.utils.system_oauth_encryption.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = "default_secret"
             encrypter = SystemOAuthEncrypter()
             expected_key = hashlib.sha256(b"default_secret").digest()
@@ -370,7 +370,7 @@ class TestFactoryFunctions:
 
     def test_create_system_oauth_encrypter_without_secret(self):
         """Test factory function without secret key"""
-        with patch("core.tools.utils.system_oauth_encryption.dify_config") as mock_config:
+        with patch("core.tools.utils.system_oauth_encryption.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = "config_secret"
             encrypter = create_system_oauth_encrypter()
 
@@ -380,7 +380,7 @@ class TestFactoryFunctions:
 
     def test_create_system_oauth_encrypter_with_none_secret(self):
         """Test factory function with None secret key"""
-        with patch("core.tools.utils.system_oauth_encryption.dify_config") as mock_config:
+        with patch("core.tools.utils.system_oauth_encryption.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = "config_secret"
             encrypter = create_system_oauth_encrypter(None)
 
@@ -412,7 +412,7 @@ class TestGlobalEncrypterInstance:
 
         core.tools.utils.system_oauth_encryption._oauth_encrypter = None
 
-        with patch("core.tools.utils.system_oauth_encryption.dify_config") as mock_config:
+        with patch("core.tools.utils.system_oauth_encryption.nexusai_config") as mock_config:
             mock_config.SECRET_KEY = "global_secret"
             encrypter = get_system_oauth_encrypter()
 

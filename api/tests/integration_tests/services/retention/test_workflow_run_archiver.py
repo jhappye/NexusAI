@@ -114,7 +114,7 @@ class TestFilterPaidTenants:
         archiver = WorkflowRunArchiver(days=90)
         tenant_ids = {"t1", "t2", "t3"}
 
-        with patch("services.retention.workflow_run.archive_paid_plan_workflow_run.dify_config") as cfg:
+        with patch("services.retention.workflow_run.archive_paid_plan_workflow_run.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = False
             result = archiver._filter_paid_tenants(tenant_ids)
 
@@ -123,7 +123,7 @@ class TestFilterPaidTenants:
     def test_empty_tenants_returns_empty(self):
         archiver = WorkflowRunArchiver(days=90)
 
-        with patch("services.retention.workflow_run.archive_paid_plan_workflow_run.dify_config") as cfg:
+        with patch("services.retention.workflow_run.archive_paid_plan_workflow_run.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = True
             result = archiver._filter_paid_tenants(set())
 
@@ -139,7 +139,7 @@ class TestFilterPaidTenants:
         }
 
         with (
-            patch("services.retention.workflow_run.archive_paid_plan_workflow_run.dify_config") as cfg,
+            patch("services.retention.workflow_run.archive_paid_plan_workflow_run.nexusai_config") as cfg,
             patch("services.retention.workflow_run.archive_paid_plan_workflow_run.BillingService") as billing,
         ):
             cfg.BILLING_ENABLED = True
@@ -154,7 +154,7 @@ class TestFilterPaidTenants:
         archiver = WorkflowRunArchiver(days=90)
 
         with (
-            patch("services.retention.workflow_run.archive_paid_plan_workflow_run.dify_config") as cfg,
+            patch("services.retention.workflow_run.archive_paid_plan_workflow_run.nexusai_config") as cfg,
             patch("services.retention.workflow_run.archive_paid_plan_workflow_run.BillingService") as billing,
         ):
             cfg.BILLING_ENABLED = True

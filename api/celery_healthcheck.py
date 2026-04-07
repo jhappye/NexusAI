@@ -4,10 +4,10 @@
 # Using this module keeps the health check fast and low-cost.
 from celery import Celery
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_celery import get_celery_broker_transport_options, get_celery_ssl_options
 
-celery = Celery(broker=dify_config.CELERY_BROKER_URL)
+celery = Celery(broker=nexusai_config.CELERY_BROKER_URL)
 
 broker_transport_options = get_celery_broker_transport_options()
 if broker_transport_options:

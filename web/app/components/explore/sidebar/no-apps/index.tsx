@@ -19,7 +19,7 @@ const NoApps: FC = () => {
       <div className={cn('h-[35px] w-[86px] bg-contain bg-center bg-no-repeat', theme === Theme.dark ? s.dark : s.light)}></div>
       <div className="system-sm-semibold mt-2 text-text-secondary">{t(`${i18nPrefix}.title`, { ns: 'explore' })}</div>
       <div className="system-xs-regular my-1 text-text-tertiary">{t(`${i18nPrefix}.description`, { ns: 'explore' })}</div>
-      <a className="system-xs-regular text-text-accent" target="_blank" rel="noopener noreferrer" href={docLink('/use-dify/publish/README')}>{t(`${i18nPrefix}.learnMore`, { ns: 'explore' })}</a>
+      <a className="system-xs-regular text-text-accent" target="_blank" rel="noopener noreferrer" href={docLink('/use-nexusai/publish/README')}>{t(`${i18nPrefix}.learnMore`, { ns: 'explore' })}</a>
     </div>
   )
 }

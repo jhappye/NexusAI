@@ -5,7 +5,7 @@ from flask_restx import Resource
 from werkzeug.exceptions import Forbidden
 
 import services
-from configs import dify_config
+from configs import nexusai_config
 from constants import DOCUMENT_EXTENSIONS
 from controllers.common.errors import (
     BlockedFileExtensionError,
@@ -41,16 +41,16 @@ class FileApi(Resource):
     @console_ns.response(200, "Success", console_ns.models[UploadConfig.__name__])
     def get(self):
         config = UploadConfig(
-            file_size_limit=dify_config.UPLOAD_FILE_SIZE_LIMIT,
-            batch_count_limit=dify_config.UPLOAD_FILE_BATCH_LIMIT,
-            file_upload_limit=dify_config.BATCH_UPLOAD_LIMIT,
-            image_file_size_limit=dify_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT,
-            video_file_size_limit=dify_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT,
-            audio_file_size_limit=dify_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT,
-            workflow_file_upload_limit=dify_config.WORKFLOW_FILE_UPLOAD_LIMIT,
-            image_file_batch_limit=dify_config.IMAGE_FILE_BATCH_LIMIT,
-            single_chunk_attachment_limit=dify_config.SINGLE_CHUNK_ATTACHMENT_LIMIT,
-            attachment_image_file_size_limit=dify_config.ATTACHMENT_IMAGE_FILE_SIZE_LIMIT,
+            file_size_limit=nexusai_config.UPLOAD_FILE_SIZE_LIMIT,
+            batch_count_limit=nexusai_config.UPLOAD_FILE_BATCH_LIMIT,
+            file_upload_limit=nexusai_config.BATCH_UPLOAD_LIMIT,
+            image_file_size_limit=nexusai_config.UPLOAD_IMAGE_FILE_SIZE_LIMIT,
+            video_file_size_limit=nexusai_config.UPLOAD_VIDEO_FILE_SIZE_LIMIT,
+            audio_file_size_limit=nexusai_config.UPLOAD_AUDIO_FILE_SIZE_LIMIT,
+            workflow_file_upload_limit=nexusai_config.WORKFLOW_FILE_UPLOAD_LIMIT,
+            image_file_batch_limit=nexusai_config.IMAGE_FILE_BATCH_LIMIT,
+            single_chunk_attachment_limit=nexusai_config.SINGLE_CHUNK_ATTACHMENT_LIMIT,
+            attachment_image_file_size_limit=nexusai_config.ATTACHMENT_IMAGE_FILE_SIZE_LIMIT,
         )
         return config.model_dump(mode="json"), 200
 

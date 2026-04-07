@@ -6,7 +6,7 @@ from typing import Any
 from elasticsearch import Elasticsearch
 from pydantic import BaseModel, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import Field
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -208,8 +208,8 @@ class HuaweiCloudVectorFactory(AbstractVectorFactory):
         return HuaweiCloudVector(
             index_name=collection_name,
             config=HuaweiCloudVectorConfig(
-                hosts=dify_config.HUAWEI_CLOUD_HOSTS or "http://localhost:9200",
-                username=dify_config.HUAWEI_CLOUD_USER,
-                password=dify_config.HUAWEI_CLOUD_PASSWORD,
+                hosts=nexusai_config.HUAWEI_CLOUD_HOSTS or "http://localhost:9200",
+                username=nexusai_config.HUAWEI_CLOUD_USER,
+                password=nexusai_config.HUAWEI_CLOUD_PASSWORD,
             ),
         )

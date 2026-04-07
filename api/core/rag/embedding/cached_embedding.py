@@ -9,7 +9,7 @@ from graphon.model_runtime.model_providers.__base.text_embedding_model import Te
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
-from configs import dify_config
+from configs import nexusai_config
 from core.entities.embedding_type import EmbeddingInputType
 from core.model_manager import ModelInstance
 from core.rag.embedding.embedding_base import Embeddings
@@ -210,7 +210,7 @@ class CacheEmbedding(Embeddings):
             if np.isnan(embedding_results).any():
                 raise ValueError("Normalized embedding is nan please try again")
         except Exception as ex:
-            if dify_config.DEBUG:
+            if nexusai_config.DEBUG:
                 logger.exception("Failed to embed query text '%s...(%s chars)'", text[:10], len(text))
             raise ex
 
@@ -224,7 +224,7 @@ class CacheEmbedding(Embeddings):
             encoded_str = encoded_vector.decode("utf-8")
             redis_client.setex(embedding_cache_key, 600, encoded_str)
         except Exception as ex:
-            if dify_config.DEBUG:
+            if nexusai_config.DEBUG:
                 logger.exception(
                     "Failed to add embedding to redis for the text '%s...(%s chars)'", text[:10], len(text)
                 )
@@ -253,7 +253,7 @@ class CacheEmbedding(Embeddings):
             if np.isnan(embedding_results).any():
                 raise ValueError("Normalized embedding is nan please try again")
         except Exception as ex:
-            if dify_config.DEBUG:
+            if nexusai_config.DEBUG:
                 logger.exception("Failed to embed multimodal document '%s'", multimodel_document["file_id"])
             raise ex
 
@@ -267,7 +267,7 @@ class CacheEmbedding(Embeddings):
             encoded_str = encoded_vector.decode("utf-8")
             redis_client.setex(embedding_cache_key, 600, encoded_str)
         except Exception as ex:
-            if dify_config.DEBUG:
+            if nexusai_config.DEBUG:
                 logger.exception(
                     "Failed to add embedding to redis for the multimodal document '%s'", multimodel_document["file_id"]
                 )

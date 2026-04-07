@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 _TRACE_PROPAGATOR = TraceContextTextMapPropagator()
 
 _SQLCOMMENTER_CONTEXT_KEY = "SQLCOMMENTER_ORM_TAGS_AND_VALUES"
-_TOKEN_ATTR = "_dify_sqlcommenter_context_token"
+_TOKEN_ATTR = "_nexusai_sqlcommenter_context_token"
 
 
 class CelerySqlcommenterTagsDict(TypedDict, total=False):

@@ -7,7 +7,7 @@ from graphon.enums import WorkflowExecutionStatus
 from graphon.nodes.human_input.entities import HumanInputNodeData
 from graphon.runtime import GraphRuntimeState, VariablePool
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.app_config.entities import WorkflowUIBasedAppConfig
 from core.app.entities.app_invoke_entities import InvokeFrom, WorkflowAppGenerateEntity
 from core.app.layers.pause_state_persist_layer import WorkflowResumptionContext
@@ -195,7 +195,7 @@ def test_dispatch_human_input_email_task_integration(monkeypatch: pytest.MonkeyP
         workflow_execution_id=workflow_run_id,
     )
 
-    monkeypatch.setattr(dify_config, "APP_WEB_URL", "https://app.example.com")
+    monkeypatch.setattr(nexusai_config, "APP_WEB_URL", "https://app.example.com")
 
     with patch("tasks.mail_human_input_delivery_task.mail") as mock_mail:
         mock_mail.is_inited.return_value = True

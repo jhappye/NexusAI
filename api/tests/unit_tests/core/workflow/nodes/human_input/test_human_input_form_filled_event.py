@@ -12,8 +12,8 @@ from graphon.nodes.human_input.enums import HumanInputFormStatus
 from graphon.nodes.human_input.human_input_node import HumanInputNode
 from graphon.runtime import GraphRuntimeState, VariablePool
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
-from core.workflow.node_runtime import DifyHumanInputNodeRuntime
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
+from core.workflow.node_runtime import NexusAIHumanInputNodeRuntime
 from core.workflow.system_variables import default_system_variables
 from libs.datetime_utils import naive_utc_now
 
@@ -36,7 +36,7 @@ def _build_node(form_content: str = "Please enter your name:\n\n{{#$output.name#
         workflow_id="workflow",
         graph_config={"nodes": [], "edges": []},
         run_context={
-            DIFY_RUN_CONTEXT_KEY: {
+            NEXUSAI_RUN_CONTEXT_KEY: {
                 "tenant_id": "tenant",
                 "app_id": "app",
                 "user_id": "user",
@@ -87,7 +87,7 @@ def _build_node(form_content: str = "Please enter your name:\n\n{{#$output.name#
         graph_init_params=graph_init_params,
         graph_runtime_state=graph_runtime_state,
         form_repository=repo,
-        runtime=DifyHumanInputNodeRuntime(graph_init_params.run_context),
+        runtime=NexusAIHumanInputNodeRuntime(graph_init_params.run_context),
     )
 
 
@@ -101,7 +101,7 @@ def _build_timeout_node() -> HumanInputNode:
         workflow_id="workflow",
         graph_config={"nodes": [], "edges": []},
         run_context={
-            DIFY_RUN_CONTEXT_KEY: {
+            NEXUSAI_RUN_CONTEXT_KEY: {
                 "tenant_id": "tenant",
                 "app_id": "app",
                 "user_id": "user",
@@ -152,7 +152,7 @@ def _build_timeout_node() -> HumanInputNode:
         graph_init_params=graph_init_params,
         graph_runtime_state=graph_runtime_state,
         form_repository=repo,
-        runtime=DifyHumanInputNodeRuntime(graph_init_params.run_context),
+        runtime=NexusAIHumanInputNodeRuntime(graph_init_params.run_context),
     )
 
 

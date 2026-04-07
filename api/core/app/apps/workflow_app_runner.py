@@ -41,7 +41,7 @@ from pydantic import ValidationError
 
 from core.app.apps.base_app_queue_manager import AppQueueManager, PublishFrom
 from core.app.entities.agent_strategy import AgentStrategyInfo
-from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_dify_run_context
+from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_nexusai_run_context
 from core.app.entities.queue_entities import (
     AppQueueEvent,
     QueueAgentLogEvent,
@@ -67,7 +67,7 @@ from core.app.entities.queue_entities import (
     QueueWorkflowSucceededEvent,
 )
 from core.rag.entities.citation_metadata import RetrievalSourceMetadata
-from core.workflow.node_factory import DifyNodeFactory, get_default_root_node_id, resolve_workflow_node_class
+from core.workflow.node_factory import NexusAINodeFactory, get_default_root_node_id, resolve_workflow_node_class
 from core.workflow.system_variables import (
     build_bootstrap_variables,
     default_system_variables,
@@ -131,7 +131,7 @@ class WorkflowBasedAppRunner:
         graph_init_params = GraphInitParams(
             workflow_id=workflow_id,
             graph_config=graph_config,
-            run_context=build_dify_run_context(
+            run_context=build_nexusai_run_context(
                 tenant_id=tenant_id or "",
                 app_id=self._app_id,
                 user_id=user_id,
@@ -143,7 +143,7 @@ class WorkflowBasedAppRunner:
 
         # Use the provided graph_runtime_state for consistent state management
 
-        node_factory = DifyNodeFactory(
+        node_factory = NexusAINodeFactory(
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
         )
@@ -293,7 +293,7 @@ class WorkflowBasedAppRunner:
         graph_init_params = GraphInitParams(
             workflow_id=workflow.id,
             graph_config=graph_config,
-            run_context=build_dify_run_context(
+            run_context=build_nexusai_run_context(
                 tenant_id=workflow.tenant_id,
                 app_id=self._app_id,
                 user_id=user_id,
@@ -303,7 +303,7 @@ class WorkflowBasedAppRunner:
             call_depth=0,
         )
 
-        node_factory = DifyNodeFactory(
+        node_factory = NexusAINodeFactory(
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
         )

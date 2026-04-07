@@ -240,10 +240,10 @@ export const WithLinkItems: Story = {
     <DropdownMenu>
       <TriggerButton label="Open links" />
       <DropdownMenuContent>
-        <DropdownMenuLinkItem href="https://docs.dify.ai" rel="noopener noreferrer" target="_blank">
-          Dify Docs
+        <DropdownMenuLinkItem href="https://docs.nexusai.ai" rel="noopener noreferrer" target="_blank">
+          NexusAI Docs
         </DropdownMenuLinkItem>
-        <DropdownMenuLinkItem href="https://roadmap.dify.ai" rel="noopener noreferrer" target="_blank">
+        <DropdownMenuLinkItem href="https://roadmap.nexusai.ai" rel="noopener noreferrer" target="_blank">
           Product Roadmap
         </DropdownMenuLinkItem>
       </DropdownMenuContent>

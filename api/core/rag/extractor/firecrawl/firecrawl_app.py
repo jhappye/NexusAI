@@ -77,7 +77,7 @@ class FirecrawlApp:
     def map(self, url: str, params: dict[str, Any] | None = None) -> MapResponse:
         # Documentation: https://docs.firecrawl.dev/api-reference/endpoint/map
         headers = self._prepare_headers()
-        json_data: dict[str, Any] = {"url": url, "integration": "dify"}
+        json_data: dict[str, Any] = {"url": url, "integration": "nexusai"}
         if params:
             # Pass through provided params, including optional "sitemap": "only" | "include" | "skip"
             json_data.update(params)
@@ -213,7 +213,7 @@ class FirecrawlApp:
             "sources": [
                 {"type": "web"},
             ],
-            "integration": "dify",
+            "integration": "nexusai",
         }
         if params:
             json_data.update(params)

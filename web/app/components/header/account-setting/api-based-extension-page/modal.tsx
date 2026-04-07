@@ -76,7 +76,7 @@ const ApiBasedExtensionModal: FC<ApiBasedExtensionModalProps> = ({ data, onCance
       <div className="py-2">
         <div className="flex h-9 items-center justify-between text-sm font-medium text-text-primary">
           {t('apiBasedExtension.modal.apiEndpoint.title', { ns: 'common' })}
-          <a href={docLink('/use-dify/workspace/api-extension/api-extension')} target="_blank" rel="noopener noreferrer" className="group flex items-center text-xs font-normal text-text-accent">
+          <a href={docLink('/use-nexusai/workspace/api-extension/api-extension')} target="_blank" rel="noopener noreferrer" className="group flex items-center text-xs font-normal text-text-accent">
             <BookOpen01 className="mr-1 h-3 w-3" />
             {t('apiBasedExtension.link', { ns: 'common' })}
           </a>

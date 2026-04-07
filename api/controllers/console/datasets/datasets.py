@@ -8,7 +8,7 @@ from sqlalchemy import func, select
 from werkzeug.exceptions import Forbidden, NotFound
 
 import services
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import get_or_create_model, register_schema_models
 from controllers.console import console_ns
 from controllers.console.apikey import (
@@ -892,7 +892,7 @@ class DatasetApiBaseUrlApi(Resource):
     @login_required
     @account_initialization_required
     def get(self):
-        return {"api_base_url": (dify_config.SERVICE_API_URL or request.host_url.rstrip("/")) + "/v1"}
+        return {"api_base_url": (nexusai_config.SERVICE_API_URL or request.host_url.rstrip("/")) + "/v1"}
 
 
 @console_ns.route("/datasets/retrieval-setting")
@@ -904,7 +904,7 @@ class DatasetRetrievalSettingApi(Resource):
     @login_required
     @account_initialization_required
     def get(self):
-        vector_type = dify_config.VECTOR_STORE
+        vector_type = nexusai_config.VECTOR_STORE
         return _get_retrieval_methods_by_vector_type(vector_type, is_mock=False)
 
 

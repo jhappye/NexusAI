@@ -5,7 +5,7 @@ from unittest import mock
 import pytest
 from flask import Flask, Response
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions import ext_request_logging
 from extensions.ext_request_logging import _is_content_type_json, _log_request_finished, init_app
 
@@ -65,7 +65,7 @@ def mock_logger(monkeypatch: pytest.MonkeyPatch) -> logging.Logger:
 
 @pytest.fixture
 def enable_request_logging(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setattr(dify_config, "ENABLE_REQUEST_LOGGING", True)
+    monkeypatch.setattr(nexusai_config, "ENABLE_REQUEST_LOGGING", True)
 
 
 class TestRequestLoggingExtension:
@@ -75,7 +75,7 @@ class TestRequestLoggingExtension:
         mock_request_receiver,
         mock_response_receiver,
     ):
-        monkeypatch.setattr(dify_config, "ENABLE_REQUEST_LOGGING", False)
+        monkeypatch.setattr(nexusai_config, "ENABLE_REQUEST_LOGGING", False)
 
         app = _get_test_app()
         init_app(app)

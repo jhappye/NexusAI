@@ -10,13 +10,13 @@ from unittest.mock import patch
 
 from core.app.entities.app_invoke_entities import InvokeFrom
 from extensions.otel.decorators.handlers.generate_handler import AppGenerateHandler
-from extensions.otel.semconv import DifySpanAttributes, GenAIAttributes
+from extensions.otel.semconv import NexusAISpanAttributes, GenAIAttributes
 
 
 class TestAppGenerateHandler:
     """Core tests for AppGenerateHandler"""
 
-    @patch("extensions.otel.decorators.base.dify_config.ENABLE_OTEL", True)
+    @patch("extensions.otel.decorators.base.nexusai_config.ENABLE_OTEL", True)
     def test_compatible_with_real_function_signature(
         self, tracer_provider_with_memory_exporter, mock_app_model, mock_account_user
     ):
@@ -47,7 +47,7 @@ class TestAppGenerateHandler:
         assert "args" in arguments, "Handler uses args but parameter is missing"
         assert "streaming" in arguments, "Handler uses streaming but parameter is missing"
 
-    @patch("extensions.otel.decorators.base.dify_config.ENABLE_OTEL", True)
+    @patch("extensions.otel.decorators.base.nexusai_config.ENABLE_OTEL", True)
     def test_all_span_attributes_set_correctly(
         self, tracer_provider_with_memory_exporter, memory_span_exporter, mock_app_model, mock_account_user
     ):
@@ -84,9 +84,9 @@ class TestAppGenerateHandler:
         assert len(spans) == 1
         attrs = spans[0].attributes
 
-        assert attrs[DifySpanAttributes.APP_ID] == test_app_id
-        assert attrs[DifySpanAttributes.TENANT_ID] == test_tenant_id
+        assert attrs[NexusAISpanAttributes.APP_ID] == test_app_id
+        assert attrs[NexusAISpanAttributes.TENANT_ID] == test_tenant_id
         assert attrs[GenAIAttributes.USER_ID] == test_user_id
-        assert attrs[DifySpanAttributes.WORKFLOW_ID] == test_workflow_id
-        assert attrs[DifySpanAttributes.USER_TYPE] == "Account"
-        assert attrs[DifySpanAttributes.STREAMING] is False
+        assert attrs[NexusAISpanAttributes.WORKFLOW_ID] == test_workflow_id
+        assert attrs[NexusAISpanAttributes.USER_TYPE] == "Account"
+        assert attrs[NexusAISpanAttributes.STREAMING] is False

@@ -7,7 +7,7 @@ from graphon.nodes.human_input.enums import HumanInputFormKind, HumanInputFormSt
 from sqlalchemy import or_, select
 from sqlalchemy.orm import sessionmaker
 
-from configs import dify_config
+from configs import nexusai_config
 from core.repositories.human_input_repository import HumanInputFormSubmissionRepository
 from extensions.ext_database import db
 from extensions.ext_storage import storage
@@ -61,7 +61,7 @@ def check_and_handle_human_input_timeouts(limit: int = 100) -> None:
     form_repo = HumanInputFormSubmissionRepository()
     service = HumanInputService(session_factory, form_repository=form_repo)
     now = naive_utc_now()
-    global_timeout_seconds = dify_config.HUMAN_INPUT_GLOBAL_TIMEOUT_SECONDS
+    global_timeout_seconds = nexusai_config.HUMAN_INPUT_GLOBAL_TIMEOUT_SECONDS
 
     with session_factory() as session:
         global_deadline = now - timedelta(seconds=global_timeout_seconds) if global_timeout_seconds > 0 else None

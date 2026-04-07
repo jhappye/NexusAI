@@ -68,7 +68,7 @@ def check_credential_policy_compliance(
     # Check policy compliance
     PluginManagerService.check_credential_policy_compliance(
         CheckCredentialPolicyComplianceRequest(
-            dify_credential_id=credential_id,
+            nexusai_credential_id=credential_id,
             provider=provider,
             credential_type=credential_type,
         )

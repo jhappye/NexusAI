@@ -24,12 +24,12 @@ class IrisVectorConfig(BaseSettings):
 
     IRIS_PASSWORD: str | None = Field(
         description="Password for IRIS authentication.",
-        default="Dify@1234",
+        default="NexusAI@1234",
     )
 
     IRIS_SCHEMA: str | None = Field(
         description="Schema name for IRIS tables.",
-        default="dify",
+        default="nexusai",
     )
 
     IRIS_DATABASE: str | None = Field(

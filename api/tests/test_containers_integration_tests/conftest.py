@@ -1,5 +1,5 @@
 """
-TestContainers-based integration test configuration for Dify API.
+TestContainers-based integration test configuration for NexusAI API.
 
 This module provides containerized test infrastructure using TestContainers library
 to spin up real database and service instances for integration testing. This approach
@@ -32,10 +32,10 @@ from extensions.ext_database import db
 # Configure logging for test containers
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
-_TEST_SANDBOX_IMAGE = os.getenv("TEST_SANDBOX_IMAGE", "langgenius/dify-sandbox:0.2.12")
+_TEST_SANDBOX_IMAGE = os.getenv("TEST_SANDBOX_IMAGE", "langgenius/nexusai-sandbox:0.2.12")
 
-DEFAULT_SANDBOX_TEST_IMAGE = "langgenius/dify-sandbox:0.2.14"
-SANDBOX_TEST_IMAGE_ENV = "DIFY_SANDBOX_TEST_IMAGE"
+DEFAULT_SANDBOX_TEST_IMAGE = "langgenius/nexusai-sandbox:0.2.14"
+SANDBOX_TEST_IMAGE_ENV = "NEXUSAI_SANDBOX_TEST_IMAGE"
 
 
 class _CloserProtocol(Protocol):
@@ -54,9 +54,9 @@ def _auto_close[T: _CloserProtocol](closer: T) -> Generator[T, None, None]:
     closer.close()
 
 
-class DifyTestContainers:
+class NexusAITestContainers:
     """
-    Manages all test containers required for Dify integration tests.
+    Manages all test containers required for NexusAI integration tests.
 
     This class provides a centralized way to manage multiple containers
     needed for comprehensive integration testing, including databases,
@@ -68,24 +68,24 @@ class DifyTestContainers:
         self.network: Network | None = None
         self.postgres: PostgresContainer | None = None
         self.redis: RedisContainer | None = None
-        self.dify_sandbox: DockerContainer | None = None
-        self.dify_plugin_daemon: DockerContainer | None = None
+        self.nexusai_sandbox: DockerContainer | None = None
+        self.nexusai_plugin_daemon: DockerContainer | None = None
         self._containers_started = False
-        logger.info("DifyTestContainers initialized - ready to manage test containers")
+        logger.info("NexusAITestContainers initialized - ready to manage test containers")
 
     def start_containers_with_env(self):
         """
         Start all required containers for integration testing.
 
         This method initializes and starts PostgreSQL, Redis
-        containers with appropriate configurations for Dify testing. Containers
+        containers with appropriate configurations for NexusAI testing. Containers
         are started in dependency order to ensure proper initialization.
         """
         if self._containers_started:
             logger.info("Containers already started - skipping container startup")
             return
 
-        logger.info("Starting test containers for Dify integration tests...")
+        logger.info("Starting test containers for NexusAI integration tests...")
 
         # Create Docker network for container communication
         logger.info("Creating Docker network for container communication...")
@@ -138,15 +138,15 @@ class DifyTestContainers:
             # NOTE: We cannot use `with conn.cursor() as cursor:` as it will wrap the statement
             # inside a transaction. However, the `CREATE DATABASE` statement cannot run inside a transaction block.
             with _auto_close(conn.cursor()) as cursor:
-                # Create plugin database for dify-plugin-daemon
+                # Create plugin database for nexusai-plugin-daemon
                 logger.info("Creating plugin database...")
-                cursor.execute("CREATE DATABASE dify_plugin;")
+                cursor.execute("CREATE DATABASE nexusai_plugin;")
             logger.info("Plugin database created successfully")
 
         # Set up storage environment variables
         os.environ.setdefault("STORAGE_TYPE", "opendal")
         os.environ.setdefault("OPENDAL_SCHEME", "fs")
-        os.environ.setdefault("OPENDAL_FS_ROOT", "/tmp/dify-storage")
+        os.environ.setdefault("OPENDAL_FS_ROOT", "/tmp/nexusai-storage")
 
         # Start Redis container for caching and session management
         # Redis is used for storing session data, cache entries, and temporary data
@@ -164,49 +164,49 @@ class DifyTestContainers:
         wait_for_logs(self.redis, "Ready to accept connections", timeout=30)
         logger.info("Redis container is ready and accepting connections")
 
-        # Start Dify Sandbox container for code execution environment.
+        # Start NexusAI Sandbox container for code execution environment.
         # Default to the production-pinned image while allowing local overrides for debugging.
-        logger.info("Initializing Dify Sandbox container...")
+        logger.info("Initializing NexusAI Sandbox container...")
         sandbox_image = os.getenv(SANDBOX_TEST_IMAGE_ENV, DEFAULT_SANDBOX_TEST_IMAGE)
-        self.dify_sandbox = DockerContainer(image=sandbox_image).with_network(self.network)
-        self.dify_sandbox.with_exposed_ports(8194)
-        self.dify_sandbox.env = {
+        self.nexusai_sandbox = DockerContainer(image=sandbox_image).with_network(self.network)
+        self.nexusai_sandbox.with_exposed_ports(8194)
+        self.nexusai_sandbox.env = {
             "API_KEY": "test_api_key",
         }
-        self.dify_sandbox.start()
-        sandbox_host = self.dify_sandbox.get_container_host_ip()
-        sandbox_port = self.dify_sandbox.get_exposed_port(8194)
+        self.nexusai_sandbox.start()
+        sandbox_host = self.nexusai_sandbox.get_container_host_ip()
+        sandbox_port = self.nexusai_sandbox.get_exposed_port(8194)
         os.environ["CODE_EXECUTION_ENDPOINT"] = f"http://{sandbox_host}:{sandbox_port}"
         os.environ["CODE_EXECUTION_API_KEY"] = "test_api_key"
         logger.info(
-            "Dify Sandbox container started successfully - Image: %s Host: %s, Port: %s",
+            "NexusAI Sandbox container started successfully - Image: %s Host: %s, Port: %s",
             sandbox_image,
             sandbox_host,
             sandbox_port,
         )
 
-        # Wait for Dify Sandbox to be ready
-        logger.info("Waiting for Dify Sandbox to be ready to accept connections...")
-        wait_for_logs(self.dify_sandbox, "config init success", timeout=60)
-        logger.info("Dify Sandbox container is ready and accepting connections")
+        # Wait for NexusAI Sandbox to be ready
+        logger.info("Waiting for NexusAI Sandbox to be ready to accept connections...")
+        wait_for_logs(self.nexusai_sandbox, "config init success", timeout=60)
+        logger.info("NexusAI Sandbox container is ready and accepting connections")
 
-        # Start Dify Plugin Daemon container for plugin management
-        # Dify Plugin Daemon provides plugin lifecycle management and execution
-        logger.info("Initializing Dify Plugin Daemon container...")
-        self.dify_plugin_daemon = DockerContainer(image="langgenius/dify-plugin-daemon:0.5.3-local").with_network(
+        # Start NexusAI Plugin Daemon container for plugin management
+        # NexusAI Plugin Daemon provides plugin lifecycle management and execution
+        logger.info("Initializing NexusAI Plugin Daemon container...")
+        self.nexusai_plugin_daemon = DockerContainer(image="langgenius/nexusai-plugin-daemon:0.5.3-local").with_network(
             self.network
         )
-        self.dify_plugin_daemon.with_exposed_ports(5002)
+        self.nexusai_plugin_daemon.with_exposed_ports(5002)
         # Get container internal network addresses
         postgres_container_name = self.postgres.get_wrapped_container().name
         redis_container_name = self.redis.get_wrapped_container().name
 
-        self.dify_plugin_daemon.env = {
+        self.nexusai_plugin_daemon.env = {
             "DB_HOST": postgres_container_name,  # Use container name for internal network communication
             "DB_PORT": "5432",  # Use internal port
             "DB_USERNAME": self.postgres.username,
             "DB_PASSWORD": self.postgres.password,
-            "DB_DATABASE": "dify_plugin",
+            "DB_DATABASE": "nexusai_plugin",
             "REDIS_HOST": redis_container_name,  # Use container name for internal network communication
             "REDIS_PORT": "6379",  # Use internal port
             "REDIS_PASSWORD": "",
@@ -214,8 +214,8 @@ class DifyTestContainers:
             "SERVER_KEY": "test_plugin_daemon_key",
             "MAX_PLUGIN_PACKAGE_SIZE": "52428800",
             "PPROF_ENABLED": "false",
-            "DIFY_INNER_API_URL": f"http://{postgres_container_name}:5001",
-            "DIFY_INNER_API_KEY": "test_inner_api_key",
+            "NEXUSAI_INNER_API_URL": f"http://{postgres_container_name}:5001",
+            "NEXUSAI_INNER_API_KEY": "test_inner_api_key",
             "PLUGIN_REMOTE_INSTALLING_HOST": "0.0.0.0",
             "PLUGIN_REMOTE_INSTALLING_PORT": "5003",
             "PLUGIN_WORKING_PATH": "/app/storage/cwd",
@@ -232,25 +232,25 @@ class DifyTestContainers:
         }
 
         try:
-            self.dify_plugin_daemon.start()
-            plugin_daemon_host = self.dify_plugin_daemon.get_container_host_ip()
-            plugin_daemon_port = self.dify_plugin_daemon.get_exposed_port(5002)
+            self.nexusai_plugin_daemon.start()
+            plugin_daemon_host = self.nexusai_plugin_daemon.get_container_host_ip()
+            plugin_daemon_port = self.nexusai_plugin_daemon.get_exposed_port(5002)
             os.environ["PLUGIN_DAEMON_URL"] = f"http://{plugin_daemon_host}:{plugin_daemon_port}"
             os.environ["PLUGIN_DAEMON_KEY"] = "test_plugin_daemon_key"
             logger.info(
-                "Dify Plugin Daemon container started successfully - Host: %s, Port: %s",
+                "NexusAI Plugin Daemon container started successfully - Host: %s, Port: %s",
                 plugin_daemon_host,
                 plugin_daemon_port,
             )
 
-            # Wait for Dify Plugin Daemon to be ready
-            logger.info("Waiting for Dify Plugin Daemon to be ready to accept connections...")
-            wait_for_logs(self.dify_plugin_daemon, "start plugin manager daemon", timeout=60)
-            logger.info("Dify Plugin Daemon container is ready and accepting connections")
+            # Wait for NexusAI Plugin Daemon to be ready
+            logger.info("Waiting for NexusAI Plugin Daemon to be ready to accept connections...")
+            wait_for_logs(self.nexusai_plugin_daemon, "start plugin manager daemon", timeout=60)
+            logger.info("NexusAI Plugin Daemon container is ready and accepting connections")
         except Exception as e:
-            logger.warning("Failed to start Dify Plugin Daemon container: %s", e)
+            logger.warning("Failed to start NexusAI Plugin Daemon container: %s", e)
             logger.info("Continuing without plugin daemon - some tests may be limited")
-            self.dify_plugin_daemon = None
+            self.nexusai_plugin_daemon = None
 
         self._containers_started = True
         logger.info("All test containers started successfully")
@@ -267,7 +267,7 @@ class DifyTestContainers:
             return
 
         logger.info("Stopping and cleaning up test containers...")
-        containers = [self.redis, self.postgres, self.dify_sandbox, self.dify_plugin_daemon]
+        containers = [self.redis, self.postgres, self.nexusai_sandbox, self.nexusai_plugin_daemon]
         for container in containers:
             if container:
                 container_name = container.image
@@ -286,7 +286,7 @@ class DifyTestContainers:
 
 
 # Global container manager instance
-_container_manager = DifyTestContainers()
+_container_manager = NexusAITestContainers()
 
 
 def _get_migration_dir() -> Path:
@@ -361,11 +361,11 @@ def _create_app_with_containers() -> Flask:
     os.environ["REDIS_PASSWORD"] = ""
 
     # Re-create the config after environment variables have been set
-    from configs import dify_config
+    from configs import nexusai_config
 
     # Force re-creation of config with new environment variables
-    dify_config.__dict__.clear()
-    dify_config.__init__()
+    nexusai_config.__dict__.clear()
+    nexusai_config.__init__()
 
     # Create and configure the Flask application
     logger.info("Initializing Flask application...")
@@ -392,7 +392,7 @@ def _create_app_with_containers() -> Flask:
 
 
 @pytest.fixture(scope="session")
-def set_up_containers_and_env() -> Generator[DifyTestContainers, None, None]:
+def set_up_containers_and_env() -> Generator[NexusAITestContainers, None, None]:
     """
     Session-scoped fixture to manage test containers.
 
@@ -401,7 +401,7 @@ def set_up_containers_and_env() -> Generator[DifyTestContainers, None, None]:
     improves test performance by reusing containers across multiple tests.
 
     Yields:
-        DifyTestContainers: Container manager instance
+        NexusAITestContainers: Container manager instance
     """
     logger.info("=== Starting test session container management ===")
     _container_manager.start_containers_with_env()

@@ -7,7 +7,7 @@ from typing import Any
 from graphon.model_runtime.entities.model_entities import ModelType
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from core.model_manager import ModelManager
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_type import VectorType
@@ -45,12 +45,12 @@ class Vector:
         self._vector_processor = self._init_vector()
 
     def _init_vector(self) -> BaseVector:
-        vector_type = dify_config.VECTOR_STORE
+        vector_type = nexusai_config.VECTOR_STORE
 
         if self._dataset.index_struct_dict:
             vector_type = self._dataset.index_struct_dict["type"]
         else:
-            if dify_config.VECTOR_STORE_WHITELIST_ENABLE:
+            if nexusai_config.VECTOR_STORE_WHITELIST_ENABLE:
                 stmt = select(Whitelist).where(
                     Whitelist.tenant_id == self._dataset.tenant_id, Whitelist.category == "vector_db"
                 )

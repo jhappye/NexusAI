@@ -16,7 +16,7 @@ from pydantic import BaseModel, model_validator
 if TYPE_CHECKING:
     from clickzetta.connector.v0.connection import Connection  # type: ignore
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import Field, parse_metadata_json
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -41,7 +41,7 @@ class ClickzettaConfig(BaseModel):
     service: str = "api.clickzetta.com"
     workspace: str = "quick_start"
     vcluster: str = "default_ap"
-    schema_name: str = "dify"  # Renamed to avoid shadowing BaseModel.schema
+    schema_name: str = "nexusai"  # Renamed to avoid shadowing BaseModel.schema
     # Advanced settings
     batch_size: int = 20  # Reduced batch size to avoid large SQL statements
     enable_inverted_index: bool = True  # Enable inverted index for full-text search
@@ -378,7 +378,7 @@ class ClickzettaVector(BaseVector):
         # Ensure required fields are set
         metadata["doc_id"] = row_id  # segment id
 
-        # Ensure document_id exists (critical for Dify's format_retrieval_documents)
+        # Ensure document_id exists (critical for NexusAI's format_retrieval_documents)
         if "document_id" not in metadata:
             metadata["document_id"] = row_id  # fallback to segment id
 
@@ -496,7 +496,7 @@ class ClickzettaVector(BaseVector):
             {Field.VECTOR} VECTOR(FLOAT, {dimension}) NOT NULL COMMENT
                 'High-dimensional embedding vector for semantic similarity search',
             PRIMARY KEY (id)
-        ) COMMENT 'Dify RAG knowledge base vector storage table for document embeddings and content'
+        ) COMMENT 'NexusAI RAG knowledge base vector storage table for document embeddings and content'
         """
 
         with self.get_connection_context() as connection:
@@ -952,7 +952,7 @@ class ClickzettaVector(BaseVector):
                         # Ensure required fields are set
                         metadata["doc_id"] = row[0]  # segment id
 
-                        # Ensure document_id exists (critical for Dify's format_retrieval_documents)
+                        # Ensure document_id exists (critical for NexusAI's format_retrieval_documents)
                         if "document_id" not in metadata:
                             metadata["document_id"] = row[0]  # fallback to segment id
 
@@ -1061,18 +1061,18 @@ class ClickzettaVectorFactory(AbstractVectorFactory):
         """Initialize a Clickzetta vector instance."""
         # Get configuration from environment variables or dataset config
         config = ClickzettaConfig(
-            username=dify_config.CLICKZETTA_USERNAME or "",
-            password=dify_config.CLICKZETTA_PASSWORD or "",
-            instance=dify_config.CLICKZETTA_INSTANCE or "",
-            service=dify_config.CLICKZETTA_SERVICE or "api.clickzetta.com",
-            workspace=dify_config.CLICKZETTA_WORKSPACE or "quick_start",
-            vcluster=dify_config.CLICKZETTA_VCLUSTER or "default_ap",
-            schema_name=dify_config.CLICKZETTA_SCHEMA or "dify",
-            batch_size=dify_config.CLICKZETTA_BATCH_SIZE or 100,
-            enable_inverted_index=dify_config.CLICKZETTA_ENABLE_INVERTED_INDEX or True,
-            analyzer_type=dify_config.CLICKZETTA_ANALYZER_TYPE or "chinese",
-            analyzer_mode=dify_config.CLICKZETTA_ANALYZER_MODE or "smart",
-            vector_distance_function=dify_config.CLICKZETTA_VECTOR_DISTANCE_FUNCTION or "cosine_distance",
+            username=nexusai_config.CLICKZETTA_USERNAME or "",
+            password=nexusai_config.CLICKZETTA_PASSWORD or "",
+            instance=nexusai_config.CLICKZETTA_INSTANCE or "",
+            service=nexusai_config.CLICKZETTA_SERVICE or "api.clickzetta.com",
+            workspace=nexusai_config.CLICKZETTA_WORKSPACE or "quick_start",
+            vcluster=nexusai_config.CLICKZETTA_VCLUSTER or "default_ap",
+            schema_name=nexusai_config.CLICKZETTA_SCHEMA or "nexusai",
+            batch_size=nexusai_config.CLICKZETTA_BATCH_SIZE or 100,
+            enable_inverted_index=nexusai_config.CLICKZETTA_ENABLE_INVERTED_INDEX or True,
+            analyzer_type=nexusai_config.CLICKZETTA_ANALYZER_TYPE or "chinese",
+            analyzer_mode=nexusai_config.CLICKZETTA_ANALYZER_MODE or "smart",
+            vector_distance_function=nexusai_config.CLICKZETTA_VECTOR_DISTANCE_FUNCTION or "cosine_distance",
         )
 
         # Use dataset collection name as table name

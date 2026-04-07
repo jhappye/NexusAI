@@ -125,8 +125,8 @@ def test_extract_images_from_docx(monkeypatch):
     monkeypatch.setattr(we, "db", db_stub)
 
     # Patch config values used for URL composition and storage type
-    monkeypatch.setattr(we.dify_config, "FILES_URL", "http://files.local", raising=False)
-    monkeypatch.setattr(we.dify_config, "STORAGE_TYPE", "local", raising=False)
+    monkeypatch.setattr(we.nexusai_config, "FILES_URL", "http://files.local", raising=False)
+    monkeypatch.setattr(we.nexusai_config, "STORAGE_TYPE", "local", raising=False)
 
     # Patch UploadFile to avoid real DB models
     class FakeUploadFile:
@@ -182,22 +182,22 @@ def test_extract_images_from_docx(monkeypatch):
 def test_extract_images_from_docx_uses_internal_files_url():
     """Test that INTERNAL_FILES_URL takes precedence over FILES_URL for plugin access."""
     # Test the URL generation logic directly
-    from configs import dify_config
+    from configs import nexusai_config
 
     # Mock the configuration values
-    original_files_url = getattr(dify_config, "FILES_URL", None)
-    original_internal_files_url = getattr(dify_config, "INTERNAL_FILES_URL", None)
+    original_files_url = getattr(nexusai_config, "FILES_URL", None)
+    original_internal_files_url = getattr(nexusai_config, "INTERNAL_FILES_URL", None)
 
     try:
         # Set both URLs - INTERNAL should take precedence
-        dify_config.FILES_URL = "http://external.example.com"
-        dify_config.INTERNAL_FILES_URL = "http://internal.docker:5001"
+        nexusai_config.FILES_URL = "http://external.example.com"
+        nexusai_config.INTERNAL_FILES_URL = "http://internal.docker:5001"
 
         # Test the URL generation logic (same as in word_extractor.py)
         upload_file_id = "test_file_id"
 
         # This is the pattern we fixed in the word extractor
-        base_url = dify_config.INTERNAL_FILES_URL or dify_config.FILES_URL
+        base_url = nexusai_config.INTERNAL_FILES_URL or nexusai_config.FILES_URL
         generated_url = f"{base_url}/files/{upload_file_id}/file-preview"
 
         # Verify that INTERNAL_FILES_URL is used instead of FILES_URL
@@ -206,8 +206,8 @@ def test_extract_images_from_docx_uses_internal_files_url():
 
     finally:
         # Restore original values
-        dify_config.FILES_URL = original_files_url
-        dify_config.INTERNAL_FILES_URL = original_internal_files_url
+        nexusai_config.FILES_URL = original_files_url
+        nexusai_config.INTERNAL_FILES_URL = original_internal_files_url
 
 
 def test_extract_hyperlinks(monkeypatch):
@@ -215,8 +215,8 @@ def test_extract_hyperlinks(monkeypatch):
     monkeypatch.setattr(we, "storage", SimpleNamespace(save=lambda k, d: None))
     db_stub = SimpleNamespace(session=SimpleNamespace(add=lambda o: None, commit=lambda: None))
     monkeypatch.setattr(we, "db", db_stub)
-    monkeypatch.setattr(we.dify_config, "FILES_URL", "http://files.local", raising=False)
-    monkeypatch.setattr(we.dify_config, "STORAGE_TYPE", "local", raising=False)
+    monkeypatch.setattr(we.nexusai_config, "FILES_URL", "http://files.local", raising=False)
+    monkeypatch.setattr(we.nexusai_config, "STORAGE_TYPE", "local", raising=False)
 
     doc = Document()
     p = doc.add_paragraph("Visit ")
@@ -228,7 +228,7 @@ def test_extract_hyperlinks(monkeypatch):
 
     new_run = OxmlElement("w:r")
     t = OxmlElement("w:t")
-    t.text = "Dify"
+    t.text = "NexusAI"
     new_run.append(t)
     hyperlink.append(new_run)
     p._p.append(hyperlink)
@@ -236,7 +236,7 @@ def test_extract_hyperlinks(monkeypatch):
     # Add relationship to the part
     doc.part.rels.add_relationship(
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
-        "https://dify.ai",
+        "https://nexusai.ai",
         r_id,
         is_external=True,
     )
@@ -249,7 +249,7 @@ def test_extract_hyperlinks(monkeypatch):
         extractor = WordExtractor(tmp_path, "tenant_id", "user_id")
         docs = extractor.extract()
         # Verify modern hyperlink extraction
-        assert "Visit[Dify](https://dify.ai)" in docs[0].page_content
+        assert "Visit[NexusAI](https://nexusai.ai)" in docs[0].page_content
     finally:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
@@ -260,8 +260,8 @@ def test_extract_legacy_hyperlinks(monkeypatch):
     monkeypatch.setattr(we, "storage", SimpleNamespace(save=lambda k, d: None))
     db_stub = SimpleNamespace(session=SimpleNamespace(add=lambda o: None, commit=lambda: None))
     monkeypatch.setattr(we, "db", db_stub)
-    monkeypatch.setattr(we.dify_config, "FILES_URL", "http://files.local", raising=False)
-    monkeypatch.setattr(we.dify_config, "STORAGE_TYPE", "local", raising=False)
+    monkeypatch.setattr(we.nexusai_config, "FILES_URL", "http://files.local", raising=False)
+    monkeypatch.setattr(we.nexusai_config, "STORAGE_TYPE", "local", raising=False)
 
     doc = Document()
     p = doc.add_paragraph()
@@ -396,7 +396,7 @@ def test_extract_images_handles_invalid_external_cases(monkeypatch):
     db_stub = SimpleNamespace(session=SimpleNamespace(add=lambda obj: None, commit=MagicMock()))
     monkeypatch.setattr(we, "db", db_stub)
     monkeypatch.setattr(we, "storage", SimpleNamespace(save=lambda key, data: None))
-    monkeypatch.setattr(we.dify_config, "FILES_URL", "http://files.local", raising=False)
+    monkeypatch.setattr(we.nexusai_config, "FILES_URL", "http://files.local", raising=False)
 
     extractor = object.__new__(WordExtractor)
     extractor.tenant_id = "tenant"
@@ -652,7 +652,7 @@ def test_parse_cell_paragraph_hyperlink_in_table_cell_http():
 
     run_elem = OxmlElement("w:r")
     t = OxmlElement("w:t")
-    t.text = "Dify"
+    t.text = "NexusAI"
     run_elem.append(t)
     hyperlink.append(run_elem)
     p._p.append(hyperlink)
@@ -660,7 +660,7 @@ def test_parse_cell_paragraph_hyperlink_in_table_cell_http():
     # Relationship for external http link
     doc.part.rels.add_relationship(
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
-        "https://dify.ai",
+        "https://nexusai.ai",
         r_id,
         is_external=True,
     )
@@ -674,7 +674,7 @@ def test_parse_cell_paragraph_hyperlink_in_table_cell_http():
         para = reopened.tables[0].cell(0, 0).paragraphs[0]
         extractor = object.__new__(WordExtractor)
         out = extractor._parse_cell_paragraph(para, {})
-        assert out == "[Dify](https://dify.ai)"
+        assert out == "[NexusAI](https://nexusai.ai)"
     finally:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)

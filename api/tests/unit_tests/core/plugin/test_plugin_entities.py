@@ -35,7 +35,7 @@ from core.tools.entities.common_entities import I18nObject
 
 class TestEndpointEntity:
     def test_endpoint_entity_with_instance_renders_url(self, mocker):
-        mocker.patch("core.plugin.entities.endpoint.dify_config.ENDPOINT_URL_TEMPLATE", "https://dify.test/{hook_id}")
+        mocker.patch("core.plugin.entities.endpoint.nexusai_config.ENDPOINT_URL_TEMPLATE", "https://nexusai.test/{hook_id}")
         now = datetime.datetime.now(datetime.UTC)
 
         entity = EndpointEntityWithInstance.model_validate(
@@ -53,7 +53,7 @@ class TestEndpointEntity:
             }
         )
 
-        assert entity.url == "https://dify.test/hook-123"
+        assert entity.url == "https://nexusai.test/hook-123"
 
     def test_endpoint_entity_with_instance_keeps_existing_url(self):
         now = datetime.datetime.now(datetime.UTC)

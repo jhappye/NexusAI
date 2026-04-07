@@ -383,7 +383,7 @@ class AppAnnotationService:
         - Subscription quota validation
         - Concurrency tracking
         """
-        from configs import dify_config
+        from configs import nexusai_config
 
         # get app info
         current_user, current_tenant_id = current_account_with_tenant()
@@ -409,8 +409,8 @@ class AppAnnotationService:
 
             # Parse CSV with row limit to prevent memory exhaustion
             # Use chunksize for memory-efficient processing
-            max_records = dify_config.ANNOTATION_IMPORT_MAX_RECORDS
-            min_records = dify_config.ANNOTATION_IMPORT_MIN_RECORDS
+            max_records = nexusai_config.ANNOTATION_IMPORT_MAX_RECORDS
+            min_records = nexusai_config.ANNOTATION_IMPORT_MIN_RECORDS
 
             # Read CSV in chunks to avoid loading entire file into memory
             df = pd.read_csv(

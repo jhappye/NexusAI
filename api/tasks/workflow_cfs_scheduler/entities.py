@@ -1,10 +1,10 @@
 from enum import StrEnum
 
-from configs import dify_config
+from configs import nexusai_config
 from services.workflow.entities import WorkflowScheduleCFSPlanEntity
 
 # Determine queue names based on edition
-if dify_config.EDITION == "CLOUD":
+if nexusai_config.EDITION == "CLOUD":
     # Cloud edition: separate queues for different tiers
     _professional_queue = "workflow_professional"
     _team_queue = "workflow_team"

@@ -159,7 +159,7 @@ describe('Plugin Tool Workflow Integration', () => {
       // Missing or null uniqueIdentifier
       uniqueIdentifier: null,
       meta: null,
-      minimum_dify_version: undefined,
+      minimum_nexusai_version: undefined,
     }
 
     // This simulates the error path that leads to the white screen

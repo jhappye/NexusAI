@@ -3,7 +3,7 @@ import logging
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from core.errors.error import QuotaExceededError
 from extensions.ext_database import db
 from models import TenantCreditPool
@@ -18,7 +18,7 @@ class CreditPoolService:
         """create default credit pool for new tenant"""
         credit_pool = TenantCreditPool(
             tenant_id=tenant_id,
-            quota_limit=dify_config.HOSTED_POOL_CREDITS,
+            quota_limit=nexusai_config.HOSTED_POOL_CREDITS,
             quota_used=0,
             pool_type=ProviderQuotaType.TRIAL,
         )

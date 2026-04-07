@@ -42,7 +42,7 @@ class TestDispatchers:
 
 class TestQueueDispatcherManager:
     @patch("services.workflow.queue_dispatcher.BillingService")
-    @patch("services.workflow.queue_dispatcher.dify_config")
+    @patch("services.workflow.queue_dispatcher.nexusai_config")
     def test_billing_enabled_professional_plan(self, mock_config, mock_billing):
         mock_config.BILLING_ENABLED = True
         mock_billing.get_info.return_value = {"subscription": {"plan": "professional"}}
@@ -52,7 +52,7 @@ class TestQueueDispatcherManager:
         assert isinstance(dispatcher, ProfessionalQueueDispatcher)
 
     @patch("services.workflow.queue_dispatcher.BillingService")
-    @patch("services.workflow.queue_dispatcher.dify_config")
+    @patch("services.workflow.queue_dispatcher.nexusai_config")
     def test_billing_enabled_team_plan(self, mock_config, mock_billing):
         mock_config.BILLING_ENABLED = True
         mock_billing.get_info.return_value = {"subscription": {"plan": "team"}}
@@ -62,7 +62,7 @@ class TestQueueDispatcherManager:
         assert isinstance(dispatcher, TeamQueueDispatcher)
 
     @patch("services.workflow.queue_dispatcher.BillingService")
-    @patch("services.workflow.queue_dispatcher.dify_config")
+    @patch("services.workflow.queue_dispatcher.nexusai_config")
     def test_billing_enabled_sandbox_plan(self, mock_config, mock_billing):
         mock_config.BILLING_ENABLED = True
         mock_billing.get_info.return_value = {"subscription": {"plan": "sandbox"}}
@@ -72,7 +72,7 @@ class TestQueueDispatcherManager:
         assert isinstance(dispatcher, SandboxQueueDispatcher)
 
     @patch("services.workflow.queue_dispatcher.BillingService")
-    @patch("services.workflow.queue_dispatcher.dify_config")
+    @patch("services.workflow.queue_dispatcher.nexusai_config")
     def test_billing_enabled_unknown_plan_defaults_to_sandbox(self, mock_config, mock_billing):
         mock_config.BILLING_ENABLED = True
         mock_billing.get_info.return_value = {"subscription": {"plan": "enterprise"}}
@@ -82,7 +82,7 @@ class TestQueueDispatcherManager:
         assert isinstance(dispatcher, SandboxQueueDispatcher)
 
     @patch("services.workflow.queue_dispatcher.BillingService")
-    @patch("services.workflow.queue_dispatcher.dify_config")
+    @patch("services.workflow.queue_dispatcher.nexusai_config")
     def test_billing_enabled_service_failure_defaults_to_sandbox(self, mock_config, mock_billing):
         mock_config.BILLING_ENABLED = True
         mock_billing.get_info.side_effect = Exception("billing unavailable")
@@ -91,7 +91,7 @@ class TestQueueDispatcherManager:
 
         assert isinstance(dispatcher, SandboxQueueDispatcher)
 
-    @patch("services.workflow.queue_dispatcher.dify_config")
+    @patch("services.workflow.queue_dispatcher.nexusai_config")
     def test_billing_disabled_defaults_to_team(self, mock_config):
         mock_config.BILLING_ENABLED = False
 
@@ -100,7 +100,7 @@ class TestQueueDispatcherManager:
         assert isinstance(dispatcher, TeamQueueDispatcher)
 
     @patch("services.workflow.queue_dispatcher.BillingService")
-    @patch("services.workflow.queue_dispatcher.dify_config")
+    @patch("services.workflow.queue_dispatcher.nexusai_config")
     def test_missing_subscription_key_defaults_to_sandbox(self, mock_config, mock_billing):
         mock_config.BILLING_ENABLED = True
         mock_billing.get_info.return_value = {}

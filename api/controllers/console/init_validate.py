@@ -6,10 +6,10 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.fastopenapi import console_router
 from extensions.ext_database import db
-from models.model import DifySetup
+from models.model import NexusAISetup
 from services.account_service import TenantService
 
 from .error import AlreadySetupError, InitValidateFailedError
@@ -63,12 +63,12 @@ def validate_init_password(payload: InitValidatePayload) -> InitValidateResponse
 
 
 def get_init_validate_status() -> bool:
-    if dify_config.EDITION == "SELF_HOSTED":
+    if nexusai_config.EDITION == "SELF_HOSTED":
         if os.environ.get("INIT_PASSWORD"):
             if session.get("is_init_validated"):
                 return True
 
             with Session(db.engine) as db_session:
-                return db_session.execute(select(DifySetup)).scalar_one_or_none() is not None
+                return db_session.execute(select(NexusAISetup)).scalar_one_or_none() is not None
 
     return True

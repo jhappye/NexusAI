@@ -83,7 +83,7 @@ class TestRateLimit:
         RateLimit("client1", 10)
 
         redis_patch.setex.assert_called_once_with(
-            "dify:rate_limit:client1:max_active_requests",
+            "nexusai:rate_limit:client1:max_active_requests",
             timedelta(days=1),
             10,
         )
@@ -109,7 +109,7 @@ class TestRateLimit:
         RateLimit("client1", 10)
 
         redis_patch.setex.assert_called_once_with(
-            "dify:rate_limit:client1:max_active_requests",
+            "nexusai:rate_limit:client1:max_active_requests",
             timedelta(days=1),
             10,
         )
@@ -133,7 +133,7 @@ class TestRateLimit:
 
         rate_limit = RateLimit("test_client", 5)
 
-        expected_max_key = "dify:rate_limit:test_client:max_active_requests"
+        expected_max_key = "nexusai:rate_limit:test_client:max_active_requests"
         redis_patch.setex.assert_called_with(expected_max_key, timedelta(days=1), 5)
 
     def test_should_sync_max_requests_from_redis_on_subsequent_flush(self, redis_patch):
@@ -180,7 +180,7 @@ class TestRateLimit:
         # Verify timeout request was cleaned up
         redis_patch.hdel.assert_called_once()
         call_args = redis_patch.hdel.call_args[0]
-        assert call_args[0] == "dify:rate_limit:test_client:active_requests"
+        assert call_args[0] == "nexusai:rate_limit:test_client:active_requests"
         assert b"req1" in call_args  # Timeout request should be removed
         assert b"req2" not in call_args  # Active request should remain
 
@@ -249,7 +249,7 @@ class TestRateLimitEnterExit:
         rate_limit = RateLimit("test_client", 5)
         rate_limit.exit("test_request_id")
 
-        redis_patch.hdel.assert_called_once_with("dify:rate_limit:test_client:active_requests", "test_request_id")
+        redis_patch.hdel.assert_called_once_with("nexusai:rate_limit:test_client:active_requests", "test_request_id")
 
     def test_should_raise_quota_exceeded_when_at_limit(self, redis_patch):
         """Test quota exceeded error when at limit."""
@@ -348,7 +348,7 @@ class TestRateLimitGenerator:
         result = list(wrapped_gen)
 
         assert result == ["item1", "item2", "item3"]
-        redis_patch.hdel.assert_called_once_with("dify:rate_limit:test_client:active_requests", request_id)
+        redis_patch.hdel.assert_called_once_with("nexusai:rate_limit:test_client:active_requests", request_id)
 
     def test_should_handle_mapping_input_directly(self, sample_mapping):
         """Test direct return of mapping input."""
@@ -376,7 +376,7 @@ class TestRateLimitGenerator:
         with pytest.raises(ValueError):
             list(wrapped_gen)
 
-        redis_patch.hdel.assert_called_once_with("dify:rate_limit:test_client:active_requests", request_id)
+        redis_patch.hdel.assert_called_once_with("nexusai:rate_limit:test_client:active_requests", request_id)
 
     def test_should_cleanup_on_explicit_close(self, redis_patch, sample_generator):
         """Test cleanup on explicit generator close."""

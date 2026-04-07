@@ -12,11 +12,11 @@ logger = logging.getLogger(__name__)
 
 class NacosHttpClient:
     def __init__(self):
-        self.username = os.getenv("DIFY_ENV_NACOS_USERNAME")
-        self.password = os.getenv("DIFY_ENV_NACOS_PASSWORD")
-        self.ak = os.getenv("DIFY_ENV_NACOS_ACCESS_KEY")
-        self.sk = os.getenv("DIFY_ENV_NACOS_SECRET_KEY")
-        self.server = os.getenv("DIFY_ENV_NACOS_SERVER_ADDR", "localhost:8848")
+        self.username = os.getenv("NEXUSAI_ENV_NACOS_USERNAME")
+        self.password = os.getenv("NEXUSAI_ENV_NACOS_PASSWORD")
+        self.ak = os.getenv("NEXUSAI_ENV_NACOS_ACCESS_KEY")
+        self.sk = os.getenv("NEXUSAI_ENV_NACOS_SECRET_KEY")
+        self.server = os.getenv("NEXUSAI_ENV_NACOS_SERVER_ADDR", "localhost:8848")
         self.token: str | None = None
         self.token_ttl = 18000
         self.token_expire_time: float = 0
@@ -37,7 +37,7 @@ class NacosHttpClient:
             return f"Request to Nacos failed: {e}"
 
     def _inject_auth_info(self, headers: dict[str, str], params: dict[str, str], module: str = "config") -> None:
-        headers.update({"User-Agent": "Nacos-Http-Client-In-Dify:v0.0.1"})
+        headers.update({"User-Agent": "Nacos-Http-Client-In-NexusAI:v0.0.1"})
 
         if module == "login":
             return

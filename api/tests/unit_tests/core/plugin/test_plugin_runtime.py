@@ -80,8 +80,8 @@ class TestPluginRuntimeExecution:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-api-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-api-key"),
         ):
             yield
 
@@ -185,8 +185,8 @@ class TestPluginRuntimeSandboxIsolation:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "secure-api-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "secure-api-key"),
         ):
             yield
 
@@ -275,8 +275,8 @@ class TestPluginRuntimeResourceLimits:
     def mock_config(self):
         """Mock plugin daemon configuration with timeout."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
             patch("core.plugin.impl.base.plugin_daemon_request_timeout", httpx.Timeout(30.0)),
         ):
             yield
@@ -349,8 +349,8 @@ class TestPluginRuntimeErrorHandling:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
         ):
             yield
 
@@ -608,8 +608,8 @@ class TestPluginRuntimeCommunication:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
         ):
             yield
 
@@ -814,8 +814,8 @@ class TestPluginToolManagerIntegration:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
         ):
             yield
 
@@ -941,8 +941,8 @@ class TestPluginInstallerIntegration:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
         ):
             yield
 
@@ -1015,8 +1015,8 @@ class TestPluginRuntimeEdgeCases:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
         ):
             yield
 
@@ -1177,8 +1177,8 @@ class TestPluginRuntimeAdvancedScenarios:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
         ):
             yield
 
@@ -1363,8 +1363,8 @@ class TestPluginRuntimeSecurityAndValidation:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "secure-key-123"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "secure-key-123"),
         ):
             yield
 
@@ -1483,8 +1483,8 @@ class TestPluginRuntimePerformanceScenarios:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
         ):
             yield
 
@@ -1601,8 +1601,8 @@ class TestPluginToolManagerAdvanced:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
         ):
             yield
 
@@ -1753,8 +1753,8 @@ class TestPluginInstallerAdvanced:
     def mock_config(self):
         """Mock plugin daemon configuration."""
         with (
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
-            patch("core.plugin.impl.base.dify_config.PLUGIN_DAEMON_KEY", "test-key"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_URL", "http://127.0.0.1:5002"),
+            patch("core.plugin.impl.base.nexusai_config.PLUGIN_DAEMON_KEY", "test-key"),
         ):
             yield
 

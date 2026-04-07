@@ -474,16 +474,16 @@ def upgrade():
         batch_op.create_index('dataset_tenant_idx', ['tenant_id'], unique=False)
 
     if _is_pg(conn):
-        op.create_table('dify_setups',
+        op.create_table('nexusai_setups',
         sa.Column('version', sa.String(length=255), nullable=False),
         sa.Column('setup_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP(0)'), nullable=False),
-        sa.PrimaryKeyConstraint('version', name='dify_setup_pkey')
+        sa.PrimaryKeyConstraint('version', name='nexusai_setup_pkey')
         )
     else:
-        op.create_table('dify_setups',
+        op.create_table('nexusai_setups',
         sa.Column('version', sa.String(length=255), nullable=False),
         sa.Column('setup_at', sa.DateTime(), server_default=sa.func.current_timestamp(), nullable=False),
-        sa.PrimaryKeyConstraint('version', name='dify_setup_pkey')
+        sa.PrimaryKeyConstraint('version', name='nexusai_setup_pkey')
         )
     if _is_pg(conn):
         op.create_table('document_segments',
@@ -1335,7 +1335,7 @@ def downgrade():
         batch_op.drop_index('document_segment_dataset_id_idx')
 
     op.drop_table('document_segments')
-    op.drop_table('dify_setups')
+    op.drop_table('nexusai_setups')
     with op.batch_alter_table('datasets', schema=None) as batch_op:
         batch_op.drop_index('dataset_tenant_idx')
 

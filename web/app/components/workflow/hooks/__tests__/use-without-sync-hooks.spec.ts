@@ -150,7 +150,7 @@ describe('useNodesInteractionsWithoutSync', () => {
       })
     })
 
-    it('should not modify _waitingRun', async () => {
+    it('should not monexusai _waitingRun', async () => {
       const { result } = renderNodesInteractionsHook()
 
       act(() => {
@@ -179,7 +179,7 @@ describe('useNodesInteractionsWithoutSync', () => {
       })
     })
 
-    it('should not modify nodes that are not Succeeded', async () => {
+    it('should not monexusai nodes that are not Succeeded', async () => {
       const { result } = renderNodesInteractionsHook()
 
       act(() => {
@@ -193,7 +193,7 @@ describe('useNodesInteractionsWithoutSync', () => {
       })
     })
 
-    it('should not modify other nodes', async () => {
+    it('should not monexusai other nodes', async () => {
       const { result } = renderNodesInteractionsHook()
 
       act(() => {

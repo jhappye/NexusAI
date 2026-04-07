@@ -289,7 +289,7 @@ def test_get_dataset_keyword_table_creates_table_when_missing(monkeypatch, patch
 
     keyword = Jieba(_dataset(dataset_keyword_table=None))
     monkeypatch.setattr(jieba_module, "DatasetKeywordTable", _fake_dataset_keyword_table)
-    monkeypatch.setattr(jieba_module.dify_config, "KEYWORD_DATA_SOURCE_TYPE", "database")
+    monkeypatch.setattr(jieba_module.nexusai_config, "KEYWORD_DATA_SOURCE_TYPE", "database")
 
     result = keyword._get_dataset_keyword_table()
 

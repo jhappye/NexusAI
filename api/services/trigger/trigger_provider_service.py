@@ -8,7 +8,7 @@ from typing import Any
 from sqlalchemy import desc, func
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import HIDDEN_VALUE, UNKNOWN_VALUE
 from core.helper.provider_cache import NoOpProviderCredentialCache
 from core.helper.provider_encryption import ProviderConfigEncrypter, create_provider_encrypter
@@ -429,7 +429,7 @@ class TriggerProviderService:
 
             # Get OAuth client configuration
             redirect_uri = (
-                f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{subscription.provider_id}/trigger/callback"
+                f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{subscription.provider_id}/trigger/callback"
             )
             system_credentials = cls.get_oauth_client(tenant_id, provider_id)
 

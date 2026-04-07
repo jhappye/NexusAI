@@ -12,18 +12,18 @@ from graphon.nodes.http_request.exc import AuthorizationConfigError
 from graphon.nodes.http_request.executor import Executor
 from graphon.runtime import VariablePool
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper.ssrf_proxy import ssrf_proxy
 from core.workflow.system_variables import default_system_variables
 
 HTTP_REQUEST_CONFIG = HttpRequestNodeConfig(
-    max_connect_timeout=dify_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
-    max_read_timeout=dify_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
-    max_write_timeout=dify_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
-    max_binary_size=dify_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
-    max_text_size=dify_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
-    ssl_verify=dify_config.HTTP_REQUEST_NODE_SSL_VERIFY,
-    ssrf_default_max_retries=dify_config.SSRF_DEFAULT_MAX_RETRIES,
+    max_connect_timeout=nexusai_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
+    max_read_timeout=nexusai_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
+    max_write_timeout=nexusai_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
+    max_binary_size=nexusai_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
+    max_text_size=nexusai_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
+    ssl_verify=nexusai_config.HTTP_REQUEST_NODE_SSL_VERIFY,
+    ssrf_default_max_retries=nexusai_config.SSRF_DEFAULT_MAX_RETRIES,
 )
 
 

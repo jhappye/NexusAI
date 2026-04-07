@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field, HttpUrl, field_validator, model_validator
 from sqlalchemy.orm import sessionmaker
 from werkzeug.exceptions import Forbidden
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import register_schema_models
 from controllers.console import console_ns
 from controllers.console.wraps import (
@@ -384,7 +384,7 @@ class ToolBuiltinProviderIconApi(Resource):
     @setup_required
     def get(self, provider):
         icon_bytes, mimetype = BuiltinToolManageService.get_builtin_tool_provider_icon(provider)
-        icon_cache_max_age = dify_config.TOOL_ICON_CACHE_MAX_AGE
+        icon_cache_max_age = nexusai_config.TOOL_ICON_CACHE_MAX_AGE
         return send_file(io.BytesIO(icon_bytes), mimetype=mimetype, max_age=icon_cache_max_age)
 
 
@@ -797,7 +797,7 @@ class ToolPluginOAuthApi(Resource):
         context_id = OAuthProxyService.create_proxy_context(
             user_id=user.id, tenant_id=tenant_id, plugin_id=plugin_id, provider=provider_name
         )
-        redirect_uri = f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/tool/callback"
+        redirect_uri = f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/tool/callback"
         authorization_url_response = oauth_handler.get_authorization_url(
             tenant_id=tenant_id,
             user_id=user.id,
@@ -840,7 +840,7 @@ class ToolOAuthCallback(Resource):
         if oauth_client_params is None:
             raise Forbidden("no oauth available client config found for this tool provider")
 
-        redirect_uri = f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/tool/callback"
+        redirect_uri = f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider}/tool/callback"
         credentials_response = oauth_handler.get_credentials(
             tenant_id=tenant_id,
             user_id=user_id,
@@ -866,7 +866,7 @@ class ToolOAuthCallback(Resource):
             expires_at=expires_at,
             api_type=CredentialType.OAUTH2,
         )
-        return redirect(f"{dify_config.CONSOLE_WEB_URL}/oauth-callback")
+        return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/oauth-callback")
 
 
 @console_ns.route("/workspaces/current/tool-provider/builtin/<path:provider>/default-credential")
@@ -1197,4 +1197,4 @@ class ToolMCPCallbackApi(Resource):
                 state_data.provider_id, state_data.tenant_id, tokens.model_dump(), OAuthDataType.TOKENS
             )
 
-        return redirect(f"{dify_config.CONSOLE_WEB_URL}/oauth-callback")
+        return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/oauth-callback")

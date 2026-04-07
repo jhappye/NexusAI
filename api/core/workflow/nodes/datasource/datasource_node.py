@@ -12,7 +12,7 @@ from graphon.node_events import NodeRunResult, StreamCompletedEvent
 from graphon.nodes.base.node import Node
 from graphon.nodes.base.variable_template_parser import VariableTemplateParser
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, DifyRunContext
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, NexusAIRunContext
 from core.datasource.datasource_manager import DatasourceManager
 from core.datasource.entities.datasource_entities import DatasourceProviderType
 from core.plugin.impl.exc import PluginDaemonClientSideError
@@ -58,7 +58,7 @@ class DatasourceNode(Node[DatasourceNodeData]):
         """
         Run the datasource node
         """
-        dify_ctx = DifyRunContext.model_validate(self.require_run_context_value(DIFY_RUN_CONTEXT_KEY))
+        nexusai_ctx = NexusAIRunContext.model_validate(self.require_run_context_value(NEXUSAI_RUN_CONTEXT_KEY))
         node_data = self.node_data
         variable_pool = self.graph_runtime_state.variable_pool
         datasource_type_segment = get_system_segment(variable_pool, SystemVariableKey.DATASOURCE_TYPE)
@@ -82,7 +82,7 @@ class DatasourceNode(Node[DatasourceNodeData]):
         datasource_info["icon"] = self.datasource_manager.get_icon_url(
             provider_id=provider_id,
             datasource_name=node_data.datasource_name or "",
-            tenant_id=dify_ctx.tenant_id,
+            tenant_id=nexusai_ctx.tenant_id,
             datasource_type=datasource_type.value,
         )
 
@@ -111,11 +111,11 @@ class DatasourceNode(Node[DatasourceNodeData]):
 
                     yield from self.datasource_manager.stream_node_events(
                         node_id=self._node_id,
-                        user_id=dify_ctx.user_id,
+                        user_id=nexusai_ctx.user_id,
                         datasource_name=node_data.datasource_name or "",
                         datasource_type=datasource_type.value,
                         provider_id=provider_id,
-                        tenant_id=dify_ctx.tenant_id,
+                        tenant_id=nexusai_ctx.tenant_id,
                         provider=node_data.provider_name,
                         plugin_id=node_data.plugin_id,
                         credential_id=credential_id,
@@ -145,7 +145,7 @@ class DatasourceNode(Node[DatasourceNodeData]):
                         raise DatasourceNodeError("File is not exist")
 
                     file_info = self.datasource_manager.get_upload_file_by_id(
-                        file_id=file_id, tenant_id=dify_ctx.tenant_id
+                        file_id=file_id, tenant_id=nexusai_ctx.tenant_id
                     )
                     variable_pool.add([self._node_id, "file"], file_info)
                     # variable_pool.add([self.node_id, "file"], file_info.to_dict())

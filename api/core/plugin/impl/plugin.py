@@ -83,7 +83,7 @@ class PluginInstaller(BasePluginClient):
         Upload a plugin package and return the plugin unique identifier.
         """
         body = {
-            "dify_pkg": ("dify_pkg", pkg, "application/octet-stream"),
+            "nexusai_pkg": ("nexusai_pkg", pkg, "application/octet-stream"),
         }
 
         data = {
@@ -111,7 +111,7 @@ class PluginInstaller(BasePluginClient):
             "POST",
             f"plugin/{tenant_id}/management/install/upload/bundle",
             list[PluginBundleDependency],
-            files={"dify_bundle": ("dify_bundle", bundle, "application/octet-stream")},
+            files={"nexusai_bundle": ("nexusai_bundle", bundle, "application/octet-stream")},
             data={"verify_signature": "true" if verify_signature else "false"},
         )
 

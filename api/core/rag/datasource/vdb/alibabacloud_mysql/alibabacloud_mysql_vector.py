@@ -9,7 +9,7 @@ import mysql.connector
 from mysql.connector import Error as MySQLError
 from pydantic import BaseModel, model_validator
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import parse_metadata_json
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -368,16 +368,16 @@ class AlibabaCloudMySQLVectorFactory(AbstractVectorFactory):
         return AlibabaCloudMySQLVector(
             collection_name=collection_name,
             config=AlibabaCloudMySQLVectorConfig(
-                host=dify_config.ALIBABACLOUD_MYSQL_HOST or "localhost",
-                port=dify_config.ALIBABACLOUD_MYSQL_PORT,
-                user=dify_config.ALIBABACLOUD_MYSQL_USER or "root",
-                password=dify_config.ALIBABACLOUD_MYSQL_PASSWORD or "",
-                database=dify_config.ALIBABACLOUD_MYSQL_DATABASE or "dify",
-                max_connection=dify_config.ALIBABACLOUD_MYSQL_MAX_CONNECTION,
-                charset=dify_config.ALIBABACLOUD_MYSQL_CHARSET or "utf8mb4",
+                host=nexusai_config.ALIBABACLOUD_MYSQL_HOST or "localhost",
+                port=nexusai_config.ALIBABACLOUD_MYSQL_PORT,
+                user=nexusai_config.ALIBABACLOUD_MYSQL_USER or "root",
+                password=nexusai_config.ALIBABACLOUD_MYSQL_PASSWORD or "",
+                database=nexusai_config.ALIBABACLOUD_MYSQL_DATABASE or "nexusai",
+                max_connection=nexusai_config.ALIBABACLOUD_MYSQL_MAX_CONNECTION,
+                charset=nexusai_config.ALIBABACLOUD_MYSQL_CHARSET or "utf8mb4",
                 distance_function=self._validate_distance_function(
-                    dify_config.ALIBABACLOUD_MYSQL_DISTANCE_FUNCTION or "cosine"
+                    nexusai_config.ALIBABACLOUD_MYSQL_DISTANCE_FUNCTION or "cosine"
                 ),
-                hnsw_m=dify_config.ALIBABACLOUD_MYSQL_HNSW_M or 6,
+                hnsw_m=nexusai_config.ALIBABACLOUD_MYSQL_HNSW_M or 6,
             ),
         )

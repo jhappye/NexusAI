@@ -781,7 +781,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.db") as mock_db,
             patch("services.annotation_service.pd.read_csv", return_value=df),
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):
@@ -805,7 +805,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.current_account_with_tenant", return_value=(_make_user(), tenant_id)),
             patch("services.annotation_service.db") as mock_db,
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):
@@ -833,7 +833,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.pd.read_csv", return_value=df),
             patch("services.annotation_service.FeatureService.get_features", return_value=features),
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=2),
             ),
         ):
@@ -859,7 +859,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.db") as mock_db,
             patch("services.annotation_service.pd.read_csv", return_value=df),
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=1, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):
@@ -889,7 +889,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.db") as mock_db,
             patch("services.annotation_service.pd.read_csv", return_value=df),
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):
@@ -915,7 +915,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.db") as mock_db,
             patch("services.annotation_service.pd.read_csv", return_value=df),
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):
@@ -941,7 +941,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.db") as mock_db,
             patch("services.annotation_service.pd.read_csv", return_value=df),
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):
@@ -967,7 +967,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.db") as mock_db,
             patch("services.annotation_service.pd.read_csv", return_value=df),
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):
@@ -998,7 +998,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.pd.read_csv", return_value=df),
             patch("services.annotation_service.FeatureService.get_features", return_value=features),
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):
@@ -1031,7 +1031,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.uuid.uuid4", return_value="uuid-3"),
             patch("services.annotation_service.naive_utc_now", return_value=SimpleNamespace(timestamp=lambda: 1)),
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):
@@ -1067,7 +1067,7 @@ class TestAppAnnotationServiceBatchImport:
             patch("services.annotation_service.naive_utc_now", return_value=SimpleNamespace(timestamp=lambda: 1)),
             patch("services.annotation_service.logger") as mock_logger,
             patch(
-                "configs.dify_config",
+                "configs.nexusai_config",
                 new=SimpleNamespace(ANNOTATION_IMPORT_MAX_RECORDS=5, ANNOTATION_IMPORT_MIN_RECORDS=1),
             ),
         ):

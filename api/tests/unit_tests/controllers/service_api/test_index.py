@@ -12,7 +12,7 @@ from controllers.service_api.index import IndexApi
 class TestIndexApi:
     """Test suite for IndexApi resource."""
 
-    @patch("controllers.service_api.index.dify_config", autospec=True)
+    @patch("controllers.service_api.index.nexusai_config", autospec=True)
     def test_get_returns_api_info(self, mock_config, app):
         """Test that GET returns API metadata with correct structure."""
         # Arrange
@@ -22,13 +22,13 @@ class TestIndexApi:
         with app.test_request_context("/", method="GET"):
             index_api = IndexApi()
             response = index_api.get()
-        with patch("controllers.service_api.index.dify_config", mock_config):
+        with patch("controllers.service_api.index.nexusai_config", mock_config):
             with app.test_request_context("/", method="GET"):
                 index_api = IndexApi()
                 response = index_api.get()
 
         # Assert
-        assert response["welcome"] == "Dify OpenAPI"
+        assert response["welcome"] == "NexusAI OpenAPI"
         assert response["api_version"] == "v1"
         assert response["server_version"] == "1.0.0-test"
 
@@ -39,7 +39,7 @@ class TestIndexApi:
         mock_config.project.version = "1.11.4"
 
         # Act
-        with patch("controllers.service_api.index.dify_config", mock_config):
+        with patch("controllers.service_api.index.nexusai_config", mock_config):
             with app.test_request_context("/", method="GET"):
                 index_api = IndexApi()
                 response = index_api.get()
@@ -60,7 +60,7 @@ class TestIndexApi:
         mock_config.project.version = version
 
         # Act
-        with patch("controllers.service_api.index.dify_config", mock_config):
+        with patch("controllers.service_api.index.nexusai_config", mock_config):
             with app.test_request_context("/", method="GET"):
                 index_api = IndexApi()
                 response = index_api.get()

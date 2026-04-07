@@ -45,7 +45,7 @@ describe('Pricing Assets', () => {
       const { container } = render(<Cloud isActive />)
 
       const rects = Array.from(container.querySelectorAll('rect'))
-      expect(rects.some(rect => rect.getAttribute('fill') === 'var(--color-saas-dify-blue-accessible)')).toBe(true)
+      expect(rects.some(rect => rect.getAttribute('fill') === 'var(--color-saas-nexusai-blue-accessible)')).toBe(true)
     })
 
     it('should render inactive state for Cloud', () => {
@@ -59,7 +59,7 @@ describe('Pricing Assets', () => {
       const { container } = render(<SelfHosted isActive />)
 
       const rects = Array.from(container.querySelectorAll('rect'))
-      expect(rects.some(rect => rect.getAttribute('fill') === 'var(--color-saas-dify-blue-accessible)')).toBe(true)
+      expect(rects.some(rect => rect.getAttribute('fill') === 'var(--color-saas-nexusai-blue-accessible)')).toBe(true)
     })
 
     it('should render inactive state for SelfHosted', () => {

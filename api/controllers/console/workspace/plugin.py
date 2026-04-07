@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import Forbidden
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import register_enum_models, register_schema_models
 from controllers.console import console_ns
 from controllers.console.workspace import plugin_permission_required
@@ -196,8 +196,8 @@ class PluginDebuggingKeyApi(Resource):
         try:
             return {
                 "key": PluginService.get_debugging_key(tenant_id),
-                "host": dify_config.PLUGIN_REMOTE_INSTALL_HOST,
-                "port": dify_config.PLUGIN_REMOTE_INSTALL_PORT,
+                "host": nexusai_config.PLUGIN_REMOTE_INSTALL_HOST,
+                "port": nexusai_config.PLUGIN_REMOTE_INSTALL_PORT,
             }
         except PluginDaemonClientSideError as e:
             return {"code": "plugin_error", "message": e.description}, 400
@@ -268,7 +268,7 @@ class PluginIconApi(Resource):
         except PluginDaemonClientSideError as e:
             return {"code": "plugin_error", "message": e.description}, 400
 
-        icon_cache_max_age = dify_config.TOOL_ICON_CACHE_MAX_AGE
+        icon_cache_max_age = nexusai_config.TOOL_ICON_CACHE_MAX_AGE
         return send_file(io.BytesIO(icon_bytes), mimetype=mimetype, max_age=icon_cache_max_age)
 
 
@@ -299,7 +299,7 @@ class PluginUploadFromPkgApi(Resource):
         _, tenant_id = current_account_with_tenant()
 
         file = request.files["pkg"]
-        content = _read_upload_content(file, dify_config.PLUGIN_MAX_PACKAGE_SIZE)
+        content = _read_upload_content(file, nexusai_config.PLUGIN_MAX_PACKAGE_SIZE)
         try:
             response = PluginService.upload_pkg(tenant_id, content)
         except PluginDaemonClientSideError as e:
@@ -338,7 +338,7 @@ class PluginUploadFromBundleApi(Resource):
         _, tenant_id = current_account_with_tenant()
 
         file = request.files["bundle"]
-        content = _read_upload_content(file, dify_config.PLUGIN_MAX_BUNDLE_SIZE)
+        content = _read_upload_content(file, nexusai_config.PLUGIN_MAX_BUNDLE_SIZE)
         try:
             response = PluginService.upload_bundle(tenant_id, content)
         except PluginDaemonClientSideError as e:

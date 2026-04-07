@@ -8,7 +8,7 @@ from typing import Any
 
 from sqlalchemy import delete, select
 
-from configs import dify_config
+from configs import nexusai_config
 from core.db.session_factory import session_factory
 from core.entities.knowledge_entities import PreviewDetail
 from core.model_manager import ModelInstance
@@ -110,8 +110,8 @@ class ParentChildIndexProcessor(BaseIndexProcessor):
                 document, rules, process_rule.get("mode"), kwargs.get("embedding_model_instance")
             )
             if kwargs.get("preview"):
-                if len(child_nodes) > dify_config.CHILD_CHUNKS_PREVIEW_NUMBER:
-                    child_nodes = child_nodes[: dify_config.CHILD_CHUNKS_PREVIEW_NUMBER]
+                if len(child_nodes) > nexusai_config.CHILD_CHUNKS_PREVIEW_NUMBER:
+                    child_nodes = child_nodes[: nexusai_config.CHILD_CHUNKS_PREVIEW_NUMBER]
 
             document.children = child_nodes
             doc_id = str(uuid.uuid4())

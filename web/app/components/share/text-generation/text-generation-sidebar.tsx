@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import SavedItems from '@/app/components/app/text-generate/saved-items'
 import AppIcon from '@/app/components/base/app-icon'
 import Badge from '@/app/components/base/badge'
-import DifyLogo from '@/app/components/base/logo/dify-logo'
+import NexusAILogo from '@/app/components/base/logo/nexusai-logo'
 import { appDefaultIconBackground } from '@/config'
 import { AccessMode } from '@/models/access-control'
 import { cn } from '@/utils/classnames'
@@ -167,7 +167,7 @@ const TextGenerationSidebar: FC<TextGenerationSidebarProps> = ({
             ? <img src={systemFeatures.branding.workspace_logo} alt="logo" className="block h-5 w-auto" />
             : customConfig?.replace_webapp_logo
               ? <img src={customConfig.replace_webapp_logo} alt="logo" className="block h-5 w-auto" />
-              : <DifyLogo size="small" />}
+              : <NexusAILogo size="small" />}
         </div>
       )}
     </div>

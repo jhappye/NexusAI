@@ -1724,7 +1724,7 @@ class TestDatasetApiBaseUrlApi:
         with (
             app.test_request_context("/"),
             patch(
-                "controllers.console.datasets.datasets.dify_config.SERVICE_API_URL",
+                "controllers.console.datasets.datasets.nexusai_config.SERVICE_API_URL",
                 "https://example.com",
             ),
         ):
@@ -1739,7 +1739,7 @@ class TestDatasetApiBaseUrlApi:
         with (
             app.test_request_context("http://localhost:5000/"),
             patch(
-                "controllers.console.datasets.datasets.dify_config.SERVICE_API_URL",
+                "controllers.console.datasets.datasets.nexusai_config.SERVICE_API_URL",
                 None,
             ),
         ):
@@ -1756,7 +1756,7 @@ class TestDatasetRetrievalSettingApi:
         with (
             app.test_request_context("/"),
             patch(
-                "controllers.console.datasets.datasets.dify_config.VECTOR_STORE",
+                "controllers.console.datasets.datasets.nexusai_config.VECTOR_STORE",
                 "qdrant",
             ),
             patch(

@@ -22,7 +22,7 @@ def test_console_setup_fastopenapi_get_not_started(app: Flask):
     ext_fastopenapi.init_app(app)
 
     with (
-        patch("controllers.console.setup.dify_config.EDITION", "SELF_HOSTED"),
+        patch("controllers.console.setup.nexusai_config.EDITION", "SELF_HOSTED"),
         patch("controllers.console.setup.get_setup_status", return_value=None),
     ):
         client = app.test_client()
@@ -43,7 +43,7 @@ def test_console_setup_fastopenapi_post_success(app: Flask):
     }
 
     with (
-        patch("controllers.console.wraps.dify_config.EDITION", "SELF_HOSTED"),
+        patch("controllers.console.wraps.nexusai_config.EDITION", "SELF_HOSTED"),
         patch("controllers.console.setup.get_setup_status", return_value=None),
         patch("controllers.console.setup.TenantService.get_tenant_count", return_value=0),
         patch("controllers.console.setup.get_init_validate_status", return_value=True),

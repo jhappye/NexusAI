@@ -111,7 +111,7 @@ class TestAppSiteInfo:
         assert info.can_replace_logo is False
         assert info.model_config is None
 
-    @patch("controllers.web.site.dify_config", SimpleNamespace(FILES_URL="https://files.example.com"))
+    @patch("controllers.web.site.nexusai_config", SimpleNamespace(FILES_URL="https://files.example.com"))
     def test_can_replace_logo_sets_custom_config(self) -> None:
         tenant = SimpleNamespace(
             id="tenant-1",

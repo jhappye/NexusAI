@@ -1,28 +1,28 @@
-"""Logging extension for Dify Flask application."""
+"""Logging extension for NexusAI Flask application."""
 
 import logging
 import os
 import sys
 from logging.handlers import RotatingFileHandler
 
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     """Initialize logging with support for text or JSON format."""
     log_handlers: list[logging.Handler] = []
 
     # File handler
-    log_file = dify_config.LOG_FILE
+    log_file = nexusai_config.LOG_FILE
     if log_file:
         log_dir = os.path.dirname(log_file)
         os.makedirs(log_dir, exist_ok=True)
         log_handlers.append(
             RotatingFileHandler(
                 filename=log_file,
-                maxBytes=dify_config.LOG_FILE_MAX_SIZE * 1024 * 1024,
-                backupCount=dify_config.LOG_FILE_BACKUP_COUNT,
+                maxBytes=nexusai_config.LOG_FILE_MAX_SIZE * 1024 * 1024,
+                backupCount=nexusai_config.LOG_FILE_BACKUP_COUNT,
             )
         )
 
@@ -44,7 +44,7 @@ def init_app(app: DifyApp):
 
     # Configure root logger
     logging.basicConfig(
-        level=dify_config.LOG_LEVEL,
+        level=nexusai_config.LOG_LEVEL,
         handlers=log_handlers,
         force=True,
     )
@@ -53,27 +53,27 @@ def init_app(app: DifyApp):
     logging.getLogger("sqlalchemy.engine").propagate = False
 
     # Apply timezone if specified (only for text format)
-    if dify_config.LOG_OUTPUT_FORMAT == "text":
+    if nexusai_config.LOG_OUTPUT_FORMAT == "text":
         _apply_timezone(log_handlers)
 
 
 def _create_formatter() -> logging.Formatter:
     """Create appropriate formatter based on configuration."""
-    if dify_config.LOG_OUTPUT_FORMAT == "json":
+    if nexusai_config.LOG_OUTPUT_FORMAT == "json":
         from core.logging.structured_formatter import StructuredJSONFormatter
 
         return StructuredJSONFormatter()
     else:
         # Text format - use existing pattern with backward compatible formatter
         return _TextFormatter(
-            fmt=dify_config.LOG_FORMAT,
-            datefmt=dify_config.LOG_DATEFORMAT,
+            fmt=nexusai_config.LOG_FORMAT,
+            datefmt=nexusai_config.LOG_DATEFORMAT,
         )
 
 
 def _apply_timezone(handlers: list[logging.Handler]):
     """Apply timezone conversion to text formatters."""
-    log_tz = dify_config.LOG_TZ
+    log_tz = nexusai_config.LOG_TZ
     if log_tz:
         from datetime import datetime
 
@@ -140,4 +140,4 @@ def apply_request_id_formatter():
     """Deprecated: Formatter is now applied in init_app."""
     for handler in logging.root.handlers:
         if handler.formatter:
-            handler.formatter = RequestIdFormatter(dify_config.LOG_FORMAT, dify_config.LOG_DATEFORMAT)
+            handler.formatter = RequestIdFormatter(nexusai_config.LOG_FORMAT, nexusai_config.LOG_DATEFORMAT)

@@ -79,7 +79,7 @@ class SchemaRegistry:
             self.versions[version][schema_name] = schema
 
             # Extract and store metadata
-            uri = f"https://dify.ai/schemas/{version}/{schema_name}.json"
+            uri = f"https://nexusai.ai/schemas/{version}/{schema_name}.json"
             metadata = {
                 "version": version,
                 "title": schema.get("title", ""),
@@ -105,9 +105,9 @@ class SchemaRegistry:
 
     def _parse_uri(self, uri: str) -> tuple[str, str]:
         """Parses a schema URI to extract version and schema name"""
-        from core.schemas.resolver import parse_dify_schema_uri
+        from core.schemas.resolver import parse_nexusai_schema_uri
 
-        return parse_dify_schema_uri(uri)
+        return parse_nexusai_schema_uri(uri)
 
     def list_versions(self) -> list[str]:
         """Returns all available versions"""

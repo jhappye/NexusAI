@@ -185,7 +185,7 @@ class TestIndividualHandlers:
         """Test initialize handler"""
         description = "Test server"
 
-        with patch("core.mcp.server.streamable_http.dify_config") as mock_config:
+        with patch("core.mcp.server.streamable_http.nexusai_config") as mock_config:
             mock_config.project.version = "1.0.0"
             result = handle_initialize(description)
 

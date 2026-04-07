@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import ModifyExternalRetrievalModal from '../modify-external-retrieval-modal'
+import MonexusaiExternalRetrievalModal from '../monexusai-external-retrieval-modal'
 
 vi.mock('@/app/components/base/action-button', () => ({
   default: ({ children, onClick }: { children: React.ReactNode, onClick: () => void }) => (
@@ -28,7 +28,7 @@ vi.mock('../../external-knowledge-base/create/RetrievalSettings', () => ({
   ),
 }))
 
-describe('ModifyExternalRetrievalModal', () => {
+describe('MonexusaiExternalRetrievalModal', () => {
   const defaultProps = {
     onClose: vi.fn(),
     onSave: vi.fn(),
@@ -42,30 +42,30 @@ describe('ModifyExternalRetrievalModal', () => {
   })
 
   it('should render title', () => {
-    render(<ModifyExternalRetrievalModal {...defaultProps} />)
+    render(<MonexusaiExternalRetrievalModal {...defaultProps} />)
     expect(screen.getByText('datasetHitTesting.settingTitle')).toBeInTheDocument()
   })
 
   it('should render retrieval settings with initial values', () => {
-    render(<ModifyExternalRetrievalModal {...defaultProps} />)
+    render(<MonexusaiExternalRetrievalModal {...defaultProps} />)
     expect(screen.getByTestId('top-k')).toHaveTextContent('4')
     expect(screen.getByTestId('score-threshold')).toHaveTextContent('0.5')
   })
 
   it('should call onClose when close button clicked', () => {
-    render(<ModifyExternalRetrievalModal {...defaultProps} />)
+    render(<MonexusaiExternalRetrievalModal {...defaultProps} />)
     fireEvent.click(screen.getByTestId('action-button'))
     expect(defaultProps.onClose).toHaveBeenCalled()
   })
 
   it('should call onClose when cancel button clicked', () => {
-    render(<ModifyExternalRetrievalModal {...defaultProps} />)
+    render(<MonexusaiExternalRetrievalModal {...defaultProps} />)
     fireEvent.click(screen.getByTestId('cancel-button'))
     expect(defaultProps.onClose).toHaveBeenCalled()
   })
 
   it('should call onSave with current values and close when save clicked', () => {
-    render(<ModifyExternalRetrievalModal {...defaultProps} />)
+    render(<MonexusaiExternalRetrievalModal {...defaultProps} />)
     fireEvent.click(screen.getByTestId('save-button'))
     expect(defaultProps.onSave).toHaveBeenCalledWith({
       top_k: 4,
@@ -76,7 +76,7 @@ describe('ModifyExternalRetrievalModal', () => {
   })
 
   it('should save updated values after settings change', () => {
-    render(<ModifyExternalRetrievalModal {...defaultProps} />)
+    render(<MonexusaiExternalRetrievalModal {...defaultProps} />)
     fireEvent.click(screen.getByTestId('change-top-k'))
     fireEvent.click(screen.getByTestId('save-button'))
     expect(defaultProps.onSave).toHaveBeenCalledWith(
@@ -85,7 +85,7 @@ describe('ModifyExternalRetrievalModal', () => {
   })
 
   it('should save updated score threshold', () => {
-    render(<ModifyExternalRetrievalModal {...defaultProps} />)
+    render(<MonexusaiExternalRetrievalModal {...defaultProps} />)
     fireEvent.click(screen.getByTestId('change-score'))
     fireEvent.click(screen.getByTestId('save-button'))
     expect(defaultProps.onSave).toHaveBeenCalledWith(
@@ -94,7 +94,7 @@ describe('ModifyExternalRetrievalModal', () => {
   })
 
   it('should save updated score threshold enabled', () => {
-    render(<ModifyExternalRetrievalModal {...defaultProps} />)
+    render(<MonexusaiExternalRetrievalModal {...defaultProps} />)
     fireEvent.click(screen.getByTestId('change-enabled'))
     fireEvent.click(screen.getByTestId('save-button'))
     expect(defaultProps.onSave).toHaveBeenCalledWith(
@@ -103,7 +103,7 @@ describe('ModifyExternalRetrievalModal', () => {
   })
 
   it('should save multiple updated values at once', () => {
-    render(<ModifyExternalRetrievalModal {...defaultProps} />)
+    render(<MonexusaiExternalRetrievalModal {...defaultProps} />)
     fireEvent.click(screen.getByTestId('change-top-k'))
     fireEvent.click(screen.getByTestId('change-score'))
     fireEvent.click(screen.getByTestId('save-button'))
@@ -119,7 +119,7 @@ describe('ModifyExternalRetrievalModal', () => {
       initialScoreThreshold: 0.8,
       initialScoreThresholdEnabled: true,
     }
-    render(<ModifyExternalRetrievalModal {...props} />)
+    render(<MonexusaiExternalRetrievalModal {...props} />)
     expect(screen.getByTestId('top-k')).toHaveTextContent('10')
     expect(screen.getByTestId('score-threshold')).toHaveTextContent('0.8')
   })

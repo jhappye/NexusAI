@@ -1,7 +1,7 @@
 import boto3
 from pydantic import BaseModel, Field
 
-from configs import dify_config
+from configs import nexusai_config
 
 
 class BedrockRetrievalSetting(BaseModel):
@@ -18,8 +18,8 @@ class ExternalDatasetTestService:
         # get bedrock client
         client = boto3.client(
             "bedrock-agent-runtime",
-            aws_secret_access_key=dify_config.AWS_SECRET_ACCESS_KEY,
-            aws_access_key_id=dify_config.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=nexusai_config.AWS_SECRET_ACCESS_KEY,
+            aws_access_key_id=nexusai_config.AWS_ACCESS_KEY_ID,
             # example: us-east-1
             region_name="us-east-1",
         )

@@ -10,7 +10,7 @@ from graphon.model_runtime.errors.invoke import InvokeAuthorizationError
 from pydantic import ValidationError
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from core.app.app_config.easy_ui_based_app.model_config.converter import ModelConfigConverter
 from core.app.app_config.features.file_upload.manager import FileUploadConfigManager
 from core.app.apps.base_app_queue_manager import AppQueueManager, PublishFrom
@@ -231,7 +231,7 @@ class CompletionAppGenerator(MessageBasedAppGenerator):
                 logger.exception("Validation Error when generating")
                 queue_manager.publish_error(e, PublishFrom.APPLICATION_MANAGER)
             except ValueError as e:
-                if dify_config.DEBUG:
+                if nexusai_config.DEBUG:
                     logger.exception("Error when generating")
                 queue_manager.publish_error(e, PublishFrom.APPLICATION_MANAGER)
             except Exception as e:

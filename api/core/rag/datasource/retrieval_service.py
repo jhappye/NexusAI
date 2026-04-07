@@ -8,7 +8,7 @@ from graphon.model_runtime.entities.model_entities import ModelType
 from sqlalchemy import select
 from sqlalchemy.orm import Session, load_only
 
-from configs import dify_config
+from configs import nexusai_config
 from core.db.session_factory import session_factory
 from core.model_manager import ModelManager
 from core.rag.data_post_processor.data_post_processor import DataPostProcessor, RerankingModelDict, WeightsDict
@@ -114,7 +114,7 @@ class RetrievalService:
         exceptions: list[str] = []
 
         # Optimize multithreading with thread pools
-        with ThreadPoolExecutor(max_workers=dify_config.RETRIEVAL_SERVICE_EXECUTORS) as executor:  # type: ignore
+        with ThreadPoolExecutor(max_workers=nexusai_config.RETRIEVAL_SERVICE_EXECUTORS) as executor:  # type: ignore
             futures = []
             retrieval_service = RetrievalService()
             if query:
@@ -198,9 +198,9 @@ class RetrievalService:
         """Deduplicate documents in O(n) while preserving first-seen order.
 
         Rules:
-        - For provider == "dify" and metadata["doc_id"] exists: keep the doc with the highest
+        - For provider == "nexusai" and metadata["doc_id"] exists: keep the doc with the highest
           metadata["score"] among duplicates; if a later duplicate has no score, ignore it.
-        - For non-dify documents (or dify without doc_id): deduplicate by content key
+        - For non-nexusai documents (or nexusai without doc_id): deduplicate by content key
           (provider, page_content), keeping the first occurrence.
         """
         if not documents:
@@ -212,11 +212,11 @@ class RetrievalService:
         order: list[tuple] = []
 
         for doc in documents:
-            is_dify = doc.provider == "dify"
-            doc_id = (doc.metadata or {}).get("doc_id") if is_dify else None
+            is_nexusai = doc.provider == "nexusai"
+            doc_id = (doc.metadata or {}).get("doc_id") if is_nexusai else None
 
-            if is_dify and doc_id:
-                key = ("dify", doc_id)
+            if is_nexusai and doc_id:
+                key = ("nexusai", doc_id)
                 if key not in chosen:
                     chosen[key] = doc
                     order.append(key)
@@ -228,8 +228,8 @@ class RetrievalService:
                         if new_score > old_score:
                             chosen[key] = doc
             else:
-                # Content-based dedup for non-dify or dify without doc_id
-                content_key = (doc.provider or "dify", doc.page_content)
+                # Content-based dedup for non-nexusai or nexusai without doc_id
+                content_key = (doc.provider or "nexusai", doc.page_content)
                 if content_key not in chosen:
                     chosen[content_key] = doc
                     order.append(content_key)
@@ -747,7 +747,7 @@ class RetrievalService:
         with flask_app.app_context():
             all_documents_item: list[Document] = []
             # Optimize multithreading with thread pools
-            with ThreadPoolExecutor(max_workers=dify_config.RETRIEVAL_SERVICE_EXECUTORS) as executor:  # type: ignore
+            with ThreadPoolExecutor(max_workers=nexusai_config.RETRIEVAL_SERVICE_EXECUTORS) as executor:  # type: ignore
                 futures = []
                 if retrieval_method == RetrievalMethod.KEYWORD_SEARCH and query:
                     futures.append(

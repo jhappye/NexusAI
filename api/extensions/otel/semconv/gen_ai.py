@@ -10,7 +10,7 @@ class GenAIAttributes:
     """Identifier of the end user in the application layer."""
 
     FRAMEWORK = "gen_ai.framework"
-    """Framework type. Fixed to 'dify' in this project."""
+    """Framework type. Fixed to 'nexusai' in this project."""
 
     SPAN_KIND = "gen_ai.span.kind"
     """Operation type. Extended specification, not in OTel standard."""

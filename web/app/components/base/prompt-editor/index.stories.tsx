@@ -130,7 +130,7 @@ export const CompactMode: Story = {
 export const ReadOnlyMode: Story = {
   render: args => <PromptEditorDemo {...args} />,
   args: {
-    value: 'This content is read-only and cannot be edited.\n\nYou can select and copy text, but not modify it.',
+    value: 'This content is read-only and cannot be edited.\n\nYou can select and copy text, but not monexusai it.',
     editable: false,
   },
 }

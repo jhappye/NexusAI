@@ -430,7 +430,7 @@ describe('correctModelProvider extended', () => {
     expect(correctModelProvider('')).toBe('')
   })
 
-  it('should not modify provider with slash', () => {
+  it('should not monexusai provider with slash', () => {
     expect(correctModelProvider('custom/provider/model')).toBe('custom/provider/model')
   })
 
@@ -455,7 +455,7 @@ describe('correctToolProvider extended', () => {
     expect(correctToolProvider('', true)).toBe('')
   })
 
-  it('should not modify provider with slash when not in collection', () => {
+  it('should not monexusai provider with slash when not in collection', () => {
     expect(correctToolProvider('custom/tool/provider', false)).toBe('custom/tool/provider')
   })
 

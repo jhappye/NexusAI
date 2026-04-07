@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from configs import dify_config
+from configs import nexusai_config
 from models.account import Account, AccountStatus
 from services.account_service import AccountService, RegisterService, TenantService
 from services.errors.account import (
@@ -294,7 +294,7 @@ class TestAccountService:
         # Setup mocks
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = True
-        dify_config.BILLING_ENABLED = True
+        nexusai_config.BILLING_ENABLED = True
 
         # Execute test and verify exception
         self._assert_exception_raised(
@@ -304,7 +304,7 @@ class TestAccountService:
             name="Test User",
             interface_language="en-US",
         )
-        dify_config.BILLING_ENABLED = False
+        nexusai_config.BILLING_ENABLED = False
 
     def test_create_account_without_password(self, mock_db_dependencies, mock_external_service_dependencies):
         """Test account creation without password (for invite-based registration)."""
@@ -946,10 +946,10 @@ class TestRegisterService:
 
             # Mock TenantService.create_owner_tenant_if_not_exist
             with patch("services.account_service.TenantService.create_owner_tenant_if_not_exist") as mock_create_tenant:
-                # Mock DifySetup
-                with patch("services.account_service.DifySetup") as mock_dify_setup:
-                    mock_dify_setup_instance = MagicMock()
-                    mock_dify_setup.return_value = mock_dify_setup_instance
+                # Mock NexusAISetup
+                with patch("services.account_service.NexusAISetup") as mock_nexusai_setup:
+                    mock_nexusai_setup_instance = MagicMock()
+                    mock_nexusai_setup.return_value = mock_nexusai_setup_instance
 
                     # Execute test
                     RegisterService.setup("admin@example.com", "Admin User", "password123", "192.168.1.1", "en-US")
@@ -963,7 +963,7 @@ class TestRegisterService:
                         is_setup=True,
                     )
                     mock_create_tenant.assert_called_once_with(account=mock_account, is_setup=True)
-                    mock_dify_setup.assert_called_once()
+                    mock_nexusai_setup.assert_called_once()
                     self._assert_database_operations_called(mock_db_dependencies["db"])
 
     def test_setup_failure_rollback(self, mock_db_dependencies, mock_external_service_dependencies):
@@ -996,7 +996,7 @@ class TestRegisterService:
         self, mock_db_dependencies, mock_external_service_dependencies, monkeypatch
     ):
         """Enterprise-only side effect should be invoked when ENTERPRISE_ENABLED is True."""
-        monkeypatch.setattr(dify_config, "ENTERPRISE_ENABLED", True, raising=False)
+        monkeypatch.setattr(nexusai_config, "ENTERPRISE_ENABLED", True, raising=False)
 
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = False
@@ -1027,7 +1027,7 @@ class TestRegisterService:
         self, mock_db_dependencies, mock_external_service_dependencies, monkeypatch
     ):
         """Enterprise-only side effect should not be invoked when ENTERPRISE_ENABLED is False."""
-        monkeypatch.setattr(dify_config, "ENTERPRISE_ENABLED", False, raising=False)
+        monkeypatch.setattr(nexusai_config, "ENTERPRISE_ENABLED", False, raising=False)
 
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = False
@@ -1059,7 +1059,7 @@ class TestRegisterService:
         """Default workspace join should still be attempted when personal workspace creation fails."""
         from services.errors.workspace import WorkSpaceNotAllowedCreateError
 
-        monkeypatch.setattr(dify_config, "ENTERPRISE_ENABLED", True, raising=False)
+        monkeypatch.setattr(nexusai_config, "ENTERPRISE_ENABLED", True, raising=False)
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = False
 
@@ -1140,7 +1140,7 @@ class TestRegisterService:
         self, mock_db_dependencies, mock_external_service_dependencies, monkeypatch
     ):
         """Enterprise-only side effect should be invoked after successful register commit."""
-        monkeypatch.setattr(dify_config, "ENTERPRISE_ENABLED", True, raising=False)
+        monkeypatch.setattr(nexusai_config, "ENTERPRISE_ENABLED", True, raising=False)
 
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = False
@@ -1170,7 +1170,7 @@ class TestRegisterService:
         self, mock_db_dependencies, mock_external_service_dependencies, monkeypatch
     ):
         """Enterprise-only side effect should not be invoked when ENTERPRISE_ENABLED is False."""
-        monkeypatch.setattr(dify_config, "ENTERPRISE_ENABLED", False, raising=False)
+        monkeypatch.setattr(nexusai_config, "ENTERPRISE_ENABLED", False, raising=False)
 
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = False
@@ -1201,7 +1201,7 @@ class TestRegisterService:
         """Default workspace join should run even when personal workspace creation raises."""
         from services.errors.workspace import WorkSpaceNotAllowedCreateError
 
-        monkeypatch.setattr(dify_config, "ENTERPRISE_ENABLED", True, raising=False)
+        monkeypatch.setattr(nexusai_config, "ENTERPRISE_ENABLED", True, raising=False)
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies[
             "feature_service"
@@ -1240,7 +1240,7 @@ class TestRegisterService:
         """Default workspace join should run before propagating workspace-limit registration failure."""
         from services.errors.workspace import WorkspacesLimitExceededError
 
-        monkeypatch.setattr(dify_config, "ENTERPRISE_ENABLED", True, raising=False)
+        monkeypatch.setattr(nexusai_config, "ENTERPRISE_ENABLED", True, raising=False)
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies[
             "feature_service"

@@ -1,4 +1,4 @@
-# Dify Frontend
+# NexusAI Frontend
 
 This is a [Next.js] project, but you can dev with [vinext].
 
@@ -38,7 +38,7 @@ pnpm install
 
 Then, configure the environment variables.
 Create `web/.env.local` and copy the contents from `web/.env.example`.
-Modify the values of these environment variables according to your requirements:
+Monexusai the values of these environment variables according to your requirements:
 
 ```bash
 cp web/.env.example web/.env.local
@@ -83,7 +83,7 @@ pnpm -C web run start
 If you build the Docker image manually, use the repository root as the build context:
 
 ```bash
-docker build -f web/Dockerfile -t dify-web .
+docker build -f web/Dockerfile -t nexusai-web .
 ```
 
 If you want to customize the host and port:
@@ -151,11 +151,11 @@ This will help you determine the testing strategy. See [web/testing/testing.md] 
 
 ## Documentation
 
-Visit <https://docs.dify.ai> to view the full documentation.
+Visit <https://docs.nexusai.ai> to view the full documentation.
 
 ## Community
 
-The Dify community can be found on [Discord community], where you can ask questions, voice ideas, and share your projects.
+The NexusAI community can be found on [Discord community], where you can ask questions, voice ideas, and share your projects.
 
 [Corepack]: https://github.com/nodejs/corepack#readme
 [Discord community]: https://discord.gg/5AEfbxcd9k

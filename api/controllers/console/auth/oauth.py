@@ -7,7 +7,7 @@ from flask_restx import Resource
 from sqlalchemy.orm import sessionmaker
 from werkzeug.exceptions import Unauthorized
 
-from configs import dify_config
+from configs import nexusai_config
 from constants.languages import languages
 from events.tenant_event import tenant_was_created
 from extensions.ext_database import db
@@ -33,21 +33,21 @@ logger = logging.getLogger(__name__)
 
 def get_oauth_providers():
     with current_app.app_context():
-        if not dify_config.GITHUB_CLIENT_ID or not dify_config.GITHUB_CLIENT_SECRET:
+        if not nexusai_config.GITHUB_CLIENT_ID or not nexusai_config.GITHUB_CLIENT_SECRET:
             github_oauth = None
         else:
             github_oauth = GitHubOAuth(
-                client_id=dify_config.GITHUB_CLIENT_ID,
-                client_secret=dify_config.GITHUB_CLIENT_SECRET,
-                redirect_uri=dify_config.CONSOLE_API_URL + "/console/api/oauth/authorize/github",
+                client_id=nexusai_config.GITHUB_CLIENT_ID,
+                client_secret=nexusai_config.GITHUB_CLIENT_SECRET,
+                redirect_uri=nexusai_config.CONSOLE_API_URL + "/console/api/oauth/authorize/github",
             )
-        if not dify_config.GOOGLE_CLIENT_ID or not dify_config.GOOGLE_CLIENT_SECRET:
+        if not nexusai_config.GOOGLE_CLIENT_ID or not nexusai_config.GOOGLE_CLIENT_SECRET:
             google_oauth = None
         else:
             google_oauth = GoogleOAuth(
-                client_id=dify_config.GOOGLE_CLIENT_ID,
-                client_secret=dify_config.GOOGLE_CLIENT_SECRET,
-                redirect_uri=dify_config.CONSOLE_API_URL + "/console/api/oauth/authorize/google",
+                client_id=nexusai_config.GOOGLE_CLIENT_ID,
+                client_secret=nexusai_config.GOOGLE_CLIENT_SECRET,
+                redirect_uri=nexusai_config.CONSOLE_API_URL + "/console/api/oauth/authorize/google",
             )
 
         OAUTH_PROVIDERS = {"github": github_oauth, "google": google_oauth}
@@ -115,7 +115,7 @@ class OAuthCallback(Resource):
             return {"error": "OAuth process failed"}, 400
         except ValueError as e:
             logger.warning("OAuth error with %s", provider, exc_info=True)
-            return redirect(f"{dify_config.CONSOLE_WEB_URL}/signin?message={urllib.parse.quote(str(e))}")
+            return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/signin?message={urllib.parse.quote(str(e))}")
 
         if invite_token and RegisterService.is_valid_invite_token(invite_token):
             invitation = RegisterService.get_invitation_by_token(token=invite_token)
@@ -125,25 +125,25 @@ class OAuthCallback(Resource):
                     invitation_email.lower() if isinstance(invitation_email, str) else invitation_email
                 )
                 if invitation_email_normalized != user_info.email.lower():
-                    return redirect(f"{dify_config.CONSOLE_WEB_URL}/signin?message=Invalid invitation token.")
+                    return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/signin?message=Invalid invitation token.")
 
-            return redirect(f"{dify_config.CONSOLE_WEB_URL}/signin/invite-settings?invite_token={invite_token}")
+            return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/signin/invite-settings?invite_token={invite_token}")
 
         try:
             account, oauth_new_user = _generate_account(provider, user_info)
         except AccountNotFoundError:
-            return redirect(f"{dify_config.CONSOLE_WEB_URL}/signin?message=Account not found.")
+            return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/signin?message=Account not found.")
         except (WorkSpaceNotFoundError, WorkSpaceNotAllowedCreateError):
             return redirect(
-                f"{dify_config.CONSOLE_WEB_URL}/signin"
+                f"{nexusai_config.CONSOLE_WEB_URL}/signin"
                 "?message=Workspace not found, please contact system admin to invite you to join in a workspace."
             )
         except AccountRegisterError as e:
-            return redirect(f"{dify_config.CONSOLE_WEB_URL}/signin?message={e.description}")
+            return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/signin?message={e.description}")
 
         # Check account status
         if account.status == AccountStatus.BANNED:
-            return redirect(f"{dify_config.CONSOLE_WEB_URL}/signin?message=Account is banned.")
+            return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/signin?message=Account is banned.")
 
         if account.status == AccountStatus.PENDING:
             account.status = AccountStatus.ACTIVE
@@ -153,10 +153,10 @@ class OAuthCallback(Resource):
         try:
             TenantService.create_owner_tenant_if_not_exist(account)
         except Unauthorized:
-            return redirect(f"{dify_config.CONSOLE_WEB_URL}/signin?message=Workspace not found.")
+            return redirect(f"{nexusai_config.CONSOLE_WEB_URL}/signin?message=Workspace not found.")
         except WorkSpaceNotAllowedCreateError:
             return redirect(
-                f"{dify_config.CONSOLE_WEB_URL}/signin"
+                f"{nexusai_config.CONSOLE_WEB_URL}/signin"
                 "?message=Workspace not found, please contact system admin to invite you to join in a workspace."
             )
 
@@ -165,7 +165,7 @@ class OAuthCallback(Resource):
             ip_address=extract_remote_ip(request),
         )
 
-        base_url = dify_config.CONSOLE_WEB_URL
+        base_url = nexusai_config.CONSOLE_WEB_URL
         query_char = "&" if "?" in base_url else "?"
         target_url = f"{base_url}{query_char}oauth_new_user={str(oauth_new_user).lower()}"
         response = redirect(target_url)
@@ -206,7 +206,7 @@ def _generate_account(provider: str, user_info: OAuthUserInfo) -> tuple[Account,
         normalized_email = user_info.email.lower()
         oauth_new_user = True
         if not FeatureService.get_system_features().is_allow_register:
-            if dify_config.BILLING_ENABLED and BillingService.is_email_in_freeze(normalized_email):
+            if nexusai_config.BILLING_ENABLED and BillingService.is_email_in_freeze(normalized_email):
                 raise AccountRegisterError(
                     description=(
                         "This email account has been deleted within the past "
@@ -215,7 +215,7 @@ def _generate_account(provider: str, user_info: OAuthUserInfo) -> tuple[Account,
                 )
             else:
                 raise AccountRegisterError(description=("Invalid email or password"))
-        account_name = user_info.name or "Dify"
+        account_name = user_info.name or "NexusAI"
         account = RegisterService.register(
             email=normalized_email,
             name=account_name,

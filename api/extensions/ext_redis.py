@@ -13,8 +13,8 @@ from redis.cluster import ClusterNode, RedisCluster
 from redis.connection import Connection, SSLConnection
 from redis.sentinel import Sentinel
 
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 from libs.broadcast_channel.channel import BroadcastChannel as BroadcastChannelProtocol
 from libs.broadcast_channel.redis.channel import BroadcastChannel as RedisBroadcastChannel
 from libs.broadcast_channel.redis.sharded_channel import ShardedRedisBroadcastChannel
@@ -126,7 +126,7 @@ _pubsub_redis_client: redis.Redis | RedisCluster | None = None
 
 def _get_ssl_configuration() -> tuple[type[Union[Connection, SSLConnection]], dict[str, Any]]:
     """Get SSL configuration for Redis connection."""
-    if not dify_config.REDIS_USE_SSL:
+    if not nexusai_config.REDIS_USE_SSL:
         return Connection, {}
 
     cert_reqs_map = {
@@ -134,13 +134,13 @@ def _get_ssl_configuration() -> tuple[type[Union[Connection, SSLConnection]], di
         "CERT_OPTIONAL": ssl.CERT_OPTIONAL,
         "CERT_REQUIRED": ssl.CERT_REQUIRED,
     }
-    ssl_cert_reqs = cert_reqs_map.get(dify_config.REDIS_SSL_CERT_REQS, ssl.CERT_NONE)
+    ssl_cert_reqs = cert_reqs_map.get(nexusai_config.REDIS_SSL_CERT_REQS, ssl.CERT_NONE)
 
     ssl_kwargs = {
         "ssl_cert_reqs": ssl_cert_reqs,
-        "ssl_ca_certs": dify_config.REDIS_SSL_CA_CERTS,
-        "ssl_certfile": dify_config.REDIS_SSL_CERTFILE,
-        "ssl_keyfile": dify_config.REDIS_SSL_KEYFILE,
+        "ssl_ca_certs": nexusai_config.REDIS_SSL_CA_CERTS,
+        "ssl_certfile": nexusai_config.REDIS_SSL_CERTFILE,
+        "ssl_keyfile": nexusai_config.REDIS_SSL_KEYFILE,
     }
 
     return SSLConnection, ssl_kwargs
@@ -148,10 +148,10 @@ def _get_ssl_configuration() -> tuple[type[Union[Connection, SSLConnection]], di
 
 def _get_cache_configuration() -> CacheConfig | None:
     """Get client-side cache configuration if enabled."""
-    if not dify_config.REDIS_ENABLE_CLIENT_SIDE_CACHE:
+    if not nexusai_config.REDIS_ENABLE_CLIENT_SIDE_CACHE:
         return None
 
-    resp_protocol = dify_config.REDIS_SERIALIZATION_PROTOCOL
+    resp_protocol = nexusai_config.REDIS_SERIALIZATION_PROTOCOL
     if resp_protocol < 3:
         raise ValueError("Client side cache is only supported in RESP3")
 
@@ -161,63 +161,63 @@ def _get_cache_configuration() -> CacheConfig | None:
 def _get_base_redis_params() -> dict[str, Any]:
     """Get base Redis connection parameters."""
     return {
-        "username": dify_config.REDIS_USERNAME,
-        "password": dify_config.REDIS_PASSWORD or None,
-        "db": dify_config.REDIS_DB,
+        "username": nexusai_config.REDIS_USERNAME,
+        "password": nexusai_config.REDIS_PASSWORD or None,
+        "db": nexusai_config.REDIS_DB,
         "encoding": "utf-8",
         "encoding_errors": "strict",
         "decode_responses": False,
-        "protocol": dify_config.REDIS_SERIALIZATION_PROTOCOL,
+        "protocol": nexusai_config.REDIS_SERIALIZATION_PROTOCOL,
         "cache_config": _get_cache_configuration(),
     }
 
 
 def _create_sentinel_client(redis_params: dict[str, Any]) -> Union[redis.Redis, RedisCluster]:
     """Create Redis client using Sentinel configuration."""
-    if not dify_config.REDIS_SENTINELS:
+    if not nexusai_config.REDIS_SENTINELS:
         raise ValueError("REDIS_SENTINELS must be set when REDIS_USE_SENTINEL is True")
 
-    if not dify_config.REDIS_SENTINEL_SERVICE_NAME:
+    if not nexusai_config.REDIS_SENTINEL_SERVICE_NAME:
         raise ValueError("REDIS_SENTINEL_SERVICE_NAME must be set when REDIS_USE_SENTINEL is True")
 
-    sentinel_hosts = [(node.split(":")[0], int(node.split(":")[1])) for node in dify_config.REDIS_SENTINELS.split(",")]
+    sentinel_hosts = [(node.split(":")[0], int(node.split(":")[1])) for node in nexusai_config.REDIS_SENTINELS.split(",")]
 
     sentinel_kwargs = {
-        "socket_timeout": dify_config.REDIS_SENTINEL_SOCKET_TIMEOUT,
-        "username": dify_config.REDIS_SENTINEL_USERNAME,
-        "password": dify_config.REDIS_SENTINEL_PASSWORD,
+        "socket_timeout": nexusai_config.REDIS_SENTINEL_SOCKET_TIMEOUT,
+        "username": nexusai_config.REDIS_SENTINEL_USERNAME,
+        "password": nexusai_config.REDIS_SENTINEL_PASSWORD,
     }
 
-    if dify_config.REDIS_MAX_CONNECTIONS:
-        sentinel_kwargs["max_connections"] = dify_config.REDIS_MAX_CONNECTIONS
+    if nexusai_config.REDIS_MAX_CONNECTIONS:
+        sentinel_kwargs["max_connections"] = nexusai_config.REDIS_MAX_CONNECTIONS
 
     sentinel = Sentinel(
         sentinel_hosts,
         sentinel_kwargs=sentinel_kwargs,
     )
 
-    master: redis.Redis = sentinel.master_for(dify_config.REDIS_SENTINEL_SERVICE_NAME, **redis_params)
+    master: redis.Redis = sentinel.master_for(nexusai_config.REDIS_SENTINEL_SERVICE_NAME, **redis_params)
     return master
 
 
 def _create_cluster_client() -> Union[redis.Redis, RedisCluster]:
     """Create Redis cluster client."""
-    if not dify_config.REDIS_CLUSTERS:
+    if not nexusai_config.REDIS_CLUSTERS:
         raise ValueError("REDIS_CLUSTERS must be set when REDIS_USE_CLUSTERS is True")
 
     nodes = [
         ClusterNode(host=node.split(":")[0], port=int(node.split(":")[1]))
-        for node in dify_config.REDIS_CLUSTERS.split(",")
+        for node in nexusai_config.REDIS_CLUSTERS.split(",")
     ]
 
     cluster_kwargs: dict[str, Any] = {
         "startup_nodes": nodes,
-        "password": dify_config.REDIS_CLUSTERS_PASSWORD,
-        "protocol": dify_config.REDIS_SERIALIZATION_PROTOCOL,
+        "password": nexusai_config.REDIS_CLUSTERS_PASSWORD,
+        "protocol": nexusai_config.REDIS_SERIALIZATION_PROTOCOL,
         "cache_config": _get_cache_configuration(),
     }
-    if dify_config.REDIS_MAX_CONNECTIONS:
-        cluster_kwargs["max_connections"] = dify_config.REDIS_MAX_CONNECTIONS
+    if nexusai_config.REDIS_MAX_CONNECTIONS:
+        cluster_kwargs["max_connections"] = nexusai_config.REDIS_MAX_CONNECTIONS
     cluster: RedisCluster = RedisCluster(**cluster_kwargs)
     return cluster
 
@@ -228,14 +228,14 @@ def _create_standalone_client(redis_params: dict[str, Any]) -> Union[redis.Redis
 
     redis_params.update(
         {
-            "host": dify_config.REDIS_HOST,
-            "port": dify_config.REDIS_PORT,
+            "host": nexusai_config.REDIS_HOST,
+            "port": nexusai_config.REDIS_PORT,
             "connection_class": connection_class,
         }
     )
 
-    if dify_config.REDIS_MAX_CONNECTIONS:
-        redis_params["max_connections"] = dify_config.REDIS_MAX_CONNECTIONS
+    if nexusai_config.REDIS_MAX_CONNECTIONS:
+        redis_params["max_connections"] = nexusai_config.REDIS_MAX_CONNECTIONS
 
     if ssl_kwargs:
         redis_params.update(ssl_kwargs)
@@ -246,7 +246,7 @@ def _create_standalone_client(redis_params: dict[str, Any]) -> Union[redis.Redis
 
 
 def _create_pubsub_client(pubsub_url: str, use_clusters: bool) -> redis.Redis | RedisCluster:
-    max_conns = dify_config.REDIS_MAX_CONNECTIONS
+    max_conns = nexusai_config.REDIS_MAX_CONNECTIONS
     if use_clusters:
         if max_conns:
             return RedisCluster.from_url(pubsub_url, max_connections=max_conns)
@@ -259,15 +259,15 @@ def _create_pubsub_client(pubsub_url: str, use_clusters: bool) -> redis.Redis | 
         return redis.Redis.from_url(pubsub_url)
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     """Initialize Redis client and attach it to the app."""
     global redis_client
 
     # Determine Redis mode and create appropriate client
-    if dify_config.REDIS_USE_SENTINEL:
+    if nexusai_config.REDIS_USE_SENTINEL:
         redis_params = _get_base_redis_params()
         client = _create_sentinel_client(redis_params)
-    elif dify_config.REDIS_USE_CLUSTERS:
+    elif nexusai_config.REDIS_USE_CLUSTERS:
         client = _create_cluster_client()
     else:
         redis_params = _get_base_redis_params()
@@ -279,20 +279,20 @@ def init_app(app: DifyApp):
 
     global _pubsub_redis_client
     _pubsub_redis_client = client
-    if dify_config.normalized_pubsub_redis_url:
+    if nexusai_config.normalized_pubsub_redis_url:
         _pubsub_redis_client = _create_pubsub_client(
-            dify_config.normalized_pubsub_redis_url, dify_config.PUBSUB_REDIS_USE_CLUSTERS
+            nexusai_config.normalized_pubsub_redis_url, nexusai_config.PUBSUB_REDIS_USE_CLUSTERS
         )
 
 
 def get_pubsub_broadcast_channel() -> BroadcastChannelProtocol:
     assert _pubsub_redis_client is not None, "PubSub redis Client should be initialized here."
-    if dify_config.PUBSUB_REDIS_CHANNEL_TYPE == "sharded":
+    if nexusai_config.PUBSUB_REDIS_CHANNEL_TYPE == "sharded":
         return ShardedRedisBroadcastChannel(_pubsub_redis_client)
-    if dify_config.PUBSUB_REDIS_CHANNEL_TYPE == "streams":
+    if nexusai_config.PUBSUB_REDIS_CHANNEL_TYPE == "streams":
         return StreamsBroadcastChannel(
             _pubsub_redis_client,
-            retention_seconds=dify_config.PUBSUB_STREAMS_RETENTION_SECONDS,
+            retention_seconds=nexusai_config.PUBSUB_STREAMS_RETENTION_SECONDS,
         )
     return RedisBroadcastChannel(_pubsub_redis_client)
 

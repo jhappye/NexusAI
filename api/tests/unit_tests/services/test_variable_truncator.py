@@ -713,11 +713,11 @@ def test_base_truncator_methods_should_execute_abstract_placeholders() -> None:
     assert mapping_result is None
 
 
-def test_default_should_use_dify_config_limits(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_default_should_use_nexusai_config_limits(monkeypatch: pytest.MonkeyPatch) -> None:
     # Arrange
-    monkeypatch.setattr(truncator_module.dify_config, "WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE", 111)
-    monkeypatch.setattr(truncator_module.dify_config, "WORKFLOW_VARIABLE_TRUNCATION_ARRAY_LENGTH", 7)
-    monkeypatch.setattr(truncator_module.dify_config, "WORKFLOW_VARIABLE_TRUNCATION_STRING_LENGTH", 33)
+    monkeypatch.setattr(truncator_module.nexusai_config, "WORKFLOW_VARIABLE_TRUNCATION_MAX_SIZE", 111)
+    monkeypatch.setattr(truncator_module.nexusai_config, "WORKFLOW_VARIABLE_TRUNCATION_ARRAY_LENGTH", 7)
+    monkeypatch.setattr(truncator_module.nexusai_config, "WORKFLOW_VARIABLE_TRUNCATION_STRING_LENGTH", 33)
 
     # Act
     truncator = VariableTruncator.default()

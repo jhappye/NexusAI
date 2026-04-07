@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from yarl import URL
 
 import contexts
-from configs import dify_config
+from configs import nexusai_config
 from core.helper.provider_cache import ToolProviderCredentialsCache
 from core.plugin.impl.tool import PluginToolManager
 from core.tools.__base.tool_provider import ToolProviderController
@@ -298,7 +298,7 @@ class ToolManager:
                 # refresh the credentials
                 tool_provider = ToolProviderID(provider_id)
                 provider_name = tool_provider.provider_name
-                redirect_uri = f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider_id}/tool/callback"
+                redirect_uri = f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider_id}/tool/callback"
                 system_credentials = BuiltinToolManageService.get_oauth_client(tenant_id, provider_id)
 
                 oauth_handler = OAuthHandler()
@@ -661,7 +661,7 @@ class ToolManager:
         """
         # according to multi credentials, select the one with is_default=True first, then created_at oldest
         # for compatibility with old version
-        if dify_config.SQLALCHEMY_DATABASE_URI_SCHEME == "postgresql":
+        if nexusai_config.SQLALCHEMY_DATABASE_URI_SCHEME == "postgresql":
             # PostgreSQL: Use DISTINCT ON
             sql = """
                 SELECT DISTINCT ON (tenant_id, provider) id
@@ -714,8 +714,8 @@ class ToolManager:
                 for provider in builtin_providers:
                     # handle include, exclude
                     if is_filtered(
-                        include_set=dify_config.POSITION_TOOL_INCLUDES_SET,
-                        exclude_set=dify_config.POSITION_TOOL_EXCLUDES_SET,
+                        include_set=nexusai_config.POSITION_TOOL_INCLUDES_SET,
+                        exclude_set=nexusai_config.POSITION_TOOL_EXCLUDES_SET,
                         data=provider,
                         name_func=lambda x: x.entity.identity.name,
                     ):
@@ -937,7 +937,7 @@ class ToolManager:
     @classmethod
     def generate_builtin_tool_icon_url(cls, provider_id: str) -> str:
         return str(
-            URL(dify_config.CONSOLE_API_URL or "/")
+            URL(nexusai_config.CONSOLE_API_URL or "/")
             / "console"
             / "api"
             / "workspaces"
@@ -951,7 +951,7 @@ class ToolManager:
     @classmethod
     def generate_plugin_tool_icon_url(cls, tenant_id: str, filename: str) -> str:
         return str(
-            URL(dify_config.CONSOLE_API_URL or "/")
+            URL(nexusai_config.CONSOLE_API_URL or "/")
             / "console"
             / "api"
             / "workspaces"

@@ -22,8 +22,8 @@ class OpenGaussTest(AbstractVectorTest):
                     host="localhost",
                     port=6600,
                     user="postgres",
-                    password="Dify@123",
-                    database="dify",
+                    password="NexusAI@123",
+                    database="nexusai",
                     min_connection=1,
                     max_connection=5,
                 )

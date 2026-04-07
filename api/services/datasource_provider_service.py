@@ -7,7 +7,7 @@ from graphon.model_runtime.entities.provider_entities import FormType
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import HIDDEN_VALUE, UNKNOWN_VALUE
 from core.helper import encrypter
 from core.helper.name_generator import generate_incremental_name
@@ -135,7 +135,7 @@ class DatasourceProviderService:
                 datasource_provider_id = DatasourceProviderID(f"{plugin_id}/{provider}")
                 provider_name = datasource_provider_id.provider_name
                 redirect_uri = (
-                    f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/"
+                    f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/"
                     f"{datasource_provider_id}/datasource/callback"
                 )
                 system_credentials = self.get_oauth_client(tenant_id, datasource_provider_id)
@@ -196,7 +196,7 @@ class DatasourceProviderService:
                 datasource_provider_id = DatasourceProviderID(f"{plugin_id}/{provider}")
                 provider_name = datasource_provider_id.provider_name
                 redirect_uri = (
-                    f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/"
+                    f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/"
                     f"{datasource_provider_id}/datasource/callback"
                 )
                 system_credentials = self.get_oauth_client(tenant_id, datasource_provider_id)
@@ -773,7 +773,7 @@ class DatasourceProviderService:
                 tenant_id=tenant_id, provider=datasource.provider, plugin_id=datasource.plugin_id
             )
             redirect_uri = (
-                f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{datasource_provider_id}/datasource/callback"
+                f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{datasource_provider_id}/datasource/callback"
             )
             datasource_credentials.append(
                 {
@@ -835,7 +835,7 @@ class DatasourceProviderService:
                     tenant_id=tenant_id, provider=datasource.provider, plugin_id=datasource.plugin_id
                 )
                 redirect_uri = "{}/console/api/oauth/plugin/{}/datasource/callback".format(
-                    dify_config.CONSOLE_API_URL, datasource_provider_id
+                    nexusai_config.CONSOLE_API_URL, datasource_provider_id
                 )
                 datasource_credentials.append(
                     {

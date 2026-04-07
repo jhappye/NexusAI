@@ -27,7 +27,7 @@ from pymochow.model.schema import (
 )  # type: ignore
 from pymochow.model.table import AnnSearch, BM25SearchRequest, HNSWSearchParams, Partition, Row  # type: ignore
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import Field as VDBField
 from core.rag.datasource.vdb.field import parse_metadata_json
 from core.rag.datasource.vdb.vector_base import BaseVector
@@ -333,7 +333,7 @@ class BaiduVector(BaseVector):
                 replication=self._client_config.replicas,
                 partition=Partition(partition_num=self._client_config.shard),
                 schema=Schema(fields=fields, indexes=indexes),
-                description="Table for Dify",
+                description="Table for NexusAI",
             )
 
             # Wait for table created
@@ -376,17 +376,17 @@ class BaiduVectorFactory(AbstractVectorFactory):
         return BaiduVector(
             collection_name=collection_name,
             config=BaiduConfig(
-                endpoint=dify_config.BAIDU_VECTOR_DB_ENDPOINT or "",
-                connection_timeout_in_mills=dify_config.BAIDU_VECTOR_DB_CONNECTION_TIMEOUT_MS,
-                account=dify_config.BAIDU_VECTOR_DB_ACCOUNT or "",
-                api_key=dify_config.BAIDU_VECTOR_DB_API_KEY or "",
-                database=dify_config.BAIDU_VECTOR_DB_DATABASE or "",
-                shard=dify_config.BAIDU_VECTOR_DB_SHARD,
-                replicas=dify_config.BAIDU_VECTOR_DB_REPLICAS,
-                inverted_index_analyzer=dify_config.BAIDU_VECTOR_DB_INVERTED_INDEX_ANALYZER,
-                inverted_index_parser_mode=dify_config.BAIDU_VECTOR_DB_INVERTED_INDEX_PARSER_MODE,
-                auto_build_row_count_increment=dify_config.BAIDU_VECTOR_DB_AUTO_BUILD_ROW_COUNT_INCREMENT,
-                auto_build_row_count_increment_ratio=dify_config.BAIDU_VECTOR_DB_AUTO_BUILD_ROW_COUNT_INCREMENT_RATIO,
-                rebuild_index_timeout_in_seconds=dify_config.BAIDU_VECTOR_DB_REBUILD_INDEX_TIMEOUT_IN_SECONDS,
+                endpoint=nexusai_config.BAIDU_VECTOR_DB_ENDPOINT or "",
+                connection_timeout_in_mills=nexusai_config.BAIDU_VECTOR_DB_CONNECTION_TIMEOUT_MS,
+                account=nexusai_config.BAIDU_VECTOR_DB_ACCOUNT or "",
+                api_key=nexusai_config.BAIDU_VECTOR_DB_API_KEY or "",
+                database=nexusai_config.BAIDU_VECTOR_DB_DATABASE or "",
+                shard=nexusai_config.BAIDU_VECTOR_DB_SHARD,
+                replicas=nexusai_config.BAIDU_VECTOR_DB_REPLICAS,
+                inverted_index_analyzer=nexusai_config.BAIDU_VECTOR_DB_INVERTED_INDEX_ANALYZER,
+                inverted_index_parser_mode=nexusai_config.BAIDU_VECTOR_DB_INVERTED_INDEX_PARSER_MODE,
+                auto_build_row_count_increment=nexusai_config.BAIDU_VECTOR_DB_AUTO_BUILD_ROW_COUNT_INCREMENT,
+                auto_build_row_count_increment_ratio=nexusai_config.BAIDU_VECTOR_DB_AUTO_BUILD_ROW_COUNT_INCREMENT_RATIO,
+                rebuild_index_timeout_in_seconds=nexusai_config.BAIDU_VECTOR_DB_REBUILD_INDEX_TIMEOUT_IN_SECONDS,
             ),
         )

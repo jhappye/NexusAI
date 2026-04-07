@@ -16,8 +16,8 @@ from opentelemetry.semconv.attributes.http_attributes import (  # type: ignore[i
 from opentelemetry.trace import Span, get_tracer_provider
 from opentelemetry.trace.status import StatusCode
 
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 from extensions.otel.runtime import is_celery_worker
 
 logger = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ class SupportsInstrument(Protocol):
 
 class SupportsFlaskInstrumentor(Protocol):
     def instrument_app(
-        self, app: DifyApp, response_hook: Callable[[Span, str, list], None] | None = None, **kwargs: object
+        self, app: NexusAIApp, response_hook: Callable[[Span, str, list], None] | None = None, **kwargs: object
     ) -> None: ...
 
 
@@ -100,8 +100,8 @@ def instrument_exception_logging() -> None:
     logging.getLogger().addHandler(exception_handler)
 
 
-def init_flask_instrumentor(app: DifyApp) -> None:
-    meter = get_meter("http_metrics", version=dify_config.project.version)
+def init_flask_instrumentor(app: NexusAIApp) -> None:
+    meter = get_meter("http_metrics", version=nexusai_config.project.version)
     _http_response_counter = meter.create_counter(
         "http.server.response.count",
         description="Total number of HTTP responses by status code, method and target",
@@ -132,12 +132,12 @@ def init_flask_instrumentor(app: DifyApp) -> None:
     from opentelemetry.instrumentation.flask import FlaskInstrumentor
 
     instrumentor = cast(SupportsFlaskInstrumentor, FlaskInstrumentor())
-    if dify_config.DEBUG:
+    if nexusai_config.DEBUG:
         logger.info("Initializing Flask instrumentor")
     instrumentor.instrument_app(app, response_hook=response_hook)
 
 
-def init_sqlalchemy_instrumentor(app: DifyApp) -> None:
+def init_sqlalchemy_instrumentor(app: NexusAIApp) -> None:
     with app.app_context():
         engines = list(app.extensions["sqlalchemy"].engines.values())
         _new_sqlalchemy_instrumentor().instrument(enable_commenter=True, engines=engines)
@@ -151,7 +151,7 @@ def init_httpx_instrumentor() -> None:
     _new_httpx_instrumentor().instrument()
 
 
-def init_instruments(app: DifyApp) -> None:
+def init_instruments(app: NexusAIApp) -> None:
     if not is_celery_worker():
         init_flask_instrumentor(app)
         _new_celery_instrumentor().instrument()

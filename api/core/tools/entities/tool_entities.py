@@ -492,7 +492,7 @@ class ToolInvokeFrom(StrEnum):
 
 
 class ToolSelector(BaseModel):
-    dify_model_identity: str = TOOL_SELECTOR_MODEL_IDENTITY
+    nexusai_model_identity: str = TOOL_SELECTOR_MODEL_IDENTITY
 
     class Parameter(BaseModel):
         name: str = Field(..., description="The name of the parameter")

@@ -58,7 +58,7 @@ const mockUpdatePackageFromMarketPlace = vi.fn()
 const mockCheckTaskStatus = vi.fn()
 const mockStopTaskStatus = vi.fn()
 const mockHandleRefetch = vi.fn()
-let mockPluginDeclaration: { manifest: { meta: { minimum_dify_version: string } } } | undefined
+let mockPluginDeclaration: { manifest: { meta: { minimum_nexusai_version: string } } } | undefined
 let mockCanInstall = true
 let mockLangGeniusVersionInfo = { current_version: '1.0.0' }
 
@@ -270,27 +270,27 @@ describe('Install Component (steps/install.tsx)', () => {
       mockPluginDeclaration = undefined
       render(<Install {...defaultProps} />)
 
-      expect(screen.queryByText(/difyVersionNotCompatible/)).not.toBeInTheDocument()
+      expect(screen.queryByText(/nexusaiVersionNotCompatible/)).not.toBeInTheDocument()
     })
 
-    it('should not show warning when dify version is compatible', () => {
+    it('should not show warning when nexusai version is compatible', () => {
       mockLangGeniusVersionInfo = { current_version: '2.0.0' }
       mockPluginDeclaration = {
-        manifest: { meta: { minimum_dify_version: '1.0.0' } },
+        manifest: { meta: { minimum_nexusai_version: '1.0.0' } },
       }
       render(<Install {...defaultProps} />)
 
-      expect(screen.queryByText(/difyVersionNotCompatible/)).not.toBeInTheDocument()
+      expect(screen.queryByText(/nexusaiVersionNotCompatible/)).not.toBeInTheDocument()
     })
 
-    it('should show warning when dify version is incompatible', () => {
+    it('should show warning when nexusai version is incompatible', () => {
       mockLangGeniusVersionInfo = { current_version: '1.0.0' }
       mockPluginDeclaration = {
-        manifest: { meta: { minimum_dify_version: '2.0.0' } },
+        manifest: { meta: { minimum_nexusai_version: '2.0.0' } },
       }
       render(<Install {...defaultProps} />)
 
-      expect(screen.getByText(/plugin.difyVersionNotCompatible/)).toBeInTheDocument()
+      expect(screen.getByText(/plugin.nexusaiVersionNotCompatible/)).toBeInTheDocument()
     })
   })
 
@@ -703,12 +703,12 @@ describe('Install Component (steps/install.tsx)', () => {
     it('should handle null current_version in langGeniusVersionInfo', () => {
       mockLangGeniusVersionInfo = { current_version: null as unknown as string }
       mockPluginDeclaration = {
-        manifest: { meta: { minimum_dify_version: '1.0.0' } },
+        manifest: { meta: { minimum_nexusai_version: '1.0.0' } },
       }
       render(<Install {...defaultProps} />)
 
       // Should not show warning when current_version is null (defaults to compatible)
-      expect(screen.queryByText(/difyVersionNotCompatible/)).not.toBeInTheDocument()
+      expect(screen.queryByText(/nexusaiVersionNotCompatible/)).not.toBeInTheDocument()
     })
   })
 

@@ -1,3 +1,3 @@
-export const isDify = () => {
-  return document.referrer.includes('dify.ai')
+export const isNexusAI = () => {
+  return document.referrer.includes('nexusai.ai')
 }

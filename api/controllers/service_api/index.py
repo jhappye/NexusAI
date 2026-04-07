@@ -1,6 +1,6 @@
 from flask_restx import Resource
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.service_api import service_api_ns
 
 
@@ -8,7 +8,7 @@ from controllers.service_api import service_api_ns
 class IndexApi(Resource):
     def get(self):
         return {
-            "welcome": "Dify OpenAPI",
+            "welcome": "NexusAI OpenAPI",
             "api_version": "v1",
-            "server_version": dify_config.project.version,
+            "server_version": nexusai_config.project.version,
         }

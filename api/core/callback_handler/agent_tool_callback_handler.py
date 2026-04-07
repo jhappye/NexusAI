@@ -3,7 +3,7 @@ from typing import Any, TextIO, Union
 
 from pydantic import BaseModel
 
-from configs import dify_config
+from configs import nexusai_config
 from core.ops.entities.trace_entity import TraceTaskName
 from core.ops.ops_trace_manager import TraceQueueManager, TraceTask
 from core.tools.entities.tool_entities import ToolInvokeMessage
@@ -31,7 +31,7 @@ def print_text(text: str, color: str | None = None, end: str = "", file: TextIO 
         file.flush()  # ensure all printed content are written to file
 
 
-class DifyAgentCallbackHandler(BaseModel):
+class NexusAIAgentCallbackHandler(BaseModel):
     """Callback Handler that prints to std out."""
 
     color: str | None = ""
@@ -50,7 +50,7 @@ class DifyAgentCallbackHandler(BaseModel):
         tool_inputs: Mapping[str, Any],
     ):
         """Do nothing."""
-        if dify_config.DEBUG:
+        if nexusai_config.DEBUG:
             print_text("\n[on_tool_start] ToolCall:" + tool_name + "\n" + str(tool_inputs) + "\n", color=self.color)
 
     def on_tool_end(
@@ -63,7 +63,7 @@ class DifyAgentCallbackHandler(BaseModel):
         trace_manager: TraceQueueManager | None = None,
     ):
         """If not the final action, print out observation."""
-        if dify_config.DEBUG:
+        if nexusai_config.DEBUG:
             print_text("\n[on_tool_end]\n", color=self.color)
             print_text("Tool: " + tool_name + "\n", color=self.color)
             print_text("Inputs: " + str(tool_inputs) + "\n", color=self.color)
@@ -84,12 +84,12 @@ class DifyAgentCallbackHandler(BaseModel):
 
     def on_tool_error(self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any):
         """Do nothing."""
-        if dify_config.DEBUG:
+        if nexusai_config.DEBUG:
             print_text("\n[on_tool_error] Error: " + str(error) + "\n", color="red")
 
     def on_agent_start(self, thought: str):
         """Run on agent start."""
-        if dify_config.DEBUG:
+        if nexusai_config.DEBUG:
             if thought:
                 print_text(
                     "\n[on_agent_start] \nCurrent Loop: " + str(self.current_loop) + "\nThought: " + thought + "\n",
@@ -100,14 +100,14 @@ class DifyAgentCallbackHandler(BaseModel):
 
     def on_agent_finish(self, color: str | None = None, **kwargs: Any):
         """Run on agent end."""
-        if dify_config.DEBUG:
+        if nexusai_config.DEBUG:
             print_text("\n[on_agent_finish]\n Loop: " + str(self.current_loop) + "\n", color=self.color)
 
         self.current_loop += 1
 
     def on_datasource_start(self, datasource_name: str, datasource_inputs: Mapping[str, Any]) -> None:
         """Run on datasource start."""
-        if dify_config.DEBUG:
+        if nexusai_config.DEBUG:
             print_text(
                 "\n[on_datasource_start] DatasourceCall:" + datasource_name + "\n" + str(datasource_inputs) + "\n",
                 color=self.color,
@@ -116,9 +116,9 @@ class DifyAgentCallbackHandler(BaseModel):
     @property
     def ignore_agent(self) -> bool:
         """Whether to ignore agent callbacks."""
-        return not dify_config.DEBUG
+        return not nexusai_config.DEBUG
 
     @property
     def ignore_chat_model(self) -> bool:
         """Whether to ignore chat model callbacks."""
-        return not dify_config.DEBUG
+        return not nexusai_config.DEBUG

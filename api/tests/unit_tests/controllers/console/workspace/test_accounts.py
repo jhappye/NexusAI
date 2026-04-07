@@ -54,7 +54,7 @@ class TestAccountInitApi:
             app.test_request_context("/account/init", json=payload),
             patch("controllers.console.workspace.account.current_account_with_tenant", return_value=(account, "t1")),
             patch("controllers.console.workspace.account.db.session.commit", return_value=None),
-            patch("controllers.console.workspace.account.dify_config.EDITION", "CLOUD"),
+            patch("controllers.console.workspace.account.nexusai_config.EDITION", "CLOUD"),
             patch("controllers.console.workspace.account.db.session.scalar") as scalar_mock,
         ):
             scalar_mock.return_value = MagicMock(status="unused")

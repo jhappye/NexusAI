@@ -675,7 +675,7 @@ describe('Model Config Utilities', () => {
     /**
      * Test that non-boolean inputs are not affected
      */
-    it('should not modify non-boolean inputs', () => {
+    it('should not monexusai non-boolean inputs', () => {
       const useInputs: PromptVariable[] = [
         {
           key: 'name',

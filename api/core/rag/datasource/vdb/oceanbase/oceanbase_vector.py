@@ -9,7 +9,7 @@ from sqlalchemy import JSON, Column, String
 from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.exc import SQLAlchemyError
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.field import parse_metadata_json
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -172,7 +172,7 @@ class OceanBaseVector(BaseVector):
 
             if self._hybrid_search_enabled:
                 # Get parser from config or use default ik parser
-                parser_name = dify_config.OCEANBASE_FULLTEXT_PARSER or "ik"
+                parser_name = nexusai_config.OCEANBASE_FULLTEXT_PARSER or "ik"
 
                 allowed_parsers = ["ngram", "beng", "space", "ngram2", "ik", "japanese_ftparser", "thai_ftparser"]
                 if parser_name not in allowed_parsers:
@@ -534,19 +534,19 @@ class OceanBaseVectorFactory(AbstractVectorFactory):
         return OceanBaseVector(
             collection_name,
             OceanBaseVectorConfig(
-                host=dify_config.OCEANBASE_VECTOR_HOST or "",
-                port=dify_config.OCEANBASE_VECTOR_PORT or 0,
-                user=dify_config.OCEANBASE_VECTOR_USER or "",
-                password=(dify_config.OCEANBASE_VECTOR_PASSWORD or ""),
-                database=dify_config.OCEANBASE_VECTOR_DATABASE or "",
-                enable_hybrid_search=dify_config.OCEANBASE_ENABLE_HYBRID_SEARCH or False,
-                batch_size=dify_config.OCEANBASE_VECTOR_BATCH_SIZE,
-                metric_type=dify_config.OCEANBASE_VECTOR_METRIC_TYPE,
-                hnsw_m=dify_config.OCEANBASE_HNSW_M,
-                hnsw_ef_construction=dify_config.OCEANBASE_HNSW_EF_CONSTRUCTION,
-                hnsw_ef_search=dify_config.OCEANBASE_HNSW_EF_SEARCH,
-                pool_size=dify_config.OCEANBASE_VECTOR_POOL_SIZE,
-                max_overflow=dify_config.OCEANBASE_VECTOR_MAX_OVERFLOW,
-                hnsw_refresh_threshold=dify_config.OCEANBASE_HNSW_REFRESH_THRESHOLD,
+                host=nexusai_config.OCEANBASE_VECTOR_HOST or "",
+                port=nexusai_config.OCEANBASE_VECTOR_PORT or 0,
+                user=nexusai_config.OCEANBASE_VECTOR_USER or "",
+                password=(nexusai_config.OCEANBASE_VECTOR_PASSWORD or ""),
+                database=nexusai_config.OCEANBASE_VECTOR_DATABASE or "",
+                enable_hybrid_search=nexusai_config.OCEANBASE_ENABLE_HYBRID_SEARCH or False,
+                batch_size=nexusai_config.OCEANBASE_VECTOR_BATCH_SIZE,
+                metric_type=nexusai_config.OCEANBASE_VECTOR_METRIC_TYPE,
+                hnsw_m=nexusai_config.OCEANBASE_HNSW_M,
+                hnsw_ef_construction=nexusai_config.OCEANBASE_HNSW_EF_CONSTRUCTION,
+                hnsw_ef_search=nexusai_config.OCEANBASE_HNSW_EF_SEARCH,
+                pool_size=nexusai_config.OCEANBASE_VECTOR_POOL_SIZE,
+                max_overflow=nexusai_config.OCEANBASE_VECTOR_MAX_OVERFLOW,
+                hnsw_refresh_threshold=nexusai_config.OCEANBASE_HNSW_REFRESH_THRESHOLD,
             ),
         )

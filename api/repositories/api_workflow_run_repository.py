@@ -19,10 +19,10 @@ Usage:
 
 Example:
     ```python
-    from repositories.dify_api_repository_factory import DifyAPIRepositoryFactory
+    from repositories.nexusai_api_repository_factory import NexusAIAPIRepositoryFactory
 
     session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-    repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+    repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
 
     # Get paginated workflow runs
     runs = repo.get_paginated_workflow_runs(

@@ -12,7 +12,7 @@ from graphon.entities import GraphInitParams
 from graphon.enums import WorkflowNodeExecutionStatus
 from graphon.runtime import GraphRuntimeState, VariablePool
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, InvokeFrom, UserFrom
 from core.workflow.nodes.trigger_webhook.entities import (
     ContentType,
     Method,
@@ -39,7 +39,7 @@ def create_webhook_node(
         workflow_id="test-workflow",
         graph_config={},
         run_context={
-            DIFY_RUN_CONTEXT_KEY: {
+            NEXUSAI_RUN_CONTEXT_KEY: {
                 "tenant_id": tenant_id,
                 "app_id": "test-app",
                 "user_id": "test-user",

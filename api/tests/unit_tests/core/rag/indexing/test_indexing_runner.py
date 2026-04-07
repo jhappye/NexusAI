@@ -1,7 +1,7 @@
 """Comprehensive unit tests for IndexingRunner.
 
 This test module provides complete coverage of the IndexingRunner class, which is responsible
-for orchestrating the document indexing pipeline in the Dify RAG system.
+for orchestrating the document indexing pipeline in the NexusAI RAG system.
 
 Test Coverage Areas:
 ==================
@@ -1230,7 +1230,7 @@ class TestIndexingRunnerSplitter:
     def test_get_splitter_validates_max_tokens_too_large(self, mock_embedding_instance):
         """Test splitter validation rejects max_tokens above maximum."""
         # Arrange
-        with patch("core.indexing_runner.dify_config") as mock_config:
+        with patch("core.indexing_runner.nexusai_config") as mock_config:
             mock_config.INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH = 5000
 
             # Act & Assert
@@ -1416,7 +1416,7 @@ class TestIndexingRunnerEstimate:
         mock_dependencies["feature_service"].get_features.return_value = mock_features
 
         # Create too many extract settings
-        with patch("core.indexing_runner.dify_config") as mock_config:
+        with patch("core.indexing_runner.nexusai_config") as mock_config:
             mock_config.BATCH_UPLOAD_LIMIT = 10
             extract_settings = [MagicMock() for _ in range(15)]
 

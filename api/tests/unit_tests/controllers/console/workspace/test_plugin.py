@@ -199,7 +199,7 @@ class TestPluginUploadFromPkgApi:
         with (
             app.test_request_context("/", data=data, content_type="multipart/form-data"),
             patch("controllers.console.workspace.plugin.current_account_with_tenant", return_value=(None, "t1")),
-            patch("controllers.console.workspace.plugin.dify_config.PLUGIN_MAX_PACKAGE_SIZE", 0),
+            patch("controllers.console.workspace.plugin.nexusai_config.PLUGIN_MAX_PACKAGE_SIZE", 0),
             patch("controllers.console.workspace.plugin.PluginService.upload_pkg") as upload_pkg_mock,
         ):
             with pytest.raises(ValueError) as exc_info:
@@ -447,7 +447,7 @@ class TestPluginUploadFromBundleApi:
                 content_type="multipart/form-data",
             ),
             patch("controllers.console.workspace.plugin.current_account_with_tenant", return_value=(None, "t1")),
-            patch("controllers.console.workspace.plugin.dify_config.PLUGIN_MAX_BUNDLE_SIZE", 0),
+            patch("controllers.console.workspace.plugin.nexusai_config.PLUGIN_MAX_BUNDLE_SIZE", 0),
             patch("controllers.console.workspace.plugin.PluginService.upload_bundle") as upload_bundle_mock,
         ):
             with pytest.raises(ValueError) as exc_info:

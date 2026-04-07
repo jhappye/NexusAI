@@ -21,5 +21,5 @@ export const mailToSupport = (account: string, plan: string, version: string, su
     Platform:
     Problem Description:
   `
-  return generateMailToLink(supportEmailAddress || 'support@dify.ai', subject, body)
+  return generateMailToLink(supportEmailAddress || 'support@nexusai.ai', subject, body)
 }

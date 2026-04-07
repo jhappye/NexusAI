@@ -5,7 +5,7 @@ from uuid import uuid4
 from pydantic import BaseModel, model_validator
 from upstash_vector import Index, Vector
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
 from core.rag.datasource.vdb.vector_type import VectorType
@@ -137,7 +137,7 @@ class UpstashVectorFactory(AbstractVectorFactory):
         return UpstashVector(
             collection_name=collection_name,
             config=UpstashVectorConfig(
-                url=dify_config.UPSTASH_VECTOR_URL or "",
-                token=dify_config.UPSTASH_VECTOR_TOKEN or "",
+                url=nexusai_config.UPSTASH_VECTOR_URL or "",
+                token=nexusai_config.UPSTASH_VECTOR_TOKEN or "",
             ),
         )

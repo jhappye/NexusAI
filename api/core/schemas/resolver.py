@@ -14,7 +14,7 @@ type SchemaType = dict[str, Any] | list[Any] | str | int | float | bool | None
 type SchemaDict = dict[str, Any]
 
 # Pre-compiled pattern for better performance
-_DIFY_SCHEMA_PATTERN = re.compile(r"^https://dify\.ai/schemas/(v\d+)/(.+)\.json$")
+_NEXUSAI_SCHEMA_PATTERN = re.compile(r"^https://nexusai\.ai/schemas/(v\d+)/(.+)\.json$")
 
 
 class SchemaResolutionError(Exception):
@@ -60,7 +60,7 @@ class QueueItem:
 
 
 class SchemaResolver:
-    """Resolver for Dify schema references with caching and optimizations"""
+    """Resolver for NexusAI schema references with caching and optimizations"""
 
     _cache: dict[str, SchemaDict] = {}
     _cache_lock = threading.Lock()
@@ -102,9 +102,9 @@ class SchemaResolver:
         if not isinstance(schema, (dict, list)):
             return schema
 
-        # Fast path: if no Dify refs found, return original schema unchanged
+        # Fast path: if no NexusAI refs found, return original schema unchanged
         # This avoids expensive deepcopy and BFS traversal for schemas without refs
-        if not _has_dify_refs(schema):
+        if not _has_nexusai_refs(schema):
             return schema
 
         # Slow path: schema contains refs, perform full resolution
@@ -134,7 +134,7 @@ class SchemaResolver:
         """Process a dictionary item"""
         ref_uri = item.current.get("$ref")
 
-        if ref_uri and _is_dify_schema_ref(ref_uri):
+        if ref_uri and _is_nexusai_schema_ref(ref_uri):
             # Handle $ref resolution
             self._resolve_ref(queue, item, ref_uri)
         else:
@@ -222,11 +222,11 @@ class SchemaResolver:
         return cleaned.copy()
 
 
-def resolve_dify_schema_refs(
+def resolve_nexusai_schema_refs(
     schema: SchemaType, registry: SchemaRegistry | None = None, max_depth: int = 30
 ) -> SchemaType:
     """
-    Resolve $ref references in Dify schema to actual schema content
+    Resolve $ref references in NexusAI schema to actual schema content
 
     This is a convenience function that creates a resolver and resolves the schema.
     Performance optimization: quickly checks for $ref presence before processing.
@@ -244,9 +244,9 @@ def resolve_dify_schema_refs(
         MaxDepthExceededError: If maximum depth exceeded
         SchemaNotFoundError: If referenced schema not found
     """
-    # Fast path: if no Dify refs found, return original schema unchanged
+    # Fast path: if no NexusAI refs found, return original schema unchanged
     # This avoids expensive deepcopy and BFS traversal for schemas without refs
-    if not _has_dify_refs(schema):
+    if not _has_nexusai_refs(schema):
         return schema
 
     # Slow path: schema contains refs, perform full resolution
@@ -274,26 +274,26 @@ def _remove_metadata_fields(schema: dict) -> dict:
     return cleaned
 
 
-def _is_dify_schema_ref(ref_uri: Any) -> bool:
+def _is_nexusai_schema_ref(ref_uri: Any) -> bool:
     """
-    Check if the reference URI is a Dify schema reference
+    Check if the reference URI is a NexusAI schema reference
 
     Args:
         ref_uri: URI to check
 
     Returns:
-        True if it's a Dify schema reference
+        True if it's a NexusAI schema reference
     """
     if not isinstance(ref_uri, str):
         return False
 
     # Use pre-compiled pattern for better performance
-    return bool(_DIFY_SCHEMA_PATTERN.match(ref_uri))
+    return bool(_NEXUSAI_SCHEMA_PATTERN.match(ref_uri))
 
 
-def _has_dify_refs_recursive(schema: SchemaType) -> bool:
+def _has_nexusai_refs_recursive(schema: SchemaType) -> bool:
     """
-    Recursively check if a schema contains any Dify $ref references
+    Recursively check if a schema contains any NexusAI $ref references
 
     This is the fallback method when string-based detection is not possible.
 
@@ -301,30 +301,30 @@ def _has_dify_refs_recursive(schema: SchemaType) -> bool:
         schema: Schema to check for references
 
     Returns:
-        True if any Dify $ref is found, False otherwise
+        True if any NexusAI $ref is found, False otherwise
     """
     if isinstance(schema, dict):
         # Check if this dict has a $ref field
         ref_uri = schema.get("$ref")
-        if ref_uri and _is_dify_schema_ref(ref_uri):
+        if ref_uri and _is_nexusai_schema_ref(ref_uri):
             return True
 
         # Check nested values
         for value in schema.values():
-            if _has_dify_refs_recursive(value):
+            if _has_nexusai_refs_recursive(value):
                 return True
 
     elif isinstance(schema, list):
         # Check each item in the list
         for item in schema:
-            if _has_dify_refs_recursive(item):
+            if _has_nexusai_refs_recursive(item):
                 return True
 
     # Primitive types don't contain refs
     return False
 
 
-def _has_dify_refs_hybrid(schema: SchemaType) -> bool:
+def _has_nexusai_refs_hybrid(schema: SchemaType) -> bool:
     """
     Hybrid detection: fast string scan followed by precise recursive check
 
@@ -336,7 +336,7 @@ def _has_dify_refs_hybrid(schema: SchemaType) -> bool:
         schema: Schema to check for references
 
     Returns:
-        True if any Dify $ref is found, False otherwise
+        True if any NexusAI $ref is found, False otherwise
     """
     # Phase 1: Fast string-based pre-filtering
     try:
@@ -348,24 +348,24 @@ def _has_dify_refs_hybrid(schema: SchemaType) -> bool:
         if '"$ref"' not in schema_str:
             return False
 
-        # Quick elimination: no Dify schema URLs
-        if "https://dify.ai/schemas/" not in schema_str:
+        # Quick elimination: no NexusAI schema URLs
+        if "https://nexusai.ai/schemas/" not in schema_str:
             return False
 
     except (TypeError, ValueError, OverflowError):
         # JSON serialization failed (e.g., circular references, non-serializable objects)
         # Fall back to recursive detection
         logger.debug("JSON serialization failed for schema, using recursive detection")
-        return _has_dify_refs_recursive(schema)
+        return _has_nexusai_refs_recursive(schema)
 
     # Phase 2: Precise recursive validation
     # Only executed for schemas that passed string pre-filtering
-    return _has_dify_refs_recursive(schema)
+    return _has_nexusai_refs_recursive(schema)
 
 
-def _has_dify_refs(schema: SchemaType) -> bool:
+def _has_nexusai_refs(schema: SchemaType) -> bool:
     """
-    Check if a schema contains any Dify $ref references
+    Check if a schema contains any NexusAI $ref references
 
     Uses hybrid detection for optimal performance:
     - Fast string scan for quick elimination
@@ -375,14 +375,14 @@ def _has_dify_refs(schema: SchemaType) -> bool:
         schema: Schema to check for references
 
     Returns:
-        True if any Dify $ref is found, False otherwise
+        True if any NexusAI $ref is found, False otherwise
     """
-    return _has_dify_refs_hybrid(schema)
+    return _has_nexusai_refs_hybrid(schema)
 
 
-def parse_dify_schema_uri(uri: str) -> tuple[str, str]:
+def parse_nexusai_schema_uri(uri: str) -> tuple[str, str]:
     """
-    Parse a Dify schema URI to extract version and schema name
+    Parse a NexusAI schema URI to extract version and schema name
 
     Args:
         uri: Schema URI to parse
@@ -390,7 +390,7 @@ def parse_dify_schema_uri(uri: str) -> tuple[str, str]:
     Returns:
         Tuple of (version, schema_name) or ("", "") if invalid
     """
-    match = _DIFY_SCHEMA_PATTERN.match(uri)
+    match = _NEXUSAI_SCHEMA_PATTERN.match(uri)
     if not match:
         return "", ""
 

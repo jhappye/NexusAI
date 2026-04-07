@@ -56,25 +56,25 @@ describe('useDocLink', () => {
     })
 
     it('should remove trailing slash from base URL', () => {
-      const baseUrlWithSlash = 'https://docs.dify.ai/'
+      const baseUrlWithSlash = 'https://docs.nexusai.ai/'
       const { result } = renderHook(() => useDocLink(baseUrlWithSlash))
-      const url = result.current('/use-dify/getting-started/introduction')
-      expect(url).toBe('https://docs.dify.ai/en/use-dify/getting-started/introduction')
+      const url = result.current('/use-nexusai/getting-started/introduction')
+      expect(url).toBe('https://docs.nexusai.ai/en/use-nexusai/getting-started/introduction')
     })
 
     it('should handle base URL without trailing slash', () => {
-      const baseUrlWithoutSlash = 'https://docs.dify.ai'
+      const baseUrlWithoutSlash = 'https://docs.nexusai.ai'
       const { result } = renderHook(() => useDocLink(baseUrlWithoutSlash))
-      const url = result.current('/use-dify/getting-started/introduction')
-      expect(url).toBe('https://docs.dify.ai/en/use-dify/getting-started/introduction')
+      const url = result.current('/use-nexusai/getting-started/introduction')
+      expect(url).toBe('https://docs.nexusai.ai/en/use-nexusai/getting-started/introduction')
     })
   })
 
   describe('Path handling', () => {
     it('should handle path parameter', () => {
       const { result } = renderHook(() => useDocLink())
-      const url = result.current('/use-dify/getting-started/introduction')
-      expect(url).toBe(`${defaultDocBaseUrl}/en/use-dify/getting-started/introduction`)
+      const url = result.current('/use-nexusai/getting-started/introduction')
+      expect(url).toBe(`${defaultDocBaseUrl}/en/use-nexusai/getting-started/introduction`)
     })
 
     it('should handle empty path', () => {
@@ -98,13 +98,13 @@ describe('useDocLink', () => {
       vi.mocked(getDocLanguage).mockReturnValue('zh')
 
       const pathMap: DocPathMap = {
-        'zh-Hans': '/use-dify/getting-started/introduction',
-        'en-US': '/use-dify/getting-started/quick-start',
+        'zh-Hans': '/use-nexusai/getting-started/introduction',
+        'en-US': '/use-nexusai/getting-started/quick-start',
       }
 
       const { result } = renderHook(() => useDocLink())
-      const url = result.current('/use-dify/getting-started/quick-start' as DocPathWithoutLang, pathMap)
-      expect(url).toBe(`${defaultDocBaseUrl}/zh/use-dify/getting-started/introduction`)
+      const url = result.current('/use-nexusai/getting-started/quick-start' as DocPathWithoutLang, pathMap)
+      expect(url).toBe(`${defaultDocBaseUrl}/zh/use-nexusai/getting-started/introduction`)
     })
 
     it('should use default path when locale not in pathMap', () => {
@@ -114,19 +114,19 @@ describe('useDocLink', () => {
       vi.mocked(getDocLanguage).mockReturnValue('ja')
 
       const pathMap: DocPathMap = {
-        'zh-Hans': '/use-dify/getting-started/introduction',
-        'en-US': '/use-dify/getting-started/quick-start',
+        'zh-Hans': '/use-nexusai/getting-started/introduction',
+        'en-US': '/use-nexusai/getting-started/quick-start',
       }
 
       const { result } = renderHook(() => useDocLink())
-      const url = result.current('/use-dify/getting-started/quick-start' as DocPathWithoutLang, pathMap)
-      expect(url).toBe(`${defaultDocBaseUrl}/ja/use-dify/getting-started/quick-start`)
+      const url = result.current('/use-nexusai/getting-started/quick-start' as DocPathWithoutLang, pathMap)
+      expect(url).toBe(`${defaultDocBaseUrl}/ja/use-nexusai/getting-started/quick-start`)
     })
 
     it('should handle undefined pathMap', () => {
       const { result } = renderHook(() => useDocLink())
-      const url = result.current('/use-dify/getting-started/introduction', undefined)
-      expect(url).toBe(`${defaultDocBaseUrl}/en/use-dify/getting-started/introduction`)
+      const url = result.current('/use-nexusai/getting-started/introduction', undefined)
+      expect(url).toBe(`${defaultDocBaseUrl}/en/use-nexusai/getting-started/introduction`)
     })
   })
 
@@ -138,7 +138,7 @@ describe('useDocLink', () => {
       vi.mocked(getDocLanguage).mockReturnValue('en')
 
       const { result } = renderHook(() => useDocLink())
-      const url = result.current('/use-dify/getting-started/introduction')
+      const url = result.current('/use-nexusai/getting-started/introduction')
       expect(url).toContain('/en/')
     })
 
@@ -149,7 +149,7 @@ describe('useDocLink', () => {
       vi.mocked(getDocLanguage).mockReturnValue('zh')
 
       const { result } = renderHook(() => useDocLink())
-      const url = result.current('/use-dify/getting-started/introduction')
+      const url = result.current('/use-nexusai/getting-started/introduction')
       expect(url).toContain('/zh/')
     })
 
@@ -160,7 +160,7 @@ describe('useDocLink', () => {
       vi.mocked(getDocLanguage).mockReturnValue('ja')
 
       const { result } = renderHook(() => useDocLink())
-      const url = result.current('/use-dify/getting-started/introduction')
+      const url = result.current('/use-nexusai/getting-started/introduction')
       expect(url).toContain('/ja/')
     })
   })
@@ -231,24 +231,24 @@ describe('useDocLink', () => {
       vi.mocked(getDocLanguage).mockReturnValue('zh')
 
       const { result } = renderHook(() => useDocLink())
-      const url = result.current('/use-dify/getting-started/introduction')
-      expect(url).toBe(`${defaultDocBaseUrl}/zh/use-dify/getting-started/introduction`)
+      const url = result.current('/use-nexusai/getting-started/introduction')
+      expect(url).toBe(`${defaultDocBaseUrl}/zh/use-nexusai/getting-started/introduction`)
     })
   })
 
   describe('Edge Cases', () => {
     it('should handle path with anchor', () => {
       const { result } = renderHook(() => useDocLink())
-      const url = result.current('/use-dify/getting-started/introduction#overview' as DocPathWithoutLang)
-      expect(url).toBe(`${defaultDocBaseUrl}/en/use-dify/getting-started/introduction#overview`)
+      const url = result.current('/use-nexusai/getting-started/introduction#overview' as DocPathWithoutLang)
+      expect(url).toBe(`${defaultDocBaseUrl}/en/use-nexusai/getting-started/introduction#overview`)
     })
 
     it('should handle multiple calls with same hook instance', () => {
       const { result } = renderHook(() => useDocLink())
-      const url1 = result.current('/use-dify/getting-started/introduction')
-      const url2 = result.current('/use-dify/getting-started/quick-start')
-      expect(url1).toBe(`${defaultDocBaseUrl}/en/use-dify/getting-started/introduction`)
-      expect(url2).toBe(`${defaultDocBaseUrl}/en/use-dify/getting-started/quick-start`)
+      const url1 = result.current('/use-nexusai/getting-started/introduction')
+      const url2 = result.current('/use-nexusai/getting-started/quick-start')
+      expect(url1).toBe(`${defaultDocBaseUrl}/en/use-nexusai/getting-started/introduction`)
+      expect(url2).toBe(`${defaultDocBaseUrl}/en/use-nexusai/getting-started/quick-start`)
     })
   })
 })

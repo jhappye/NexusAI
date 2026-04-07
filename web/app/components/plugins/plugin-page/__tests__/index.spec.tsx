@@ -332,12 +332,12 @@ describe('PluginPage Component', () => {
       expect(fileInput).toHaveClass('hidden')
     })
 
-    it('should accept .difypkg files', () => {
+    it('should accept .nexusaipkg files', () => {
       vi.mocked(useQueryState).mockReturnValue(['plugins', vi.fn()])
 
       render(<PluginPageWithContext {...createDefaultProps()} />)
       const fileInput = document.getElementById('fileUploader') as HTMLInputElement
-      expect(fileInput.accept).toContain('.difypkg')
+      expect(fileInput.accept).toContain('.nexusaipkg')
     })
 
     it('should show InstallFromLocalPackage modal when valid file is selected', async () => {
@@ -346,7 +346,7 @@ describe('PluginPage Component', () => {
       render(<PluginPageWithContext {...createDefaultProps()} />)
       const fileInput = document.getElementById('fileUploader') as HTMLInputElement
 
-      const file = new File(['content'], 'plugin.difypkg', { type: 'application/octet-stream' })
+      const file = new File(['content'], 'plugin.nexusaipkg', { type: 'application/octet-stream' })
       Object.defineProperty(fileInput, 'files', {
         value: [file],
       })
@@ -358,7 +358,7 @@ describe('PluginPage Component', () => {
       })
     })
 
-    it('should not show modal for non-.difypkg files', async () => {
+    it('should not show modal for non-.nexusaipkg files', async () => {
       vi.mocked(useQueryState).mockReturnValue(['plugins', vi.fn()])
 
       render(<PluginPageWithContext {...createDefaultProps()} />)
@@ -831,7 +831,7 @@ describe('Uploader Hook Integration', () => {
         container.dispatchEvent(dragEnterEvent)
       })
 
-      const file = new File(['content'], 'test-plugin.difypkg', { type: 'application/octet-stream' })
+      const file = new File(['content'], 'test-plugin.nexusaipkg', { type: 'application/octet-stream' })
       const dropEvent = new Event('drop', { bubbles: true, cancelable: true })
       Object.defineProperty(dropEvent, 'dataTransfer', {
         value: { files: [file] },
@@ -894,7 +894,7 @@ describe('Uploader Hook Integration', () => {
       render(<PluginPageWithContext {...createDefaultProps()} />)
       const fileInput = document.getElementById('fileUploader') as HTMLInputElement
 
-      const file = new File(['content'], 'plugin.difypkg', { type: 'application/octet-stream' })
+      const file = new File(['content'], 'plugin.nexusaipkg', { type: 'application/octet-stream' })
       Object.defineProperty(fileInput, 'files', { value: [file] })
       fireEvent.change(fileInput)
 
@@ -1003,7 +1003,7 @@ describe('PluginPage Integration', () => {
     render(<PluginPageWithContext {...createDefaultProps()} />)
 
     const fileInput = document.getElementById('fileUploader') as HTMLInputElement
-    const file = new File(['plugin content'], 'my-plugin.difypkg', {
+    const file = new File(['plugin content'], 'my-plugin.nexusaipkg', {
       type: 'application/octet-stream',
     })
 

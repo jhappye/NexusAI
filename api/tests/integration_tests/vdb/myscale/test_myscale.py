@@ -16,7 +16,7 @@ class MyScaleVectorTest(AbstractVectorTest):
                 port=8123,
                 user="default",
                 password="",
-                database="dify",
+                database="nexusai",
                 fts_params="",
             ),
         )

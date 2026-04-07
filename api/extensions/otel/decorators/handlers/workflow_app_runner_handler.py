@@ -6,7 +6,7 @@ from opentelemetry.trace import SpanKind, Status, StatusCode
 from opentelemetry.util.types import AttributeValue
 
 from extensions.otel.decorators.handler import SpanHandler
-from extensions.otel.semconv import DifySpanAttributes, GenAIAttributes
+from extensions.otel.semconv import NexusAISpanAttributes, GenAIAttributes
 
 logger = logging.getLogger(__name__)
 
@@ -42,11 +42,11 @@ class WorkflowAppRunnerHandler(SpanHandler):
             streaming = getattr(entity, "stream", True)
 
             attributes: dict[str, AttributeValue] = {
-                DifySpanAttributes.APP_ID: app_id,
-                DifySpanAttributes.TENANT_ID: tenant_id,
+                NexusAISpanAttributes.APP_ID: app_id,
+                NexusAISpanAttributes.TENANT_ID: tenant_id,
                 GenAIAttributes.USER_ID: user_id,
-                DifySpanAttributes.STREAMING: streaming,
-                DifySpanAttributes.WORKFLOW_ID: workflow_id,
+                NexusAISpanAttributes.STREAMING: streaming,
+                NexusAISpanAttributes.WORKFLOW_ID: workflow_id,
             }
 
             span_name = self._build_span_name(wrapped)

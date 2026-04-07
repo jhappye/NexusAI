@@ -109,7 +109,7 @@ class MLflowDataTrace(BaseTraceInstance):
 
     def workflow_trace(self, trace_info: WorkflowTraceInfo):
         """Create workflow span as root, with node spans as children"""
-        # fields with sys.xyz is added by Dify, they are duplicate to trace_info.metadata
+        # fields with sys.xyz is added by NexusAI, they are duplicate to trace_info.metadata
         raw_inputs = trace_info.workflow_run_inputs or {}
         workflow_inputs = {k: v for k, v in raw_inputs.items() if not k.startswith("sys.")}
 
@@ -228,7 +228,7 @@ class MLflowDataTrace(BaseTraceInstance):
         }
 
         if hasattr(SpanAttributeKey, "MESSAGE_FORMAT"):
-            attributes[SpanAttributeKey.MESSAGE_FORMAT] = "dify"
+            attributes[SpanAttributeKey.MESSAGE_FORMAT] = "nexusai"
 
         if usage := data.get("usage"):
             # Set reserved token usage attributes
@@ -281,7 +281,7 @@ class MLflowDataTrace(BaseTraceInstance):
         )
 
         if hasattr(SpanAttributeKey, "MESSAGE_FORMAT"):
-            span.set_attribute(SpanAttributeKey.MESSAGE_FORMAT, "dify")
+            span.set_attribute(SpanAttributeKey.MESSAGE_FORMAT, "nexusai")
 
         # Set token usage
         span.set_attribute(
@@ -456,7 +456,7 @@ class MLflowDataTrace(BaseTraceInstance):
         return workflow_nodes
 
     def _get_node_span_type(self, node_type: str) -> str:
-        """Map Dify node types to MLflow span types"""
+        """Map NexusAI node types to MLflow span types"""
         node_type_mapping = {
             BuiltinNodeTypes.LLM: SpanType.LLM,
             BuiltinNodeTypes.QUESTION_CLASSIFIER: SpanType.LLM,
@@ -509,7 +509,7 @@ class MLflowDataTrace(BaseTraceInstance):
 
     def _resolve_tool_call_ids(self, messages: list[dict]):
         """
-        The tool call message from Dify does not contain tool call ids, which is not
+        The tool call message from NexusAI does not contain tool call ids, which is not
         ideal for debugging. This method resolves the tool call ids by matching the
         tool call name and parameters with the tool instruction messages.
         """
@@ -519,7 +519,7 @@ class MLflowDataTrace(BaseTraceInstance):
                 tool_call_ids = [t["id"] for t in tool_calls]
             if msg["role"] == "tool":
                 # Get the tool call id in the order of the tool call messages
-                # assuming Dify runs tools sequentially
+                # assuming NexusAI runs tools sequentially
                 if tool_call_ids:
                     msg["tool_call_id"] = tool_call_ids.pop(0)
         return messages

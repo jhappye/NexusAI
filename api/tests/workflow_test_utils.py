@@ -5,7 +5,7 @@ from graphon.entities import GraphInitParams
 from graphon.runtime import VariablePool
 from graphon.variables.variables import Variable
 
-from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_dify_run_context
+from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom, build_nexusai_run_context
 from core.workflow.variable_pool_initializer import add_node_inputs_to_pool, add_variables_to_pool
 
 
@@ -20,7 +20,7 @@ def build_test_run_context(
 ) -> dict[str, Any]:
     normalized_user_from = user_from if isinstance(user_from, UserFrom) else UserFrom(user_from)
     normalized_invoke_from = invoke_from if isinstance(invoke_from, InvokeFrom) else InvokeFrom(invoke_from)
-    return build_dify_run_context(
+    return build_nexusai_run_context(
         tenant_id=tenant_id,
         app_id=app_id,
         user_id=user_id,

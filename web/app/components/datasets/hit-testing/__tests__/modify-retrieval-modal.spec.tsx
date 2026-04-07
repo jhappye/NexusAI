@@ -2,7 +2,7 @@ import type { RetrievalConfig } from '@/types/app'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { RETRIEVE_METHOD } from '@/types/app'
-import ModifyRetrievalModal from '../modify-retrieval-modal'
+import MonexusaiRetrievalModal from '../monexusai-retrieval-modal'
 
 const { mockToast } = vi.hoisted(() => {
   const mockToast = Object.assign(vi.fn(), {
@@ -55,14 +55,14 @@ vi.mock('@/context/dataset-detail', () => ({
 }))
 
 vi.mock('@/context/i18n', () => ({
-  useDocLink: () => (path: string) => `https://docs.dify.ai${path}`,
+  useDocLink: () => (path: string) => `https://docs.nexusai.ai${path}`,
 }))
 
 vi.mock('../../settings/utils', () => ({
   checkShowMultiModalTip: () => false,
 }))
 
-describe('ModifyRetrievalModal', () => {
+describe('MonexusaiRetrievalModal', () => {
   const defaultProps = {
     indexMethod: 'high_quality',
     value: {
@@ -83,39 +83,39 @@ describe('ModifyRetrievalModal', () => {
   })
 
   it('should return null when isShow is false', () => {
-    const { container } = render(<ModifyRetrievalModal {...defaultProps} isShow={false} />)
+    const { container } = render(<MonexusaiRetrievalModal {...defaultProps} isShow={false} />)
     expect(container.firstChild).toBeNull()
   })
 
   it('should render title when isShow is true', () => {
-    render(<ModifyRetrievalModal {...defaultProps} />)
+    render(<MonexusaiRetrievalModal {...defaultProps} />)
     expect(screen.getByText('datasetSettings.form.retrievalSetting.title')).toBeInTheDocument()
   })
 
   it('should render high quality retrieval config for high_quality index', () => {
-    render(<ModifyRetrievalModal {...defaultProps} />)
+    render(<MonexusaiRetrievalModal {...defaultProps} />)
     expect(screen.getByTestId('retrieval-method-config')).toBeInTheDocument()
   })
 
   it('should render economical config for non high_quality index', () => {
-    render(<ModifyRetrievalModal {...defaultProps} indexMethod="economy" />)
+    render(<MonexusaiRetrievalModal {...defaultProps} indexMethod="economy" />)
     expect(screen.getByTestId('economical-config')).toBeInTheDocument()
   })
 
   it('should call onHide when cancel button clicked', () => {
-    render(<ModifyRetrievalModal {...defaultProps} />)
+    render(<MonexusaiRetrievalModal {...defaultProps} />)
     fireEvent.click(screen.getByTestId('cancel-button'))
     expect(defaultProps.onHide).toHaveBeenCalled()
   })
 
   it('should call onSave with retrieval config when save clicked', () => {
-    render(<ModifyRetrievalModal {...defaultProps} />)
+    render(<MonexusaiRetrievalModal {...defaultProps} />)
     fireEvent.click(screen.getByTestId('save-button'))
     expect(defaultProps.onSave).toHaveBeenCalled()
   })
 
   it('should render learn more link', () => {
-    render(<ModifyRetrievalModal {...defaultProps} />)
+    render(<MonexusaiRetrievalModal {...defaultProps} />)
     expect(screen.getByText('datasetSettings.form.retrievalSetting.learnMore')).toBeInTheDocument()
   })
 })

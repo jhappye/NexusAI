@@ -101,7 +101,7 @@ def _build_human_input_required_reason(
     )
 
 
-class DifyAPISQLAlchemyWorkflowRunRepository(APIWorkflowRunRepository):
+class NexusAIAPISQLAlchemyWorkflowRunRepository(APIWorkflowRunRepository):
     """
     SQLAlchemy implementation of APIWorkflowRunRepository.
 

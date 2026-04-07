@@ -108,11 +108,11 @@ const Installed: FC<Props> = ({
   }
 
   const { langGeniusVersionInfo } = useAppContext()
-  const isDifyVersionCompatible = useMemo(() => {
+  const isNexusAIVersionCompatible = useMemo(() => {
     if (!langGeniusVersionInfo.current_version)
       return true
-    return isEqualOrLaterThanVersion(langGeniusVersionInfo.current_version, payload.meta.minimum_dify_version ?? '0.0.0')
-  }, [langGeniusVersionInfo.current_version, payload.meta.minimum_dify_version])
+    return isEqualOrLaterThanVersion(langGeniusVersionInfo.current_version, payload.meta.minimum_nexusai_version ?? '0.0.0')
+  }, [langGeniusVersionInfo.current_version, payload.meta.minimum_nexusai_version])
 
   return (
     <>
@@ -126,9 +126,9 @@ const Installed: FC<Props> = ({
               components={{ trustSource: <span className="system-md-semibold" /> }}
             />
           </p>
-          {!isDifyVersionCompatible && (
+          {!isNexusAIVersionCompatible && (
             <p className="flex items-center gap-1 text-text-warning system-md-regular">
-              {t('difyVersionNotCompatible', { ns: 'plugin', minimalDifyVersion: payload.meta.minimum_dify_version })}
+              {t('nexusaiVersionNotCompatible', { ns: 'plugin', minimalNexusAIVersion: payload.meta.minimum_nexusai_version })}
             </p>
           )}
         </div>

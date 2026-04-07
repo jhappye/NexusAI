@@ -18,7 +18,7 @@ def test_init_prefers_openapi_when_api_config_is_provided():
         instance_id="instance-1",
         account="account",
         account_password="password",
-        namespace="dify",
+        namespace="nexusai",
         namespace_password="ns-password",
     )
 
@@ -37,7 +37,7 @@ def test_init_uses_sql_implementation_when_api_config_is_missing():
         account_password="password",
         min_connection=1,
         max_connection=2,
-        namespace="dify",
+        namespace="nexusai",
     )
 
     with patch.object(analyticdb_module, "AnalyticdbVectorBySql", return_value="sql_runner") as sql_cls:
@@ -88,15 +88,15 @@ def test_factory_builds_openapi_config_when_host_is_missing(monkeypatch):
     dataset = SimpleNamespace(id="dataset-1", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(analyticdb_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_HOST", None)
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_KEY_ID", "ak")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_KEY_SECRET", "sk")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_REGION_ID", "cn-hz")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_INSTANCE_ID", "instance")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_ACCOUNT", "account")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_PASSWORD", "password")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_NAMESPACE", "dify")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_NAMESPACE_PASSWORD", "ns-password")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_HOST", None)
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_KEY_ID", "ak")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_KEY_SECRET", "sk")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_REGION_ID", "cn-hz")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_INSTANCE_ID", "instance")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_ACCOUNT", "account")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_PASSWORD", "password")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_NAMESPACE", "nexusai")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_NAMESPACE_PASSWORD", "ns-password")
 
     with patch.object(analyticdb_module, "AnalyticdbVector", return_value="vector") as vector_cls:
         result = factory.init_vector(dataset, attributes=[], embeddings=MagicMock())
@@ -115,13 +115,13 @@ def test_factory_builds_sql_config_when_host_is_present(monkeypatch):
         id="dataset-2", index_struct_dict={"vector_store": {"class_prefix": "EXISTING"}}, index_struct=None
     )
 
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_HOST", "127.0.0.1")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_PORT", 5432)
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_ACCOUNT", "account")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_PASSWORD", "password")
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_MIN_CONNECTION", 1)
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_MAX_CONNECTION", 3)
-    monkeypatch.setattr(analyticdb_module.dify_config, "ANALYTICDB_NAMESPACE", "dify")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_HOST", "127.0.0.1")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_PORT", 5432)
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_ACCOUNT", "account")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_PASSWORD", "password")
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_MIN_CONNECTION", 1)
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_MAX_CONNECTION", 3)
+    monkeypatch.setattr(analyticdb_module.nexusai_config, "ANALYTICDB_NAMESPACE", "nexusai")
 
     with patch.object(analyticdb_module, "AnalyticdbVector", return_value="vector") as vector_cls:
         result = factory.init_vector(dataset, attributes=[], embeddings=MagicMock())

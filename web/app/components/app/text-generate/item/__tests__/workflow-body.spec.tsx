@@ -17,7 +17,7 @@ vi.mock('@/app/components/base/chat/chat/answer/workflow-process', () => ({
 
 vi.mock('@/app/components/base/chat/chat/answer/human-input-form-list', () => ({
   default: ({ onHumanInputFormSubmit }: { onHumanInputFormSubmit: typeof mockSubmit }) => (
-    <button onClick={() => onHumanInputFormSubmit('token-1', { inputs: { name: 'dify' }, action: 'submit' })}>
+    <button onClick={() => onHumanInputFormSubmit('token-1', { inputs: { name: 'nexusai' }, action: 'submit' })}>
       submit-human-input
     </button>
   ),
@@ -87,7 +87,7 @@ describe('WorkflowBody', () => {
 
     expect(mockSubmit).toHaveBeenCalledWith('token-1', {
       action: 'submit',
-      inputs: { name: 'dify' },
+      inputs: { name: 'nexusai' },
     })
   })
 })

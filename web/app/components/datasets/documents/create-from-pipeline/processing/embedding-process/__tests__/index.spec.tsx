@@ -56,7 +56,7 @@ vi.mock('@/service/knowledge/use-document', () => ({
 
 // Mock useDatasetApiAccessUrl hook
 vi.mock('@/hooks/use-api-access-url', () => ({
-  useDatasetApiAccessUrl: () => 'https://docs.dify.ai/api-reference/datasets',
+  useDatasetApiAccessUrl: () => 'https://docs.nexusai.ai/api-reference/datasets',
 }))
 
 // Test Data Factory Functions
@@ -169,7 +169,7 @@ describe('EmbeddingProcess', () => {
       render(<EmbeddingProcess {...props} />)
 
       const apiLink = screen.getByRole('link', { name: /access the api/i })
-      expect(apiLink).toHaveAttribute('href', 'https://docs.dify.ai/api-reference/datasets')
+      expect(apiLink).toHaveAttribute('href', 'https://docs.nexusai.ai/api-reference/datasets')
       expect(apiLink).toHaveAttribute('target', '_blank')
       expect(apiLink).toHaveAttribute('rel', 'noopener noreferrer')
     })

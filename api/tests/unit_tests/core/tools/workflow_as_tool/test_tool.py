@@ -519,13 +519,13 @@ def test_extract_files():
         outputs = {
             "attachments": [
                 {
-                    "dify_model_identity": FILE_MODEL_IDENTITY,
+                    "nexusai_model_identity": FILE_MODEL_IDENTITY,
                     "transfer_method": "tool_file",
                     "related_id": "r1",
                 }
             ],
             "single_file": {
-                "dify_model_identity": FILE_MODEL_IDENTITY,
+                "nexusai_model_identity": FILE_MODEL_IDENTITY,
                 "transfer_method": "local_file",
                 "related_id": "r2",
             },

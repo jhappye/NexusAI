@@ -25,7 +25,7 @@ vi.mock('@/app/components/datasets/common/retrieval-method-info', () => ({
 
 // Capture onSave callback for external retrieval modal
 let _capturedModalOnSave: ((data: { top_k: number, score_threshold: number, score_threshold_enabled: boolean }) => void) | null = null
-vi.mock('@/app/components/datasets/hit-testing/modify-external-retrieval-modal', () => ({
+vi.mock('@/app/components/datasets/hit-testing/monexusai-external-retrieval-modal', () => ({
   default: ({ onSave, onClose }: { onSave: (data: { top_k: number, score_threshold: number, score_threshold_enabled: boolean }) => void, onClose: () => void }) => {
     _capturedModalOnSave = onSave
     return (

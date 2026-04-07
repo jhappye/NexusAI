@@ -406,7 +406,7 @@ class TestCacheEmbeddingMultimodalQuery:
             mock_redis.get.return_value = None
             mock_model_instance.invoke_multimodal_embedding.side_effect = Exception("API Error")
 
-            with patch("core.rag.embedding.cached_embedding.dify_config") as mock_config:
+            with patch("core.rag.embedding.cached_embedding.nexusai_config") as mock_config:
                 mock_config.DEBUG = False
 
                 with pytest.raises(Exception) as exc_info:
@@ -443,7 +443,7 @@ class TestCacheEmbeddingMultimodalQuery:
             mock_model_instance.invoke_multimodal_embedding.return_value = embedding_result
             mock_redis.setex.side_effect = RuntimeError("Redis Error")
 
-            with patch("core.rag.embedding.cached_embedding.dify_config") as mock_config:
+            with patch("core.rag.embedding.cached_embedding.nexusai_config") as mock_config:
                 mock_config.DEBUG = True
 
                 with pytest.raises(RuntimeError):
@@ -472,7 +472,7 @@ class TestCacheEmbeddingQueryErrors:
             mock_redis.get.return_value = None
             mock_model_instance.invoke_text_embedding.side_effect = RuntimeError("API Error")
 
-            with patch("core.rag.embedding.cached_embedding.dify_config") as mock_config:
+            with patch("core.rag.embedding.cached_embedding.nexusai_config") as mock_config:
                 mock_config.DEBUG = True
 
                 with patch("core.rag.embedding.cached_embedding.logger") as mock_logger:
@@ -511,7 +511,7 @@ class TestCacheEmbeddingQueryErrors:
             mock_model_instance.invoke_text_embedding.return_value = embedding_result
             mock_redis.setex.side_effect = RuntimeError("Redis Error")
 
-            with patch("core.rag.embedding.cached_embedding.dify_config") as mock_config:
+            with patch("core.rag.embedding.cached_embedding.nexusai_config") as mock_config:
                 mock_config.DEBUG = True
 
                 with patch("core.rag.embedding.cached_embedding.logger") as mock_logger:

@@ -6,7 +6,7 @@ from flask import Request
 from werkzeug.exceptions import Unauthorized
 from werkzeug.wrappers import Response
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import (
     COOKIE_NAME_ACCESS_TOKEN,
     COOKIE_NAME_CSRF_TOKEN,
@@ -27,7 +27,7 @@ CSRF_WHITE_LIST = [
 
 # server is behind a reverse proxy, so we need to check the url
 def is_secure() -> bool:
-    return dify_config.CONSOLE_WEB_URL.startswith("https") and dify_config.CONSOLE_API_URL.startswith("https")
+    return nexusai_config.CONSOLE_WEB_URL.startswith("https") and nexusai_config.CONSOLE_API_URL.startswith("https")
 
 
 def _cookie_domain() -> str | None:
@@ -39,7 +39,7 @@ def _cookie_domain() -> str | None:
     'example.com' and '.example.com' identically. This normalization ensures consistent
     behavior and avoids confusion.
     """
-    domain = dify_config.COOKIE_DOMAIN.strip()
+    domain = nexusai_config.COOKIE_DOMAIN.strip()
     domain = domain.removeprefix(".")
     return domain or None
 
@@ -108,7 +108,7 @@ def set_access_token_to_cookie(request: Request, response: Response, token: str,
         domain=_cookie_domain(),
         secure=is_secure(),
         samesite=samesite,
-        max_age=int(dify_config.ACCESS_TOKEN_EXPIRE_MINUTES * 60),
+        max_age=int(nexusai_config.ACCESS_TOKEN_EXPIRE_MINUTES * 60),
         path="/",
     )
 
@@ -121,7 +121,7 @@ def set_refresh_token_to_cookie(request: Request, response: Response, token: str
         domain=_cookie_domain(),
         secure=is_secure(),
         samesite="Lax",
-        max_age=int(60 * 60 * 24 * dify_config.REFRESH_TOKEN_EXPIRE_DAYS),
+        max_age=int(60 * 60 * 24 * nexusai_config.REFRESH_TOKEN_EXPIRE_DAYS),
         path="/",
     )
 
@@ -134,7 +134,7 @@ def set_csrf_token_to_cookie(request: Request, response: Response, token: str):
         domain=_cookie_domain(),
         secure=is_secure(),
         samesite="Lax",
-        max_age=int(60 * dify_config.ACCESS_TOKEN_EXPIRE_MINUTES),
+        max_age=int(60 * nexusai_config.ACCESS_TOKEN_EXPIRE_MINUTES),
         path="/",
     )
 
@@ -189,9 +189,9 @@ def build_force_logout_cookie_headers() -> list[str]:
 def check_csrf_token(request: Request, user_id: str):
     # some apis are sent by beacon, so we need to bypass csrf token check
     # since these APIs are post, they are already protected by SameSite: Lax, so csrf is not required.
-    if dify_config.ADMIN_API_KEY_ENABLE:
+    if nexusai_config.ADMIN_API_KEY_ENABLE:
         auth_token = extract_access_token(request)
-        if auth_token and auth_token == dify_config.ADMIN_API_KEY:
+        if auth_token and auth_token == nexusai_config.ADMIN_API_KEY:
             return
 
     def _unauthorized():
@@ -228,7 +228,7 @@ def check_csrf_token(request: Request, user_id: str):
 
 
 def generate_csrf_token(user_id: str) -> str:
-    exp_dt = datetime.now(UTC) + timedelta(minutes=dify_config.ACCESS_TOKEN_EXPIRE_MINUTES)
+    exp_dt = datetime.now(UTC) + timedelta(minutes=nexusai_config.ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {
         "exp": int(exp_dt.timestamp()),
         "sub": user_id,

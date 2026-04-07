@@ -35,7 +35,7 @@ describe('useSingleRunFormParams', () => {
       const { result } = renderHook(() => useSingleRunFormParams({
         id: 'knowledge-base-1',
         payload: createPayload(),
-        runInputData: { query: 'what is dify' },
+        runInputData: { query: 'what is nexusai' },
         getInputVars: vi.fn(),
         setRunInputData: vi.fn(),
         toVarInputs: vi.fn(),
@@ -48,7 +48,7 @@ describe('useSingleRunFormParams', () => {
         type: InputVarType.paragraph,
         required: true,
       }])
-      expect(result.current.forms[0].values).toEqual({ query: 'what is dify' })
+      expect(result.current.forms[0].values).toEqual({ query: 'what is nexusai' })
     })
 
     it('should update run input data when the query changes', () => {

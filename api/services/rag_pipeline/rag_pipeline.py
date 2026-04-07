@@ -22,7 +22,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session, sessionmaker
 
 import contexts
-from configs import dify_config
+from configs import nexusai_config
 from core.app.apps.pipeline.pipeline_generator import PipelineGenerator
 from core.app.entities.app_invoke_entities import InvokeFrom
 from core.datasource.entities.datasource_entities import (
@@ -43,7 +43,7 @@ from core.rag.entities.event import (
     DatasourceErrorEvent,
     DatasourceProcessingEvent,
 )
-from core.repositories.factory import DifyCoreRepositoryFactory, OrderConfig
+from core.repositories.factory import NexusAICoreRepositoryFactory, OrderConfig
 from core.repositories.sqlalchemy_workflow_node_execution_repository import SQLAlchemyWorkflowNodeExecutionRepository
 from core.workflow.node_factory import LATEST_VERSION, get_node_type_classes_mapping
 from core.workflow.system_variables import (
@@ -76,7 +76,7 @@ from models.workflow import (
     WorkflowRun,
     WorkflowType,
 )
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 from services.datasource_provider_service import DatasourceProviderService
 from services.entities.knowledge_entities.rag_pipeline_entities import (
     KnowledgeConfiguration,
@@ -102,15 +102,15 @@ class RagPipelineService:
         """Initialize RagPipelineService with repository dependencies."""
         if session_maker is None:
             session_maker = sessionmaker(bind=db.engine, expire_on_commit=False)
-        self._node_execution_service_repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(
+        self._node_execution_service_repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(
             session_maker
         )
-        self._workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+        self._workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
 
     @classmethod
     def get_pipeline_templates(cls, type: str = "built-in", language: str = "en-US") -> dict:
         if type == "built-in":
-            mode = dify_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE
+            mode = nexusai_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE
             retrieval_instance = PipelineTemplateRetrievalFactory.get_pipeline_template_factory(mode)()
             result = retrieval_instance.get_pipeline_templates(language)
             if not result.get("pipeline_templates") and language != "en-US":
@@ -133,7 +133,7 @@ class RagPipelineService:
         :return: template detail dict, or None if not found
         """
         if type == "built-in":
-            mode = dify_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE
+            mode = nexusai_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE
             retrieval_instance = PipelineTemplateRetrievalFactory.get_pipeline_template_factory(mode)()
             built_in_result: dict | None = retrieval_instance.get_pipeline_template_detail(template_id)
             if built_in_result is None:
@@ -456,13 +456,13 @@ class RagPipelineService:
             if node_type == BuiltinNodeTypes.HTTP_REQUEST:
                 filters = {
                     HTTP_REQUEST_CONFIG_FILTER_KEY: build_http_request_config(
-                        max_connect_timeout=dify_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
-                        max_read_timeout=dify_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
-                        max_write_timeout=dify_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
-                        max_binary_size=dify_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
-                        max_text_size=dify_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
-                        ssl_verify=dify_config.HTTP_REQUEST_NODE_SSL_VERIFY,
-                        ssrf_default_max_retries=dify_config.SSRF_DEFAULT_MAX_RETRIES,
+                        max_connect_timeout=nexusai_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
+                        max_read_timeout=nexusai_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
+                        max_write_timeout=nexusai_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
+                        max_binary_size=nexusai_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
+                        max_text_size=nexusai_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
+                        ssl_verify=nexusai_config.HTTP_REQUEST_NODE_SSL_VERIFY,
+                        ssrf_default_max_retries=nexusai_config.SSRF_DEFAULT_MAX_RETRIES,
                     )
                 }
             default_config = node_class.get_default_config(filters=filters)
@@ -489,13 +489,13 @@ class RagPipelineService:
         final_filters = dict(filters) if filters else {}
         if node_type_enum == BuiltinNodeTypes.HTTP_REQUEST and HTTP_REQUEST_CONFIG_FILTER_KEY not in final_filters:
             final_filters[HTTP_REQUEST_CONFIG_FILTER_KEY] = build_http_request_config(
-                max_connect_timeout=dify_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
-                max_read_timeout=dify_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
-                max_write_timeout=dify_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
-                max_binary_size=dify_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
-                max_text_size=dify_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
-                ssl_verify=dify_config.HTTP_REQUEST_NODE_SSL_VERIFY,
-                ssrf_default_max_retries=dify_config.SSRF_DEFAULT_MAX_RETRIES,
+                max_connect_timeout=nexusai_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
+                max_read_timeout=nexusai_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
+                max_write_timeout=nexusai_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
+                max_binary_size=nexusai_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
+                max_text_size=nexusai_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
+                ssl_verify=nexusai_config.HTTP_REQUEST_NODE_SSL_VERIFY,
+                ssrf_default_max_retries=nexusai_config.SSRF_DEFAULT_MAX_RETRIES,
             )
         default_config = node_class.get_default_config(filters=final_filters or None)
         if not default_config:
@@ -546,7 +546,7 @@ class RagPipelineService:
 
         # Create repository and save the node execution
 
-        repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+        repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
             session_factory=db.engine,
             user=account,
             app_id=pipeline.id,
@@ -1252,7 +1252,7 @@ class RagPipelineService:
     def get_node_last_run(
         self, pipeline: Pipeline, workflow: Workflow, node_id: str
     ) -> WorkflowNodeExecutionModel | None:
-        node_execution_service_repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(
+        node_execution_service_repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(
             sessionmaker(db.engine)
         )
 

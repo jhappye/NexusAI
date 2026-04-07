@@ -5,7 +5,7 @@ import click
 from redis.exceptions import LockError
 
 import app
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_redis import redis_client
 from services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs import WorkflowRunCleanup
 
@@ -21,8 +21,8 @@ def clean_workflow_runs_task() -> None:
         click.style(
             (
                 "Scheduled workflow run cleanup starting: "
-                f"cutoff={dify_config.SANDBOX_EXPIRED_RECORDS_RETENTION_DAYS} days, "
-                f"batch={dify_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_SIZE}"
+                f"cutoff={nexusai_config.SANDBOX_EXPIRED_RECORDS_RETENTION_DAYS} days, "
+                f"batch={nexusai_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_SIZE}"
             ),
             fg="green",
         )
@@ -34,12 +34,12 @@ def clean_workflow_runs_task() -> None:
         # lock the task to avoid concurrent execution in case of the future data volume growth
         with redis_client.lock(
             "retention:clean_workflow_runs_task",
-            timeout=dify_config.SANDBOX_EXPIRED_RECORDS_CLEAN_TASK_LOCK_TTL,
+            timeout=nexusai_config.SANDBOX_EXPIRED_RECORDS_CLEAN_TASK_LOCK_TTL,
             blocking=False,
         ):
             WorkflowRunCleanup(
-                days=dify_config.SANDBOX_EXPIRED_RECORDS_RETENTION_DAYS,
-                batch_size=dify_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_SIZE,
+                days=nexusai_config.SANDBOX_EXPIRED_RECORDS_RETENTION_DAYS,
+                batch_size=nexusai_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_SIZE,
                 start_from=None,
                 end_before=None,
             ).run()

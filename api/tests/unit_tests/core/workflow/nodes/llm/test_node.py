@@ -68,11 +68,11 @@ from graphon.runtime import GraphRuntimeState, VariablePool
 from graphon.template_rendering import TemplateRenderError
 from graphon.variables import ArrayAnySegment, ArrayFileSegment, NoneSegment
 
-from core.app.entities.app_invoke_entities import DifyRunContext, InvokeFrom, ModelConfigWithCredentialsEntity, UserFrom
+from core.app.entities.app_invoke_entities import NexusAIRunContext, InvokeFrom, ModelConfigWithCredentialsEntity, UserFrom
 from core.app.llm.model_access import (
-    DifyCredentialsProvider,
-    DifyModelFactory,
-    build_dify_model_access,
+    NexusAICredentialsProvider,
+    NexusAIModelFactory,
+    build_nexusai_model_access,
     fetch_model_config,
 )
 from core.entities.provider_configuration import ProviderConfiguration, ProviderModelBundle
@@ -283,7 +283,7 @@ def model_config(monkeypatch):
 
 def test_fetch_model_config_hydrates_model_instance_runtime_settings(model_config: ModelConfigWithCredentialsEntity):
     mock_credentials_provider = mock.MagicMock(spec=CredentialsProvider)
-    mock_model_factory = mock.MagicMock(spec=DifyModelFactory)
+    mock_model_factory = mock.MagicMock(spec=NexusAIModelFactory)
 
     provider_model_bundle = model_config.provider_model_bundle
     model_type_instance = provider_model_bundle.model_type_instance
@@ -348,7 +348,7 @@ def test_fetch_model_config_hydrates_model_instance_runtime_settings(model_confi
     provider_model.raise_for_status.assert_called_once()
 
 
-def test_dify_model_access_adapters_call_managers():
+def test_nexusai_model_access_adapters_call_managers():
     mock_provider_manager = mock.MagicMock()
     mock_model_manager = mock.MagicMock()
     mock_configurations = mock.MagicMock()
@@ -359,7 +359,7 @@ def test_dify_model_access_adapters_call_managers():
     mock_provider_configuration.get_provider_model.return_value = mock_provider_model
     mock_provider_configuration.get_current_credentials.return_value = {"api_key": "test"}
 
-    run_context = DifyRunContext(
+    run_context = NexusAIRunContext(
         tenant_id="tenant",
         app_id="app",
         user_id="user",
@@ -367,11 +367,11 @@ def test_dify_model_access_adapters_call_managers():
         invoke_from=InvokeFrom.DEBUGGER,
     )
 
-    credentials_provider = DifyCredentialsProvider(
+    credentials_provider = NexusAICredentialsProvider(
         run_context=run_context,
         provider_manager=mock_provider_manager,
     )
-    model_factory = DifyModelFactory(
+    model_factory = NexusAIModelFactory(
         run_context=run_context,
         model_manager=mock_model_manager,
     )
@@ -508,8 +508,8 @@ def test_fetch_files_with_non_existent_variable():
 # def test_fetch_prompt_messages__basic(faker, llm_node, model_config):
 # TODO: Add test
 # pass
-# Setup dify config
-# dify_config.MULTIMODAL_SEND_FORMAT = "url"
+# Setup nexusai config
+# nexusai_config.MULTIMODAL_SEND_FORMAT = "url"
 
 # # Generate fake values for prompt template
 # fake_assistant_prompt = faker.sentence()
@@ -752,9 +752,9 @@ def test_handle_list_messages_replaces_double_brace_context_placeholder(llm_node
 
 
 def test_handle_list_messages_renders_jinja2_messages(llm_node):
-    llm_node.graph_runtime_state.variable_pool.add(["input", "name"], "Dify")
+    llm_node.graph_runtime_state.variable_pool.add(["input", "name"], "NexusAI")
     renderer = mock.MagicMock()
-    renderer.render_template.return_value = "Hello Dify"
+    renderer.render_template.return_value = "Hello NexusAI"
 
     prompt_messages = llm_node.handle_list_messages(
         messages=[
@@ -773,9 +773,9 @@ def test_handle_list_messages_renders_jinja2_messages(llm_node):
     )
 
     assert prompt_messages == [
-        SystemPromptMessage(content=[TextPromptMessageContent(data="Hello Dify")]),
+        SystemPromptMessage(content=[TextPromptMessageContent(data="Hello NexusAI")]),
     ]
-    renderer.render_template.assert_called_once_with("Hello {{ name }}", {"name": "Dify"})
+    renderer.render_template.assert_called_once_with("Hello {{ name }}", {"name": "NexusAI"})
 
 
 def test_transform_chat_messages_prefers_jinja2_text(llm_node):
@@ -850,7 +850,7 @@ def test_fetch_jinja_inputs_raises_for_missing_variable(llm_node):
 
 
 def test_fetch_inputs_collects_prompt_and_memory_variables(llm_node):
-    llm_node.graph_runtime_state.variable_pool.add(["input", "name"], "Dify")
+    llm_node.graph_runtime_state.variable_pool.add(["input", "name"], "NexusAI")
     llm_node.graph_runtime_state.variable_pool.add(["input", "payload"], {"active": True})
 
     node_data = llm_node.node_data.model_copy(
@@ -871,7 +871,7 @@ def test_fetch_inputs_collects_prompt_and_memory_variables(llm_node):
     )
 
     assert llm_node._fetch_inputs(node_data) == {
-        "#input.name#": "Dify",
+        "#input.name#": "NexusAI",
         "#input.payload#": {"active": True},
     }
 
@@ -1372,21 +1372,21 @@ class TestReasoningFormat:
         """Test separated mode: tags are removed and content is extracted"""
 
         text_with_think = """
-        <think>I need to explain what Dify is. It's an open source AI platform.
-        </think>Dify is an open source AI platform.
+        <think>I need to explain what NexusAI is. It's an open source AI platform.
+        </think>NexusAI is an open source AI platform.
         """
 
         clean_text, reasoning_content = LLMNode._split_reasoning(text_with_think, "separated")
 
-        assert clean_text == "Dify is an open source AI platform."
-        assert reasoning_content == "I need to explain what Dify is. It's an open source AI platform."
+        assert clean_text == "NexusAI is an open source AI platform."
+        assert reasoning_content == "I need to explain what NexusAI is. It's an open source AI platform."
 
     def test_split_reasoning_tagged_mode(self):
         """Test tagged mode: original text is preserved"""
 
         text_with_think = """
-        <think>I need to explain what Dify is. It's an open source AI platform.
-        </think>Dify is an open source AI platform.
+        <think>I need to explain what NexusAI is. It's an open source AI platform.
+        </think>NexusAI is an open source AI platform.
         """
 
         clean_text, reasoning_content = LLMNode._split_reasoning(text_with_think, "tagged")
@@ -1419,8 +1419,8 @@ class TestReasoningFormat:
         assert node_data.reasoning_format == "tagged"
 
         text_with_think = """
-        <think>I need to explain what Dify is. It's an open source AI platform.
-        </think>Dify is an open source AI platform.
+        <think>I need to explain what NexusAI is. It's an open source AI platform.
+        </think>NexusAI is an open source AI platform.
         """
         clean_text, reasoning_content = LLMNode._split_reasoning(text_with_think, node_data.reasoning_format)
 
@@ -1638,7 +1638,7 @@ def test_extract_variable_selector_to_variable_mapping_includes_runtime_selector
 
 def test_render_jinja2_message_requires_renderer_and_passes_inputs():
     variable_pool = VariablePool.empty()
-    variable_pool.add(["input", "name"], "Dify")
+    variable_pool.add(["input", "name"], "NexusAI")
     variables = [VariableSelector(variable="name", value_selector=["input", "name"])]
 
     with pytest.raises(
@@ -1653,7 +1653,7 @@ def test_render_jinja2_message_requires_renderer_and_passes_inputs():
         )
 
     renderer = mock.MagicMock()
-    renderer.render_template.return_value = "Hello Dify"
+    renderer.render_template.return_value = "Hello NexusAI"
 
     assert (
         _render_jinja2_message(
@@ -1662,9 +1662,9 @@ def test_render_jinja2_message_requires_renderer_and_passes_inputs():
             variable_pool=variable_pool,
             jinja2_template_renderer=renderer,
         )
-        == "Hello Dify"
+        == "Hello NexusAI"
     )
-    renderer.render_template.assert_called_once_with("Hello {{ name }}", {"name": "Dify"})
+    renderer.render_template.assert_called_once_with("Hello {{ name }}", {"name": "NexusAI"})
 
 
 def test_calculate_rest_token_uses_context_size_and_max_tokens():
@@ -1708,8 +1708,8 @@ def test_handle_memory_chat_mode_uses_calculated_token_budget():
     memory.get_history_prompt_messages.assert_called_once_with(max_token_limit=321, message_limit=2)
 
 
-def test_dify_model_access_adapters_skip_runtime_build_when_managers_are_injected():
-    run_context = DifyRunContext(
+def test_nexusai_model_access_adapters_skip_runtime_build_when_managers_are_injected():
+    run_context = NexusAIRunContext(
         tenant_id="tenant",
         app_id="app",
         user_id="user",
@@ -1718,14 +1718,14 @@ def test_dify_model_access_adapters_skip_runtime_build_when_managers_are_injecte
     )
 
     with mock.patch("core.app.llm.model_access.create_plugin_provider_manager") as mock_provider_manager_factory:
-        DifyCredentialsProvider(run_context=run_context, provider_manager=mock.MagicMock())
-        DifyModelFactory(run_context=run_context, model_manager=mock.MagicMock())
+        NexusAICredentialsProvider(run_context=run_context, provider_manager=mock.MagicMock())
+        NexusAIModelFactory(run_context=run_context, model_manager=mock.MagicMock())
 
     mock_provider_manager_factory.assert_not_called()
 
 
-def test_build_dify_model_access_binds_run_context_user_id_once():
-    run_context = DifyRunContext(
+def test_build_nexusai_model_access_binds_run_context_user_id_once():
+    run_context = NexusAIRunContext(
         tenant_id="tenant",
         app_id="app",
         user_id="user",
@@ -1734,14 +1734,14 @@ def test_build_dify_model_access_binds_run_context_user_id_once():
     )
 
     with mock.patch("core.app.llm.model_access.create_plugin_provider_manager") as mock_provider_manager:
-        build_dify_model_access(run_context)
+        build_nexusai_model_access(run_context)
 
     mock_provider_manager.assert_called_once_with(tenant_id="tenant", user_id="user")
 
 
-def test_dify_model_access_requires_run_context_argument():
+def test_nexusai_model_access_requires_run_context_argument():
     with pytest.raises(TypeError):
-        DifyCredentialsProvider()
+        NexusAICredentialsProvider()
 
     with pytest.raises(TypeError):
-        DifyModelFactory()
+        NexusAIModelFactory()

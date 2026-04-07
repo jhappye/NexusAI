@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_database import db
 from models.model import AccountTrialAppRecord, TrialApp
 from services.feature_service import FeatureService
@@ -15,7 +15,7 @@ class RecommendedAppService:
         :param language: language
         :return:
         """
-        mode = dify_config.HOSTED_FETCH_APP_TEMPLATES_MODE
+        mode = nexusai_config.HOSTED_FETCH_APP_TEMPLATES_MODE
         retrieval_instance = RecommendAppRetrievalFactory.get_recommend_app_factory(mode)()
         result = retrieval_instance.get_recommended_apps_and_categories(language)
         if not result.get("recommended_apps"):
@@ -43,7 +43,7 @@ class RecommendedAppService:
         :param app_id: app id
         :return:
         """
-        mode = dify_config.HOSTED_FETCH_APP_TEMPLATES_MODE
+        mode = nexusai_config.HOSTED_FETCH_APP_TEMPLATES_MODE
         retrieval_instance = RecommendAppRetrievalFactory.get_recommend_app_factory(mode)()
         result: dict = retrieval_instance.get_recommend_app_detail(app_id)
         if FeatureService.get_system_features().enable_trial_app:

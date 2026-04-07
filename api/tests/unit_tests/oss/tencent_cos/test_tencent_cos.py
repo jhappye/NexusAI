@@ -26,19 +26,19 @@ class TestTencentCosConfiguration:
 
     def test_init_with_custom_domain(self):
         """Test initialization with custom domain configured."""
-        # Mock dify_config to return custom domain configuration
-        mock_dify_config = MagicMock()
-        mock_dify_config.TENCENT_COS_CUSTOM_DOMAIN = "cos.example.com"
-        mock_dify_config.TENCENT_COS_SECRET_ID = "test-secret-id"
-        mock_dify_config.TENCENT_COS_SECRET_KEY = "test-secret-key"
-        mock_dify_config.TENCENT_COS_SCHEME = "https"
+        # Mock nexusai_config to return custom domain configuration
+        mock_nexusai_config = MagicMock()
+        mock_nexusai_config.TENCENT_COS_CUSTOM_DOMAIN = "cos.example.com"
+        mock_nexusai_config.TENCENT_COS_SECRET_ID = "test-secret-id"
+        mock_nexusai_config.TENCENT_COS_SECRET_KEY = "test-secret-key"
+        mock_nexusai_config.TENCENT_COS_SCHEME = "https"
 
         # Mock CosConfig and CosS3Client
         mock_config_instance = MagicMock()
         mock_client = MagicMock()
 
         with (
-            patch("extensions.storage.tencent_cos_storage.dify_config", mock_dify_config),
+            patch("extensions.storage.tencent_cos_storage.nexusai_config", mock_nexusai_config),
             patch(
                 "extensions.storage.tencent_cos_storage.CosConfig", return_value=mock_config_instance, autospec=True
             ) as mock_cos_config,
@@ -58,20 +58,20 @@ class TestTencentCosConfiguration:
 
     def test_init_with_region(self):
         """Test initialization with region configured (no custom domain)."""
-        # Mock dify_config to return region configuration
-        mock_dify_config = MagicMock()
-        mock_dify_config.TENCENT_COS_CUSTOM_DOMAIN = None
-        mock_dify_config.TENCENT_COS_REGION = "ap-guangzhou"
-        mock_dify_config.TENCENT_COS_SECRET_ID = "test-secret-id"
-        mock_dify_config.TENCENT_COS_SECRET_KEY = "test-secret-key"
-        mock_dify_config.TENCENT_COS_SCHEME = "https"
+        # Mock nexusai_config to return region configuration
+        mock_nexusai_config = MagicMock()
+        mock_nexusai_config.TENCENT_COS_CUSTOM_DOMAIN = None
+        mock_nexusai_config.TENCENT_COS_REGION = "ap-guangzhou"
+        mock_nexusai_config.TENCENT_COS_SECRET_ID = "test-secret-id"
+        mock_nexusai_config.TENCENT_COS_SECRET_KEY = "test-secret-key"
+        mock_nexusai_config.TENCENT_COS_SCHEME = "https"
 
         # Mock CosConfig and CosS3Client
         mock_config_instance = MagicMock()
         mock_client = MagicMock()
 
         with (
-            patch("extensions.storage.tencent_cos_storage.dify_config", mock_dify_config),
+            patch("extensions.storage.tencent_cos_storage.nexusai_config", mock_nexusai_config),
             patch(
                 "extensions.storage.tencent_cos_storage.CosConfig", return_value=mock_config_instance, autospec=True
             ) as mock_cos_config,

@@ -9,7 +9,7 @@ def test_format_returns_result_value_as_string(mocker: MockerFixture) -> None:
         return_value={"result": 123},
     )
 
-    formatted = Jinja2Formatter.format("Hello {{ name }}", {"name": "Dify"})
+    formatted = Jinja2Formatter.format("Hello {{ name }}", {"name": "NexusAI"})
 
     assert formatted == "123"
     execute_mock.assert_called_once()
@@ -21,4 +21,4 @@ def test_format_returns_empty_string_when_result_missing(mocker: MockerFixture) 
         return_value={},
     )
 
-    assert Jinja2Formatter.format("Hello", {"name": "Dify"}) == ""
+    assert Jinja2Formatter.format("Hello", {"name": "NexusAI"}) == ""

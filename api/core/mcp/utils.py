@@ -7,10 +7,10 @@ import httpx_sse
 from graphon.model_runtime.utils.encoders import jsonable_encoder
 from httpx_sse import connect_sse
 
-from configs import dify_config
+from configs import nexusai_config
 from core.mcp.types import ErrorData, JSONRPCError
 
-HTTP_REQUEST_NODE_SSL_VERIFY = dify_config.HTTP_REQUEST_NODE_SSL_VERIFY
+HTTP_REQUEST_NODE_SSL_VERIFY = nexusai_config.HTTP_REQUEST_NODE_SSL_VERIFY
 
 STATUS_FORCELIST = [429, 500, 502, 503, 504]
 
@@ -28,19 +28,19 @@ def create_ssrf_proxy_mcp_http_client(
     Returns:
         Configured httpx.Client with proxy settings
     """
-    if dify_config.SSRF_PROXY_ALL_URL:
+    if nexusai_config.SSRF_PROXY_ALL_URL:
         return httpx.Client(
             verify=HTTP_REQUEST_NODE_SSL_VERIFY,
             headers=headers or {},
             timeout=timeout,
             follow_redirects=True,
-            proxy=dify_config.SSRF_PROXY_ALL_URL,
+            proxy=nexusai_config.SSRF_PROXY_ALL_URL,
         )
-    elif dify_config.SSRF_PROXY_HTTP_URL and dify_config.SSRF_PROXY_HTTPS_URL:
+    elif nexusai_config.SSRF_PROXY_HTTP_URL and nexusai_config.SSRF_PROXY_HTTPS_URL:
         proxy_mounts = {
-            "http://": httpx.HTTPTransport(proxy=dify_config.SSRF_PROXY_HTTP_URL, verify=HTTP_REQUEST_NODE_SSL_VERIFY),
+            "http://": httpx.HTTPTransport(proxy=nexusai_config.SSRF_PROXY_HTTP_URL, verify=HTTP_REQUEST_NODE_SSL_VERIFY),
             "https://": httpx.HTTPTransport(
-                proxy=dify_config.SSRF_PROXY_HTTPS_URL, verify=HTTP_REQUEST_NODE_SSL_VERIFY
+                proxy=nexusai_config.SSRF_PROXY_HTTPS_URL, verify=HTTP_REQUEST_NODE_SSL_VERIFY
             ),
         }
         return httpx.Client(
@@ -103,10 +103,10 @@ def ssrf_proxy_sse_connect(url: str, **kwargs) -> AbstractContextManager[httpx_s
         timeout = kwargs.pop(
             "timeout",
             httpx.Timeout(
-                timeout=dify_config.SSRF_DEFAULT_TIME_OUT,
-                connect=dify_config.SSRF_DEFAULT_CONNECT_TIME_OUT,
-                read=dify_config.SSRF_DEFAULT_READ_TIME_OUT,
-                write=dify_config.SSRF_DEFAULT_WRITE_TIME_OUT,
+                timeout=nexusai_config.SSRF_DEFAULT_TIME_OUT,
+                connect=nexusai_config.SSRF_DEFAULT_CONNECT_TIME_OUT,
+                read=nexusai_config.SSRF_DEFAULT_READ_TIME_OUT,
+                write=nexusai_config.SSRF_DEFAULT_WRITE_TIME_OUT,
             ),
         )
         headers = kwargs.pop("headers", {})

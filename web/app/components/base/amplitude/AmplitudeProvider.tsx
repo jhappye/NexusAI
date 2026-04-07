@@ -38,7 +38,7 @@ const pageNameEnrichmentPlugin = (): amplitude.Types.EnrichmentPlugin => {
     type: 'enrichment',
     setup: async () => undefined,
     execute: async (event: amplitude.Types.Event) => {
-      // Only modify page view events
+      // Only monexusai page view events
       if (event.event_type === '[Amplitude] Page Viewed' && event.event_properties) {
         /* v8 ignore next @preserve */
         const pathname = typeof window !== 'undefined' ? window.location.pathname : ''

@@ -281,7 +281,7 @@ def test_get_model_schema_deletes_invalid_cache_and_refetches(monkeypatch: pytes
             setex=setex,
         ),
     )
-    monkeypatch.setattr(model_runtime_module.dify_config, "PLUGIN_MODEL_SCHEMA_CACHE_TTL", 300)
+    monkeypatch.setattr(model_runtime_module.nexusai_config, "PLUGIN_MODEL_SCHEMA_CACHE_TTL", 300)
     client.get_model_schema.return_value = schema
     runtime = PluginModelRuntime(tenant_id="tenant", user_id="user", client=client)
 
@@ -308,7 +308,7 @@ def test_get_model_schema_deletes_invalid_cache_and_refetches(monkeypatch: pytes
 
 def test_get_llm_num_tokens_returns_zero_when_plugin_counting_is_disabled(monkeypatch: pytest.MonkeyPatch) -> None:
     client = Mock(spec=PluginModelClient)
-    monkeypatch.setattr(model_runtime_module.dify_config, "PLUGIN_BASED_TOKEN_COUNTING_ENABLED", False)
+    monkeypatch.setattr(model_runtime_module.nexusai_config, "PLUGIN_BASED_TOKEN_COUNTING_ENABLED", False)
     runtime = PluginModelRuntime(tenant_id="tenant", user_id="user", client=client)
 
     assert (

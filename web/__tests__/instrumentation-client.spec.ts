@@ -35,7 +35,7 @@ describe('toSpliced polyfill', () => {
     expect(typeof Array.prototype.toSpliced).toBe('function')
   })
 
-  it('should return a new array without modifying the original', () => {
+  it('should return a new array without monexusaiing the original', () => {
     applyPolyfill()
     const arr = [1, 2, 3, 4, 5]
     const result = arr.toSpliced(1, 2)

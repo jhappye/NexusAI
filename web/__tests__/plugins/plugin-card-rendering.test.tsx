@@ -210,7 +210,7 @@ describe('Plugin Card Rendering Integration', () => {
 
   it('shows loading placeholder when isLoading is true', () => {
     const payload = makePayload()
-    render(<Card payload={payload} isLoading loadingFileName="uploading.difypkg" />)
+    render(<Card payload={payload} isLoading loadingFileName="uploading.nexusaipkg" />)
 
     expect(screen.getByTestId('placeholder')).toBeInTheDocument()
   })

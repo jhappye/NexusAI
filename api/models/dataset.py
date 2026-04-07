@@ -18,7 +18,7 @@ import sqlalchemy as sa
 from sqlalchemy import DateTime, String, func, select
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.index_processor.constant.built_in_field import BuiltInField, MetadataDataSource
 from core.rag.index_processor.constant.index_type import IndexStructureType, IndexTechniqueType
 from core.rag.index_processor.constant.query_type import QueryType
@@ -384,7 +384,7 @@ class Dataset(Base):
     @staticmethod
     def gen_collection_name_by_id(dataset_id: str) -> str:
         normalized_dataset_id = dataset_id.replace("-", "_")
-        return f"{dify_config.VECTOR_INDEX_NAME_PREFIX}_{normalized_dataset_id}_Node"
+        return f"{nexusai_config.VECTOR_INDEX_NAME_PREFIX}_{normalized_dataset_id}_Node"
 
 
 class DatasetProcessRule(Base):  # bug
@@ -886,7 +886,7 @@ class DocumentSegment(Base):
             nonce = os.urandom(16).hex()
             timestamp = str(int(time.time()))
             data_to_sign = f"image-preview|{upload_file_id}|{timestamp}|{nonce}"
-            secret_key = dify_config.SECRET_KEY.encode() if dify_config.SECRET_KEY else b""
+            secret_key = nexusai_config.SECRET_KEY.encode() if nexusai_config.SECRET_KEY else b""
             sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
             encoded_sign = base64.urlsafe_b64encode(sign).decode()
 
@@ -903,7 +903,7 @@ class DocumentSegment(Base):
             nonce = os.urandom(16).hex()
             timestamp = str(int(time.time()))
             data_to_sign = f"file-preview|{upload_file_id}|{timestamp}|{nonce}"
-            secret_key = dify_config.SECRET_KEY.encode() if dify_config.SECRET_KEY else b""
+            secret_key = nexusai_config.SECRET_KEY.encode() if nexusai_config.SECRET_KEY else b""
             sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
             encoded_sign = base64.urlsafe_b64encode(sign).decode()
 
@@ -922,7 +922,7 @@ class DocumentSegment(Base):
             nonce = os.urandom(16).hex()
             timestamp = str(int(time.time()))
             data_to_sign = f"file-preview|{upload_file_id}|{timestamp}|{nonce}"
-            secret_key = dify_config.SECRET_KEY.encode() if dify_config.SECRET_KEY else b""
+            secret_key = nexusai_config.SECRET_KEY.encode() if nexusai_config.SECRET_KEY else b""
             sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
             encoded_sign = base64.urlsafe_b64encode(sign).decode()
 
@@ -960,12 +960,12 @@ class DocumentSegment(Base):
             nonce = os.urandom(16).hex()
             timestamp = str(int(time.time()))
             data_to_sign = f"image-preview|{upload_file_id}|{timestamp}|{nonce}"
-            secret_key = dify_config.SECRET_KEY.encode() if dify_config.SECRET_KEY else b""
+            secret_key = nexusai_config.SECRET_KEY.encode() if nexusai_config.SECRET_KEY else b""
             sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
             encoded_sign = base64.urlsafe_b64encode(sign).decode()
 
             params = f"timestamp={timestamp}&nonce={nonce}&sign={encoded_sign}"
-            reference_url = dify_config.CONSOLE_API_URL or ""
+            reference_url = nexusai_config.CONSOLE_API_URL or ""
             base_url = f"{reference_url}/files/{upload_file_id}/image-preview"
             source_url = f"{base_url}?{params}"
             attachment_list.append(

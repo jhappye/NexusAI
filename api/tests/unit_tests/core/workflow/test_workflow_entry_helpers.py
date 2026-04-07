@@ -83,7 +83,7 @@ class TestWorkflowChildEngineBuilder:
             variable_pool=sentinel.variable_pool,
         )
 
-        with patch.object(workflow_entry, "DifyNodeFactory", return_value=sentinel.factory):
+        with patch.object(workflow_entry, "NexusAINodeFactory", return_value=sentinel.factory):
             with pytest.raises(ChildGraphNotFoundError, match="child graph root node 'missing' not found"):
                 builder.build_child_engine(
                     workflow_id="workflow-id",
@@ -110,7 +110,7 @@ class TestWorkflowChildEngineBuilder:
                 "GraphRuntimeState",
                 return_value=child_graph_runtime_state,
             ) as graph_runtime_state_cls,
-            patch.object(workflow_entry, "DifyNodeFactory", return_value=sentinel.factory) as dify_node_factory,
+            patch.object(workflow_entry, "NexusAINodeFactory", return_value=sentinel.factory) as nexusai_node_factory,
             patch.object(workflow_entry.Graph, "init", return_value=child_graph) as graph_init,
             patch.object(workflow_entry, "GraphEngine", return_value=child_engine) as graph_engine_cls,
             patch.object(workflow_entry, "GraphEngineConfig", return_value=sentinel.graph_engine_config),
@@ -131,7 +131,7 @@ class TestWorkflowChildEngineBuilder:
             start_at=123.0,
             execution_context=sentinel.execution_context,
         )
-        dify_node_factory.assert_called_once_with(
+        nexusai_node_factory.assert_called_once_with(
             graph_init_params=graph_init_params,
             graph_runtime_state=child_graph_runtime_state,
         )
@@ -188,7 +188,7 @@ class TestWorkflowChildEngineBuilder:
         with (
             patch.object(
                 workflow_entry,
-                "DifyNodeFactory",
+                "NexusAINodeFactory",
                 side_effect=lambda graph_init_params, graph_runtime_state: SimpleNamespace(
                     graph_init_params=graph_init_params,
                     graph_runtime_state=graph_runtime_state,
@@ -217,7 +217,7 @@ class TestWorkflowChildEngineBuilder:
 
 class TestWorkflowEntryInit:
     def test_rejects_call_depth_above_limit(self):
-        call_depth = workflow_entry.dify_config.WORKFLOW_CALL_MAX_DEPTH + 1
+        call_depth = workflow_entry.nexusai_config.WORKFLOW_CALL_MAX_DEPTH + 1
 
         with pytest.raises(ValueError, match="Max workflow call depth"):
             workflow_entry.WorkflowEntry(
@@ -243,8 +243,8 @@ class TestWorkflowEntryInit:
         observability_layer = sentinel.observability_layer
 
         with (
-            patch.object(workflow_entry.dify_config, "DEBUG", True),
-            patch.object(workflow_entry.dify_config, "ENABLE_OTEL", False),
+            patch.object(workflow_entry.nexusai_config, "DEBUG", True),
+            patch.object(workflow_entry.nexusai_config, "ENABLE_OTEL", False),
             patch.object(workflow_entry, "is_instrument_flag_enabled", return_value=True),
             patch.object(workflow_entry, "capture_current_context", return_value=sentinel.execution_context),
             patch.object(workflow_entry, "GraphEngine", return_value=graph_engine) as graph_engine_cls,
@@ -292,8 +292,8 @@ class TestWorkflowEntryInit:
             logger_name="GraphEngine.Debug.workflow",
         )
         execution_limits_layer_cls.assert_called_once_with(
-            max_steps=workflow_entry.dify_config.WORKFLOW_MAX_EXECUTION_STEPS,
-            max_time=workflow_entry.dify_config.WORKFLOW_MAX_EXECUTION_TIME,
+            max_steps=workflow_entry.nexusai_config.WORKFLOW_MAX_EXECUTION_STEPS,
+            max_time=workflow_entry.nexusai_config.WORKFLOW_MAX_EXECUTION_TIME,
         )
         assert graph_engine.layer.call_args_list == [
             ((debug_layer,), {}),
@@ -355,10 +355,10 @@ class TestWorkflowEntrySingleStepRun:
                 "GraphRuntimeState",
                 return_value=SimpleNamespace(variable_pool=variable_pool),
             ),
-            patch.object(workflow_entry, "build_dify_run_context", return_value={"_dify": "context"}),
+            patch.object(workflow_entry, "build_nexusai_run_context", return_value={"_nexusai": "context"}),
             patch.object(workflow_entry.time, "perf_counter", return_value=123.0),
             patch.object(workflow_entry, "resolve_workflow_node_class", return_value=FakeLLMNode),
-            patch.object(workflow_entry, "DifyNodeFactory") as dify_node_factory,
+            patch.object(workflow_entry, "NexusAINodeFactory") as nexusai_node_factory,
             patch.object(workflow_entry, "load_into_variable_pool"),
             patch.object(workflow_entry.WorkflowEntry, "mapping_user_inputs_to_variable_pool"),
             patch.object(
@@ -372,7 +372,7 @@ class TestWorkflowEntrySingleStepRun:
                 assert variable_pool.get(["sys", "conversation_id"]) is not None
                 return FakeLLMNode()
 
-            dify_node_factory.return_value.create_node.side_effect = _create_node
+            nexusai_node_factory.return_value.create_node.side_effect = _create_node
             workflow = SimpleNamespace(
                 tenant_id="tenant-id",
                 app_id="app-id",
@@ -414,10 +414,10 @@ class TestWorkflowEntrySingleStepRun:
         with (
             patch.object(workflow_entry, "GraphInitParams", return_value=sentinel.graph_init_params),
             patch.object(workflow_entry, "GraphRuntimeState", return_value=sentinel.graph_runtime_state),
-            patch.object(workflow_entry, "build_dify_run_context", return_value={"_dify": "context"}),
+            patch.object(workflow_entry, "build_nexusai_run_context", return_value={"_nexusai": "context"}),
             patch.object(workflow_entry.time, "perf_counter", return_value=123.0),
             patch.object(workflow_entry, "resolve_workflow_node_class", return_value=FakeNode),
-            patch.object(workflow_entry, "DifyNodeFactory") as dify_node_factory,
+            patch.object(workflow_entry, "NexusAINodeFactory") as nexusai_node_factory,
             patch.object(workflow_entry, "add_node_inputs_to_pool") as add_node_inputs_to_pool,
             patch.object(workflow_entry, "load_into_variable_pool") as load_into_variable_pool,
             patch.object(
@@ -430,7 +430,7 @@ class TestWorkflowEntrySingleStepRun:
                 return_value=iter(["event"]),
             ),
         ):
-            dify_node_factory.return_value.create_node.return_value = FakeNode()
+            nexusai_node_factory.return_value.create_node.return_value = FakeNode()
             workflow = SimpleNamespace(
                 tenant_id="tenant-id",
                 app_id="app-id",
@@ -483,10 +483,10 @@ class TestWorkflowEntrySingleStepRun:
         with (
             patch.object(workflow_entry, "GraphInitParams", return_value=sentinel.graph_init_params),
             patch.object(workflow_entry, "GraphRuntimeState", return_value=sentinel.graph_runtime_state),
-            patch.object(workflow_entry, "build_dify_run_context", return_value={"_dify": "context"}),
+            patch.object(workflow_entry, "build_nexusai_run_context", return_value={"_nexusai": "context"}),
             patch.object(workflow_entry.time, "perf_counter", return_value=123.0),
             patch.object(workflow_entry, "resolve_workflow_node_class", return_value=FakeDatasourceNode),
-            patch.object(workflow_entry, "DifyNodeFactory") as dify_node_factory,
+            patch.object(workflow_entry, "NexusAINodeFactory") as nexusai_node_factory,
             patch.object(workflow_entry, "add_node_inputs_to_pool") as add_node_inputs_to_pool,
             patch.object(workflow_entry, "load_into_variable_pool") as load_into_variable_pool,
             patch.object(
@@ -499,7 +499,7 @@ class TestWorkflowEntrySingleStepRun:
                 return_value=iter(["event"]),
             ),
         ):
-            dify_node_factory.return_value.create_node.return_value = FakeDatasourceNode()
+            nexusai_node_factory.return_value.create_node.return_value = FakeDatasourceNode()
             workflow = SimpleNamespace(
                 tenant_id="tenant-id",
                 app_id="app-id",
@@ -543,10 +543,10 @@ class TestWorkflowEntrySingleStepRun:
         with (
             patch.object(workflow_entry, "GraphInitParams", return_value=sentinel.graph_init_params),
             patch.object(workflow_entry, "GraphRuntimeState", return_value=sentinel.graph_runtime_state),
-            patch.object(workflow_entry, "build_dify_run_context", return_value={"_dify": "context"}),
+            patch.object(workflow_entry, "build_nexusai_run_context", return_value={"_nexusai": "context"}),
             patch.object(workflow_entry.time, "perf_counter", return_value=123.0),
             patch.object(workflow_entry, "resolve_workflow_node_class", return_value=FakeNode),
-            patch.object(workflow_entry, "DifyNodeFactory") as dify_node_factory,
+            patch.object(workflow_entry, "NexusAINodeFactory") as nexusai_node_factory,
             patch.object(workflow_entry, "add_node_inputs_to_pool"),
             patch.object(workflow_entry, "load_into_variable_pool"),
             patch.object(workflow_entry.WorkflowEntry, "mapping_user_inputs_to_variable_pool"),
@@ -556,7 +556,7 @@ class TestWorkflowEntrySingleStepRun:
                 side_effect=RuntimeError("boom"),
             ),
         ):
-            dify_node_factory.return_value.create_node.return_value = FakeNode()
+            nexusai_node_factory.return_value.create_node.return_value = FakeNode()
             workflow = SimpleNamespace(
                 tenant_id="tenant-id",
                 app_id="app-id",
@@ -638,8 +638,8 @@ class TestWorkflowEntryHelpers:
             def version():
                 return "1"
 
-        dify_node_factory = MagicMock()
-        dify_node_factory.create_node.return_value = FakeNode()
+        nexusai_node_factory = MagicMock()
+        nexusai_node_factory.create_node.return_value = FakeNode()
         monkeypatch.setattr(
             workflow_entry,
             "resolve_workflow_node_class",
@@ -655,10 +655,10 @@ class TestWorkflowEntryHelpers:
             ) as graph_init_params,
             patch.object(workflow_entry, "GraphRuntimeState", return_value=sentinel.graph_runtime_state),
             patch.object(
-                workflow_entry, "build_dify_run_context", return_value={"_dify": "context"}
-            ) as build_dify_run_context,
+                workflow_entry, "build_nexusai_run_context", return_value={"_nexusai": "context"}
+            ) as build_nexusai_run_context,
             patch.object(workflow_entry.time, "perf_counter", return_value=123.0),
-            patch.object(workflow_entry, "DifyNodeFactory", return_value=dify_node_factory) as dify_node_factory_cls,
+            patch.object(workflow_entry, "NexusAINodeFactory", return_value=nexusai_node_factory) as nexusai_node_factory_cls,
             patch.object(
                 workflow_entry.WorkflowEntry,
                 "mapping_user_inputs_to_variable_pool",
@@ -681,7 +681,7 @@ class TestWorkflowEntryHelpers:
         assert list(generator) == ["event"]
         variable_pool_cls.assert_called_once_with()
         add_variables_to_pool.assert_called_once_with(sentinel.variable_pool, sentinel.system_variables)
-        build_dify_run_context.assert_called_once_with(
+        build_nexusai_run_context.assert_called_once_with(
             tenant_id="tenant-id",
             app_id="",
             user_id="user-id",
@@ -693,10 +693,10 @@ class TestWorkflowEntryHelpers:
             graph_config=workflow_entry.WorkflowEntry._create_single_node_graph(
                 "node-id", {"type": BuiltinNodeTypes.PARAMETER_EXTRACTOR, "title": "Node"}
             ),
-            run_context={"_dify": "context"},
+            run_context={"_nexusai": "context"},
             call_depth=0,
         )
-        dify_node_factory_cls.assert_called_once_with(
+        nexusai_node_factory_cls.assert_called_once_with(
             graph_init_params=sentinel.graph_init_params,
             graph_runtime_state=sentinel.graph_runtime_state,
         )
@@ -722,8 +722,8 @@ class TestWorkflowEntryHelpers:
             def version():
                 return "1"
 
-        dify_node_factory = MagicMock()
-        dify_node_factory.create_node.return_value = FakeNode()
+        nexusai_node_factory = MagicMock()
+        nexusai_node_factory.create_node.return_value = FakeNode()
         monkeypatch.setattr(
             workflow_entry,
             "resolve_workflow_node_class",
@@ -736,9 +736,9 @@ class TestWorkflowEntryHelpers:
             patch.object(workflow_entry, "add_variables_to_pool"),
             patch.object(workflow_entry, "GraphInitParams", return_value=sentinel.graph_init_params),
             patch.object(workflow_entry, "GraphRuntimeState", return_value=sentinel.graph_runtime_state),
-            patch.object(workflow_entry, "build_dify_run_context", return_value={"_dify": "context"}),
+            patch.object(workflow_entry, "build_nexusai_run_context", return_value={"_nexusai": "context"}),
             patch.object(workflow_entry.time, "perf_counter", return_value=123.0),
-            patch.object(workflow_entry, "DifyNodeFactory", return_value=dify_node_factory),
+            patch.object(workflow_entry, "NexusAINodeFactory", return_value=nexusai_node_factory),
             patch.object(
                 workflow_entry.WorkflowEntry,
                 "mapping_user_inputs_to_variable_pool",

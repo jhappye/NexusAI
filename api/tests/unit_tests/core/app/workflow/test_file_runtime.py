@@ -13,7 +13,7 @@ from graphon.file import File, FileTransferMethod, FileType
 from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom
 from core.app.file_access import DatabaseFileAccessController, FileAccessScope
 from core.app.workflow import file_runtime
-from core.app.workflow.file_runtime import DifyWorkflowFileRuntime, bind_dify_workflow_file_runtime
+from core.app.workflow.file_runtime import NexusAIWorkflowFileRuntime, bind_nexusai_workflow_file_runtime
 from core.workflow.file_reference import build_file_reference
 from models import ToolFile, UploadFile
 
@@ -38,8 +38,8 @@ def _build_file(
     )
 
 
-def _build_runtime() -> DifyWorkflowFileRuntime:
-    return DifyWorkflowFileRuntime(file_access_controller=DatabaseFileAccessController())
+def _build_runtime() -> NexusAIWorkflowFileRuntime:
+    return NexusAIWorkflowFileRuntime(file_access_controller=DatabaseFileAccessController())
 
 
 def test_resolve_file_url_returns_remote_url() -> None:
@@ -100,10 +100,10 @@ def test_resolve_upload_file_url_signs_internal_urls_and_supports_attachments(
 ) -> None:
     monkeypatch.setattr("core.app.workflow.file_runtime.time.time", lambda: 1700000000)
     monkeypatch.setattr("core.app.workflow.file_runtime.os.urandom", lambda _: b"\x01" * 16)
-    monkeypatch.setattr("core.app.workflow.file_runtime.dify_config.SECRET_KEY", "unit-secret")
-    monkeypatch.setattr("core.app.workflow.file_runtime.dify_config.FILES_URL", "https://files.example.com")
+    monkeypatch.setattr("core.app.workflow.file_runtime.nexusai_config.SECRET_KEY", "unit-secret")
+    monkeypatch.setattr("core.app.workflow.file_runtime.nexusai_config.FILES_URL", "https://files.example.com")
     monkeypatch.setattr(
-        "core.app.workflow.file_runtime.dify_config.INTERNAL_FILES_URL",
+        "core.app.workflow.file_runtime.nexusai_config.INTERNAL_FILES_URL",
         "https://internal.example.com",
     )
 
@@ -124,8 +124,8 @@ def test_resolve_upload_file_url_signs_internal_urls_and_supports_attachments(
 
 def test_verify_preview_signature_validates_signature_and_expiration(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("core.app.workflow.file_runtime.time.time", lambda: 1700000000)
-    monkeypatch.setattr("core.app.workflow.file_runtime.dify_config.SECRET_KEY", "unit-secret")
-    monkeypatch.setattr("core.app.workflow.file_runtime.dify_config.FILES_ACCESS_TIMEOUT", 60)
+    monkeypatch.setattr("core.app.workflow.file_runtime.nexusai_config.SECRET_KEY", "unit-secret")
+    monkeypatch.setattr("core.app.workflow.file_runtime.nexusai_config.FILES_ACCESS_TIMEOUT", 60)
     runtime = _build_runtime()
     payload = "file-preview|upload-file-id|1700000000|nonce"
     sign = base64.urlsafe_b64encode(hmac.new(b"unit-secret", payload.encode(), hashlib.sha256).digest()).decode()
@@ -222,7 +222,7 @@ def test_resolve_storage_key_uses_canonical_record_when_scope_is_bound(monkeypat
         invoke_from=InvokeFrom.WEB_APP,
     )
     controller.get_upload_file.return_value = SimpleNamespace(key="canonical-storage-key")
-    runtime = DifyWorkflowFileRuntime(file_access_controller=controller)
+    runtime = NexusAIWorkflowFileRuntime(file_access_controller=controller)
     file = _build_file(
         transfer_method=FileTransferMethod.LOCAL_FILE,
         reference=build_file_reference(record_id="upload-file-id", storage_key="tampered-storage-key"),
@@ -251,7 +251,7 @@ def test_resolve_upload_file_url_rejects_unauthorized_scoped_access(monkeypatch:
         invoke_from=InvokeFrom.WEB_APP,
     )
     controller.get_upload_file.return_value = None
-    runtime = DifyWorkflowFileRuntime(file_access_controller=controller)
+    runtime = NexusAIWorkflowFileRuntime(file_access_controller=controller)
     session = MagicMock()
 
     class _SessionContext:
@@ -346,7 +346,7 @@ def test_resolve_storage_key_raises_when_records_are_missing(
 
 
 def test_runtime_helper_wrappers_delegate_to_config_and_io(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("core.app.workflow.file_runtime.dify_config.MULTIMODAL_SEND_FORMAT", "url")
+    monkeypatch.setattr("core.app.workflow.file_runtime.nexusai_config.MULTIMODAL_SEND_FORMAT", "url")
     runtime = _build_runtime()
 
     assert runtime.multimodal_send_format == "url"
@@ -360,11 +360,11 @@ def test_runtime_helper_wrappers_delegate_to_config_and_io(monkeypatch: pytest.M
         mock_load.assert_called_once_with("path", stream=True)
 
 
-def test_bind_dify_workflow_file_runtime_registers_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_bind_nexusai_workflow_file_runtime_registers_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
     set_runtime = MagicMock()
     monkeypatch.setattr(file_runtime, "set_workflow_file_runtime", set_runtime)
 
-    bind_dify_workflow_file_runtime()
+    bind_nexusai_workflow_file_runtime()
 
     set_runtime.assert_called_once()
-    assert isinstance(set_runtime.call_args.args[0], DifyWorkflowFileRuntime)
+    assert isinstance(set_runtime.call_args.args[0], NexusAIWorkflowFileRuntime)

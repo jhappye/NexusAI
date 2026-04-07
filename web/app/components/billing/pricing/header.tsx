@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { DialogDescription, DialogTitle } from '@/app/components/base/ui/dialog'
 import { cn } from '@/utils/classnames'
 import Button from '../../base/button'
-import DifyLogo from '../../base/logo/dify-logo'
+import NexusAILogo from '../../base/logo/nexusai-logo'
 import styles from './header.module.css'
 
 type HeaderProps = {
@@ -20,7 +20,7 @@ const Header = ({
       <div className="relative flex max-w-[1680px] grow flex-col justify-end gap-y-1 border-x border-divider-accent p-6 pt-8">
         <div className="flex items-end">
           <div aria-hidden="true" className="py-[5px]">
-            <DifyLogo className="h-[27px] w-[60px]" />
+            <NexusAILogo className="h-[27px] w-[60px]" />
           </div>
           <DialogTitle
             className={cn(

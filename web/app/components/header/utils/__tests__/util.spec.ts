@@ -45,7 +45,7 @@ describe('mailToSupport', () => {
     const result = mailToSupport('user@test.com', 'Pro', '1.0.0')
 
     // Assert
-    expect(result.startsWith('mailto:support@dify.ai?')).toBe(true)
+    expect(result.startsWith('mailto:support@nexusai.ai?')).toBe(true)
 
     const query = result.split('?')[1]
     expect(query).toBeDefined()

@@ -15,7 +15,7 @@ from core.plugin.entities.plugin_daemon import (
     PluginDatasourceProviderEntity,
 )
 from core.plugin.impl.base import BasePluginClient
-from core.schemas.resolver import resolve_dify_schema_refs
+from core.schemas.resolver import resolve_nexusai_schema_refs
 from models.provider_ids import DatasourceProviderID, GenericProviderID
 from services.tools.tools_transform_service import ToolTransformService
 
@@ -35,7 +35,7 @@ class PluginDatasourceManager(BasePluginClient):
                         datasource["identity"]["provider"] = provider_name
                         # resolve refs
                         if datasource.get("output_schema"):
-                            datasource["output_schema"] = resolve_dify_schema_refs(datasource["output_schema"])
+                            datasource["output_schema"] = resolve_nexusai_schema_refs(datasource["output_schema"])
 
             return json_response
 
@@ -77,7 +77,7 @@ class PluginDatasourceManager(BasePluginClient):
                         datasource["identity"]["provider"] = provider_name
                         # resolve refs
                         if datasource.get("output_schema"):
-                            datasource["output_schema"] = resolve_dify_schema_refs(datasource["output_schema"])
+                            datasource["output_schema"] = resolve_nexusai_schema_refs(datasource["output_schema"])
 
             return json_response
 
@@ -116,7 +116,7 @@ class PluginDatasourceManager(BasePluginClient):
                 for datasource in data.get("declaration", {}).get("datasources", []):
                     datasource["identity"]["provider"] = tool_provider_id.provider_name
                     if datasource.get("output_schema"):
-                        datasource["output_schema"] = resolve_dify_schema_refs(datasource["output_schema"])
+                        datasource["output_schema"] = resolve_nexusai_schema_refs(datasource["output_schema"])
             return json_response
 
         response = self._request_with_plugin_daemon_response(
@@ -347,13 +347,13 @@ class PluginDatasourceManager(BasePluginClient):
             "id": "langgenius/file/file",
             "plugin_id": "langgenius/file",
             "provider": "file",
-            "plugin_unique_identifier": "langgenius/file:0.0.1@dify",
+            "plugin_unique_identifier": "langgenius/file:0.0.1@nexusai",
             "declaration": {
                 "identity": {
                     "author": "langgenius",
                     "name": "file",
                     "label": {"zh_Hans": "File", "en_US": "File", "pt_BR": "File", "ja_JP": "File"},
-                    "icon": "https://assets.dify.ai/images/File%20Upload.svg",
+                    "icon": "https://assets.nexusai.ai/images/File%20Upload.svg",
                     "description": {"zh_Hans": "File", "en_US": "File", "pt_BR": "File", "ja_JP": "File"},
                 },
                 "credentials_schema": [],

@@ -21,7 +21,7 @@ import { v4 as uuid4 } from 'uuid'
 import Button from '@/app/components/base/button'
 import ImageUploaderInRetrievalTesting from '@/app/components/datasets/common/image-uploader/image-uploader-in-retrieval-testing'
 import { getIcon } from '@/app/components/datasets/common/retrieval-method-info'
-import ModifyExternalRetrievalModal from '@/app/components/datasets/hit-testing/modify-external-retrieval-modal'
+import MonexusaiExternalRetrievalModal from '@/app/components/datasets/hit-testing/monexusai-external-retrieval-modal'
 import { useDatasetDetailContextWithSelector } from '@/context/dataset-detail'
 import { RETRIEVE_METHOD } from '@/types/app'
 import { cn } from '@/utils/classnames'
@@ -233,7 +233,7 @@ const QueryInput = ({
               )}
           {
             isSettingsOpen && (
-              <ModifyExternalRetrievalModal
+              <MonexusaiExternalRetrievalModal
                 onClose={() => setIsSettingsOpen(false)}
                 onSave={handleSaveExternalRetrievalSettings}
                 initialTopK={externalRetrievalSettings.top_k}

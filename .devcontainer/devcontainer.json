@@ -7,7 +7,7 @@
 		"dockerfile": "Dockerfile"
 	},
 	"mounts": [
-		"source=dify-dev-tmp,target=/tmp,type=volume"
+		"source=nexusai-dev-tmp,target=/tmp,type=volume"
 	],
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {

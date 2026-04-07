@@ -102,7 +102,7 @@ def create_cleanup(
     **kwargs: Any,
 ) -> WorkflowRunCleanup:
     monkeypatch.setattr(
-        cleanup_module.dify_config,
+        cleanup_module.nexusai_config,
         "SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD",
         grace_period_days,
     )
@@ -117,7 +117,7 @@ def create_cleanup(
 def test_filter_free_tenants_billing_disabled(monkeypatch: pytest.MonkeyPatch) -> None:
     cleanup = create_cleanup(monkeypatch, repo=FakeRepo([]), days=30, batch_size=10)
 
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", False)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", False)
 
     def fail_bulk(_: list[str]) -> dict[str, SubscriptionPlan]:
         raise RuntimeError("should not call")
@@ -133,7 +133,7 @@ def test_filter_free_tenants_billing_disabled(monkeypatch: pytest.MonkeyPatch) -
 def test_filter_free_tenants_bulk_mixed(monkeypatch: pytest.MonkeyPatch) -> None:
     cleanup = create_cleanup(monkeypatch, repo=FakeRepo([]), days=30, batch_size=10)
 
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", True)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", True)
     monkeypatch.setattr(
         cleanup_module.BillingService,
         "get_plan_bulk_with_cache",
@@ -153,7 +153,7 @@ def test_filter_free_tenants_bulk_mixed(monkeypatch: pytest.MonkeyPatch) -> None
 def test_filter_free_tenants_respects_grace_period(monkeypatch: pytest.MonkeyPatch) -> None:
     cleanup = create_cleanup(monkeypatch, repo=FakeRepo([]), days=30, batch_size=10, grace_period_days=45)
 
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", True)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", True)
     now = datetime.datetime.now(datetime.UTC)
     within_grace_ts = int((now - datetime.timedelta(days=10)).timestamp())
     outside_grace_ts = int((now - datetime.timedelta(days=90)).timestamp())
@@ -180,7 +180,7 @@ def test_filter_free_tenants_skips_cleanup_whitelist(monkeypatch: pytest.MonkeyP
         whitelist={"tenant_whitelist"},
     )
 
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", True)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", True)
     monkeypatch.setattr(
         cleanup_module.BillingService,
         "get_plan_bulk_with_cache",
@@ -201,7 +201,7 @@ def test_filter_free_tenants_skips_cleanup_whitelist(monkeypatch: pytest.MonkeyP
 def test_filter_free_tenants_bulk_failure(monkeypatch: pytest.MonkeyPatch) -> None:
     cleanup = create_cleanup(monkeypatch, repo=FakeRepo([]), days=30, batch_size=10)
 
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", True)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", True)
     monkeypatch.setattr(
         cleanup_module.BillingService,
         "get_plan_bulk_with_cache",
@@ -225,7 +225,7 @@ def test_run_deletes_only_free_tenants(monkeypatch: pytest.MonkeyPatch) -> None:
     )
     cleanup = create_cleanup(monkeypatch, repo=repo, days=30, batch_size=10)
 
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", True)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", True)
     monkeypatch.setattr(
         cleanup_module.BillingService,
         "get_plan_bulk_with_cache",
@@ -247,7 +247,7 @@ def test_run_skips_when_no_free_tenants(monkeypatch: pytest.MonkeyPatch) -> None
     repo = FakeRepo(batches=[[FakeRun("run-paid", "t_paid", cutoff)]])
     cleanup = create_cleanup(monkeypatch, repo=repo, days=30, batch_size=10)
 
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", True)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", True)
     monkeypatch.setattr(
         cleanup_module.BillingService,
         "get_plan_bulk_with_cache",
@@ -280,7 +280,7 @@ def test_run_records_metrics_on_success(monkeypatch: pytest.MonkeyPatch) -> None
         },
     )
     cleanup = create_cleanup(monkeypatch, repo=repo, days=30, batch_size=10)
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", False)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", False)
 
     batch_calls: list[dict[str, object]] = []
     completion_calls: list[dict[str, object]] = []
@@ -308,7 +308,7 @@ def test_run_records_failed_metrics(monkeypatch: pytest.MonkeyPatch) -> None:
     cutoff = datetime.datetime.now()
     repo = FailingRepo(batches=[[FakeRun("run-free", "t_free", cutoff)]])
     cleanup = create_cleanup(monkeypatch, repo=repo, days=30, batch_size=10)
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", False)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", False)
 
     completion_calls: list[dict[str, object]] = []
     monkeypatch.setattr(cleanup._metrics, "record_completion", lambda **kwargs: completion_calls.append(kwargs))
@@ -336,7 +336,7 @@ def test_run_dry_run_skips_deletions(monkeypatch: pytest.MonkeyPatch, capsys: py
     )
     cleanup = create_cleanup(monkeypatch, repo=repo, days=30, batch_size=10, dry_run=True)
 
-    monkeypatch.setattr(cleanup_module.dify_config, "BILLING_ENABLED", False)
+    monkeypatch.setattr(cleanup_module.nexusai_config, "BILLING_ENABLED", False)
 
     cleanup.run()
 

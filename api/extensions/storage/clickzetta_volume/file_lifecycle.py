@@ -86,7 +86,7 @@ class FileLifecycleManager:
         """
         self._storage = storage
         self._dataset_id = dataset_id
-        self._metadata_file = ".dify_file_metadata.json"
+        self._metadata_file = ".nexusai_file_metadata.json"
         self._version_prefix = ".versions/"
         self._backup_prefix = ".backups/"
         self._deleted_prefix = ".deleted/"

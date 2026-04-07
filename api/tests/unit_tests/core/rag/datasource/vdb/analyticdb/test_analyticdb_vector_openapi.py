@@ -95,7 +95,7 @@ def _config() -> AnalyticdbVectorOpenAPIConfig:
         instance_id="instance-1",
         account="account",
         account_password="password",
-        namespace="dify",
+        namespace="nexusai",
         namespace_password="ns-password",
     )
 
@@ -139,7 +139,7 @@ def test_init_creates_openapi_client_and_runs_initialize(monkeypatch):
 
     assert vector._collection_name == "collection_1"
     assert isinstance(vector._client_config, stubs.OpenApiConfig)
-    assert vector._client_config.user_agent == "dify"
+    assert vector._client_config.user_agent == "nexusai"
     assert vector._client_config.access_key_id == "ak"
     assert vector._client.config is vector._client_config
     initialize_mock.assert_called_once_with()

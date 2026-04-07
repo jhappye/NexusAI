@@ -172,8 +172,8 @@ def test_upstash_factory_uses_existing_or_generated_collection(upstash_module, m
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(upstash_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(upstash_module.dify_config, "UPSTASH_VECTOR_URL", "https://upstash.example")
-    monkeypatch.setattr(upstash_module.dify_config, "UPSTASH_VECTOR_TOKEN", "token-123")
+    monkeypatch.setattr(upstash_module.nexusai_config, "UPSTASH_VECTOR_URL", "https://upstash.example")
+    monkeypatch.setattr(upstash_module.nexusai_config, "UPSTASH_VECTOR_TOKEN", "token-123")
 
     with patch.object(upstash_module, "UpstashVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

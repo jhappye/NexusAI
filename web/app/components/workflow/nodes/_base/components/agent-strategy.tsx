@@ -263,7 +263,7 @@ export const AgentStrategy = memo((props: AgentStrategyProps) => {
                     {' '}
                     <br />
                     <Link
-                      href={docLink('/use-dify/nodes/agent')}
+                      href={docLink('/use-nexusai/nodes/agent')}
                       className="text-text-accent-secondary"
                       target="_blank"
                     >

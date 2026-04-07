@@ -73,7 +73,7 @@ class TestSyncWorkspaceMemberRemoval:
         workspace_id = str(uuid4())
         member_id = str(uuid4())
 
-        with patch("services.enterprise.account_deletion_sync.dify_config") as mock_config:
+        with patch("services.enterprise.account_deletion_sync.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
 
             result = sync_workspace_member_removal(workspace_id=workspace_id, member_id=member_id, source="removed")
@@ -82,7 +82,7 @@ class TestSyncWorkspaceMemberRemoval:
             mock_queue_task.assert_called_once_with(workspace_id=workspace_id, member_id=member_id, source="removed")
 
     def test_sync_workspace_member_removal_enterprise_disabled(self, mock_queue_task):
-        with patch("services.enterprise.account_deletion_sync.dify_config") as mock_config:
+        with patch("services.enterprise.account_deletion_sync.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = False
 
             result = sync_workspace_member_removal(
@@ -95,7 +95,7 @@ class TestSyncWorkspaceMemberRemoval:
     def test_sync_workspace_member_removal_queue_failure(self, mock_queue_task):
         mock_queue_task.return_value = False
 
-        with patch("services.enterprise.account_deletion_sync.dify_config") as mock_config:
+        with patch("services.enterprise.account_deletion_sync.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
 
             result = sync_workspace_member_removal(
@@ -113,7 +113,7 @@ class TestSyncAccountDeletion:
             yield mock_queue
 
     def test_sync_account_deletion_enterprise_disabled(self, mock_queue_task):
-        with patch("services.enterprise.account_deletion_sync.dify_config") as mock_config:
+        with patch("services.enterprise.account_deletion_sync.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = False
 
             result = sync_account_deletion(account_id=str(uuid4()), source="account_deleted")
@@ -132,7 +132,7 @@ class TestSyncAccountDeletion:
             db_session_with_containers.add(join)
         db_session_with_containers.commit()
 
-        with patch("services.enterprise.account_deletion_sync.dify_config") as mock_config:
+        with patch("services.enterprise.account_deletion_sync.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
 
             result = sync_account_deletion(account_id=account_id, source="account_deleted")
@@ -146,7 +146,7 @@ class TestSyncAccountDeletion:
     def test_sync_account_deletion_no_workspaces(
         self, flask_app_with_containers, db_session_with_containers, mock_queue_task
     ):
-        with patch("services.enterprise.account_deletion_sync.dify_config") as mock_config:
+        with patch("services.enterprise.account_deletion_sync.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
 
             result = sync_account_deletion(account_id=str(uuid4()), source="account_deleted")
@@ -171,7 +171,7 @@ class TestSyncAccountDeletion:
 
         mock_queue_task.side_effect = queue_side_effect
 
-        with patch("services.enterprise.account_deletion_sync.dify_config") as mock_config:
+        with patch("services.enterprise.account_deletion_sync.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
 
             result = sync_account_deletion(account_id=account_id, source="account_deleted")
@@ -191,7 +191,7 @@ class TestSyncAccountDeletion:
 
         mock_queue_task.return_value = False
 
-        with patch("services.enterprise.account_deletion_sync.dify_config") as mock_config:
+        with patch("services.enterprise.account_deletion_sync.nexusai_config") as mock_config:
             mock_config.ENTERPRISE_ENABLED = True
 
             result = sync_account_deletion(account_id=account_id, source="account_deleted")

@@ -11,8 +11,8 @@ from graphon.runtime import GraphRuntimeState, VariablePool
 
 from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom
 from core.tools.utils.configuration import ToolParameterConfigurationManager
-from core.workflow.node_factory import DifyNodeFactory
-from core.workflow.node_runtime import DifyToolNodeRuntime
+from core.workflow.node_factory import NexusAINodeFactory
+from core.workflow.node_runtime import NexusAIToolNodeRuntime
 from core.workflow.system_variables import build_system_variables
 from tests.workflow_test_utils import build_test_graph_init_params
 
@@ -51,7 +51,7 @@ def init_tool_node(config: dict):
     graph_runtime_state = GraphRuntimeState(variable_pool=variable_pool, start_at=time.perf_counter())
 
     # Create node factory
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )
@@ -66,7 +66,7 @@ def init_tool_node(config: dict):
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
         tool_file_manager_factory=tool_file_manager_factory,
-        runtime=DifyToolNodeRuntime(init_params.run_context),
+        runtime=NexusAIToolNodeRuntime(init_params.run_context),
     )
     return node
 

@@ -42,7 +42,7 @@ class TestGetOAuthProviders:
             ({"id": None, "secret": None}, {"id": None, "secret": None}, False, False),
         ],
     )
-    @patch("controllers.console.auth.oauth.dify_config")
+    @patch("controllers.console.auth.oauth.nexusai_config")
     def test_should_configure_oauth_providers_correctly(
         self, mock_config, app, github_config, google_config, expected_github, expected_google
     ):
@@ -149,7 +149,7 @@ class TestOAuthCallback:
 
         return {"provider": oauth_provider, "account": account, "token_pair": token_pair}
 
-    @patch("controllers.console.auth.oauth.dify_config")
+    @patch("controllers.console.auth.oauth.nexusai_config")
     @patch("controllers.console.auth.oauth.get_oauth_providers")
     @patch("controllers.console.auth.oauth._generate_account")
     @patch("controllers.console.auth.oauth.AccountService")
@@ -206,7 +206,7 @@ class TestOAuthCallback:
         assert status_code == 400
         assert response["error"] == expected_error
 
-    @patch("controllers.console.auth.oauth.dify_config")
+    @patch("controllers.console.auth.oauth.nexusai_config")
     @patch("controllers.console.auth.oauth.get_oauth_providers")
     @patch("controllers.console.auth.oauth.RegisterService")
     @patch("controllers.console.auth.oauth.redirect")
@@ -248,7 +248,7 @@ class TestOAuthCallback:
     )
     @patch("controllers.console.auth.oauth.AccountService")
     @patch("controllers.console.auth.oauth.TenantService")
-    @patch("controllers.console.auth.oauth.dify_config")
+    @patch("controllers.console.auth.oauth.nexusai_config")
     @patch("controllers.console.auth.oauth.get_oauth_providers")
     @patch("controllers.console.auth.oauth._generate_account")
     @patch("controllers.console.auth.oauth.redirect")
@@ -287,7 +287,7 @@ class TestOAuthCallback:
 
         mock_redirect.assert_called_once_with(expected_redirect)
 
-    @patch("controllers.console.auth.oauth.dify_config")
+    @patch("controllers.console.auth.oauth.nexusai_config")
     @patch("controllers.console.auth.oauth.get_oauth_providers")
     @patch("controllers.console.auth.oauth._generate_account")
     @patch("controllers.console.auth.oauth.TenantService")
@@ -321,7 +321,7 @@ class TestOAuthCallback:
         assert mock_account.status == AccountStatus.ACTIVE
         assert mock_account.initialized_at is not None
 
-    @patch("controllers.console.auth.oauth.dify_config")
+    @patch("controllers.console.auth.oauth.nexusai_config")
     @patch("controllers.console.auth.oauth.get_oauth_providers")
     @patch("controllers.console.auth.oauth._generate_account")
     @patch("controllers.console.auth.oauth.TenantService")

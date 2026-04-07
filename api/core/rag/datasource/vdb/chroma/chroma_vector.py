@@ -5,7 +5,7 @@ import chromadb
 from chromadb import QueryResult, Settings
 from pydantic import BaseModel
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
 from core.rag.datasource.vdb.vector_type import VectorType
@@ -151,11 +151,11 @@ class ChromaVectorFactory(AbstractVectorFactory):
         return ChromaVector(
             collection_name=collection_name,
             config=ChromaConfig(
-                host=dify_config.CHROMA_HOST or "",
-                port=dify_config.CHROMA_PORT,
-                tenant=dify_config.CHROMA_TENANT or chromadb.DEFAULT_TENANT,
-                database=dify_config.CHROMA_DATABASE or chromadb.DEFAULT_DATABASE,
-                auth_provider=dify_config.CHROMA_AUTH_PROVIDER,
-                auth_credentials=dify_config.CHROMA_AUTH_CREDENTIALS,
+                host=nexusai_config.CHROMA_HOST or "",
+                port=nexusai_config.CHROMA_PORT,
+                tenant=nexusai_config.CHROMA_TENANT or chromadb.DEFAULT_TENANT,
+                database=nexusai_config.CHROMA_DATABASE or chromadb.DEFAULT_DATABASE,
+                auth_provider=nexusai_config.CHROMA_AUTH_PROVIDER,
+                auth_credentials=nexusai_config.CHROMA_AUTH_CREDENTIALS,
             ),
         )

@@ -76,12 +76,12 @@ class PluginDeclaration(BaseModel):
         triggers: list[str] | None = Field(default_factory=list[str])
 
     class Meta(BaseModel):
-        minimum_dify_version: str | None = Field(default=None)
+        minimum_nexusai_version: str | None = Field(default=None)
         version: str | None = Field(default=None)
 
-        @field_validator("minimum_dify_version")
+        @field_validator("minimum_nexusai_version")
         @classmethod
-        def validate_minimum_dify_version(cls, v: str | None) -> str | None:
+        def validate_minimum_nexusai_version(cls, v: str | None) -> str | None:
             if v is None:
                 return v
             try:

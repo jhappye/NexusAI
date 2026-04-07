@@ -11,7 +11,7 @@ from uuid import uuid4
 
 import httpx
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper import ssrf_proxy
 from extensions.ext_database import db
 from extensions.ext_storage import storage
@@ -29,13 +29,13 @@ class DatasourceFileManager:
         """
         sign file to get a temporary url
         """
-        base_url = dify_config.FILES_URL
+        base_url = nexusai_config.FILES_URL
         file_preview_url = f"{base_url}/files/datasources/{datasource_file_id}{extension}"
 
         timestamp = str(int(time.time()))
         nonce = os.urandom(16).hex()
         data_to_sign = f"file-preview|{datasource_file_id}|{timestamp}|{nonce}"
-        secret_key = dify_config.SECRET_KEY.encode() if dify_config.SECRET_KEY else b""
+        secret_key = nexusai_config.SECRET_KEY.encode() if nexusai_config.SECRET_KEY else b""
         sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
         encoded_sign = base64.urlsafe_b64encode(sign).decode()
 
@@ -47,7 +47,7 @@ class DatasourceFileManager:
         verify signature
         """
         data_to_sign = f"file-preview|{datasource_file_id}|{timestamp}|{nonce}"
-        secret_key = dify_config.SECRET_KEY.encode() if dify_config.SECRET_KEY else b""
+        secret_key = nexusai_config.SECRET_KEY.encode() if nexusai_config.SECRET_KEY else b""
         recalculated_sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
         recalculated_encoded_sign = base64.urlsafe_b64encode(recalculated_sign).decode()
 
@@ -56,7 +56,7 @@ class DatasourceFileManager:
             return False
 
         current_time = int(time.time())
-        return current_time - int(timestamp) <= dify_config.FILES_ACCESS_TIMEOUT
+        return current_time - int(timestamp) <= nexusai_config.FILES_ACCESS_TIMEOUT
 
     @staticmethod
     def create_file_by_raw(
@@ -82,7 +82,7 @@ class DatasourceFileManager:
 
         upload_file = UploadFile(
             tenant_id=tenant_id,
-            storage_type=StorageType(dify_config.STORAGE_TYPE),
+            storage_type=StorageType(nexusai_config.STORAGE_TYPE),
             key=filepath,
             name=present_filename,
             size=len(file_binary),

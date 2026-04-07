@@ -15,7 +15,7 @@ from docx import Document as DocxDocument
 from docx.oxml.ns import qn
 from docx.text.run import Run
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper import ssrf_proxy
 from core.rag.extractor.extractor_base import BaseExtractor
 from core.rag.models.document import Document
@@ -88,7 +88,7 @@ class WordExtractor(BaseExtractor):
     def _extract_images_from_docx(self, doc):
         image_count = 0
         image_map = {}
-        base_url = dify_config.INTERNAL_FILES_URL or dify_config.FILES_URL
+        base_url = nexusai_config.INTERNAL_FILES_URL or nexusai_config.FILES_URL
 
         for r_id, rel in doc.part.rels.items():
             if "image" in rel.target_ref:
@@ -113,7 +113,7 @@ class WordExtractor(BaseExtractor):
                         # save file to db
                         upload_file = UploadFile(
                             tenant_id=self.tenant_id,
-                            storage_type=StorageType(dify_config.STORAGE_TYPE),
+                            storage_type=StorageType(nexusai_config.STORAGE_TYPE),
                             key=file_key,
                             name=file_key,
                             size=0,
@@ -141,7 +141,7 @@ class WordExtractor(BaseExtractor):
                     # save file to db
                     upload_file = UploadFile(
                         tenant_id=self.tenant_id,
-                        storage_type=StorageType(dify_config.STORAGE_TYPE),
+                        storage_type=StorageType(nexusai_config.STORAGE_TYPE),
                         key=file_key,
                         name=file_key,
                         size=0,

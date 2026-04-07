@@ -37,7 +37,7 @@ from models.account import Tenant, TenantAccountJoin, TenantAccountRole
 from models.model import UploadFile
 from models.workflow import Workflow, WorkflowRun
 from repositories.sqlalchemy_api_workflow_run_repository import (
-    DifyAPISQLAlchemyWorkflowRunRepository,
+    NexusAIAPISQLAlchemyWorkflowRunRepository,
     _WorkflowRunError,
 )
 
@@ -302,7 +302,7 @@ class TestWorkflowPauseIntegration:
         session_factory = sessionmaker(bind=engine, expire_on_commit=False)
 
         # Create a test-specific repository that implements the missing save method
-        class TestWorkflowRunRepository(DifyAPISQLAlchemyWorkflowRunRepository):
+        class TestWorkflowRunRepository(NexusAIAPISQLAlchemyWorkflowRunRepository):
             """Test-specific repository that implements the missing save method."""
 
             def save(self, execution: WorkflowExecution):

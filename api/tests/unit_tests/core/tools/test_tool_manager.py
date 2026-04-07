@@ -639,7 +639,7 @@ def test_list_default_builtin_providers_for_postgres_and_mysql():
         session.execute.return_value.all.return_value = [SimpleNamespace(id="id-1"), SimpleNamespace(id="id-2")]
         session.query.return_value.where.return_value.all.return_value = provider_records
 
-        with patch("core.tools.tool_manager.dify_config", SimpleNamespace(SQLALCHEMY_DATABASE_URI_SCHEME=scheme)):
+        with patch("core.tools.tool_manager.nexusai_config", SimpleNamespace(SQLALCHEMY_DATABASE_URI_SCHEME=scheme)):
             with patch("core.tools.tool_manager.db") as mock_db:
                 mock_db.engine = object()
                 with patch("core.tools.tool_manager.Session", return_value=_cm(session)):
@@ -791,7 +791,7 @@ def test_get_mcp_provider_controller_missing_raises():
 
 
 def test_generate_tool_icon_urls_for_builtin_and_plugin():
-    with patch("core.tools.tool_manager.dify_config.CONSOLE_API_URL", "https://console.example.com"):
+    with patch("core.tools.tool_manager.nexusai_config.CONSOLE_API_URL", "https://console.example.com"):
         builtin_url = ToolManager.generate_builtin_tool_icon_url("time")
         plugin_url = ToolManager.generate_plugin_tool_icon_url("tenant-1", "icon.svg")
 

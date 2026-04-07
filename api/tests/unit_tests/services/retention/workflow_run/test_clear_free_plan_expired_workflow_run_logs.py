@@ -25,7 +25,7 @@ def mock_repo():
 
 @pytest.fixture
 def cleanup(mock_repo):
-    with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+    with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
         cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
         cfg.BILLING_ENABLED = False
         yield WorkflowRunCleanup(days=30, batch_size=10, workflow_run_repo=mock_repo)
@@ -38,7 +38,7 @@ def cleanup(mock_repo):
 
 class TestWorkflowRunCleanupInit:
     def test_only_start_from_raises(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             with pytest.raises(ValueError, match="both set or both omitted"):
@@ -50,7 +50,7 @@ class TestWorkflowRunCleanupInit:
                 )
 
     def test_only_end_before_raises(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             with pytest.raises(ValueError, match="both set or both omitted"):
@@ -62,7 +62,7 @@ class TestWorkflowRunCleanupInit:
                 )
 
     def test_end_before_not_greater_than_start_raises(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             with pytest.raises(ValueError, match="end_before must be greater than start_from"):
@@ -76,7 +76,7 @@ class TestWorkflowRunCleanupInit:
 
     def test_equal_start_end_raises(self, mock_repo):
         dt = datetime.datetime(2024, 1, 1)
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             with pytest.raises(ValueError):
@@ -89,21 +89,21 @@ class TestWorkflowRunCleanupInit:
                 )
 
     def test_zero_batch_size_raises(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             with pytest.raises(ValueError, match="batch_size must be greater than 0"):
                 WorkflowRunCleanup(days=30, batch_size=0, workflow_run_repo=mock_repo)
 
     def test_negative_batch_size_raises(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             with pytest.raises(ValueError):
                 WorkflowRunCleanup(days=30, batch_size=-1, workflow_run_repo=mock_repo)
 
     def test_valid_window_init(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 7
             cfg.BILLING_ENABLED = False
             start = datetime.datetime(2024, 1, 1)
@@ -119,7 +119,7 @@ class TestWorkflowRunCleanupInit:
             assert c.window_end == end
 
     def test_default_task_label_is_custom(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             c = WorkflowRunCleanup(days=30, batch_size=10, workflow_run_repo=mock_repo)
@@ -216,13 +216,13 @@ class TestIsWithinGracePeriod:
 class TestGetCleanupWhitelist:
     def test_billing_disabled_returns_empty(self, cleanup):
         cleanup._cleanup_whitelist = None
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = False
             result = cleanup._get_cleanup_whitelist()
         assert result == set()
 
     def test_billing_enabled_fetches_whitelist(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = True
             c = WorkflowRunCleanup(days=30, batch_size=10, workflow_run_repo=mock_repo)
@@ -239,7 +239,7 @@ class TestGetCleanupWhitelist:
         assert result == {"cached"}
 
     def test_billing_service_error_returns_empty(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = True
             c = WorkflowRunCleanup(days=30, batch_size=10, workflow_run_repo=mock_repo)
@@ -262,13 +262,13 @@ class TestFilterFreeTenants:
         assert result == {"t1", "t2"}
 
     def test_empty_tenants_returns_empty(self, cleanup):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = True
             result = cleanup._filter_free_tenants([])
         assert result == set()
 
     def test_whitelisted_tenant_excluded(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = True
             c = WorkflowRunCleanup(days=30, batch_size=10, workflow_run_repo=mock_repo)
@@ -287,7 +287,7 @@ class TestFilterFreeTenants:
         assert "t2" in result
 
     def test_paid_tenant_excluded(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = True
             c = WorkflowRunCleanup(days=30, batch_size=10, workflow_run_repo=mock_repo)
@@ -302,7 +302,7 @@ class TestFilterFreeTenants:
         assert result == set()
 
     def test_missing_billing_info_treats_as_non_free(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = True
             c = WorkflowRunCleanup(days=30, batch_size=10, workflow_run_repo=mock_repo)
@@ -315,7 +315,7 @@ class TestFilterFreeTenants:
         assert result == set()
 
     def test_billing_bulk_error_treats_as_non_free(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = True
             c = WorkflowRunCleanup(days=30, batch_size=10, workflow_run_repo=mock_repo)
@@ -335,7 +335,7 @@ class TestFilterFreeTenants:
 
 class TestRunDeleteMode:
     def _make_cleanup(self, mock_repo, billing_enabled=False):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = billing_enabled
             return WorkflowRunCleanup(days=30, batch_size=10, workflow_run_repo=mock_repo)
@@ -343,7 +343,7 @@ class TestRunDeleteMode:
     def test_no_rows_stops_immediately(self, mock_repo):
         mock_repo.get_runs_batch_by_time_range.return_value = []
         c = self._make_cleanup(mock_repo)
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = False
             c.run()
         mock_repo.delete_runs_with_related.assert_not_called()
@@ -354,7 +354,7 @@ class TestRunDeleteMode:
         c = self._make_cleanup(mock_repo)
         # billing disabled -> all free; but let's override _filter_free_tenants to return empty
         c._filter_free_tenants = MagicMock(return_value=set())
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = False
             c.run()
         mock_repo.delete_runs_with_related.assert_not_called()
@@ -372,7 +372,7 @@ class TestRunDeleteMode:
             "pause_reasons": 0,
         }
         c = self._make_cleanup(mock_repo)
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = False
             with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.time.sleep"):
                 c.run()
@@ -383,14 +383,14 @@ class TestRunDeleteMode:
         mock_repo.get_runs_batch_by_time_range.side_effect = [[run], []]
         mock_repo.delete_runs_with_related.side_effect = RuntimeError("db error")
         c = self._make_cleanup(mock_repo)
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = False
             with pytest.raises(RuntimeError):
                 c.run()
 
     def test_summary_with_window_start(self, mock_repo):
         mock_repo.get_runs_batch_by_time_range.return_value = []
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             c = WorkflowRunCleanup(
@@ -410,7 +410,7 @@ class TestRunDeleteMode:
 
 class TestRunDryRunMode:
     def _make_dry_cleanup(self, mock_repo):
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             return WorkflowRunCleanup(
@@ -432,7 +432,7 @@ class TestRunDryRunMode:
             "pause_reasons": 0,
         }
         c = self._make_dry_cleanup(mock_repo)
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = False
             c.run()
         mock_repo.delete_runs_with_related.assert_not_called()
@@ -440,7 +440,7 @@ class TestRunDryRunMode:
 
     def test_dry_run_summary_with_window_start(self, mock_repo):
         mock_repo.get_runs_batch_by_time_range.return_value = []
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD = 0
             cfg.BILLING_ENABLED = False
             c = WorkflowRunCleanup(
@@ -458,7 +458,7 @@ class TestRunDryRunMode:
         mock_repo.get_runs_batch_by_time_range.side_effect = [[run], []]
         c = self._make_dry_cleanup(mock_repo)
         c._filter_free_tenants = MagicMock(return_value=set())
-        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.dify_config") as cfg:
+        with patch("services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.nexusai_config") as cfg:
             cfg.BILLING_ENABLED = False
             c.run()
         mock_repo.count_runs_with_related.assert_not_called()
@@ -502,7 +502,7 @@ class TestNodeExecutionMethods:
         session.get_bind.return_value = MagicMock()
         runs = [make_run("t1", "r1")]
         with patch(
-            "services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.DifyAPIRepositoryFactory"
+            "services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.NexusAIAPIRepositoryFactory"
         ) as factory:
             repo = factory.create_api_workflow_node_execution_repository.return_value
             repo.count_by_runs.return_value = (10, 2)
@@ -515,7 +515,7 @@ class TestNodeExecutionMethods:
         session.get_bind.return_value = MagicMock()
         runs = [make_run("t1", "r1")]
         with patch(
-            "services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.DifyAPIRepositoryFactory"
+            "services.retention.workflow_run.clear_free_plan_expired_workflow_run_logs.NexusAIAPIRepositoryFactory"
         ) as factory:
             repo = factory.create_api_workflow_node_execution_repository.return_value
             repo.delete_by_runs.return_value = (5, 1)

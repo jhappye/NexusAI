@@ -38,7 +38,7 @@ const ModelList: FC<ModelListProps> = ({
   const { isCurrentWorkspaceManager } = useAppContext()
   const isConfigurable = configurativeMethods.includes(ConfigurationMethodEnum.customizableModel)
   const setShowModelLoadBalancingModal = useModalContextSelector(state => state.setShowModelLoadBalancingModal)
-  const onModifyLoadBalancing = useCallback((model: ModelItem, credential?: Credential) => {
+  const onMonexusaiLoadBalancing = useCallback((model: ModelItem, credential?: Credential) => {
     setShowModelLoadBalancingModal({
       provider,
       credential,
@@ -92,7 +92,7 @@ const ModelList: FC<ModelListProps> = ({
                 provider,
                 isConfigurable,
                 onChange,
-                onModifyLoadBalancing,
+                onMonexusaiLoadBalancing,
               }}
             />
           ))

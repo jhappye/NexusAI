@@ -17,7 +17,7 @@ const Description = () => {
           isZhHans && (
             <>
               <span className="mr-1">{tCommon('operation.in')}</span>
-              {t('marketplace.difyMarketplace')}
+              {t('marketplace.nexusaiMarketplace')}
               {t('marketplace.discover')}
             </>
           )
@@ -60,7 +60,7 @@ const Description = () => {
           !isZhHans && (
             <>
               <span className="mr-1">{tCommon('operation.in')}</span>
-              {t('marketplace.difyMarketplace')}
+              {t('marketplace.nexusaiMarketplace')}
             </>
           )
         }

@@ -11,7 +11,7 @@ from graphon.runtime import GraphRuntimeState, VariablePool
 
 from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom
 from core.model_manager import ModelInstance
-from core.workflow.node_runtime import DifyPromptMessageSerializer
+from core.workflow.node_runtime import NexusAIPromptMessageSerializer
 from core.workflow.system_variables import build_system_variables
 from extensions.ext_database import db
 from tests.integration_tests.workflow.nodes.__mock.model import get_mocked_fetch_model_instance
@@ -78,7 +78,7 @@ def init_parameter_extractor_node(config: dict, memory=None):
         model_factory=MagicMock(spec=ModelFactory),
         model_instance=MagicMock(spec=ModelInstance),
         memory=memory,
-        prompt_message_serializer=DifyPromptMessageSerializer(),
+        prompt_message_serializer=NexusAIPromptMessageSerializer(),
     )
     return node
 

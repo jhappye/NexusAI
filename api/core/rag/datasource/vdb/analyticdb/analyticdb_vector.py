@@ -1,7 +1,7 @@
 import json
 from typing import Any
 
-from configs import dify_config
+from configs import nexusai_config
 from core.rag.datasource.vdb.analyticdb.analyticdb_vector_openapi import (
     AnalyticdbVectorOpenAPI,
     AnalyticdbVectorOpenAPIConfig,
@@ -72,29 +72,29 @@ class AnalyticdbVectorFactory(AbstractVectorFactory):
             collection_name = Dataset.gen_collection_name_by_id(dataset_id).lower()
             dataset.index_struct = json.dumps(self.gen_index_struct_dict(VectorType.ANALYTICDB, collection_name))
 
-        if dify_config.ANALYTICDB_HOST is None:
+        if nexusai_config.ANALYTICDB_HOST is None:
             # implemented through OpenAPI
             apiConfig = AnalyticdbVectorOpenAPIConfig(
-                access_key_id=dify_config.ANALYTICDB_KEY_ID or "",
-                access_key_secret=dify_config.ANALYTICDB_KEY_SECRET or "",
-                region_id=dify_config.ANALYTICDB_REGION_ID or "",
-                instance_id=dify_config.ANALYTICDB_INSTANCE_ID or "",
-                account=dify_config.ANALYTICDB_ACCOUNT or "",
-                account_password=dify_config.ANALYTICDB_PASSWORD or "",
-                namespace=dify_config.ANALYTICDB_NAMESPACE or "",
-                namespace_password=dify_config.ANALYTICDB_NAMESPACE_PASSWORD,
+                access_key_id=nexusai_config.ANALYTICDB_KEY_ID or "",
+                access_key_secret=nexusai_config.ANALYTICDB_KEY_SECRET or "",
+                region_id=nexusai_config.ANALYTICDB_REGION_ID or "",
+                instance_id=nexusai_config.ANALYTICDB_INSTANCE_ID or "",
+                account=nexusai_config.ANALYTICDB_ACCOUNT or "",
+                account_password=nexusai_config.ANALYTICDB_PASSWORD or "",
+                namespace=nexusai_config.ANALYTICDB_NAMESPACE or "",
+                namespace_password=nexusai_config.ANALYTICDB_NAMESPACE_PASSWORD,
             )
             sqlConfig = None
         else:
             # implemented through sql
             sqlConfig = AnalyticdbVectorBySqlConfig(
-                host=dify_config.ANALYTICDB_HOST,
-                port=dify_config.ANALYTICDB_PORT,
-                account=dify_config.ANALYTICDB_ACCOUNT or "",
-                account_password=dify_config.ANALYTICDB_PASSWORD or "",
-                min_connection=dify_config.ANALYTICDB_MIN_CONNECTION,
-                max_connection=dify_config.ANALYTICDB_MAX_CONNECTION,
-                namespace=dify_config.ANALYTICDB_NAMESPACE or "",
+                host=nexusai_config.ANALYTICDB_HOST,
+                port=nexusai_config.ANALYTICDB_PORT,
+                account=nexusai_config.ANALYTICDB_ACCOUNT or "",
+                account_password=nexusai_config.ANALYTICDB_PASSWORD or "",
+                min_connection=nexusai_config.ANALYTICDB_MIN_CONNECTION,
+                max_connection=nexusai_config.ANALYTICDB_MAX_CONNECTION,
+                namespace=nexusai_config.ANALYTICDB_NAMESPACE or "",
             )
             apiConfig = None
         return AnalyticdbVector(

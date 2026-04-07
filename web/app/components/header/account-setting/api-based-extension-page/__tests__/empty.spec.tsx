@@ -12,7 +12,7 @@ describe('Empty State', () => {
       const link = screen.getByText('common.apiBasedExtension.link')
       expect(link).toBeInTheDocument()
       // The real useDocLink includes the language prefix (defaulting to /en in tests)
-      expect(link.closest('a')).toHaveAttribute('href', 'https://docs.dify.ai/en/use-dify/workspace/api-extension/api-extension')
+      expect(link.closest('a')).toHaveAttribute('href', 'https://docs.nexusai.ai/en/use-nexusai/workspace/api-extension/api-extension')
     })
   })
 })

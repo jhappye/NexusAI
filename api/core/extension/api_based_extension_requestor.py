@@ -2,7 +2,7 @@ from typing import cast
 
 import httpx
 
-from configs import dify_config
+from configs import nexusai_config
 from models.api_based_extension import APIBasedExtensionPoint
 
 
@@ -28,10 +28,10 @@ class APIBasedExtensionRequestor:
 
         try:
             mounts: dict[str, httpx.BaseTransport] | None = None
-            if dify_config.SSRF_PROXY_HTTP_URL and dify_config.SSRF_PROXY_HTTPS_URL:
+            if nexusai_config.SSRF_PROXY_HTTP_URL and nexusai_config.SSRF_PROXY_HTTPS_URL:
                 mounts = {
-                    "http://": httpx.HTTPTransport(proxy=dify_config.SSRF_PROXY_HTTP_URL),
-                    "https://": httpx.HTTPTransport(proxy=dify_config.SSRF_PROXY_HTTPS_URL),
+                    "http://": httpx.HTTPTransport(proxy=nexusai_config.SSRF_PROXY_HTTP_URL),
+                    "https://": httpx.HTTPTransport(proxy=nexusai_config.SSRF_PROXY_HTTPS_URL),
                 }
 
             with httpx.Client(mounts=mounts, timeout=self.timeout) as client:

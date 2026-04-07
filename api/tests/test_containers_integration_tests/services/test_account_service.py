@@ -7,7 +7,7 @@ from faker import Faker
 from sqlalchemy.orm import Session
 from werkzeug.exceptions import Unauthorized
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.console.error import AccountNotFound, NotAllowedCreateWorkspace
 from models import AccountStatus, TenantAccountJoin
 from services.account_service import AccountService, RegisterService, TenantService, TokenPair
@@ -150,7 +150,7 @@ class TestAccountService:
         # Setup mocks
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = True
-        dify_config.BILLING_ENABLED = True
+        nexusai_config.BILLING_ENABLED = True
 
         with pytest.raises(AccountRegisterError):
             AccountService.create_account(
@@ -160,7 +160,7 @@ class TestAccountService:
                 password=password,
             )
 
-        dify_config.BILLING_ENABLED = False  # Reset config for other tests
+        nexusai_config.BILLING_ENABLED = False  # Reset config for other tests
 
     def test_authenticate_account_not_found(
         self, db_session_with_containers: Session, mock_external_service_dependencies
@@ -1028,14 +1028,14 @@ class TestAccountService:
         fake = Faker()
         email_in_freeze = fake.email()
         # Setup mocks
-        dify_config.BILLING_ENABLED = True
+        nexusai_config.BILLING_ENABLED = True
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = True
 
         with pytest.raises(AccountRegisterError):
             AccountService.get_user_through_email(email_in_freeze)
 
         # Reset config
-        dify_config.BILLING_ENABLED = False
+        nexusai_config.BILLING_ENABLED = False
 
     def test_delete_account(self, db_session_with_containers: Session, mock_external_service_dependencies):
         """
@@ -2358,9 +2358,9 @@ class TestRegisterService:
         mock_external_service_dependencies["feature_service"].get_system_features.return_value.is_allow_register = True
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = False
 
-        from models.model import DifySetup
+        from models.model import NexusAISetup
 
-        db_session_with_containers.query(DifySetup).delete()
+        db_session_with_containers.query(NexusAISetup).delete()
         db_session_with_containers.commit()
 
         # Execute setup
@@ -2382,9 +2382,9 @@ class TestRegisterService:
         assert account.initialized_at is not None
         assert account.status == "active"
 
-        # Verify DifySetup was created
-        dify_setup = db_session_with_containers.query(DifySetup).first()
-        assert dify_setup is not None
+        # Verify NexusAISetup was created
+        nexusai_setup = db_session_with_containers.query(NexusAISetup).first()
+        assert nexusai_setup is not None
 
         # Verify tenant was created and linked
         from models.account import TenantAccountJoin
@@ -2422,17 +2422,17 @@ class TestRegisterService:
 
             # Verify no entities were created (rollback worked)
             from models import Account, Tenant, TenantAccountJoin
-            from models.model import DifySetup
+            from models.model import NexusAISetup
 
             account = db_session_with_containers.query(Account).filter_by(email=admin_email).first()
             tenant_count = db_session_with_containers.query(Tenant).count()
             tenant_join_count = db_session_with_containers.query(TenantAccountJoin).count()
-            dify_setup_count = db_session_with_containers.query(DifySetup).count()
+            nexusai_setup_count = db_session_with_containers.query(NexusAISetup).count()
 
             assert account is None
             assert tenant_count == 0
             assert tenant_join_count == 0
-            assert dify_setup_count == 0
+            assert nexusai_setup_count == 0
 
     def test_register_success(self, db_session_with_containers: Session, mock_external_service_dependencies):
         """

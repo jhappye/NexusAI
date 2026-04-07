@@ -62,13 +62,13 @@ describe('WebsitePreview', () => {
     })
 
     it('should render the payload source_url', () => {
-      const payload = createPayload({ source_url: 'https://docs.dify.ai/intro' })
+      const payload = createPayload({ source_url: 'https://docs.nexusai.ai/intro' })
 
       render(<WebsitePreview payload={payload} hidePreview={mockHidePreview} />)
 
-      const urlElement = screen.getByText('https://docs.dify.ai/intro')
+      const urlElement = screen.getByText('https://docs.nexusai.ai/intro')
       expect(urlElement).toBeInTheDocument()
-      expect(urlElement).toHaveAttribute('title', 'https://docs.dify.ai/intro')
+      expect(urlElement).toHaveAttribute('title', 'https://docs.nexusai.ai/intro')
     })
 
     it('should render the payload markdown content', () => {

@@ -8,7 +8,7 @@ from graphon.runtime import GraphRuntimeState, VariablePool
 from graphon.template_rendering import TemplateRenderError
 
 from core.app.entities.app_invoke_entities import InvokeFrom, UserFrom
-from core.workflow.node_factory import DifyNodeFactory
+from core.workflow.node_factory import NexusAINodeFactory
 from core.workflow.system_variables import build_system_variables
 from tests.workflow_test_utils import build_test_graph_init_params
 
@@ -78,7 +78,7 @@ def test_execute_template_transform():
     graph_runtime_state = GraphRuntimeState(variable_pool=variable_pool, start_at=time.perf_counter())
 
     # Create node factory (graph init path still works regardless of renderer choice below)
-    node_factory = DifyNodeFactory(
+    node_factory = NexusAINodeFactory(
         graph_init_params=init_params,
         graph_runtime_state=graph_runtime_state,
     )

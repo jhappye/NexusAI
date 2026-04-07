@@ -58,7 +58,7 @@ TOOL_DESCRIPTION = "tool.description"
 TOOL_PARAMETERS = "tool.parameters"
 
 # Instrumentation Library
-INSTRUMENTATION_NAME = "dify-sdk"
+INSTRUMENTATION_NAME = "nexusai-sdk"
 INSTRUMENTATION_VERSION = "0.1.0"
 INSTRUMENTATION_LANGUAGE = "python"
 

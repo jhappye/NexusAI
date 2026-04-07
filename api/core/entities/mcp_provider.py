@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 from graphon.file import helpers as file_helpers
 from pydantic import BaseModel
 
-from configs import dify_config
+from configs import nexusai_config
 from core.entities.provider_entities import BasicProviderConfig
 from core.helper import encrypter
 from core.helper.provider_cache import NoOpProviderCredentialCache
@@ -21,8 +21,8 @@ if TYPE_CHECKING:
     from models.tools import MCPToolProvider
 
 # Constants
-CLIENT_NAME = "Dify"
-CLIENT_URI = "https://github.com/langgenius/dify"
+CLIENT_NAME = "NexusAI"
+CLIENT_URI = "https://github.com/langgenius/nexusai"
 DEFAULT_TOKEN_TYPE = "Bearer"
 DEFAULT_EXPIRES_IN = 3600
 MASK_CHAR = "*"
@@ -101,7 +101,7 @@ class MCPProviderEntity(BaseModel):
     @property
     def redirect_url(self) -> str:
         """OAuth redirect URL"""
-        return dify_config.CONSOLE_API_URL + "/console/api/mcp/oauth/callback"
+        return nexusai_config.CONSOLE_API_URL + "/console/api/mcp/oauth/callback"
 
     @property
     def client_metadata(self) -> OAuthClientMetadata:

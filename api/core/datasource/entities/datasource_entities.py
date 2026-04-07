@@ -7,7 +7,7 @@ from typing import Any
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
 from yarl import URL
 
-from configs import dify_config
+from configs import nexusai_config
 from core.entities.provider_entities import ProviderConfig
 from core.plugin.entities.oauth import OAuthSchema
 from core.plugin.entities.parameters import (
@@ -149,11 +149,11 @@ class DatasourceProviderIdentity(BaseModel):
     )
 
     def generate_datasource_icon_url(self, tenant_id: str) -> str:
-        HARD_CODED_DATASOURCE_ICONS = ["https://assets.dify.ai/images/File%20Upload.svg"]
+        HARD_CODED_DATASOURCE_ICONS = ["https://assets.nexusai.ai/images/File%20Upload.svg"]
         if self.icon in HARD_CODED_DATASOURCE_ICONS:
             return self.icon
         return str(
-            URL(dify_config.CONSOLE_API_URL or "/")
+            URL(nexusai_config.CONSOLE_API_URL or "/")
             / "console"
             / "api"
             / "workspaces"

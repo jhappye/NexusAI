@@ -49,7 +49,7 @@ def test_wrap_dict():
 
 
 def test_wrap_metadata():
-    assert wrap_metadata({"a": 1}, b=2) == {"a": 1, "b": 2, "created_from": "dify"}
+    assert wrap_metadata({"a": 1}, b=2) == {"a": 1, "b": 2, "created_from": "nexusai"}
 
 
 def test_prepare_opik_uuid():
@@ -203,7 +203,7 @@ def test_workflow_trace_with_message_id(trace_instance, monkeypatch):
 
     mock_factory = MagicMock()
     mock_factory.create_workflow_node_execution_repository.return_value = repo
-    monkeypatch.setattr("core.ops.opik_trace.opik_trace.DifyCoreRepositoryFactory", mock_factory)
+    monkeypatch.setattr("core.ops.opik_trace.opik_trace.NexusAICoreRepositoryFactory", mock_factory)
 
     monkeypatch.setattr(trace_instance, "get_service_account_with_tenant", lambda app_id: MagicMock())
 
@@ -256,7 +256,7 @@ def test_workflow_trace_no_message_id(trace_instance, monkeypatch):
     repo.get_by_workflow_execution.return_value = []
     mock_factory = MagicMock()
     mock_factory.create_workflow_node_execution_repository.return_value = repo
-    monkeypatch.setattr("core.ops.opik_trace.opik_trace.DifyCoreRepositoryFactory", mock_factory)
+    monkeypatch.setattr("core.ops.opik_trace.opik_trace.NexusAICoreRepositoryFactory", mock_factory)
     monkeypatch.setattr(trace_instance, "get_service_account_with_tenant", lambda app_id: MagicMock())
 
     trace_instance.add_trace = MagicMock()
@@ -658,7 +658,7 @@ def test_workflow_trace_usage_extraction_error_fixed(trace_instance, monkeypatch
     repo.get_by_workflow_execution.return_value = [node]
     mock_factory = MagicMock()
     mock_factory.create_workflow_node_execution_repository.return_value = repo
-    monkeypatch.setattr("core.ops.opik_trace.opik_trace.DifyCoreRepositoryFactory", mock_factory)
+    monkeypatch.setattr("core.ops.opik_trace.opik_trace.NexusAICoreRepositoryFactory", mock_factory)
     monkeypatch.setattr("core.ops.opik_trace.opik_trace.sessionmaker", lambda bind: lambda: MagicMock())
     monkeypatch.setattr("core.ops.opik_trace.opik_trace.db", MagicMock(engine="engine"))
     monkeypatch.setattr(trace_instance, "get_service_account_with_tenant", lambda app_id: MagicMock())

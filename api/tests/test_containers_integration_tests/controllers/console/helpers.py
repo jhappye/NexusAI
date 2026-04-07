@@ -6,22 +6,22 @@ from flask.testing import FlaskClient
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import HEADER_NAME_CSRF_TOKEN
 from libs.datetime_utils import naive_utc_now
 from libs.token import _real_cookie_name, generate_csrf_token
-from models import Account, DifySetup, Tenant, TenantAccountJoin
+from models import Account, NexusAISetup, Tenant, TenantAccountJoin
 from models.account import AccountStatus, TenantAccountRole
 from models.model import App, AppMode
 from services.account_service import AccountService
 
 
-def ensure_dify_setup(db_session: Session) -> None:
+def ensure_nexusai_setup(db_session: Session) -> None:
     """Create a setup marker once so setup-protected console routes can be exercised."""
-    if db_session.scalar(select(DifySetup).limit(1)) is not None:
+    if db_session.scalar(select(NexusAISetup).limit(1)) is not None:
         return
 
-    db_session.add(DifySetup(version=dify_config.project.version))
+    db_session.add(NexusAISetup(version=nexusai_config.project.version))
     db_session.commit()
 
 
@@ -55,7 +55,7 @@ def create_console_account_and_tenant(db_session: Session) -> tuple[Account, Ten
     account.timezone = "UTC"
     db_session.commit()
 
-    ensure_dify_setup(db_session)
+    ensure_nexusai_setup(db_session)
     return account, tenant
 
 

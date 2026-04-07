@@ -15,7 +15,7 @@ from models.dataset import Dataset
 def create_mock_dataset(
     dataset_id: str | None = None,
     tenant_id: str | None = None,
-    provider: str = "dify",
+    provider: str = "nexusai",
     indexing_technique: str = "high_quality",
     available_document_count: int = 10,
 ) -> Mock:
@@ -25,7 +25,7 @@ def create_mock_dataset(
     Args:
         dataset_id: Unique identifier for the dataset
         tenant_id: Tenant ID for the dataset
-        provider: Provider type ("dify" or "external")
+        provider: Provider type ("nexusai" or "external")
         indexing_technique: Indexing technique ("high_quality" or "economy")
         available_document_count: Number of available documents
 
@@ -54,7 +54,7 @@ def create_mock_document(
     content: str,
     doc_id: str,
     score: float = 0.8,
-    provider: str = "dify",
+    provider: str = "nexusai",
     additional_metadata: dict | None = None,
 ) -> Document:
     """
@@ -64,7 +64,7 @@ def create_mock_document(
         content: The text content of the document
         doc_id: Unique identifier for the document chunk
         score: Relevance score (0.0 to 1.0)
-        provider: Document provider ("dify" or "external")
+        provider: Document provider ("nexusai" or "external")
         additional_metadata: Optional extra metadata fields
 
     Returns:
@@ -312,7 +312,7 @@ class TestDatasetRetrievalKnowledgeRetrieval:
     4. Metadata filtering automatic
     5. Metadata filtering manual
     6. External documents handling
-    7. Dify documents handling
+    7. NexusAI documents handling
     8. Empty results handling
     9. Rate limit exceeded
     10. No available datasets
@@ -519,7 +519,7 @@ class TestDatasetRetrievalKnowledgeRetrieval:
         Test knowledge_retrieval with external documents.
 
         External documents come from external knowledge bases and should
-        be formatted differently than Dify documents.
+        be formatted differently than NexusAI documents.
 
         Verifies:
         - External documents are handled correctly

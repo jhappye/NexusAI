@@ -172,7 +172,7 @@ class TestParentChildIndexProcessor:
                 return_value="hash",
             ),
             patch(
-                "core.rag.index_processor.processor.parent_child_index_processor.dify_config.CHILD_CHUNKS_PREVIEW_NUMBER",
+                "core.rag.index_processor.processor.parent_child_index_processor.nexusai_config.CHILD_CHUNKS_PREVIEW_NUMBER",
                 2,
             ),
         ):

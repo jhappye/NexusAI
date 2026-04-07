@@ -4,22 +4,22 @@ import threading
 
 from flask import Response
 
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     @app.after_request
     def after_request(response):  # pyright: ignore[reportUnusedFunction]
         """Add Version headers to the response."""
-        response.headers.add("X-Version", dify_config.project.version)
-        response.headers.add("X-Env", dify_config.DEPLOY_ENV)
+        response.headers.add("X-Version", nexusai_config.project.version)
+        response.headers.add("X-Env", nexusai_config.DEPLOY_ENV)
         return response
 
     @app.route("/health")
     def health():  # pyright: ignore[reportUnusedFunction]
         return Response(
-            json.dumps({"pid": os.getpid(), "status": "ok", "version": dify_config.project.version}),
+            json.dumps({"pid": os.getpid(), "status": "ok", "version": nexusai_config.project.version}),
             status=200,
             content_type="application/json",
         )

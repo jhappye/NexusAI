@@ -11,11 +11,11 @@ from services.rag_pipeline.rag_pipeline import RagPipelineService
 @pytest.fixture
 def rag_pipeline_service(mocker) -> RagPipelineService:
     mocker.patch(
-        "services.rag_pipeline.rag_pipeline.DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository",
+        "services.rag_pipeline.rag_pipeline.NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository",
         return_value=MockRepo(),
     )
     mocker.patch(
-        "services.rag_pipeline.rag_pipeline.DifyAPIRepositoryFactory.create_api_workflow_run_repository",
+        "services.rag_pipeline.rag_pipeline.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository",
         return_value=MockRepo(),
     )
     return RagPipelineService(session_maker=sessionmaker())
@@ -26,7 +26,7 @@ class MockRepo:
 
 
 def test_get_pipeline_templates_fallbacks_to_builtin_for_non_english_empty_result(mocker) -> None:
-    mocker.patch("services.rag_pipeline.rag_pipeline.dify_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE", "remote")
+    mocker.patch("services.rag_pipeline.rag_pipeline.nexusai_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE", "remote")
 
     remote_retrieval = mocker.Mock()
     remote_retrieval.get_pipeline_templates.return_value = {"pipeline_templates": []}
@@ -59,7 +59,7 @@ def test_get_pipeline_templates_customized_mode_uses_customized_factory(mocker) 
 
 @pytest.mark.parametrize("template_type", ["built-in", "customized"])
 def test_get_pipeline_template_detail_uses_expected_mode(mocker, template_type: str) -> None:
-    mocker.patch("services.rag_pipeline.rag_pipeline.dify_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE", "remote")
+    mocker.patch("services.rag_pipeline.rag_pipeline.nexusai_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE", "remote")
     retrieval = mocker.Mock()
     retrieval.get_pipeline_template_detail.return_value = {"id": "tpl-1"}
 
@@ -1037,7 +1037,7 @@ def test_run_draft_workflow_node_saves_execution_and_variables(mocker, rag_pipel
 
     repo = mocker.Mock()
     mocker.patch(
-        "services.rag_pipeline.rag_pipeline.DifyCoreRepositoryFactory.create_workflow_node_execution_repository",
+        "services.rag_pipeline.rag_pipeline.NexusAICoreRepositoryFactory.create_workflow_node_execution_repository",
         return_value=repo,
     )
     rag_pipeline_service._node_execution_service_repo = mocker.Mock(get_execution_by_id=mocker.Mock(return_value="db"))
@@ -1312,7 +1312,7 @@ def test_get_node_last_run_delegates_to_repository(mocker, rag_pipeline_service)
     repo = mocker.Mock()
     repo.get_node_last_execution.return_value = "node-exec"
     mocker.patch(
-        "services.rag_pipeline.rag_pipeline.DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository",
+        "services.rag_pipeline.rag_pipeline.NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository",
         return_value=repo,
     )
     pipeline = SimpleNamespace(id="p1", tenant_id="t1")
@@ -1693,10 +1693,10 @@ def test_init_uses_default_sessionmaker_when_none(mocker) -> None:
     mocker.patch("services.rag_pipeline.rag_pipeline.sessionmaker", return_value=default_session_maker)
     mocker.patch("services.rag_pipeline.rag_pipeline.db", SimpleNamespace(engine=mocker.Mock()))
     create_exec_repo = mocker.patch(
-        "services.rag_pipeline.rag_pipeline.DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository"
+        "services.rag_pipeline.rag_pipeline.NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository"
     )
     create_run_repo = mocker.patch(
-        "services.rag_pipeline.rag_pipeline.DifyAPIRepositoryFactory.create_api_workflow_run_repository"
+        "services.rag_pipeline.rag_pipeline.NexusAIAPIRepositoryFactory.create_api_workflow_run_repository"
     )
 
     RagPipelineService(session_maker=None)
@@ -1706,7 +1706,7 @@ def test_init_uses_default_sessionmaker_when_none(mocker) -> None:
 
 
 def test_get_pipeline_templates_builtin_en_us_no_fallback(mocker) -> None:
-    mocker.patch("services.rag_pipeline.rag_pipeline.dify_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE", "remote")
+    mocker.patch("services.rag_pipeline.rag_pipeline.nexusai_config.HOSTED_FETCH_PIPELINE_TEMPLATES_MODE", "remote")
     retrieval = mocker.Mock()
     retrieval.get_pipeline_templates.return_value = {"pipeline_templates": []}
     factory = mocker.patch("services.rag_pipeline.rag_pipeline.PipelineTemplateRetrievalFactory")

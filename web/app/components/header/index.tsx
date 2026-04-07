@@ -1,6 +1,6 @@
 'use client'
 import { useCallback } from 'react'
-import DifyLogo from '@/app/components/base/logo/dify-logo'
+import NexusAILogo from '@/app/components/base/logo/nexusai-logo'
 import WorkplaceSelector from '@/app/components/header/account-dropdown/workplace-selector'
 import { ACCOUNT_SETTING_TAB } from '@/app/components/header/account-setting/constants'
 import { useAppContext } from '@/context/app-context'
@@ -46,7 +46,7 @@ const Header = () => {
   const renderLogo = () => (
     <h1>
       <Link href="/apps" className="flex h-8 shrink-0 items-center justify-center overflow-hidden whitespace-nowrap px-0.5 indent-[-9999px]">
-        {isBrandingEnabled && systemFeatures.branding.application_title ? systemFeatures.branding.application_title : 'Dify'}
+        {isBrandingEnabled && systemFeatures.branding.application_title ? systemFeatures.branding.application_title : 'NexusAI'}
         {systemFeatures.branding.enabled && systemFeatures.branding.workspace_logo
           ? (
               <img
@@ -55,7 +55,7 @@ const Header = () => {
                 alt="logo"
               />
             )
-          : <DifyLogo />}
+          : <NexusAILogo />}
       </Link>
     </h1>
   )

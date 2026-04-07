@@ -7,9 +7,9 @@ from flask_login import user_loaded_from_request, user_logged_in
 from sqlalchemy import select
 from werkzeug.exceptions import NotFound, Unauthorized
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import HEADER_NAME_APP_CODE
-from dify_app import DifyApp
+from nexusai_app import NexusAIApp
 from extensions.ext_database import db
 from libs.passport import PassportService
 from libs.token import extract_access_token, extract_webapp_passport
@@ -20,10 +20,10 @@ from services.account_service import AccountService
 type LoginUser = Account | EndUser
 
 
-class DifyLoginManager(flask_login.LoginManager):
+class NexusAILoginManager(flask_login.LoginManager):
     """Project-specific Flask-Login manager with a stable unauthorized contract.
 
-    Dify registers `unauthorized_handler` below to always return a JSON `Response`.
+    NexusAI registers `unauthorized_handler` below to always return a JSON `Response`.
     Overriding this method lets callers rely on that narrower return type instead of
     Flask-Login's broader callback contract.
     """
@@ -37,7 +37,7 @@ class DifyLoginManager(flask_login.LoginManager):
         self._load_user()
 
 
-login_manager = DifyLoginManager()
+login_manager = NexusAILoginManager()
 
 
 # Flask-Login configuration
@@ -47,14 +47,14 @@ def load_user_from_request(request_from_flask_login: Request) -> LoginUser | Non
     del request_from_flask_login
 
     # Skip authentication for documentation endpoints
-    if dify_config.SWAGGER_UI_ENABLED and request.path.endswith((dify_config.SWAGGER_UI_PATH, "/swagger.json")):
+    if nexusai_config.SWAGGER_UI_ENABLED and request.path.endswith((nexusai_config.SWAGGER_UI_PATH, "/swagger.json")):
         return None
 
     auth_token = extract_access_token(request)
 
     # Check for admin API key authentication first
-    if dify_config.ADMIN_API_KEY_ENABLE and auth_token:
-        admin_api_key = dify_config.ADMIN_API_KEY
+    if nexusai_config.ADMIN_API_KEY_ENABLE and auth_token:
+        admin_api_key = nexusai_config.ADMIN_API_KEY
         if admin_api_key and admin_api_key == auth_token:
             workspace_id = request.headers.get("X-WORKSPACE-ID")
             if workspace_id:
@@ -141,7 +141,7 @@ def on_user_logged_in(_sender: object, user: LoginUser) -> None:
 @login_manager.unauthorized_handler
 def unauthorized_handler() -> Response:
     """Handle unauthorized requests."""
-    # Keep this as a concrete `Response`; `DifyLoginManager.unauthorized()` narrows
+    # Keep this as a concrete `Response`; `NexusAILoginManager.unauthorized()` narrows
     # Flask-Login's callback contract based on this override.
     return Response(
         json.dumps({"code": "unauthorized", "message": "Unauthorized."}),
@@ -150,5 +150,5 @@ def unauthorized_handler() -> Response:
     )
 
 
-def init_app(app: DifyApp) -> None:
+def init_app(app: NexusAIApp) -> None:
     login_manager.init_app(app)

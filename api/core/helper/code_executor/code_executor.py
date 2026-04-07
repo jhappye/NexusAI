@@ -8,7 +8,7 @@ from graphon.nodes.code.entities import CodeLanguage
 from pydantic import BaseModel
 from yarl import URL
 
-from configs import dify_config
+from configs import nexusai_config
 from core.helper.code_executor.javascript.javascript_transformer import NodeJsTemplateTransformer
 from core.helper.code_executor.jinja2.jinja2_transformer import Jinja2TemplateTransformer
 from core.helper.code_executor.python3.python3_transformer import Python3TemplateTransformer
@@ -16,12 +16,12 @@ from core.helper.code_executor.template_transformer import TemplateTransformer
 from core.helper.http_client_pooling import get_pooled_http_client
 
 logger = logging.getLogger(__name__)
-code_execution_endpoint_url = URL(str(dify_config.CODE_EXECUTION_ENDPOINT))
-CODE_EXECUTION_SSL_VERIFY = dify_config.CODE_EXECUTION_SSL_VERIFY
+code_execution_endpoint_url = URL(str(nexusai_config.CODE_EXECUTION_ENDPOINT))
+CODE_EXECUTION_SSL_VERIFY = nexusai_config.CODE_EXECUTION_SSL_VERIFY
 _CODE_EXECUTOR_CLIENT_LIMITS = httpx.Limits(
-    max_connections=dify_config.CODE_EXECUTION_POOL_MAX_CONNECTIONS,
-    max_keepalive_connections=dify_config.CODE_EXECUTION_POOL_MAX_KEEPALIVE_CONNECTIONS,
-    keepalive_expiry=dify_config.CODE_EXECUTION_POOL_KEEPALIVE_EXPIRY,
+    max_connections=nexusai_config.CODE_EXECUTION_POOL_MAX_CONNECTIONS,
+    max_keepalive_connections=nexusai_config.CODE_EXECUTION_POOL_MAX_KEEPALIVE_CONNECTIONS,
+    keepalive_expiry=nexusai_config.CODE_EXECUTION_POOL_KEEPALIVE_EXPIRY,
 )
 _CODE_EXECUTOR_CLIENT_KEY = "code_executor:http_client"
 
@@ -76,7 +76,7 @@ class CodeExecutor:
         """
         url = code_execution_endpoint_url / "v1" / "sandbox" / "run"
 
-        headers = {"X-Api-Key": dify_config.CODE_EXECUTION_API_KEY}
+        headers = {"X-Api-Key": nexusai_config.CODE_EXECUTION_API_KEY}
 
         data = {
             "language": cls.code_language_to_running_language.get(language),
@@ -86,9 +86,9 @@ class CodeExecutor:
         }
 
         timeout = httpx.Timeout(
-            connect=dify_config.CODE_EXECUTION_CONNECT_TIMEOUT,
-            read=dify_config.CODE_EXECUTION_READ_TIMEOUT,
-            write=dify_config.CODE_EXECUTION_WRITE_TIMEOUT,
+            connect=nexusai_config.CODE_EXECUTION_CONNECT_TIMEOUT,
+            read=nexusai_config.CODE_EXECUTION_READ_TIMEOUT,
+            write=nexusai_config.CODE_EXECUTION_WRITE_TIMEOUT,
             pool=None,
         )
 

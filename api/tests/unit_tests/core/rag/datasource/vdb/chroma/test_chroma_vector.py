@@ -181,12 +181,12 @@ def test_factory_init_vector_uses_existing_or_generated_collection(chroma_module
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(chroma_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(chroma_module.dify_config, "CHROMA_HOST", "localhost")
-    monkeypatch.setattr(chroma_module.dify_config, "CHROMA_PORT", 8000)
-    monkeypatch.setattr(chroma_module.dify_config, "CHROMA_TENANT", None)
-    monkeypatch.setattr(chroma_module.dify_config, "CHROMA_DATABASE", None)
-    monkeypatch.setattr(chroma_module.dify_config, "CHROMA_AUTH_PROVIDER", None)
-    monkeypatch.setattr(chroma_module.dify_config, "CHROMA_AUTH_CREDENTIALS", None)
+    monkeypatch.setattr(chroma_module.nexusai_config, "CHROMA_HOST", "localhost")
+    monkeypatch.setattr(chroma_module.nexusai_config, "CHROMA_PORT", 8000)
+    monkeypatch.setattr(chroma_module.nexusai_config, "CHROMA_TENANT", None)
+    monkeypatch.setattr(chroma_module.nexusai_config, "CHROMA_DATABASE", None)
+    monkeypatch.setattr(chroma_module.nexusai_config, "CHROMA_AUTH_PROVIDER", None)
+    monkeypatch.setattr(chroma_module.nexusai_config, "CHROMA_AUTH_CREDENTIALS", None)
 
     with patch.object(chroma_module, "ChromaVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

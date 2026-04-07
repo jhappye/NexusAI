@@ -2,7 +2,7 @@ from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from configs import dify_config
+from configs import nexusai_config
 from enums.cloud_plan import CloudPlan
 from enums.hosted_provider import HostedTrialProvider
 from services.billing_service import BillingService
@@ -110,7 +110,7 @@ class PluginInstallationScope(StrEnum):
 class PluginInstallationPermissionModel(BaseModel):
     # Plugin installation scope – possible values:
     #   none: prohibit all plugin installations
-    #   official_only: allow only Dify official plugins
+    #   official_only: allow only NexusAI official plugins
     #   official_and_specific_partners: allow official and specific partner plugins
     #   all: allow installation of all plugins
     plugin_installation_scope: PluginInstallationScope = PluginInstallationScope.ALL
@@ -160,7 +160,7 @@ class SystemFeatureModel(BaseModel):
     sso_enforced_for_signin: bool = False
     sso_enforced_for_signin_protocol: str = ""
     enable_marketplace: bool = False
-    max_plugin_package_size: int = dify_config.PLUGIN_MAX_PACKAGE_SIZE
+    max_plugin_package_size: int = nexusai_config.PLUGIN_MAX_PACKAGE_SIZE
     enable_email_code_login: bool = False
     enable_email_password_login: bool = True
     enable_social_oauth_login: bool = False
@@ -185,10 +185,10 @@ class FeatureService:
 
         cls._fulfill_params_from_env(features)
 
-        if dify_config.BILLING_ENABLED and tenant_id:
+        if nexusai_config.BILLING_ENABLED and tenant_id:
             cls._fulfill_params_from_billing_api(features, tenant_id)
 
-        if dify_config.ENTERPRISE_ENABLED:
+        if nexusai_config.ENTERPRISE_ENABLED:
             features.webapp_copyright_enabled = True
             features.knowledge_pipeline.publish_enabled = True
             cls._fulfill_params_from_workspace_info(features, tenant_id)
@@ -203,7 +203,7 @@ class FeatureService:
     @classmethod
     def get_knowledge_rate_limit(cls, tenant_id: str):
         knowledge_rate_limit = KnowledgeRateLimitModel()
-        if dify_config.BILLING_ENABLED and tenant_id:
+        if nexusai_config.BILLING_ENABLED and tenant_id:
             knowledge_rate_limit.enabled = True
             limit_info = BillingService.get_knowledge_rate_limit(tenant_id)
             knowledge_rate_limit.limit = limit_info.get("limit", 10)
@@ -212,7 +212,7 @@ class FeatureService:
 
     @classmethod
     def _resolve_human_input_email_delivery_enabled(cls, *, features: FeatureModel, tenant_id: str | None) -> bool:
-        if dify_config.ENTERPRISE_ENABLED or not dify_config.BILLING_ENABLED:
+        if nexusai_config.ENTERPRISE_ENABLED or not nexusai_config.BILLING_ENABLED:
             return True
         if not tenant_id:
             return False
@@ -227,29 +227,29 @@ class FeatureService:
 
         cls._fulfill_system_params_from_env(system_features)
 
-        if dify_config.ENTERPRISE_ENABLED:
+        if nexusai_config.ENTERPRISE_ENABLED:
             system_features.branding.enabled = True
             system_features.webapp_auth.enabled = True
             system_features.enable_change_email = False
             system_features.plugin_manager.enabled = True
             cls._fulfill_params_from_enterprise(system_features, is_authenticated)
 
-        if dify_config.MARKETPLACE_ENABLED:
+        if nexusai_config.MARKETPLACE_ENABLED:
             system_features.enable_marketplace = True
 
         return system_features
 
     @classmethod
     def _fulfill_system_params_from_env(cls, system_features: SystemFeatureModel):
-        system_features.enable_email_code_login = dify_config.ENABLE_EMAIL_CODE_LOGIN
-        system_features.enable_email_password_login = dify_config.ENABLE_EMAIL_PASSWORD_LOGIN
-        system_features.enable_social_oauth_login = dify_config.ENABLE_SOCIAL_OAUTH_LOGIN
-        system_features.is_allow_register = dify_config.ALLOW_REGISTER
-        system_features.is_allow_create_workspace = dify_config.ALLOW_CREATE_WORKSPACE
-        system_features.is_email_setup = dify_config.MAIL_TYPE is not None and dify_config.MAIL_TYPE != ""
+        system_features.enable_email_code_login = nexusai_config.ENABLE_EMAIL_CODE_LOGIN
+        system_features.enable_email_password_login = nexusai_config.ENABLE_EMAIL_PASSWORD_LOGIN
+        system_features.enable_social_oauth_login = nexusai_config.ENABLE_SOCIAL_OAUTH_LOGIN
+        system_features.is_allow_register = nexusai_config.ALLOW_REGISTER
+        system_features.is_allow_create_workspace = nexusai_config.ALLOW_CREATE_WORKSPACE
+        system_features.is_email_setup = nexusai_config.MAIL_TYPE is not None and nexusai_config.MAIL_TYPE != ""
         system_features.trial_models = cls._fulfill_trial_models_from_env()
-        system_features.enable_trial_app = dify_config.ENABLE_TRIAL_APP
-        system_features.enable_explore_banner = dify_config.ENABLE_EXPLORE_BANNER
+        system_features.enable_trial_app = nexusai_config.ENABLE_TRIAL_APP
+        system_features.enable_explore_banner = nexusai_config.ENABLE_EXPLORE_BANNER
 
     @classmethod
     def _fulfill_trial_models_from_env(cls) -> list[str]:
@@ -257,17 +257,17 @@ class FeatureService:
             provider.value
             for provider in HostedTrialProvider
             if (
-                getattr(dify_config, f"HOSTED_{provider.config_key}_PAID_ENABLED", False)
-                and getattr(dify_config, f"HOSTED_{provider.config_key}_TRIAL_ENABLED", False)
+                getattr(nexusai_config, f"HOSTED_{provider.config_key}_PAID_ENABLED", False)
+                and getattr(nexusai_config, f"HOSTED_{provider.config_key}_TRIAL_ENABLED", False)
             )
         ]
 
     @classmethod
     def _fulfill_params_from_env(cls, features: FeatureModel):
-        features.can_replace_logo = dify_config.CAN_REPLACE_LOGO
-        features.model_load_balancing_enabled = dify_config.MODEL_LB_ENABLED
-        features.dataset_operator_enabled = dify_config.DATASET_OPERATOR_ENABLED
-        features.education.enabled = dify_config.EDUCATION_ENABLED
+        features.can_replace_logo = nexusai_config.CAN_REPLACE_LOGO
+        features.model_load_balancing_enabled = nexusai_config.MODEL_LB_ENABLED
+        features.dataset_operator_enabled = nexusai_config.DATASET_OPERATOR_ENABLED
+        features.education.enabled = nexusai_config.EDUCATION_ENABLED
 
     @classmethod
     def _fulfill_params_from_workspace_info(cls, features: FeatureModel, tenant_id: str):

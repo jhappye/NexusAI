@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from werkzeug.exceptions import NotFound
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.common.schema import register_schema_models
 from controllers.service_api import service_api_ns
 from controllers.service_api.app.error import ProviderNotInitializeError
@@ -150,7 +150,7 @@ class SegmentApi(DatasetApiResource):
         # validate args
         payload = SegmentCreatePayload.model_validate(service_api_ns.payload or {})
         if payload.segments is not None:
-            segments_limit = dify_config.DATASET_MAX_SEGMENTS_PER_REQUEST
+            segments_limit = nexusai_config.DATASET_MAX_SEGMENTS_PER_REQUEST
             if segments_limit > 0 and len(payload.segments) > segments_limit:
                 raise ValueError(f"Exceeded maximum segments limit of {segments_limit}.")
 

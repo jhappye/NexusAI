@@ -7,7 +7,7 @@ from typing import Any
 from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
-from configs import dify_config
+from configs import nexusai_config
 from constants import HIDDEN_VALUE, UNKNOWN_VALUE
 from core.helper.name_generator import generate_incremental_name
 from core.helper.position_helper import is_filtered
@@ -76,7 +76,7 @@ class BuiltinToolManageService:
             "is_oauth_custom_client_enabled": is_oauth_custom_client_enabled,
             "is_system_oauth_params_exists": is_system_oauth_params_exists,
             "client_params": BuiltinToolManageService.get_custom_oauth_client_params(tenant_id, provider_name),
-            "redirect_uri": f"{dify_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider_name}/tool/callback",
+            "redirect_uri": f"{nexusai_config.CONSOLE_API_URL}/console/api/oauth/plugin/{provider_name}/tool/callback",
         }
         return result
 
@@ -542,8 +542,8 @@ class BuiltinToolManageService:
             try:
                 # handle include, exclude
                 if is_filtered(
-                    include_set=dify_config.POSITION_TOOL_INCLUDES_SET,
-                    exclude_set=dify_config.POSITION_TOOL_EXCLUDES_SET,
+                    include_set=nexusai_config.POSITION_TOOL_INCLUDES_SET,
+                    exclude_set=nexusai_config.POSITION_TOOL_EXCLUDES_SET,
                     data=provider_controller,
                     name_func=lambda x: x.entity.identity.name,
                 ):

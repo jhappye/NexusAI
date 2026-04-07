@@ -179,7 +179,7 @@ export default function AppSelector() {
             <>
               <AccountMenuSection>
                 <AccountMenuExternalItem
-                  href={docLink('/use-dify/getting-started/introduction')}
+                  href={docLink('/use-nexusai/getting-started/introduction')}
                   iconClassName="i-ri-book-open-line"
                   label={t('userProfile.helpCenter', { ns: 'common' })}
                   trailing={<ExternalLinkIndicator />}
@@ -190,13 +190,13 @@ export default function AppSelector() {
               <DropdownMenuSeparator className="my-0! bg-divider-subtle" />
               <AccountMenuSection>
                 <AccountMenuExternalItem
-                  href="https://roadmap.dify.ai"
+                  href="https://roadmap.nexusai.ai"
                   iconClassName="i-ri-map-2-line"
                   label={t('userProfile.roadmap', { ns: 'common' })}
                   trailing={<ExternalLinkIndicator />}
                 />
                 <AccountMenuExternalItem
-                  href="https://github.com/langgenius/dify"
+                  href="https://github.com/langgenius/nexusai"
                   iconClassName="i-ri-github-line"
                   label={t('userProfile.github', { ns: 'common' })}
                   trailing={(

@@ -334,22 +334,22 @@ def test_create_collection_paths(lindorm_module, monkeypatch):
 def test_lindorm_factory_branches(lindorm_module, monkeypatch):
     factory = lindorm_module.LindormVectorStoreFactory()
 
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_URL", "http://localhost:9200")
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_USERNAME", "user")
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_PASSWORD", "pass")
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_QUERY_TIMEOUT", 3.0)
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_INDEX_TYPE", "hnsw")
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_DISTANCE_TYPE", "l2")
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_URL", "http://localhost:9200")
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_USERNAME", "user")
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_PASSWORD", "pass")
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_QUERY_TIMEOUT", 3.0)
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_INDEX_TYPE", "hnsw")
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_DISTANCE_TYPE", "l2")
     monkeypatch.setattr(lindorm_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
 
     dataset = SimpleNamespace(id="dataset-1", index_struct=None, index_struct_dict={})
     embeddings = SimpleNamespace(embed_query=lambda _q: [0.1, 0.2, 0.3])
 
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_USING_UGC", None)
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_USING_UGC", None)
     with pytest.raises(ValueError, match="LINDORM_USING_UGC is not set"):
         factory.init_vector(dataset, attributes=[], embeddings=embeddings)
 
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_USING_UGC", False)
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_USING_UGC", False)
 
     dataset_existing_plain = SimpleNamespace(
         id="dataset-1",
@@ -379,7 +379,7 @@ def test_lindorm_factory_branches(lindorm_module, monkeypatch):
 
     dataset_new = SimpleNamespace(id="dataset-2", index_struct=None, index_struct_dict={})
 
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_USING_UGC", True)
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_USING_UGC", True)
     with patch.object(lindorm_module, "LindormVectorStore", return_value="vector") as store_cls:
         factory.init_vector(dataset_new, attributes=[], embeddings=embeddings)
     assert store_cls.call_args.args[0] == "ugc_index_3_hnsw_l2"
@@ -387,7 +387,7 @@ def test_lindorm_factory_branches(lindorm_module, monkeypatch):
     assert dataset_new.index_struct is not None
 
     dataset_new_plain = SimpleNamespace(id="dataset-3", index_struct=None, index_struct_dict={})
-    monkeypatch.setattr(lindorm_module.dify_config, "LINDORM_USING_UGC", False)
+    monkeypatch.setattr(lindorm_module.nexusai_config, "LINDORM_USING_UGC", False)
     with patch.object(lindorm_module, "LindormVectorStore", return_value="vector") as store_cls:
         factory.init_vector(dataset_new_plain, attributes=[], embeddings=embeddings)
     assert store_cls.call_args.args[0] == "auto_collection"

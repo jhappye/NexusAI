@@ -8,7 +8,7 @@ from functools import wraps
 from flask import abort, request
 from sqlalchemy import select
 
-from configs import dify_config
+from configs import nexusai_config
 from controllers.console.auth.error import AuthenticationFailedError, EmailCodeError
 from controllers.console.workspace.error import AccountNotInitializedError
 from enums.cloud_plan import CloudPlan
@@ -18,7 +18,7 @@ from libs.encryption import FieldEncryption
 from libs.login import current_account_with_tenant
 from models.account import AccountStatus
 from models.dataset import RateLimitLog
-from models.model import DifySetup
+from models.model import NexusAISetup
 from services.feature_service import FeatureService, LicenseStatus
 from services.operation_service import OperationService
 
@@ -49,7 +49,7 @@ def account_initialization_required[**P, R](view: Callable[P, R]) -> Callable[P,
 def only_edition_cloud[**P, R](view: Callable[P, R]) -> Callable[P, R]:
     @wraps(view)
     def decorated(*args: P.args, **kwargs: P.kwargs):
-        if dify_config.EDITION != "CLOUD":
+        if nexusai_config.EDITION != "CLOUD":
             abort(404)
 
         return view(*args, **kwargs)
@@ -60,7 +60,7 @@ def only_edition_cloud[**P, R](view: Callable[P, R]) -> Callable[P, R]:
 def only_edition_enterprise[**P, R](view: Callable[P, R]) -> Callable[P, R]:
     @wraps(view)
     def decorated(*args: P.args, **kwargs: P.kwargs):
-        if not dify_config.ENTERPRISE_ENABLED:
+        if not nexusai_config.ENTERPRISE_ENABLED:
             abort(404)
 
         return view(*args, **kwargs)
@@ -71,7 +71,7 @@ def only_edition_enterprise[**P, R](view: Callable[P, R]) -> Callable[P, R]:
 def only_edition_self_hosted[**P, R](view: Callable[P, R]) -> Callable[P, R]:
     @wraps(view)
     def decorated(*args: P.args, **kwargs: P.kwargs):
-        if dify_config.EDITION != "SELF_HOSTED":
+        if nexusai_config.EDITION != "SELF_HOSTED":
             abort(404)
 
         return view(*args, **kwargs)
@@ -146,7 +146,7 @@ def cloud_edition_billing_knowledge_limit_check[**P, R](
                     if features.billing.subscription.plan == CloudPlan.SANDBOX:
                         abort(
                             403,
-                            "To unlock this feature and elevate your Dify experience, please upgrade to a paid plan.",
+                            "To unlock this feature and elevate your NexusAI experience, please upgrade to a paid plan.",
                         )
                 else:
                     return view(*args, **kwargs)
@@ -217,7 +217,7 @@ def setup_required[**P, R](view: Callable[P, R]) -> Callable[P, R]:
     @wraps(view)
     def decorated(*args: P.args, **kwargs: P.kwargs) -> R:
         # check setup
-        if dify_config.EDITION == "SELF_HOSTED" and not db.session.scalar(select(DifySetup).limit(1)):
+        if nexusai_config.EDITION == "SELF_HOSTED" and not db.session.scalar(select(NexusAISetup).limit(1)):
             if os.environ.get("INIT_PASSWORD"):
                 raise NotInitValidateError()
             raise NotSetupError()
@@ -360,10 +360,10 @@ def annotation_import_rate_limit[**P, R](view: Callable[P, R]) -> Callable[P, R]
         minute_count = redis_client.zcard(minute_key)
         redis_client.expire(minute_key, 120)  # 2 minutes TTL
 
-        if minute_count > dify_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE:
+        if minute_count > nexusai_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE:
             abort(
                 429,
-                f"Too many annotation import requests. Maximum {dify_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE} "
+                f"Too many annotation import requests. Maximum {nexusai_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE} "
                 f"requests per minute allowed. Please try again later.",
             )
 
@@ -374,10 +374,10 @@ def annotation_import_rate_limit[**P, R](view: Callable[P, R]) -> Callable[P, R]
         hour_count = redis_client.zcard(hour_key)
         redis_client.expire(hour_key, 7200)  # 2 hours TTL
 
-        if hour_count > dify_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR:
+        if hour_count > nexusai_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR:
             abort(
                 429,
-                f"Too many annotation import requests. Maximum {dify_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR} "
+                f"Too many annotation import requests. Maximum {nexusai_config.ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR} "
                 f"requests per hour allowed. Please try again later.",
             )
 
@@ -411,10 +411,10 @@ def annotation_import_concurrency_limit[**P, R](view: Callable[P, R]) -> Callabl
         # Check current active job count
         active_count = redis_client.zcard(active_jobs_key)
 
-        if active_count >= dify_config.ANNOTATION_IMPORT_MAX_CONCURRENT:
+        if active_count >= nexusai_config.ANNOTATION_IMPORT_MAX_CONCURRENT:
             abort(
                 429,
-                f"Too many concurrent import tasks. Maximum {dify_config.ANNOTATION_IMPORT_MAX_CONCURRENT} "
+                f"Too many concurrent import tasks. Maximum {nexusai_config.ANNOTATION_IMPORT_MAX_CONCURRENT} "
                 f"concurrent imports allowed per workspace. Please wait for existing imports to complete.",
             )
 
@@ -449,7 +449,7 @@ def _decrypt_field(field_name: str, error_class: type[Exception], error_message:
 
     # Update payload dict in-place with decoded value
     # Since payload is a mutable dict and get_json() returns the cached reference,
-    # modifying it will affect all subsequent accesses including console_ns.payload
+    # monexusaiing it will affect all subsequent accesses including console_ns.payload
     payload[field_name] = decoded_value
 
 

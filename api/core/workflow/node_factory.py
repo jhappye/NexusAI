@@ -23,9 +23,9 @@ from graphon.nodes.question_classifier.entities import QuestionClassifierNodeDat
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from configs import dify_config
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY, DifyRunContext
-from core.app.llm.model_access import build_dify_model_access, fetch_model_config
+from configs import nexusai_config
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY, NexusAIRunContext
+from core.app.llm.model_access import build_nexusai_model_access, fetch_model_config
 from core.helper.code_executor.code_executor import (
     CodeExecutionError,
     CodeExecutor,
@@ -37,14 +37,14 @@ from core.prompt.entities.advanced_prompt_entities import MemoryConfig
 from core.trigger.constants import TRIGGER_NODE_TYPES
 from core.workflow.human_input_compat import normalize_node_config_for_graph
 from core.workflow.node_runtime import (
-    DifyFileReferenceFactory,
-    DifyHumanInputNodeRuntime,
-    DifyPreparedLLM,
-    DifyPromptMessageSerializer,
-    DifyRetrieverAttachmentLoader,
-    DifyToolFileManager,
-    DifyToolNodeRuntime,
-    build_dify_llm_file_saver,
+    NexusAIFileReferenceFactory,
+    NexusAIHumanInputNodeRuntime,
+    NexusAIPreparedLLM,
+    NexusAIPromptMessageSerializer,
+    NexusAIRetrieverAttachmentLoader,
+    NexusAIToolFileManager,
+    NexusAIToolNodeRuntime,
+    build_nexusai_llm_file_saver,
 )
 from core.workflow.nodes.agent.message_transformer import AgentMessageTransformer
 from core.workflow.nodes.agent.plugin_strategy_adapter import (
@@ -232,7 +232,7 @@ class DefaultWorkflowCodeExecutor:
 
 
 @final
-class DifyNodeFactory(NodeFactory):
+class NexusAINodeFactory(NodeFactory):
     """
     Default implementation of NodeFactory that resolves node classes from the live registry.
     """
@@ -244,72 +244,72 @@ class DifyNodeFactory(NodeFactory):
     ) -> None:
         self.graph_init_params = graph_init_params
         self.graph_runtime_state = graph_runtime_state
-        self._dify_context = self._resolve_dify_context(graph_init_params.run_context)
+        self._nexusai_context = self._resolve_nexusai_context(graph_init_params.run_context)
         self._code_executor: WorkflowCodeExecutor = DefaultWorkflowCodeExecutor()
         self._code_limits = CodeNodeLimits(
-            max_string_length=dify_config.CODE_MAX_STRING_LENGTH,
-            max_number=dify_config.CODE_MAX_NUMBER,
-            min_number=dify_config.CODE_MIN_NUMBER,
-            max_precision=dify_config.CODE_MAX_PRECISION,
-            max_depth=dify_config.CODE_MAX_DEPTH,
-            max_number_array_length=dify_config.CODE_MAX_NUMBER_ARRAY_LENGTH,
-            max_string_array_length=dify_config.CODE_MAX_STRING_ARRAY_LENGTH,
-            max_object_array_length=dify_config.CODE_MAX_OBJECT_ARRAY_LENGTH,
+            max_string_length=nexusai_config.CODE_MAX_STRING_LENGTH,
+            max_number=nexusai_config.CODE_MAX_NUMBER,
+            min_number=nexusai_config.CODE_MIN_NUMBER,
+            max_precision=nexusai_config.CODE_MAX_PRECISION,
+            max_depth=nexusai_config.CODE_MAX_DEPTH,
+            max_number_array_length=nexusai_config.CODE_MAX_NUMBER_ARRAY_LENGTH,
+            max_string_array_length=nexusai_config.CODE_MAX_STRING_ARRAY_LENGTH,
+            max_object_array_length=nexusai_config.CODE_MAX_OBJECT_ARRAY_LENGTH,
         )
         self._jinja2_template_renderer = CodeExecutorJinja2TemplateRenderer()
-        self._template_transform_max_output_length = dify_config.TEMPLATE_TRANSFORM_MAX_LENGTH
+        self._template_transform_max_output_length = nexusai_config.TEMPLATE_TRANSFORM_MAX_LENGTH
         self._http_request_http_client = ssrf_proxy
-        self._bound_tool_file_manager_factory = lambda: DifyToolFileManager(
-            self._dify_context,
+        self._bound_tool_file_manager_factory = lambda: NexusAIToolFileManager(
+            self._nexusai_context,
             conversation_id_getter=self._conversation_id,
         )
-        self._file_reference_factory = DifyFileReferenceFactory(self._dify_context)
-        self._prompt_message_serializer = DifyPromptMessageSerializer()
-        self._retriever_attachment_loader = DifyRetrieverAttachmentLoader(
+        self._file_reference_factory = NexusAIFileReferenceFactory(self._nexusai_context)
+        self._prompt_message_serializer = NexusAIPromptMessageSerializer()
+        self._retriever_attachment_loader = NexusAIRetrieverAttachmentLoader(
             file_reference_factory=self._file_reference_factory,
         )
-        self._llm_file_saver = build_dify_llm_file_saver(
-            run_context=self._dify_context,
+        self._llm_file_saver = build_nexusai_llm_file_saver(
+            run_context=self._nexusai_context,
             http_client=self._http_request_http_client,
             conversation_id_getter=self._conversation_id,
         )
-        self._human_input_runtime = DifyHumanInputNodeRuntime(
-            self._dify_context,
+        self._human_input_runtime = NexusAIHumanInputNodeRuntime(
+            self._nexusai_context,
             workflow_execution_id_getter=lambda: get_system_text(
                 self.graph_runtime_state.variable_pool,
                 SystemVariableKey.WORKFLOW_EXECUTION_ID,
             ),
         )
-        self._tool_runtime = DifyToolNodeRuntime(self._dify_context)
+        self._tool_runtime = NexusAIToolNodeRuntime(self._nexusai_context)
         self._http_request_file_manager = file_manager
         self._document_extractor_unstructured_api_config = UnstructuredApiConfig(
-            api_url=dify_config.UNSTRUCTURED_API_URL,
-            api_key=dify_config.UNSTRUCTURED_API_KEY or "",
+            api_url=nexusai_config.UNSTRUCTURED_API_URL,
+            api_key=nexusai_config.UNSTRUCTURED_API_KEY or "",
         )
         self._http_request_config = build_http_request_config(
-            max_connect_timeout=dify_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
-            max_read_timeout=dify_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
-            max_write_timeout=dify_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
-            max_binary_size=dify_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
-            max_text_size=dify_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
-            ssl_verify=dify_config.HTTP_REQUEST_NODE_SSL_VERIFY,
-            ssrf_default_max_retries=dify_config.SSRF_DEFAULT_MAX_RETRIES,
+            max_connect_timeout=nexusai_config.HTTP_REQUEST_MAX_CONNECT_TIMEOUT,
+            max_read_timeout=nexusai_config.HTTP_REQUEST_MAX_READ_TIMEOUT,
+            max_write_timeout=nexusai_config.HTTP_REQUEST_MAX_WRITE_TIMEOUT,
+            max_binary_size=nexusai_config.HTTP_REQUEST_NODE_MAX_BINARY_SIZE,
+            max_text_size=nexusai_config.HTTP_REQUEST_NODE_MAX_TEXT_SIZE,
+            ssl_verify=nexusai_config.HTTP_REQUEST_NODE_SSL_VERIFY,
+            ssrf_default_max_retries=nexusai_config.SSRF_DEFAULT_MAX_RETRIES,
         )
 
-        self._llm_credentials_provider, self._llm_model_factory = build_dify_model_access(self._dify_context)
+        self._llm_credentials_provider, self._llm_model_factory = build_nexusai_model_access(self._nexusai_context)
         self._agent_strategy_resolver = PluginAgentStrategyResolver()
         self._agent_strategy_presentation_provider = PluginAgentStrategyPresentationProvider()
         self._agent_runtime_support = AgentRuntimeSupport()
         self._agent_message_transformer = AgentMessageTransformer()
 
     @staticmethod
-    def _resolve_dify_context(run_context: Mapping[str, Any]) -> DifyRunContext:
-        raw_ctx = run_context.get(DIFY_RUN_CONTEXT_KEY)
+    def _resolve_nexusai_context(run_context: Mapping[str, Any]) -> NexusAIRunContext:
+        raw_ctx = run_context.get(NEXUSAI_RUN_CONTEXT_KEY)
         if raw_ctx is None:
-            raise ValueError(f"run_context missing required key: {DIFY_RUN_CONTEXT_KEY}")
-        if isinstance(raw_ctx, DifyRunContext):
+            raise ValueError(f"run_context missing required key: {NEXUSAI_RUN_CONTEXT_KEY}")
+        if isinstance(raw_ctx, NexusAIRunContext):
             return raw_ctx
-        return DifyRunContext.model_validate(raw_ctx)
+        return NexusAIRunContext.model_validate(raw_ctx)
 
     def _conversation_id(self) -> str | None:
         return get_system_text(self.graph_runtime_state.variable_pool, SystemVariableKey.CONVERSATION_ID)
@@ -435,7 +435,7 @@ class DifyNodeFactory(NodeFactory):
         node_init_kwargs: dict[str, object] = {
             "credentials_provider": self._llm_credentials_provider,
             "model_factory": self._llm_model_factory,
-            "model_instance": DifyPreparedLLM(model_instance) if wrap_model_instance else model_instance,
+            "model_instance": NexusAIPreparedLLM(model_instance) if wrap_model_instance else model_instance,
             "memory": self._build_memory_for_llm_node(
                 node_data=validated_node_data,
                 model_instance=model_instance,
@@ -479,7 +479,7 @@ class DifyNodeFactory(NodeFactory):
         conversation_id = get_system_text(self.graph_runtime_state.variable_pool, SystemVariableKey.CONVERSATION_ID)
         return fetch_memory(
             conversation_id=conversation_id,
-            app_id=self._dify_context.app_id,
+            app_id=self._nexusai_context.app_id,
             node_data_memory=node_data.memory,
             model_instance=model_instance,
         )

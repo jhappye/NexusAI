@@ -12,14 +12,14 @@ class TestKnowledgeService:
     # ===== Happy Path Tests =====
 
     @patch("services.knowledge_service.boto3.client")
-    @patch("services.knowledge_service.dify_config")
+    @patch("services.knowledge_service.nexusai_config")
     def test_knowledge_retrieval_should_succeed_with_valid_results(
-        self, mock_dify_config: MagicMock, mock_boto_client: MagicMock
+        self, mock_nexusai_config: MagicMock, mock_boto_client: MagicMock
     ):
         """Test that knowledge_retrieval successfully parses results from Bedrock"""
         # Arrange
-        mock_dify_config.AWS_SECRET_ACCESS_KEY = "dummy_secret"
-        mock_dify_config.AWS_ACCESS_KEY_ID = "dummy_id"
+        mock_nexusai_config.AWS_SECRET_ACCESS_KEY = "dummy_secret"
+        mock_nexusai_config.AWS_ACCESS_KEY_ID = "dummy_id"
 
         mock_client = MagicMock()
         mock_boto_client.return_value = mock_client

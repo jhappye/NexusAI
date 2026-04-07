@@ -25,7 +25,7 @@ from core.app.workflow.layers import PersistenceWorkflowInfo, WorkflowPersistenc
 from core.repositories.human_input_repository import HumanInputFormEntity, HumanInputFormRepository
 from core.repositories.sqlalchemy_workflow_execution_repository import SQLAlchemyWorkflowExecutionRepository
 from core.repositories.sqlalchemy_workflow_node_execution_repository import SQLAlchemyWorkflowNodeExecutionRepository
-from core.workflow.node_runtime import DifyHumanInputNodeRuntime
+from core.workflow.node_runtime import NexusAIHumanInputNodeRuntime
 from core.workflow.system_variables import build_system_variables
 from libs.datetime_utils import naive_utc_now
 from models import Account
@@ -121,7 +121,7 @@ def _build_graph(
         graph_init_params=params,
         graph_runtime_state=runtime_state,
         form_repository=form_repository,
-        runtime=DifyHumanInputNodeRuntime(params.run_context),
+        runtime=NexusAIHumanInputNodeRuntime(params.run_context),
     )
 
     end_data = EndNodeData(

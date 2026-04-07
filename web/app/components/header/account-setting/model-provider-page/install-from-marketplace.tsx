@@ -60,7 +60,7 @@ const InstallFromMarketplace = ({
             href={getMarketplaceUrl('', { theme })}
             className="inline-flex items-center text-text-accent system-sm-medium"
           >
-            {t('marketplace.difyMarketplace', { ns: 'plugin' })}
+            {t('marketplace.nexusaiMarketplace', { ns: 'plugin' })}
             <span className="i-ri-arrow-right-up-line h-4 w-4" />
           </Link>
         </div>

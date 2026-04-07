@@ -146,7 +146,7 @@ const createActionProps = (overrides: Partial<ActionProps> = {}): ActionProps =>
   meta: {
     repo: 'test-author/test-plugin',
     version: '1.0.0',
-    package: 'test-plugin.difypkg',
+    package: 'test-plugin.nexusaipkg',
   },
   ...overrides,
 })
@@ -448,7 +448,7 @@ describe('Action Component', () => {
         meta: {
           repo: 'owner/repo-name',
           version: '2.0.0',
-          package: 'my-package.difypkg',
+          package: 'my-package.nexusaipkg',
         },
       })
 
@@ -460,7 +460,7 @@ describe('Action Component', () => {
       expect(screen.getByTestId('plugin-info-modal')).toBeInTheDocument()
       expect(screen.getByTestId('plugin-info-modal')).toHaveAttribute('data-repo', 'owner/repo-name')
       expect(screen.getByTestId('plugin-info-modal')).toHaveAttribute('data-release', '2.0.0')
-      expect(screen.getByTestId('plugin-info-modal')).toHaveAttribute('data-package', 'my-package.difypkg')
+      expect(screen.getByTestId('plugin-info-modal')).toHaveAttribute('data-package', 'my-package.nexusaipkg')
     })
 
     it('should hide plugin info modal when close is clicked', () => {
@@ -495,7 +495,7 @@ describe('Action Component', () => {
         meta: {
           repo: 'owner/repo',
           version: '1.0.0',
-          package: 'pkg.difypkg',
+          package: 'pkg.nexusaipkg',
         },
       })
 
@@ -521,7 +521,7 @@ describe('Action Component', () => {
         meta: {
           repo: '/', // Results in empty parts after split
           version: '1.0.0',
-          package: 'pkg.difypkg',
+          package: 'pkg.nexusaipkg',
         },
       })
 
@@ -595,7 +595,7 @@ describe('Action Component', () => {
         meta: {
           repo: 'owner/repo',
           version: '1.0.0',
-          package: 'pkg.difypkg',
+          package: 'pkg.nexusaipkg',
         },
       })
 
@@ -615,7 +615,7 @@ describe('Action Component', () => {
                   id: 'test-id',
                   repo: 'owner/repo',
                   version: '1.0.0',
-                  package: 'pkg.difypkg',
+                  package: 'pkg.nexusaipkg',
                   releases,
                 }),
               }),
@@ -667,7 +667,7 @@ describe('Action Component', () => {
         meta: {
           repo: 'owner/repo',
           version: '1.0.0',
-          package: 'pkg.difypkg',
+          package: 'pkg.nexusaipkg',
         },
       })
 
@@ -816,7 +816,7 @@ describe('Action Component', () => {
         meta: {
           repo: '',
           version: '1.0.0',
-          package: 'pkg.difypkg',
+          package: 'pkg.nexusaipkg',
         },
       })
 

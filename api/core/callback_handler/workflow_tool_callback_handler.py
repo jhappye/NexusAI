@@ -1,12 +1,12 @@
 from collections.abc import Generator, Iterable, Mapping
 from typing import Any
 
-from core.callback_handler.agent_tool_callback_handler import DifyAgentCallbackHandler, print_text
+from core.callback_handler.agent_tool_callback_handler import NexusAIAgentCallbackHandler, print_text
 from core.ops.ops_trace_manager import TraceQueueManager
 from core.tools.entities.tool_entities import ToolInvokeMessage
 
 
-class DifyWorkflowCallbackHandler(DifyAgentCallbackHandler):
+class NexusAIWorkflowCallbackHandler(NexusAIAgentCallbackHandler):
     """Callback Handler that prints to std out."""
 
     def on_tool_execution(

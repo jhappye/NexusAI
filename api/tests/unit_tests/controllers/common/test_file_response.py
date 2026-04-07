@@ -105,7 +105,7 @@ class TestEnforceDownloadForHtml:
         assert response.headers["Content-Type"] == "application/octet-stream"
         assert response.headers["X-Content-Type-Options"] == "nosniff"
 
-    def test_does_not_modify_response_for_non_html_content(self):
+    def test_does_not_monexusai_response_for_non_html_content(self):
         response = Response("payload", mimetype="text/plain")
 
         updated = enforce_download_for_html(

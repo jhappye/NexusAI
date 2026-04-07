@@ -11,12 +11,12 @@ import core.callback_handler.agent_tool_callback_handler as module
 
 @pytest.fixture
 def enable_debug(mocker):
-    mocker.patch.object(module.dify_config, "DEBUG", True)
+    mocker.patch.object(module.nexusai_config, "DEBUG", True)
 
 
 @pytest.fixture
 def disable_debug(mocker):
-    mocker.patch.object(module.dify_config, "DEBUG", False)
+    mocker.patch.object(module.nexusai_config, "DEBUG", False)
 
 
 @pytest.fixture
@@ -26,7 +26,7 @@ def mock_print(mocker):
 
 @pytest.fixture
 def handler():
-    return module.DifyAgentCallbackHandler(color="blue")
+    return module.NexusAIAgentCallbackHandler(color="blue")
 
 
 # -----------------------------
@@ -97,13 +97,13 @@ class TestPrintText:
 
 
 # -----------------------------
-# DifyAgentCallbackHandler Tests
+# NexusAIAgentCallbackHandler Tests
 # -----------------------------
 
 
-class TestDifyAgentCallbackHandler:
+class TestNexusAIAgentCallbackHandler:
     def test_init_default_color(self):
-        handler = module.DifyAgentCallbackHandler()
+        handler = module.NexusAIAgentCallbackHandler()
         assert handler.color == "green"
         assert handler.current_loop == 1
 

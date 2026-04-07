@@ -232,7 +232,7 @@ function AppCard({
                                   </div>
                                   <div
                                     className="cursor-pointer text-xs font-normal text-text-accent hover:underline"
-                                    onClick={() => window.open(docLink('/use-dify/nodes/user-input'), '_blank')}
+                                    onClick={() => window.open(docLink('/use-nexusai/nodes/user-input'), '_blank')}
                                   >
                                     {t('overview.appInfo.enableTooltip.learnMore', { ns: 'appOverview' })}
                                   </div>

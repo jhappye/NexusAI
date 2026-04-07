@@ -164,10 +164,10 @@ export const WithLinkItems: Story = {
     <ContextMenu>
       <TriggerArea label="Right-click to open links" />
       <ContextMenuContent>
-        <ContextMenuLinkItem href="https://docs.dify.ai" rel="noopener noreferrer" target="_blank">
-          Dify Docs
+        <ContextMenuLinkItem href="https://docs.nexusai.ai" rel="noopener noreferrer" target="_blank">
+          NexusAI Docs
         </ContextMenuLinkItem>
-        <ContextMenuLinkItem href="https://roadmap.dify.ai" rel="noopener noreferrer" target="_blank">
+        <ContextMenuLinkItem href="https://roadmap.nexusai.ai" rel="noopener noreferrer" target="_blank">
           Product Roadmap
         </ContextMenuLinkItem>
         <ContextMenuSeparator />

@@ -5,7 +5,7 @@ import click
 from redis.exceptions import LockError
 
 import app
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_redis import redis_client
 from services.retention.conversation.messages_clean_policy import create_message_clean_policy
 from services.retention.conversation.messages_clean_service import MessagesCleanService
@@ -29,18 +29,18 @@ def clean_messages():
     try:
         # Create policy based on billing configuration
         policy = create_message_clean_policy(
-            graceful_period_days=dify_config.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD,
+            graceful_period_days=nexusai_config.SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD,
         )
 
         # Create and run the cleanup service
         # lock the task to avoid concurrent execution in case of the future data volume growth
         with redis_client.lock(
-            "retention:clean_messages", timeout=dify_config.SANDBOX_EXPIRED_RECORDS_CLEAN_TASK_LOCK_TTL, blocking=False
+            "retention:clean_messages", timeout=nexusai_config.SANDBOX_EXPIRED_RECORDS_CLEAN_TASK_LOCK_TTL, blocking=False
         ):
             service = MessagesCleanService.from_days(
                 policy=policy,
-                days=dify_config.SANDBOX_EXPIRED_RECORDS_RETENTION_DAYS,
-                batch_size=dify_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_SIZE,
+                days=nexusai_config.SANDBOX_EXPIRED_RECORDS_RETENTION_DAYS,
+                batch_size=nexusai_config.SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_SIZE,
             )
             stats = service.run()
 

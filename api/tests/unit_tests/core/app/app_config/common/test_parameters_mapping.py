@@ -11,7 +11,7 @@ class TestGetParametersFromFeatureDict:
 
     @pytest.fixture
     def mock_config(self, monkeypatch):
-        """Mock dify_config values"""
+        """Mock nexusai_config values"""
         mock = MagicMock()
         mock.UPLOAD_IMAGE_FILE_SIZE_LIMIT = 1
         mock.UPLOAD_VIDEO_FILE_SIZE_LIMIT = 2
@@ -19,7 +19,7 @@ class TestGetParametersFromFeatureDict:
         mock.UPLOAD_FILE_SIZE_LIMIT = 4
         mock.WORKFLOW_FILE_UPLOAD_LIMIT = 5
 
-        monkeypatch.setattr(parameters_mapping, "dify_config", mock)
+        monkeypatch.setattr(parameters_mapping, "nexusai_config", mock)
         return mock
 
     @pytest.fixture

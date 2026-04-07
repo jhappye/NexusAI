@@ -18,7 +18,7 @@ vi.mock('@/next/navigation', () => ({
 
 // Mock useDocLink hook
 vi.mock('@/context/i18n', () => ({
-  useDocLink: () => (path?: string) => `https://docs.dify.ai/en${path || ''}`,
+  useDocLink: () => (path?: string) => `https://docs.nexusai.ai/en${path || ''}`,
 }))
 
 const mockToastSuccess = vi.hoisted(() => vi.fn())

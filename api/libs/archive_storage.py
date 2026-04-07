@@ -17,7 +17,7 @@ import orjson
 from botocore.client import Config
 from botocore.exceptions import ClientError
 
-from configs import dify_config
+from configs import nexusai_config
 
 logger = logging.getLogger(__name__)
 
@@ -42,17 +42,17 @@ class ArchiveStorage:
     """
 
     def __init__(self, bucket: str):
-        if not dify_config.ARCHIVE_STORAGE_ENABLED:
+        if not nexusai_config.ARCHIVE_STORAGE_ENABLED:
             raise ArchiveStorageNotConfiguredError("Archive storage is not enabled")
 
         if not bucket:
             raise ArchiveStorageNotConfiguredError("Archive storage bucket is not configured")
         if not all(
             [
-                dify_config.ARCHIVE_STORAGE_ENDPOINT,
+                nexusai_config.ARCHIVE_STORAGE_ENDPOINT,
                 bucket,
-                dify_config.ARCHIVE_STORAGE_ACCESS_KEY,
-                dify_config.ARCHIVE_STORAGE_SECRET_KEY,
+                nexusai_config.ARCHIVE_STORAGE_ACCESS_KEY,
+                nexusai_config.ARCHIVE_STORAGE_SECRET_KEY,
             ]
         ):
             raise ArchiveStorageNotConfiguredError(
@@ -64,10 +64,10 @@ class ArchiveStorage:
         self.bucket = bucket
         self.client = boto3.client(
             "s3",
-            endpoint_url=dify_config.ARCHIVE_STORAGE_ENDPOINT,
-            aws_access_key_id=dify_config.ARCHIVE_STORAGE_ACCESS_KEY,
-            aws_secret_access_key=dify_config.ARCHIVE_STORAGE_SECRET_KEY,
-            region_name=dify_config.ARCHIVE_STORAGE_REGION,
+            endpoint_url=nexusai_config.ARCHIVE_STORAGE_ENDPOINT,
+            aws_access_key_id=nexusai_config.ARCHIVE_STORAGE_ACCESS_KEY,
+            aws_secret_access_key=nexusai_config.ARCHIVE_STORAGE_SECRET_KEY,
+            region_name=nexusai_config.ARCHIVE_STORAGE_REGION,
             config=Config(
                 s3={"addressing_style": "path"},
                 max_pool_connections=64,
@@ -326,7 +326,7 @@ def get_archive_storage() -> ArchiveStorage:
     """
     global _archive_storage
     if _archive_storage is None:
-        archive_bucket = dify_config.ARCHIVE_STORAGE_ARCHIVE_BUCKET
+        archive_bucket = nexusai_config.ARCHIVE_STORAGE_ARCHIVE_BUCKET
         if not archive_bucket:
             raise ArchiveStorageNotConfiguredError(
                 "Archive storage bucket is not configured. Required: ARCHIVE_STORAGE_ARCHIVE_BUCKET"
@@ -344,7 +344,7 @@ def get_export_storage() -> ArchiveStorage:
     """
     global _export_storage
     if _export_storage is None:
-        export_bucket = dify_config.ARCHIVE_STORAGE_EXPORT_BUCKET
+        export_bucket = nexusai_config.ARCHIVE_STORAGE_EXPORT_BUCKET
         if not export_bucket:
             raise ArchiveStorageNotConfiguredError(
                 "Archive export bucket is not configured. Required: ARCHIVE_STORAGE_EXPORT_BUCKET"

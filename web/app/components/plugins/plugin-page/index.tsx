@@ -130,7 +130,7 @@ const PluginPage = ({
   }, [activeTab])
 
   const handleFileChange = (file: File | null) => {
-    if (!file || !file.name.endsWith('.difypkg')) {
+    if (!file || !file.name.endsWith('.nexusaipkg')) {
       setCurrentFile(null)
       return
     }
@@ -175,7 +175,7 @@ const PluginPage = ({
               isExploringMarketplace && (
                 <>
                   <Link
-                    href="https://github.com/langgenius/dify-plugins/issues/new?template=plugin_request.yaml"
+                    href="https://github.com/langgenius/nexusai-plugins/issues/new?template=plugin_request.yaml"
                     target="_blank"
                   >
                     <Button
@@ -186,7 +186,7 @@ const PluginPage = ({
                     </Button>
                   </Link>
                   <Link
-                    href={docLink('/develop-plugin/publishing/marketplace-listing/release-to-dify-marketplace')}
+                    href={docLink('/develop-plugin/publishing/marketplace-listing/release-to-nexusai-marketplace')}
                     target="_blank"
                   >
                     <Button

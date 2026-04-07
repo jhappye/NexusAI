@@ -2,8 +2,8 @@ import logging
 
 from flask import Flask
 
-from configs import dify_config
-from dify_app import DifyApp
+from configs import nexusai_config
+from nexusai_app import NexusAIApp
 
 logger = logging.getLogger(__name__)
 
@@ -17,23 +17,23 @@ class Mail:
         return self._client is not None
 
     def init_app(self, app: Flask):
-        mail_type = dify_config.MAIL_TYPE
+        mail_type = nexusai_config.MAIL_TYPE
         if not mail_type:
             logger.warning("MAIL_TYPE is not set")
             return
 
-        if dify_config.MAIL_DEFAULT_SEND_FROM:
-            self._default_send_from = dify_config.MAIL_DEFAULT_SEND_FROM
+        if nexusai_config.MAIL_DEFAULT_SEND_FROM:
+            self._default_send_from = nexusai_config.MAIL_DEFAULT_SEND_FROM
 
         match mail_type:
             case "resend":
                 import resend
 
-                api_key = dify_config.RESEND_API_KEY
+                api_key = nexusai_config.RESEND_API_KEY
                 if not api_key:
                     raise ValueError("RESEND_API_KEY is not set")
 
-                api_url = dify_config.RESEND_API_URL
+                api_url = nexusai_config.RESEND_API_URL
                 if api_url:
                     resend.api_url = api_url
 
@@ -42,27 +42,27 @@ class Mail:
             case "smtp":
                 from libs.smtp import SMTPClient
 
-                if not dify_config.SMTP_SERVER or not dify_config.SMTP_PORT:
+                if not nexusai_config.SMTP_SERVER or not nexusai_config.SMTP_PORT:
                     raise ValueError("SMTP_SERVER and SMTP_PORT are required for smtp mail type")
-                if not dify_config.SMTP_USE_TLS and dify_config.SMTP_OPPORTUNISTIC_TLS:
+                if not nexusai_config.SMTP_USE_TLS and nexusai_config.SMTP_OPPORTUNISTIC_TLS:
                     raise ValueError("SMTP_OPPORTUNISTIC_TLS is not supported without enabling SMTP_USE_TLS")
                 self._client = SMTPClient(
-                    server=dify_config.SMTP_SERVER,
-                    port=dify_config.SMTP_PORT,
-                    username=dify_config.SMTP_USERNAME or "",
-                    password=dify_config.SMTP_PASSWORD or "",
-                    _from=dify_config.MAIL_DEFAULT_SEND_FROM or "",
-                    use_tls=dify_config.SMTP_USE_TLS,
-                    opportunistic_tls=dify_config.SMTP_OPPORTUNISTIC_TLS,
+                    server=nexusai_config.SMTP_SERVER,
+                    port=nexusai_config.SMTP_PORT,
+                    username=nexusai_config.SMTP_USERNAME or "",
+                    password=nexusai_config.SMTP_PASSWORD or "",
+                    _from=nexusai_config.MAIL_DEFAULT_SEND_FROM or "",
+                    use_tls=nexusai_config.SMTP_USE_TLS,
+                    opportunistic_tls=nexusai_config.SMTP_OPPORTUNISTIC_TLS,
                 )
             case "sendgrid":
                 from libs.sendgrid import SendGridClient
 
-                if not dify_config.SENDGRID_API_KEY:
+                if not nexusai_config.SENDGRID_API_KEY:
                     raise ValueError("SENDGRID_API_KEY is required for SendGrid mail type")
 
                 self._client = SendGridClient(
-                    sendgrid_api_key=dify_config.SENDGRID_API_KEY, _from=dify_config.MAIL_DEFAULT_SEND_FROM or ""
+                    sendgrid_api_key=nexusai_config.SENDGRID_API_KEY, _from=nexusai_config.MAIL_DEFAULT_SEND_FROM or ""
                 )
             case _:
                 raise ValueError(f"Unsupported mail type {mail_type}")
@@ -97,10 +97,10 @@ class Mail:
 
 
 def is_enabled() -> bool:
-    return dify_config.MAIL_TYPE is not None and dify_config.MAIL_TYPE != ""
+    return nexusai_config.MAIL_TYPE is not None and nexusai_config.MAIL_TYPE != ""
 
 
-def init_app(app: DifyApp):
+def init_app(app: NexusAIApp):
     mail.init_app(app)
 
 

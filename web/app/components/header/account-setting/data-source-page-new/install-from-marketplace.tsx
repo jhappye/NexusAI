@@ -55,7 +55,7 @@ const InstallFromMarketplace = ({
         <div className="mb-2 flex items-center pt-2">
           <span className="system-sm-regular pr-1 text-text-tertiary">{t('modelProvider.discoverMore', { ns: 'common' })}</span>
           <Link target="_blank" href={getMarketplaceUrl('', { theme })} className="system-sm-medium inline-flex items-center text-text-accent">
-            {t('marketplace.difyMarketplace', { ns: 'plugin' })}
+            {t('marketplace.nexusaiMarketplace', { ns: 'plugin' })}
             <RiArrowRightUpLine className="h-4 w-4" />
           </Link>
         </div>

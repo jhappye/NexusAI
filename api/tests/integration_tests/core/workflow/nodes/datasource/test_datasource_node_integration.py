@@ -1,7 +1,7 @@
 from graphon.enums import WorkflowNodeExecutionStatus
 from graphon.node_events import NodeRunResult, StreamCompletedEvent
 
-from core.app.entities.app_invoke_entities import DIFY_RUN_CONTEXT_KEY
+from core.app.entities.app_invoke_entities import NEXUSAI_RUN_CONTEXT_KEY
 from core.workflow.nodes.datasource.datasource_node import DatasourceNode
 
 
@@ -33,7 +33,7 @@ class _GP:
     workflow_id = "wf-1"
     graph_config = {}
     run_context = {
-        DIFY_RUN_CONTEXT_KEY: {
+        NEXUSAI_RUN_CONTEXT_KEY: {
             "tenant_id": "t1",
             "app_id": "app-1",
             "user_id": "u1",

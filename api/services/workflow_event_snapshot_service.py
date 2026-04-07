@@ -30,7 +30,7 @@ from models.model import AppMode, Message
 from models.workflow import WorkflowNodeExecutionTriggeredFrom, WorkflowRun
 from repositories.api_workflow_node_execution_repository import WorkflowNodeExecutionSnapshot
 from repositories.entities.workflow_pause import WorkflowPauseEntity
-from repositories.factory import DifyAPIRepositoryFactory
+from repositories.factory import NexusAIAPIRepositoryFactory
 
 logger = logging.getLogger(__name__)
 
@@ -63,8 +63,8 @@ def build_workflow_event_stream(
     ping_interval: float = 10.0,
 ) -> Generator[Mapping[str, Any] | str, None, None]:
     topic = MessageGenerator.get_response_topic(app_mode, workflow_run.id)
-    workflow_run_repo = DifyAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
-    node_execution_repo = DifyAPIRepositoryFactory.create_api_workflow_node_execution_repository(session_maker)
+    workflow_run_repo = NexusAIAPIRepositoryFactory.create_api_workflow_run_repository(session_maker)
+    node_execution_repo = NexusAIAPIRepositoryFactory.create_api_workflow_node_execution_repository(session_maker)
     message_context = (
         _get_message_context(session_maker, workflow_run.id) if app_mode == AppMode.ADVANCED_CHAT else None
     )

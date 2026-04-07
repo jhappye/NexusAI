@@ -12,7 +12,7 @@ class MatrixoneVectorTest(AbstractVectorTest):
         self.vector = MatrixoneVector(
             collection_name=self.collection_name,
             config=MatrixoneConfig(
-                host="localhost", port=6001, user="dump", password="111", database="dify", metric="l2"
+                host="localhost", port=6001, user="dump", password="111", database="nexusai", metric="l2"
             ),
         )
 

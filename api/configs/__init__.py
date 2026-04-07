@@ -1,3 +1,3 @@
-from .app_config import DifyConfig
+from .app_config import NexusAIConfig
 
-dify_config = DifyConfig()  # type: ignore
+nexusai_config = NexusAIConfig()  # type: ignore

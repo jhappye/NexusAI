@@ -68,11 +68,11 @@ const PluginItem: FC<Props> = ({
 
   const { langGeniusVersionInfo } = useAppContext()
 
-  const isDifyVersionCompatible = useMemo(() => {
+  const isNexusAIVersionCompatible = useMemo(() => {
     if (!langGeniusVersionInfo.current_version)
       return true
-    return isEqualOrLaterThanVersion(langGeniusVersionInfo.current_version, declarationMeta.minimum_dify_version ?? '0.0.0')
-  }, [declarationMeta.minimum_dify_version, langGeniusVersionInfo.current_version])
+    return isEqualOrLaterThanVersion(langGeniusVersionInfo.current_version, declarationMeta.minimum_nexusai_version ?? '0.0.0')
+  }, [declarationMeta.minimum_nexusai_version, langGeniusVersionInfo.current_version])
 
   const isDeprecated = useMemo(() => {
     return status === 'deleted' && !!deprecated_reason
@@ -119,9 +119,9 @@ const PluginItem: FC<Props> = ({
             <div className="flex h-5 items-center">
               <Title title={title} />
               {verified && <Verified className="ml-0.5 h-4 w-4" text={t('marketplace.verifiedTip', { ns: 'plugin' })} />}
-              {!isDifyVersionCompatible && (
+              {!isNexusAIVersionCompatible && (
                 <Tooltip popupContent={
-                  t('difyVersionNotCompatible', { ns: 'plugin', minimalDifyVersion: declarationMeta.minimum_dify_version })
+                  t('nexusaiVersionNotCompatible', { ns: 'plugin', minimalNexusAIVersion: declarationMeta.minimum_nexusai_version })
                 }
                 >
                   <RiErrorWarningLine color="red" className="ml-0.5 h-4 w-4 shrink-0 text-text-accent" />

@@ -184,7 +184,7 @@ const StatusPanel: FC<ResultProps> = ({
             <div className="system-xs-medium text-text-warning">
               {error}
               <a
-                href={docLink('/use-dify/debug/error-type')}
+                href={docLink('/use-nexusai/debug/error-type')}
                 target="_blank"
                 className="text-text-accent"
               >

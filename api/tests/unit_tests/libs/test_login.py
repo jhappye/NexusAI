@@ -7,7 +7,7 @@ from flask_login import UserMixin
 from pytest_mock import MockerFixture
 
 import libs.login as login_module
-from extensions.ext_login import DifyLoginManager
+from extensions.ext_login import NexusAILoginManager
 from libs.login import current_user
 from models.account import Account
 
@@ -40,7 +40,7 @@ def login_app(mocker: MockerFixture) -> Flask:
     app = Flask(__name__)
     app.config["TESTING"] = True
 
-    login_manager = DifyLoginManager()
+    login_manager = NexusAILoginManager()
     login_manager.init_app(app)
     login_manager.unauthorized = mocker.Mock(
         name="unauthorized",
@@ -56,7 +56,7 @@ def login_app(mocker: MockerFixture) -> Flask:
 
 @pytest.fixture(autouse=True)
 def reset_login_disabled(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(login_module.dify_config, "LOGIN_DISABLED", False)
+    monkeypatch.setattr(login_module.nexusai_config, "LOGIN_DISABLED", False)
 
 
 @pytest.fixture
@@ -170,7 +170,7 @@ class TestLoginRequired:
         """Test that bypass conditions skip auth lookup, CSRF, and unauthorized handling."""
 
         resolve_user = resolve_current_user(MockUser("test_user"))
-        monkeypatch.setattr(login_module.dify_config, "LOGIN_DISABLED", login_disabled)
+        monkeypatch.setattr(login_module.nexusai_config, "LOGIN_DISABLED", login_disabled)
 
         with login_app.test_request_context(method=method):
             result = protected_view()

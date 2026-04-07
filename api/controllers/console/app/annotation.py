@@ -349,7 +349,7 @@ class AnnotationBatchImportApi(Resource):
     @annotation_import_concurrency_limit
     @edit_permission_required
     def post(self, app_id):
-        from configs import dify_config
+        from configs import nexusai_config
 
         app_id = str(app_id)
 
@@ -372,11 +372,11 @@ class AnnotationBatchImportApi(Resource):
         file_size = file.tell()
         file.seek(0)  # Reset to beginning
 
-        max_size_bytes = dify_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT * 1024 * 1024
+        max_size_bytes = nexusai_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT * 1024 * 1024
         if file_size > max_size_bytes:
             abort(
                 413,
-                f"File size exceeds maximum limit of {dify_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT}MB. "
+                f"File size exceeds maximum limit of {nexusai_config.ANNOTATION_IMPORT_FILE_SIZE_LIMIT}MB. "
                 f"Please reduce the file size and try again.",
             )
 

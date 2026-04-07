@@ -16,7 +16,7 @@ from core.ops.aliyun_trace.data_exporter.traceclient import (
 )
 from core.ops.aliyun_trace.entities.aliyun_trace_entity import SpanData, TraceMetadata
 from core.ops.aliyun_trace.entities.semconv import (
-    DIFY_APP_ID,
+    NEXUSAI_APP_ID,
     GEN_AI_COMPLETION,
     GEN_AI_INPUT_MESSAGE,
     GEN_AI_OUTPUT_MESSAGE,
@@ -58,7 +58,7 @@ from core.ops.entities.trace_entity import (
     ToolTraceInfo,
     WorkflowTraceInfo,
 )
-from core.repositories import DifyCoreRepositoryFactory
+from core.repositories import NexusAICoreRepositoryFactory
 from extensions.ext_database import db
 from models import WorkflowNodeExecutionTriggeredFrom
 
@@ -162,7 +162,7 @@ class AliyunDataTrace(BaseTraceInstance):
                     inputs=inputs_json,
                     outputs=outputs_str,
                 ),
-                DIFY_APP_ID: self._extract_app_id(trace_info),
+                NEXUSAI_APP_ID: self._extract_app_id(trace_info),
             },
             status=status,
             links=trace_metadata.links,
@@ -289,7 +289,7 @@ class AliyunDataTrace(BaseTraceInstance):
         service_account = self.get_service_account_with_tenant(app_id)
 
         session_factory = sessionmaker(bind=db.engine)
-        workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+        workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
             session_factory=session_factory,
             user=service_account,
             app_id=app_id,
@@ -475,7 +475,7 @@ class AliyunDataTrace(BaseTraceInstance):
                         inputs=trace_info.workflow_run_inputs.get("sys.query") or "",
                         outputs=outputs_json,
                     ),
-                    DIFY_APP_ID: app_id,
+                    NEXUSAI_APP_ID: app_id,
                 },
                 status=status,
                 links=trace_metadata.links,
@@ -498,7 +498,7 @@ class AliyunDataTrace(BaseTraceInstance):
                     inputs=inputs_json,
                     outputs=outputs_json,
                 ),
-                **({DIFY_APP_ID: app_id} if message_span_id is None else {}),
+                **({NEXUSAI_APP_ID: app_id} if message_span_id is None else {}),
             },
             status=status,
             links=trace_metadata.links,

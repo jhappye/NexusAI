@@ -39,7 +39,7 @@ from core.ops.entities.trace_entity import (
     WorkflowTraceInfo,
 )
 from core.ops.utils import JSON_DICT_ADAPTER
-from core.repositories import DifyCoreRepositoryFactory
+from core.repositories import NexusAICoreRepositoryFactory
 from extensions.ext_database import db
 from models.model import EndUser, MessageFile
 from models.workflow import WorkflowNodeExecutionTriggeredFrom
@@ -152,7 +152,7 @@ def safe_json_dumps(obj: Any) -> str:
 
 def wrap_span_metadata(metadata, **kwargs):
     """Add common metatada to all trace entity types for Arize/Phoenix."""
-    metadata["created_from"] = "Dify"
+    metadata["created_from"] = "NexusAI"
     metadata.update(kwargs)
     return metadata
 
@@ -188,7 +188,7 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
         self.project = arize_phoenix_config.project
         self.file_base_url = os.getenv("FILES_URL", "http://127.0.0.1:5001")
         self.propagator = TraceContextTextMapPropagator()
-        self.dify_trace_ids: set[str] = set()
+        self.nexusai_trace_ids: set[str] = set()
 
     def trace(self, trace_info: BaseTraceInfo):
         logger.info("[Arize/Phoenix] Trace Entity Info: %s", trace_info)
@@ -236,8 +236,8 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
             query=trace_info.query or "",
         )
 
-        dify_trace_id = trace_info.trace_id or trace_info.message_id or trace_info.workflow_run_id
-        self.ensure_root_span(dify_trace_id)
+        nexusai_trace_id = trace_info.trace_id or trace_info.message_id or trace_info.workflow_run_id
+        self.ensure_root_span(nexusai_trace_id)
         root_span_context = self.propagator.extract(carrier=self.carrier)
 
         workflow_span = self.tracer.start_span(
@@ -265,7 +265,7 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
 
         service_account = self.get_service_account_with_tenant(app_id)
 
-        workflow_node_execution_repository = DifyCoreRepositoryFactory.create_workflow_node_execution_repository(
+        workflow_node_execution_repository = NexusAICoreRepositoryFactory.create_workflow_node_execution_repository(
             session_factory=session_factory,
             user=service_account,
             app_id=app_id,
@@ -425,8 +425,8 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
             SpanAttributes.SESSION_ID: trace_info.message_data.conversation_id or "",
         }
 
-        dify_trace_id = trace_info.trace_id or trace_info.message_id
-        self.ensure_root_span(dify_trace_id)
+        nexusai_trace_id = trace_info.trace_id or trace_info.message_id
+        self.ensure_root_span(nexusai_trace_id)
         root_span_context = self.propagator.extract(carrier=self.carrier)
 
         message_span = self.tracer.start_span(
@@ -513,8 +513,8 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
             model_id=trace_info.message_data.model_id or "",
         )
 
-        dify_trace_id = trace_info.trace_id or trace_info.message_id
-        self.ensure_root_span(dify_trace_id)
+        nexusai_trace_id = trace_info.trace_id or trace_info.message_id
+        self.ensure_root_span(nexusai_trace_id)
         root_span_context = self.propagator.extract(carrier=self.carrier)
 
         span = self.tracer.start_span(
@@ -571,8 +571,8 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
             workflow_run_id=trace_info.workflow_run_id or "",
         )
 
-        dify_trace_id = trace_info.trace_id or trace_info.message_id
-        self.ensure_root_span(dify_trace_id)
+        nexusai_trace_id = trace_info.trace_id or trace_info.message_id
+        self.ensure_root_span(nexusai_trace_id)
         root_span_context = self.propagator.extract(carrier=self.carrier)
 
         span = self.tracer.start_span(
@@ -617,8 +617,8 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
             model_id=trace_info.message_data.model_id or "",
         )
 
-        dify_trace_id = trace_info.trace_id or trace_info.message_id
-        self.ensure_root_span(dify_trace_id)
+        nexusai_trace_id = trace_info.trace_id or trace_info.message_id
+        self.ensure_root_span(nexusai_trace_id)
         root_span_context = self.propagator.extract(carrier=self.carrier)
 
         span = self.tracer.start_span(
@@ -661,8 +661,8 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
             file_url=trace_info.file_url or "",
         )
 
-        dify_trace_id = trace_info.trace_id or trace_info.message_id
-        self.ensure_root_span(dify_trace_id)
+        nexusai_trace_id = trace_info.trace_id or trace_info.message_id
+        self.ensure_root_span(nexusai_trace_id)
         root_span_context = self.propagator.extract(carrier=self.carrier)
 
         span = self.tracer.start_span(
@@ -708,8 +708,8 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
             tenant_id=trace_info.tenant_id,
         )
 
-        dify_trace_id = trace_info.trace_id or trace_info.message_id or trace_info.conversation_id
-        self.ensure_root_span(dify_trace_id)
+        nexusai_trace_id = trace_info.trace_id or trace_info.message_id or trace_info.conversation_id
+        self.ensure_root_span(nexusai_trace_id)
         root_span_context = self.propagator.extract(carrier=self.carrier)
 
         span = self.tracer.start_span(
@@ -735,22 +735,22 @@ class ArizePhoenixDataTrace(BaseTraceInstance):
         finally:
             span.end(end_time=datetime_to_nanos(trace_info.end_time))
 
-    def ensure_root_span(self, dify_trace_id: str | None):
-        """Ensure a unique root span exists for the given Dify trace ID."""
-        if str(dify_trace_id) not in self.dify_trace_ids:
+    def ensure_root_span(self, nexusai_trace_id: str | None):
+        """Ensure a unique root span exists for the given NexusAI trace ID."""
+        if str(nexusai_trace_id) not in self.nexusai_trace_ids:
             self.carrier: dict[str, str] = {}
 
-            root_span = self.tracer.start_span(name="Dify")
+            root_span = self.tracer.start_span(name="NexusAI")
             root_span.set_attribute(SpanAttributes.OPENINFERENCE_SPAN_KIND, OpenInferenceSpanKindValues.CHAIN.value)
-            root_span.set_attribute("dify_project_name", str(self.project))
-            root_span.set_attribute("dify_trace_id", str(dify_trace_id))
+            root_span.set_attribute("nexusai_project_name", str(self.project))
+            root_span.set_attribute("nexusai_trace_id", str(nexusai_trace_id))
 
             with use_span(root_span, end_on_exit=False):
                 self.propagator.inject(carrier=self.carrier)
 
             set_span_status(root_span)
             root_span.end()
-            self.dify_trace_ids.add(str(dify_trace_id))
+            self.nexusai_trace_ids.add(str(nexusai_trace_id))
 
     def api_check(self):
         try:

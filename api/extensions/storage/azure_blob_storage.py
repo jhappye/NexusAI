@@ -4,7 +4,7 @@ from datetime import timedelta
 from azure.identity import ChainedTokenCredential, DefaultAzureCredential
 from azure.storage.blob import AccountSasPermissions, BlobServiceClient, ResourceTypes, generate_account_sas
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.ext_redis import redis_client
 from extensions.storage.base_storage import BaseStorage
 from libs.datetime_utils import naive_utc_now
@@ -15,10 +15,10 @@ class AzureBlobStorage(BaseStorage):
 
     def __init__(self):
         super().__init__()
-        self.bucket_name = dify_config.AZURE_BLOB_CONTAINER_NAME
-        self.account_url = dify_config.AZURE_BLOB_ACCOUNT_URL
-        self.account_name = dify_config.AZURE_BLOB_ACCOUNT_NAME
-        self.account_key = dify_config.AZURE_BLOB_ACCOUNT_KEY
+        self.bucket_name = nexusai_config.AZURE_BLOB_CONTAINER_NAME
+        self.account_url = nexusai_config.AZURE_BLOB_ACCOUNT_URL
+        self.account_name = nexusai_config.AZURE_BLOB_ACCOUNT_NAME
+        self.account_key = nexusai_config.AZURE_BLOB_ACCOUNT_KEY
 
         self.credential: ChainedTokenCredential | None = None
         if self.account_key == "managedidentity":

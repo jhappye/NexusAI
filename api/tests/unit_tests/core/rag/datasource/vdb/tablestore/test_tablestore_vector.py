@@ -299,11 +299,11 @@ def test_tablestore_factory_uses_existing_or_generated_collection(tablestore_mod
     dataset_without_index = SimpleNamespace(id="dataset-2", index_struct_dict=None, index_struct=None)
 
     monkeypatch.setattr(tablestore_module.Dataset, "gen_collection_name_by_id", lambda _id: "AUTO_COLLECTION")
-    monkeypatch.setattr(tablestore_module.dify_config, "TABLESTORE_ENDPOINT", "endpoint")
-    monkeypatch.setattr(tablestore_module.dify_config, "TABLESTORE_INSTANCE_NAME", "instance")
-    monkeypatch.setattr(tablestore_module.dify_config, "TABLESTORE_ACCESS_KEY_ID", "ak")
-    monkeypatch.setattr(tablestore_module.dify_config, "TABLESTORE_ACCESS_KEY_SECRET", "sk")
-    monkeypatch.setattr(tablestore_module.dify_config, "TABLESTORE_NORMALIZE_FULLTEXT_BM25_SCORE", True)
+    monkeypatch.setattr(tablestore_module.nexusai_config, "TABLESTORE_ENDPOINT", "endpoint")
+    monkeypatch.setattr(tablestore_module.nexusai_config, "TABLESTORE_INSTANCE_NAME", "instance")
+    monkeypatch.setattr(tablestore_module.nexusai_config, "TABLESTORE_ACCESS_KEY_ID", "ak")
+    monkeypatch.setattr(tablestore_module.nexusai_config, "TABLESTORE_ACCESS_KEY_SECRET", "sk")
+    monkeypatch.setattr(tablestore_module.nexusai_config, "TABLESTORE_NORMALIZE_FULLTEXT_BM25_SCORE", True)
 
     with patch.object(tablestore_module, "TableStoreVector", return_value="vector") as vector_cls:
         result_1 = factory.init_vector(dataset_with_index, attributes=[], embeddings=MagicMock())

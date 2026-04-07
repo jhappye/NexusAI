@@ -483,7 +483,7 @@ class TestWorkflowStatisticEndpoints:
     def test_workflow_daily_runs_statistic(self, app, monkeypatch):
         monkeypatch.setattr(workflow_statistic_module, "db", SimpleNamespace(engine=MagicMock()))
         monkeypatch.setattr(
-            workflow_statistic_module.DifyAPIRepositoryFactory,
+            workflow_statistic_module.NexusAIAPIRepositoryFactory,
             "create_api_workflow_run_repository",
             lambda *_args, **_kwargs: SimpleNamespace(get_daily_runs_statistics=lambda **_kw: [{"date": "2024-01-01"}]),
         )
@@ -509,7 +509,7 @@ class TestWorkflowStatisticEndpoints:
     def test_workflow_daily_terminals_statistic(self, app, monkeypatch):
         monkeypatch.setattr(workflow_statistic_module, "db", SimpleNamespace(engine=MagicMock()))
         monkeypatch.setattr(
-            workflow_statistic_module.DifyAPIRepositoryFactory,
+            workflow_statistic_module.NexusAIAPIRepositoryFactory,
             "create_api_workflow_run_repository",
             lambda *_args, **_kwargs: SimpleNamespace(
                 get_daily_terminals_statistics=lambda **_kw: [{"date": "2024-01-02"}]

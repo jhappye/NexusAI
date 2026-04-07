@@ -2,7 +2,7 @@ from collections.abc import Generator
 
 from obs import ObsClient
 
-from configs import dify_config
+from configs import nexusai_config
 from extensions.storage.base_storage import BaseStorage
 
 
@@ -12,12 +12,12 @@ class HuaweiObsStorage(BaseStorage):
     def __init__(self):
         super().__init__()
 
-        self.bucket_name = dify_config.HUAWEI_OBS_BUCKET_NAME
+        self.bucket_name = nexusai_config.HUAWEI_OBS_BUCKET_NAME
         self.client = ObsClient(
-            access_key_id=dify_config.HUAWEI_OBS_ACCESS_KEY,
-            secret_access_key=dify_config.HUAWEI_OBS_SECRET_KEY,
-            server=dify_config.HUAWEI_OBS_SERVER,
-            path_style=dify_config.HUAWEI_OBS_PATH_STYLE,
+            access_key_id=nexusai_config.HUAWEI_OBS_ACCESS_KEY,
+            secret_access_key=nexusai_config.HUAWEI_OBS_SECRET_KEY,
+            server=nexusai_config.HUAWEI_OBS_SERVER,
+            path_style=nexusai_config.HUAWEI_OBS_PATH_STYLE,
         )
 
     def save(self, filename, data):

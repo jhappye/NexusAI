@@ -38,7 +38,7 @@ class TestOAuthHandler:
             user_id="user-1",
             plugin_id="org/plugin",
             provider="provider",
-            redirect_uri="https://dify.example.com/callback",
+            redirect_uri="https://nexusai.example.com/callback",
             system_credentials={"client_id": "id"},
         )
 
@@ -55,7 +55,7 @@ class TestOAuthHandler:
                 user_id="user-1",
                 plugin_id="org/plugin",
                 provider="provider",
-                redirect_uri="https://dify.example.com/callback",
+                redirect_uri="https://nexusai.example.com/callback",
                 system_credentials={},
             )
 
@@ -76,7 +76,7 @@ class TestOAuthHandler:
             user_id="user-1",
             plugin_id="org/plugin",
             provider="provider",
-            redirect_uri="https://dify.example.com/callback",
+            redirect_uri="https://nexusai.example.com/callback",
             system_credentials={"client_id": "id"},
             request=_build_request(),
         )
@@ -95,7 +95,7 @@ class TestOAuthHandler:
                 user_id="user-1",
                 plugin_id="org/plugin",
                 provider="provider",
-                redirect_uri="https://dify.example.com/callback",
+                redirect_uri="https://nexusai.example.com/callback",
                 system_credentials={},
                 request=_build_request(),
             )
@@ -113,7 +113,7 @@ class TestOAuthHandler:
             user_id="user-1",
             plugin_id="org/plugin",
             provider="provider",
-            redirect_uri="https://dify.example.com/callback",
+            redirect_uri="https://nexusai.example.com/callback",
             system_credentials={"client_id": "id"},
             credentials={"refresh_token": "r"},
         )
@@ -131,7 +131,7 @@ class TestOAuthHandler:
                 user_id="user-1",
                 plugin_id="org/plugin",
                 provider="provider",
-                redirect_uri="https://dify.example.com/callback",
+                redirect_uri="https://nexusai.example.com/callback",
                 system_credentials={},
                 credentials={},
             )

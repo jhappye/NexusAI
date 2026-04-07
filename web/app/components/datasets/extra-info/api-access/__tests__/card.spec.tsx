@@ -33,7 +33,7 @@ vi.mock('@/service/knowledge/use-dataset', () => ({
 }))
 
 vi.mock('@/hooks/use-api-access-url', () => ({
-  useDatasetApiAccessUrl: () => 'https://docs.dify.ai/api-reference/datasets',
+  useDatasetApiAccessUrl: () => 'https://docs.nexusai.ai/api-reference/datasets',
 }))
 
 describe('Card (API Access)', () => {
@@ -64,7 +64,7 @@ describe('Card (API Access)', () => {
     it('should render API reference link', () => {
       render(<Card apiEnabled={true} />)
       const link = screen.getByRole('link')
-      expect(link).toHaveAttribute('href', 'https://docs.dify.ai/api-reference/datasets')
+      expect(link).toHaveAttribute('href', 'https://docs.nexusai.ai/api-reference/datasets')
     })
 
     it('should render API doc text in link', () => {
