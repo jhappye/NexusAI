@@ -765,10 +765,10 @@
 
     --primary-glow: conic-gradient(
       from 180deg at 50% 50%,
-      #16abff33 0deg,
-      #0885ff33 55deg,
-      #54d6ff33 120deg,
-      #0071ff33 160deg,
+      #1E3A5F33 0deg,
+      #D4A84B33 55deg,
+      #E5C87833 120deg,
+      #1E3A5F33 160deg,
       transparent 360deg
     );
     --secondary-glow: radial-gradient(
@@ -884,7 +884,7 @@
   }
 
   .text-gradient {
-    background: linear-gradient(91.58deg, #2250f2 -29.55%, #0ebcf3 75.22%);
+    background: linear-gradient(91.58deg, #1E3A5F -29.55%, #D4A84B 75.22%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -893,8 +893,8 @@
 
   /* overwrite paging active dark model style  */
   [class*='style_paginatio'] li .text-primary-600 {
-    color: rgb(28 100 242);
-    background-color: rgb(235 245 255);
+    color: rgb(30 58 95);
+    background-color: rgb(245 242 231);
   }
 
   /* support safari 14 and below */

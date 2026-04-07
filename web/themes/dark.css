@@ -25,7 +25,7 @@ html[data-theme="dark"] {
   --color-components-input-text-filled-disabled: rgb(200 206 218 / 0.6);
   --color-components-input-border-hover: #3a3a40;
   --color-components-input-border-active-prompt-1: #36bffa;
-  --color-components-input-border-active-prompt-2: #296dff;
+  --color-components-input-border-active-prompt-2: #D4A84B;
 
   --color-components-kbd-bg-gray: rgb(255 255 255 / 0.03);
   --color-components-kbd-bg-white: rgb(255 255 255 / 0.12);
@@ -33,11 +33,11 @@ html[data-theme="dark"] {
   --color-components-tooltip-bg: rgb(24 24 27 / 0.95);
 
   --color-components-button-primary-text: rgb(255 255 255 / 0.95);
-  --color-components-button-primary-bg: #155aef;
+  --color-components-button-primary-bg: #D4A84B;
   --color-components-button-primary-border: rgb(255 255 255 / 0.12);
-  --color-components-button-primary-bg-hover: #296dff;
+  --color-components-button-primary-bg-hover: #B8923F;
   --color-components-button-primary-border-hover: rgb(255 255 255 / 0.2);
-  --color-components-button-primary-bg-disabled: rgb(255 255 255 / 0.03);
+  --color-components-button-primary-bg-disabled: rgb(212 168 75 / 0.14);
   --color-components-button-primary-border-disabled: rgb(255 255 255 / 0.08);
   --color-components-button-primary-text-disabled: rgb(255 255 255 / 0.2);
 
@@ -114,19 +114,19 @@ html[data-theme="dark"] {
 
   --color-components-checkbox-icon: rgb(255 255 255 / 0.95);
   --color-components-checkbox-icon-disabled: rgb(255 255 255 / 0.2);
-  --color-components-checkbox-bg: #296dff;
-  --color-components-checkbox-bg-hover: #5289ff;
+  --color-components-checkbox-bg: #D4A84B;
+  --color-components-checkbox-bg-hover: #E5C878;
   --color-components-checkbox-bg-disabled: rgb(255 255 255 / 0.03);
   --color-components-checkbox-border: rgb(255 255 255 / 0.4);
   --color-components-checkbox-border-hover: rgb(255 255 255 / 0.6);
   --color-components-checkbox-border-disabled: rgb(255 255 255 / 0.01);
   --color-components-checkbox-bg-unchecked: rgb(255 255 255 / 0.03);
   --color-components-checkbox-bg-unchecked-hover: rgb(255 255 255 / 0.05);
-  --color-components-checkbox-bg-disabled-checked: rgb(21 90 239 / 0.2);
+  --color-components-checkbox-bg-disabled-checked: rgb(212 168 75 / 0.2);
 
-  --color-components-radio-border-checked: #296dff;
-  --color-components-radio-border-checked-hover: #5289ff;
-  --color-components-radio-border-checked-disabled: rgb(21 90 239 / 0.2);
+  --color-components-radio-border-checked: #D4A84B;
+  --color-components-radio-border-checked-hover: #E5C878;
+  --color-components-radio-border-checked-disabled: rgb(212 168 75 / 0.2);
   --color-components-radio-bg-disabled: rgb(255 255 255 / 0.03);
   --color-components-radio-border: rgb(255 255 255 / 0.4);
   --color-components-radio-border-hover: rgb(255 255 255 / 0.6);
@@ -136,8 +136,8 @@ html[data-theme="dark"] {
 
   --color-components-toggle-knob: #f4f4f5;
   --color-components-toggle-knob-disabled: rgb(255 255 255 / 0.2);
-  --color-components-toggle-bg: #296dff;
-  --color-components-toggle-bg-hover: #5289ff;
+  --color-components-toggle-bg: #D4A84B;
+  --color-components-toggle-bg-hover: #E5C878;
   --color-components-toggle-bg-disabled: rgb(255 255 255 / 0.08);
   --color-components-toggle-bg-unchecked: rgb(255 255 255 / 0.2);
   --color-components-toggle-bg-unchecked-hover: rgb(255 255 255 / 0.3);
@@ -206,7 +206,7 @@ html[data-theme="dark"] {
   --color-components-slider-knob: #f4f4f5;
   --color-components-slider-knob-hover: #fefefe;
   --color-components-slider-knob-disabled: rgb(255 255 255 / 0.2);
-  --color-components-slider-range: #296dff;
+  --color-components-slider-range: #D4A84B;
   --color-components-slider-track: rgb(255 255 255 / 0.2);
   --color-components-slider-knob-border-hover: rgb(16 24 40 / 0.3);
   --color-components-slider-knob-border: rgb(16 24 40 / 0.2);
@@ -214,17 +214,17 @@ html[data-theme="dark"] {
   --color-components-segmented-control-item-active-bg: rgb(255 255 255 / 0.08);
   --color-components-segmented-control-item-active-border: rgb(200 206 218 / 0.08);
   --color-components-segmented-control-bg-normal: rgb(24 24 27 / 0.7);
-  --color-components-segmented-control-item-active-accent-bg: rgb(21 90 239 / 0.2);
-  --color-components-segmented-control-item-active-accent-border: rgb(21 90 239 / 0.3);
+  --color-components-segmented-control-item-active-accent-bg: rgb(212 168 75 / 0.2);
+  --color-components-segmented-control-item-active-accent-border: rgb(212 168 75 / 0.3);
 
   --color-components-option-card-option-bg: rgb(200 206 218 / 0.04);
   --color-components-option-card-option-selected-bg: rgb(255 255 255 / 0.05);
-  --color-components-option-card-option-selected-border: #5289ff;
+  --color-components-option-card-option-selected-border: #E5C878;
   --color-components-option-card-option-border: rgb(200 206 218 / 0.2);
   --color-components-option-card-option-bg-hover: rgb(200 206 218 / 0.14);
   --color-components-option-card-option-border-hover: rgb(200 206 218 / 0.3);
 
-  --color-components-tab-active: #296dff;
+  --color-components-tab-active: #D4A84B;
 
   --color-components-badge-white-to-dark: rgb(24 24 27 / 0.8);
   --color-components-badge-status-light-success-bg: #17b26a;
@@ -256,28 +256,28 @@ html[data-theme="dark"] {
   --color-components-badge-bg-gray-soft: rgb(200 206 218 / 0.08);
   --color-components-badge-bg-dimm: rgb(255 255 255 / 0.03);
 
-  --color-components-chart-line: #5289ff;
-  --color-components-chart-area-1: rgb(21 90 239 / 0.2);
-  --color-components-chart-area-2: rgb(21 90 239 / 0.04);
-  --color-components-chart-current-1: #5289ff;
-  --color-components-chart-current-2: rgb(21 90 239 / 0.3);
+  --color-components-chart-line: #E5C878;
+  --color-components-chart-area-1: rgb(212 168 75 / 0.2);
+  --color-components-chart-area-2: rgb(212 168 75 / 0.04);
+  --color-components-chart-current-1: #D4A84B;
+  --color-components-chart-current-2: rgb(212 168 75 / 0.3);
   --color-components-chart-bg: rgb(24 24 27 / 0.95);
 
   --color-components-actionbar-bg: #222225;
   --color-components-actionbar-border: rgb(200 206 218 / 0.08);
   --color-components-actionbar-bg-accent: #27272b;
-  --color-components-actionbar-border-accent: #5289ff;
+  --color-components-actionbar-border-accent: #D4A84B;
 
   --color-components-dropzone-bg-alt: rgb(24 24 27 / 0.8);
   --color-components-dropzone-bg: rgb(24 24 27 / 0.4);
-  --color-components-dropzone-bg-accent: rgb(21 90 239 / 0.2);
+  --color-components-dropzone-bg-accent: rgb(212 168 75 / 0.2);
   --color-components-dropzone-border: rgb(200 206 218 / 0.14);
   --color-components-dropzone-border-alt: rgb(200 206 218 / 0.2);
-  --color-components-dropzone-border-accent: #84abff;
+  --color-components-dropzone-border-accent: #E5C878;
 
-  --color-components-progress-brand-progress: #5289ff;
-  --color-components-progress-brand-border: #5289ff;
-  --color-components-progress-brand-bg: rgb(21 90 239 / 0.04);
+  --color-components-progress-brand-progress: #D4A84B;
+  --color-components-progress-brand-border: #D4A84B;
+  --color-components-progress-brand-bg: rgb(212 168 75 / 0.04);
 
   --color-components-progress-white-progress: #ffffff;
   --color-components-progress-white-border: rgb(255 255 255 / 0.95);
@@ -295,12 +295,12 @@ html[data-theme="dark"] {
   --color-components-progress-error-border: #f97066;
   --color-components-progress-error-bg: rgb(240 68 56 / 0.04);
 
-  --color-components-chat-input-audio-bg: rgb(21 90 239 / 0.2);
+  --color-components-chat-input-audio-bg: rgb(212 168 75 / 0.2);
   --color-components-chat-input-audio-wave-default: rgb(200 206 218 / 0.14);
   --color-components-chat-input-bg-mask-1: rgb(24 24 27 / 0.04);
   --color-components-chat-input-bg-mask-2: rgb(24 24 27 / 0.6);
   --color-components-chat-input-border: rgb(200 206 218 / 0.2);
-  --color-components-chat-input-audio-wave-active: #84abff;
+  --color-components-chat-input-audio-wave-active: #E5C878;
   --color-components-chat-input-audio-bg-alt: rgb(24 24 27 / 0.9);
 
   --color-components-avatar-shape-fill-stop-0: rgb(255 255 255 / 0.95);
@@ -314,18 +314,18 @@ html[data-theme="dark"] {
 
   --color-components-label-gray: rgb(200 206 218 / 0.14);
 
-  --color-components-premium-badge-blue-bg-stop-0: #5289ff;
-  --color-components-premium-badge-blue-bg-stop-100: #296dff;
+  --color-components-premium-badge-blue-bg-stop-0: #E5C878;
+  --color-components-premium-badge-blue-bg-stop-100: #D4A84B;
   --color-components-premium-badge-blue-stroke-stop-0: rgb(255 255 255 / 0.2);
-  --color-components-premium-badge-blue-stroke-stop-100: #296dff;
-  --color-components-premium-badge-blue-text-stop-0: #eff4ff;
-  --color-components-premium-badge-blue-text-stop-100: #b2caff;
-  --color-components-premium-badge-blue-glow: #004aeb;
-  --color-components-premium-badge-blue-bg-stop-0-hover: #84abff;
-  --color-components-premium-badge-blue-bg-stop-100-hover: #004aeb;
-  --color-components-premium-badge-blue-glow-hover: #d1e0ff;
+  --color-components-premium-badge-blue-stroke-stop-100: #D4A84B;
+  --color-components-premium-badge-blue-text-stop-0: #f5f2e7;
+  --color-components-premium-badge-blue-text-stop-100: #1E3A5F;
+  --color-components-premium-badge-blue-glow: #B8923F;
+  --color-components-premium-badge-blue-bg-stop-0-hover: #E5C878;
+  --color-components-premium-badge-blue-bg-stop-100-hover: #B8923F;
+  --color-components-premium-badge-blue-glow-hover: #1E3A5F;
   --color-components-premium-badge-blue-stroke-stop-0-hover: rgb(255 255 255 / 0.5);
-  --color-components-premium-badge-blue-stroke-stop-100-hover: #296dff;
+  --color-components-premium-badge-blue-stroke-stop-100-hover: #B8923F;
 
   --color-components-premium-badge-highlight-stop-0: rgb(255 255 255 / 0.12);
   --color-components-premium-badge-highlight-stop-100: rgb(255 255 255 / 0.2);
@@ -371,7 +371,7 @@ html[data-theme="dark"] {
   --color-components-progress-bar-bg: rgb(200 206 218 / 0.08);
   --color-components-progress-bar-progress: rgb(200 206 218 / 0.14);
   --color-components-progress-bar-border: rgb(255 255 255 / 0.03);
-  --color-components-progress-bar-progress-solid: rgb(255 255 255 / 0.95);
+  --color-components-progress-bar-progress-solid: #D4A84B;
   --color-components-progress-bar-progress-highlight: rgb(200 206 218 / 0.2);
 
   --color-components-icon-bg-red-solid: #d92d20;
@@ -382,7 +382,7 @@ html[data-theme="dark"] {
   --color-components-icon-bg-green-solid: #4ca30d;
   --color-components-icon-bg-teal-solid: #0e9384;
   --color-components-icon-bg-blue-light-solid: #0ba5ec;
-  --color-components-icon-bg-blue-solid: #155aef;
+  --color-components-icon-bg-blue-solid: #1E3A5F;
   --color-components-icon-bg-indigo-solid: #444ce7;
   --color-components-icon-bg-violet-solid: #7839ee;
   --color-components-icon-bg-midnight-solid: #5d698d;
@@ -393,7 +393,7 @@ html[data-theme="dark"] {
   --color-components-icon-bg-green-soft: rgb(102 198 28 / 0.2);
   --color-components-icon-bg-teal-soft: rgb(21 183 158 / 0.2);
   --color-components-icon-bg-blue-light-soft: rgb(11 165 236 / 0.2);
-  --color-components-icon-bg-blue-soft: rgb(21 90 239 / 0.2);
+  --color-components-icon-bg-blue-soft: rgb(30 58 95 / 0.2);
   --color-components-icon-bg-indigo-soft: rgb(97 114 243 / 0.2);
   --color-components-icon-bg-violet-soft: rgb(135 91 247 / 0.2);
   --color-components-icon-bg-midnight-soft: rgb(130 141 173 / 0.2);
@@ -413,15 +413,15 @@ html[data-theme="dark"] {
   --color-text-destructive-secondary: #f97066;
   --color-text-success-secondary: #47cd89;
   --color-text-warning-secondary: #fdb022;
-  --color-text-accent: #5289ff;
+  --color-text-accent: #D4A84B;
   --color-text-primary-on-surface: rgb(255 255 255 / 0.95);
   --color-text-placeholder: rgb(200 206 218 / 0.3);
   --color-text-disabled: rgb(200 206 218 / 0.3);
-  --color-text-accent-secondary: #84abff;
+  --color-text-accent-secondary: #E5C878;
   --color-text-accent-light-mode-only: #d9d9de;
-  --color-text-text-selected: rgb(21 90 239 / 0.3);
+  --color-text-text-selected: rgb(212 168 75 / 0.3);
   --color-text-secondary-on-surface: rgb(255 255 255 / 0.9);
-  --color-text-logo-text: #e9e9ec;
+  --color-text-logo-text: #f5f2e7;
   --color-text-empty-state-icon: rgb(200 206 218 / 0.3);
   --color-text-inverted: #ffffff;
   --color-text-inverted-dimmed: rgb(255 255 255 / 0.8);
@@ -481,7 +481,7 @@ html[data-theme="dark"] {
   --color-workflow-block-parma-bg: rgb(255 255 255 / 0.05);
   --color-workflow-block-bg: #27272b;
   --color-workflow-block-bg-transparent: rgb(39 39 43 / 0.96);
-  --color-workflow-block-border-highlight: rgb(200 206 218 / 0.2);
+  --color-workflow-block-border-highlight: rgb(212 168 75 / 0.2);
   --color-workflow-block-wrapper-bg-1: #27272b;
   --color-workflow-block-wrapper-bg-2: rgb(39 39 43 / 0.2);
 
@@ -491,9 +491,9 @@ html[data-theme="dark"] {
   --color-workflow-canvas-workflow-top-bar-2: rgb(29 29 32 / 0.08);
   --color-workflow-canvas-canvas-overlay: rgb(29 29 32 / 0.8);
 
-  --color-workflow-link-line-active: #5289ff;
+  --color-workflow-link-line-active: #E5C878;
   --color-workflow-link-line-normal: #676f83;
-  --color-workflow-link-line-handle: #5289ff;
+  --color-workflow-link-line-handle: #E5C878;
   --color-workflow-link-line-normal-transparent: rgb(103 111 131 / 0.2);
   --color-workflow-link-line-failure-active: #fdb022;
   --color-workflow-link-line-failure-handle: #fdb022;
@@ -554,9 +554,9 @@ html[data-theme="dark"] {
   --color-workflow-debug-text-disabled: rgb(255 68 5 / 0.2);
   --color-workflow-debug-run-status-bg-alt: rgb(255 46 0 / 0.5);
 
-  --color-workflow-test-run-run-status-bg: rgb(21 90 239 / 0.5);
-  --color-workflow-test-run-text: #d1e0ff;
-  --color-workflow-test-run-run-status-bg-alt: rgb(45 90 190 / 0.9);
+  --color-workflow-test-run-run-status-bg: rgb(212 168 75 / 0.5);
+  --color-workflow-test-run-text: #f5f2e7;
+  --color-workflow-test-run-run-status-bg-alt: rgb(184 146 63 / 0.9);
   --color-workflow-test-run-paused-bg: rgb(247 144 9 / 0.3);
   --color-workflow-test-run-paused-text: #fdb022;
 
@@ -576,11 +576,11 @@ html[data-theme="dark"] {
   --color-state-base-handle-hover: rgb(200 206 218 / 0.5);
   --color-state-base-hover-subtle: rgb(200 206 218 / 0.04);
 
-  --color-state-accent-hover: rgb(21 90 239 / 0.14);
-  --color-state-accent-active: rgb(21 90 239 / 0.14);
-  --color-state-accent-hover-alt: rgb(21 90 239 / 0.25);
-  --color-state-accent-solid: #5289ff;
-  --color-state-accent-active-alt: rgb(21 90 239 / 0.2);
+  --color-state-accent-hover: rgb(212 168 75 / 0.14);
+  --color-state-accent-active: rgb(212 168 75 / 0.14);
+  --color-state-accent-hover-alt: rgb(212 168 75 / 0.25);
+  --color-state-accent-solid: #D4A84B;
+  --color-state-accent-active-alt: rgb(212 168 75 / 0.2);
 
   --color-state-destructive-hover: rgb(240 68 56 / 0.14);
   --color-state-destructive-hover-alt: rgb(240 68 56 / 0.25);
@@ -688,14 +688,14 @@ html[data-theme="dark"] {
   --color-util-colors-gray-blue-gray-blue-600: #717bbc;
   --color-util-colors-gray-blue-gray-blue-700: #b3b8db;
 
-  --color-util-colors-blue-brand-blue-brand-50: #002066;
-  --color-util-colors-blue-brand-blue-brand-100: #00329e;
-  --color-util-colors-blue-brand-blue-brand-200: #003dc1;
-  --color-util-colors-blue-brand-blue-brand-300: #004aeb;
-  --color-util-colors-blue-brand-blue-brand-400: #155aef;
-  --color-util-colors-blue-brand-blue-brand-500: #296dff;
-  --color-util-colors-blue-brand-blue-brand-600: #5289ff;
-  --color-util-colors-blue-brand-blue-brand-700: #84abff;
+  --color-util-colors-blue-brand-blue-brand-50: #152A45;
+  --color-util-colors-blue-brand-blue-brand-100: #1E3A5F;
+  --color-util-colors-blue-brand-blue-brand-200: #2A4F7F;
+  --color-util-colors-blue-brand-blue-brand-300: #D4A84B;
+  --color-util-colors-blue-brand-blue-brand-400: #E5C878;
+  --color-util-colors-blue-brand-blue-brand-500: #B8923F;
+  --color-util-colors-blue-brand-blue-brand-600: #1E3A5F;
+  --color-util-colors-blue-brand-blue-brand-700: #152A45;
 
   --color-util-colors-red-red-50: #55160c;
   --color-util-colors-red-red-100: #7a271a;
@@ -819,9 +819,9 @@ html[data-theme="dark"] {
   --color-saas-background-inverted: rgb(255 255 255 / 0.9);
   --color-saas-background-inverted-hover: #ffffff;
 
-  --color-dify-logo-blue: #e8e8e8;
-  --color-dify-logo-black: #e8e8e8;
+  --color-dify-logo-blue: #D4A84B;
+  --color-dify-logo-black: #D4A84B;
   --color-dify-logo-outline-1: #ffffff;
-  --color-dify-logo-outline-2: #e8e8e8;
+  --color-dify-logo-outline-2: #D4A84B;
 
 }
