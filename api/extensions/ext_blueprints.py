@@ -30,8 +30,11 @@ def init_app(app: NexusAIApp):
     from controllers.inner_api import bp as inner_api_bp
     from controllers.mcp import bp as mcp_bp
     from controllers.service_api import bp as service_api_bp
+    from controllers.tenant_controller import tenant_bp
     from controllers.trigger import bp as trigger_bp
     from controllers.web import bp as web_bp
+    from controllers.audit_controller import audit_bp
+    from controllers.billing_controller import billing_bp
 
     _apply_cors_once(
         service_api_bp,
@@ -98,3 +101,30 @@ def init_app(app: NexusAIApp):
         expose_headers=list(EXPOSED_HEADERS),
     )
     app.register_blueprint(trigger_bp)
+
+    # Register tenant blueprint with CORS
+    _apply_cors_once(
+        tenant_bp,
+        allow_headers=list(SERVICE_API_HEADERS),
+        methods=["GET", "PUT", "POST", "DELETE", "OPTIONS", "PATCH"],
+        expose_headers=list(EXPOSED_HEADERS),
+    )
+    app.register_blueprint(tenant_bp, url_prefix='/api/v1/tenants')
+
+    # Register audit blueprint with CORS
+    _apply_cors_once(
+        audit_bp,
+        allow_headers=list(SERVICE_API_HEADERS),
+        methods=["GET", "PUT", "POST", "DELETE", "OPTIONS", "PATCH"],
+        expose_headers=list(EXPOSED_HEADERS),
+    )
+    app.register_blueprint(audit_bp, url_prefix='/api/v1')
+
+    # Register billing blueprint with CORS
+    _apply_cors_once(
+        billing_bp,
+        allow_headers=list(SERVICE_API_HEADERS),
+        methods=["GET", "PUT", "POST", "DELETE", "OPTIONS", "PATCH"],
+        expose_headers=list(EXPOSED_HEADERS),
+    )
+    app.register_blueprint(billing_bp, url_prefix='/api/v1')
