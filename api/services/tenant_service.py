@@ -107,7 +107,14 @@ class TenantService:
 
     @staticmethod
     def check_quota(tenant_id: UUID, resource: str, amount: int) -> bool:
-        """检查租户配额是否足够"""
+        """检查租户配额是否足够
+
+        对于 users 配额：检查当前用户数量 + amount 是否超过配额
+        对于其他配额：检查 UsageRecord 中的实际使用量
+        """
+        from sqlalchemy import func
+        from models.usage_record import UsageRecord
+
         tenant = Tenant.query.get(tenant_id)
         if not tenant:
             return False
@@ -119,4 +126,24 @@ class TenantService:
         }
 
         quota = quota_map.get(resource, float('inf'))
-        return amount <= quota
+
+        if resource == 'users':
+            # 检查用户配额：当前用户数 + 申请数 <= 配额
+            current_usage = TenantUser.query.filter_by(tenant_id=tenant_id).count()
+            return (current_usage + amount) <= quota
+
+        if resource in ('apps', 'api_calls'):
+            # 检查应用/API配额：从 UsageRecord 获取当前使用量
+            period = datetime.utcnow().strftime('%Y-%m')
+            usage = db.session.query(
+                func.coalesce(func.sum(UsageRecord.amount), 0)
+            ).filter(
+                UsageRecord.tenant_id == tenant_id,
+                UsageRecord.resource_type == resource,
+                UsageRecord.period == period
+            ).scalar()
+
+            return (int(usage) + amount) <= quota
+
+        # 未知资源类型，默认允许
+        return True

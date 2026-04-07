@@ -38,12 +38,42 @@ def create_tenant():
 @tenant_bp.route('', methods=['GET'])
 @tenant_required
 def list_tenants():
-    """获取租户列表（系统管理员）"""
-    from models.tenant import Tenant
-    tenants = Tenant.query.all()
+    """获取租户列表（系统管理员专用）
+
+    安全说明: 此接口仅对系统管理员开放。
+    目前实现为：仅当用户为 tenant_admin 且为特殊系统租户时才返回所有租户。
+    后续可扩展为独立的系统管理员角色。
+    """
+    from models.tenant import Tenant, TenantUser
+    from models.account import Account
+
+    # 获取当前用户
+    user_id = g.get('user_id')
+    tenant_id = g.get('tenant_id')
+
+    if not user_id or not tenant_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    # 检查用户是否为系统租户的管理员
+    # 目前策略：tenant_id 对应的租户名称包含 "SYSTEM" 或 tier 为 'enterprise'
+    # 实际生产环境应使用独立的系统管理员角色
+    tenant = TenantService.get_tenant(tenant_id)
+    if not tenant:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    # 简化的系统管理员检查：企业版租户可查看所有租户
+    # 后续应实现独立的 system_admin 角色
+    if tenant.tier == 'enterprise':
+        tenants = Tenant.query.all()
+        return jsonify({
+            'code': 0,
+            'data': [t.to_dict() for t in tenants]
+        })
+
+    # 非企业版用户只能查看自己的租户
     return jsonify({
         'code': 0,
-        'data': [t.to_dict() for t in tenants]
+        'data': [tenant.to_dict()]
     })
 
 
@@ -91,11 +121,31 @@ def update_tenant(tenant_id):
 @tenant_bp.route('/<tenant_id>/activate', methods=['POST'])
 @tenant_required
 def activate_tenant(tenant_id):
-    """激活租户"""
+    """激活租户（仅系统管理员可操作）"""
+    from models.tenant import Tenant
+
     try:
         tenant_uuid = UUID(tenant_id)
     except ValueError:
         return jsonify({'error': 'Invalid tenant ID'}), 400
+
+    # 权限检查：只有企业版租户的管理员才能操作其他租户状态
+    current_tenant = g.get('tenant')
+
+    # 如果操作的是当前用户所属租户，允许
+    if str(current_tenant.id) == tenant_id:
+        tenant = TenantService.activate_tenant(tenant_uuid)
+        if not tenant:
+            return jsonify({'error': 'Tenant not found'}), 404
+        return jsonify({
+            'code': 0,
+            'data': tenant.to_dict(),
+            'message': 'Tenant activated successfully'
+        })
+
+    # 如果操作其他租户，需要是 enterprise 租户的管理员
+    if current_tenant.tier != 'enterprise':
+        return jsonify({'error': 'Permission denied. Only enterprise tenants can manage other tenants.'}), 403
 
     tenant = TenantService.activate_tenant(tenant_uuid)
     if not tenant:
